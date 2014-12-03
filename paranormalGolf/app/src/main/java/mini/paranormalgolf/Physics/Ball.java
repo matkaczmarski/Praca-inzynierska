@@ -10,41 +10,105 @@ public class Ball extends MovableElement {
 
     private final static float G=-9.81f;
 
-    private float R;
+    private final static float R=2;
     private float omega;
     private Vector axis;
     private float mass;
     private float area;
-    private float Cd;
-    private float density;
+    private final static float Cd=0.4f;
+    private final static float density=1.225f;
 
 
 
     public Ball(Vector _velocity, Point _location) {
         super(_velocity, _location);
-        R=2;
         omega=0;
         axis=new Vector(0,0,1);
         mass=5;
         area=(float)Math.PI*R*R;
-        Cd=1.2f;
-        density=1.3f;
     }
 
-    public void Update(float dt,Vector accelerometrData){
+    public void Update(float dt,Vector accelerometrData) {
         //Update związany z poruszeniem się elementu
 
         //jeśli jest na powierzchni to liczymy następująco
         //TODO
+        //SolveEquation
+        int j;
+        int numEqns = 6;
+        float q[];
+        float dq1[] = new float[numEqns];
+        float dq2[] = new float[numEqns];
+        float dq3[] = new float[numEqns];
+        float dq4[] = new float[numEqns];
+// Retrieve the current values of the dependent
+// and independent variables.
+        q=new float[6];
+        {
+            q[1] = location.X;
+            q[0] = velocity.X;
+            q[3] = location.Y;
+            q[2] = velocity.Y;
+            q[5] = location.Z;
+            q[4] = velocity.Z;
+        }
+       // q=SolveEquation(q,dt,accelerometrData);
 
-        velocity.X=velocity.X+(-accelerometrData.X)*dt;
-        velocity.Y=velocity.Y+(-accelerometrData.Y)*dt;
-        velocity.Z=velocity.Z+(-accelerometrData.Z)*dt;
-        location.X=location.X+velocity.X*dt+0.5f*(-accelerometrData.X)*dt*dt;
-        location.Y=location.Y+velocity.Y*dt+0.5f*(-accelerometrData.Y)*dt*dt;
-        location.Z=location.Z+velocity.Z*dt+0.5f*(-accelerometrData.Z)*dt*dt;
+        dq1 = getRightHand( q, q, dt, 0.0f,accelerometrData);
+        dq2 = getRightHand( q, dq1, dt, 0.5f,accelerometrData);
+        dq3 = getRightHand( q, dq2, dt, 0.5f,accelerometrData);
+        dq4 = getRightHand( q, dq3, dt, 1.0f,accelerometrData);
 
-// Load new values into ODE arrays and fields.
+        for(j=0; j<numEqns; ++j) {
+            q[j] = q[j] + (dq1[j] + 2.0f*dq2[j] + 2.0f*dq3[j] + dq4[j])/6.0f;
+        }
+        {
+            location.X = q[1];
+            velocity.X = q[0];
+            location.Y = q[3];
+            velocity.Y = q[2];
+            location.Z = q[5];
+            velocity.Z = q[4];
+        }
+        return;
+      //  velocity.X = velocity.X + (-accelerometrData.X) * dt;
+     //   velocity.Y = velocity.Y + (-accelerometrData.Y) * dt;
+     //   velocity.Z = velocity.Z + (-accelerometrData.Z) * dt;
+     //   location.X = location.X + velocity.X * dt + 0.5f * (-accelerometrData.X) * dt * dt;
+    //    location.Y = location.Y + velocity.Y * dt + 0.5f * (-accelerometrData.Y) * dt * dt;
+    //    location.Z = location.Z + velocity.Z * dt + 0.5f * (-accelerometrData.Z) * dt * dt;
+    }
+
+    private float[] getRightHand(float[] q, float deltaQ[], float dt,float qScale,Vector accelerometrData) {
+        float dQ[] = new float[6];
+        float newQ[] = new float[6];
+// Compute the intermediate values of the
+// dependent variables.
+        for (int i = 0; i < 6; ++i) {
+            newQ[i] = q[i] + qScale * deltaQ[i];
+        }
+// Declare some convenience variables representing
+// the intermediate values of velocity.
+        float vx = newQ[0];
+        float vy = newQ[2];
+        float vz = newQ[4];
+// Compute the velocity magnitude. The 1.0e-8 term
+// ensures there won't be a divide by zero later on
+// if all of the velocity components are zero.
+        float v = (float) (Math.sqrt(vx * vx + vy * vy + vz * vz) + 1e-8);
+//
+        float Fd = 0.5f * density * area * Cd * v * v;
+// Compute the right-hand sides of the six ODEs.
+        dQ[0] = dt * (-accelerometrData.X - Fd * vx / (mass * v));
+        dQ[1] = dt * vx;
+        dQ[2] = dt * (-accelerometrData.Y - Fd * vy / (mass * v));
+        dQ[3] = dt * vy;
+        dQ[4] = dt * (-accelerometrData.Z - Fd * vz / (mass * v));
+        dQ[5] = dt * vz;
+        return dQ;
+    }
+/*
+
 
         //jeśli jest w powietrzu, to liczymy następująco:
         //TODO
@@ -70,5 +134,5 @@ public class Ball extends MovableElement {
 
     public void ReactOnCollision(Wall element){
 
-    }
+    }*/
 }
