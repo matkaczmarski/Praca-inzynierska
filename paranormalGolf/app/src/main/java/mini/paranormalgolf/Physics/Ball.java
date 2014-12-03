@@ -8,6 +8,8 @@ import mini.paranormalgolf.Primitives.Vector;
  */
 public class Ball extends MovableElement {
 
+    private final static float G=-9.81f;
+
     private float R;
     private float omega;
     private Vector axis;
@@ -15,6 +17,8 @@ public class Ball extends MovableElement {
     private float area;
     private float Cd;
     private float density;
+
+
 
     public Ball(Vector _velocity, Point _location) {
         super(_velocity, _location);
@@ -32,6 +36,15 @@ public class Ball extends MovableElement {
 
         //jeśli jest na powierzchni to liczymy następująco
         //TODO
+
+        velocity.X=velocity.X+(-accelerometrData.X)*dt;
+        velocity.Y=velocity.Y+(-accelerometrData.Y)*dt;
+        velocity.Z=velocity.Z+(-accelerometrData.Z)*dt;
+        location.X=location.X+velocity.X*dt+0.5f*(-accelerometrData.X)*dt*dt;
+        location.Y=location.Y+velocity.Y*dt+0.5f*(-accelerometrData.Y)*dt*dt;
+        location.Z=location.Z+velocity.Z*dt+0.5f*(-accelerometrData.Z)*dt*dt;
+
+// Load new values into ODE arrays and fields.
 
         //jeśli jest w powietrzu, to liczymy następująco:
         //TODO
