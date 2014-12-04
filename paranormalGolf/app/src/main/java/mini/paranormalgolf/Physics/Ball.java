@@ -33,17 +33,29 @@ public class Ball extends MovableElement {
 
         //jeśli jest na powierzchni to liczymy następująco
         //TODO
-        //SolveEquation
+        //olveSEquation
+        SolveEquation(dt,accelerometrData);
+
+      //  velocity.X = velocity.X + (-accelerometrData.X) * dt;
+     //   velocity.Y = velocity.Y + (-accelerometrData.Y) * dt;
+     //   velocity.Z = velocity.Z + (-accelerometrData.Z) * dt;
+     //   location.X = location.X + velocity.X * dt + 0.5f * (-accelerometrData.X) * dt * dt;
+    //    location.Y = location.Y + velocity.Y * dt + 0.5f * (-accelerometrData.Y) * dt * dt;
+    //    location.Z = location.Z + velocity.Z * dt + 0.5f * (-accelerometrData.Z) * dt * dt;
+    }
+
+
+    private void SolveEquation(float dt,Vector accelerometrData) {
+
         int j;
         int numEqns = 6;
-        float q[];
-        float dq1[] = new float[numEqns];
-        float dq2[] = new float[numEqns];
-        float dq3[] = new float[numEqns];
-        float dq4[] = new float[numEqns];
+        float[] dq1 = new float[numEqns];
+        float[] dq2 = new float[numEqns];
+        float[] dq3 = new float[numEqns];
+        float[] dq4 = new float[numEqns];
 // Retrieve the current values of the dependent
 // and independent variables.
-        q=new float[6];
+        float[] q = new float[6];
         {
             q[1] = location.X;
             q[0] = velocity.X;
@@ -52,15 +64,17 @@ public class Ball extends MovableElement {
             q[5] = location.Z;
             q[4] = velocity.Z;
         }
-       // q=SolveEquation(q,dt,accelerometrData);
+        // q=SolveEquation(q,dt,accelerometrData);
+        if (true) {
+            dq1 = RollingBall(q, q, dt, 0.0f, accelerometrData);
+            dq2 = RollingBall(q, dq1, dt, 0.5f, accelerometrData);
+            dq3 = RollingBall(q, dq2, dt, 0.5f, accelerometrData);
+            dq4 = RollingBall(q, dq3, dt, 1.0f, accelerometrData);
+        } else {
 
-        dq1 = getRightHand( q, q, dt, 0.0f,accelerometrData);
-        dq2 = getRightHand( q, dq1, dt, 0.5f,accelerometrData);
-        dq3 = getRightHand( q, dq2, dt, 0.5f,accelerometrData);
-        dq4 = getRightHand( q, dq3, dt, 1.0f,accelerometrData);
-
-        for(j=0; j<numEqns; ++j) {
-            q[j] = q[j] + (dq1[j] + 2.0f*dq2[j] + 2.0f*dq3[j] + dq4[j])/6.0f;
+        }
+        for (j = 0; j < numEqns; ++j) {
+            q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
         {
             location.X = q[1];
@@ -71,15 +85,9 @@ public class Ball extends MovableElement {
             velocity.Z = q[4];
         }
         return;
-      //  velocity.X = velocity.X + (-accelerometrData.X) * dt;
-     //   velocity.Y = velocity.Y + (-accelerometrData.Y) * dt;
-     //   velocity.Z = velocity.Z + (-accelerometrData.Z) * dt;
-     //   location.X = location.X + velocity.X * dt + 0.5f * (-accelerometrData.X) * dt * dt;
-    //    location.Y = location.Y + velocity.Y * dt + 0.5f * (-accelerometrData.Y) * dt * dt;
-    //    location.Z = location.Z + velocity.Z * dt + 0.5f * (-accelerometrData.Z) * dt * dt;
     }
 
-    private float[] getRightHand(float[] q, float deltaQ[], float dt,float qScale,Vector accelerometrData) {
+    private float[] RollingBall(float[] q, float deltaQ[], float dt, float qScale, Vector accelerometrData) {
         float dQ[] = new float[6];
         float newQ[] = new float[6];
 // Compute the intermediate values of the
@@ -103,8 +111,8 @@ public class Ball extends MovableElement {
         dQ[1] = dt * vx;
         dQ[2] = dt * (-accelerometrData.Y - Fd * vy / (mass * v));
         dQ[3] = dt * vy;
-        dQ[4] = dt * (-accelerometrData.Z - Fd * vz / (mass * v));
-        dQ[5] = dt * vz;
+        dQ[4] = q[4];//dt * (-accelerometrData.Z - Fd * vz / (mass * v));
+        dQ[5] = q[5];//dt * vz;
         return dQ;
     }
 /*
