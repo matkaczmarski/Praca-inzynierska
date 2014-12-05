@@ -22,18 +22,20 @@ public class Ball extends MovableElement {
 
     public Ball(Vector _velocity, Point _location) {
         super(_velocity, _location);
-        omega=0;
-        axis=new Vector(0,0,1);
-        mass=5;
-        area=(float)Math.PI*R*R;
+        omega = 0;
+        axis = new Vector(0, 0, 1);
+        mass = 5;
+        area = (float) Math.PI * R * R;
+    }
+
+    public Point getPosition() {
+        return location;
     }
 
     public void Update(float dt,Vector accelerometrData) {
         //Update związany z poruszeniem się elementu
 
         //jeśli jest na powierzchni to liczymy następująco
-        //TODO
-        //olveSEquation
         SolveEquation(dt,accelerometrData);
 
       //  velocity.X = velocity.X + (-accelerometrData.X) * dt;
@@ -89,17 +91,16 @@ public class Ball extends MovableElement {
 
     private float[] RollingBall(float[] q, float deltaQ[], float dt, float qScale, Vector accelerometrData) {
         float dQ[] = new float[6];
-        float newQ[] = new float[6];
 // Compute the intermediate values of the
 // dependent variables.
         for (int i = 0; i < 6; ++i) {
-            newQ[i] = q[i] + qScale * deltaQ[i];
+            q[i] = q[i] + qScale * deltaQ[i];
         }
 // Declare some convenience variables representing
 // the intermediate values of velocity.
-        float vx = newQ[0];
-        float vy = newQ[2];
-        float vz = newQ[4];
+        float vx = q[0];
+        float vy = q[2];
+        float vz = q[4];
 // Compute the velocity magnitude. The 1.0e-8 term
 // ensures there won't be a divide by zero later on
 // if all of the velocity components are zero.
