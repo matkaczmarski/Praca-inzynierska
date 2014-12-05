@@ -112,8 +112,8 @@ public class Ball extends MovableElement {
         dQ[1] = dt * vx;
         dQ[2] = dt * (-accelerometrData.Y - Fd * vy / (mass * v));
         dQ[3] = dt * vy;
-        dQ[4] = q[4];//dt * (-accelerometrData.Z - Fd * vz / (mass * v));
-        dQ[5] = q[5];//dt * vz;
+        dQ[4] = 0;//dt * (-accelerometrData.Z - Fd * vz / (mass * v));
+        dQ[5] = 0;//dt * vz;
         return dQ;
     }
 /*

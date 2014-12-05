@@ -34,10 +34,10 @@ public class TestActivity extends Activity implements SensorEventListener {
         mSensorManager.registerListener(this,mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         setContentView(R.layout.activity_test);
         ball=new Ball(new Vector(0,0,0),new Point(0,0,2));
-        CountDownTimer timer=new CountDownTimer(300000, 1000) {
+        CountDownTimer timer=new CountDownTimer(300000, 10) {
 
             public void onTick(long millisUntilFinished) {
-                ball.Update(1, accelerometrData);
+                ball.Update(0.01f, accelerometrData);
                 Point p = ball.getPosition();
                 setContentView(R.layout.activity_test);
                 TextView tv1 = (TextView) findViewById(R.id.x);
