@@ -8,10 +8,10 @@ public class CuboidMeasurement {
     public float sizeY;
     public float sizeZ;
 
-    public CuboidMeasurement(float x,float y, float z)
+    public CuboidMeasurement(float sizeX,float sizeY, float sizeZ)
     {
-        sizeX=x;
-        sizeY=y;
-        sizeZ=z;
+        this.sizeX=sizeX;
+        this.sizeY=sizeY;
+        this.sizeZ=sizeZ;
     }
 }

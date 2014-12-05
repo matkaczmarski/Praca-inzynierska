@@ -1,7 +1,12 @@
 package mini.paranormalgolf.Physics;
 
+import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
+import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
+import  mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
+import mini.paranormalgolf.Graphics.VertexArray;
 
 /**
  * Created by Sławomir on 2014-12-03.
@@ -9,8 +14,11 @@ import mini.paranormalgolf.Primitives.Vector;
 public class Ball extends MovableElement {
 
     private final static float G=-9.81f;
+    private final int MESH_DIMENSION = 32;
 
-    private final static float R=2;
+    public final float[] rgba = new float[] {0f, 1f, 0f, 0.4f};
+
+    private float radius;
     private float omega;
     private Vector axis;
     private float mass;
@@ -18,30 +26,45 @@ public class Ball extends MovableElement {
     private final static float Cd=0.4f;
     private final static float density=1.225f;
 
-
-
-    public Ball(Vector _velocity, Point _location) {
-        super(_velocity, _location);
-        omega=0;
-        axis=new Vector(0,0,1);
-        mass=5;
-        area=(float)Math.PI*R*R;
+    public float getRadius(){
+        return this.radius;
     }
 
-    public void Update(float dt,Vector accelerometrData) {
-        //Update związany z poruszeniem się elementu
+
+    public Ball(Point location, float radius, Vector velocity) {
+        super(velocity, location);
+        omega=0;
+        axis=new Vector(0,0,1);
+        this.radius = radius;
+        mass=5;
+        area=(float)Math.PI*radius*radius;
+
+
+        GraphicsData generatedData = ObjectGenerator.createBall(location, radius, MESH_DIMENSION);
+        vertexData = new VertexArray(generatedData.vertexData);
+        drawCommands = generatedData.drawCommands;
+
+    }
+
+    public void bindData(ShaderProgram colorProgram) {
+        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, 0);
+    }
+
+
+    public void update(float dt, Vector accelerometrData) {
+        //update związany z poruszeniem się elementu
 
         //jeśli jest na powierzchni to liczymy następująco
         //TODO
         //olveSEquation
         SolveEquation(dt,accelerometrData);
 
-      //  velocity.X = velocity.X + (-accelerometrData.X) * dt;
-     //   velocity.Y = velocity.Y + (-accelerometrData.Y) * dt;
-     //   velocity.Z = velocity.Z + (-accelerometrData.Z) * dt;
-     //   location.X = location.X + velocity.X * dt + 0.5f * (-accelerometrData.X) * dt * dt;
-    //    location.Y = location.Y + velocity.Y * dt + 0.5f * (-accelerometrData.Y) * dt * dt;
-    //    location.Z = location.Z + velocity.Z * dt + 0.5f * (-accelerometrData.Z) * dt * dt;
+      //  velocity.x = velocity.x + (-accelerometrData.x) * dt;
+     //   velocity.y = velocity.y + (-accelerometrData.y) * dt;
+     //   velocity.z = velocity.z + (-accelerometrData.z) * dt;
+     //   location.x = location.x + velocity.x * dt + 0.5f * (-accelerometrData.x) * dt * dt;
+    //    location.y = location.y + velocity.y * dt + 0.5f * (-accelerometrData.y) * dt * dt;
+    //    location.z = location.z + velocity.z * dt + 0.5f * (-accelerometrData.z) * dt * dt;
     }
 
 
@@ -57,11 +80,11 @@ public class Ball extends MovableElement {
 // and independent variables.
         float[] q = new float[6];
         {
-            q[1] = location.X;
+            q[1] = location.x;
             q[0] = velocity.X;
-            q[3] = location.Y;
+            q[3] = location.y;
             q[2] = velocity.Y;
-            q[5] = location.Z;
+            q[5] = location.z;
             q[4] = velocity.Z;
         }
         // q=SolveEquation(q,dt,accelerometrData);
@@ -77,11 +100,11 @@ public class Ball extends MovableElement {
             q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
         {
-            location.X = q[1];
+            location.x = q[1];
             velocity.X = q[0];
-            location.Y = q[3];
+            location.y = q[3];
             velocity.Y = q[2];
-            location.Z = q[5];
+            location.z = q[5];
             velocity.Z = q[4];
         }
         return;
@@ -111,7 +134,7 @@ public class Ball extends MovableElement {
         dQ[1] = dt * vx;
         dQ[2] = dt * (-accelerometrData.Y - Fd * vy / (mass * v));
         dQ[3] = dt * vy;
-        dQ[4] = q[4];//dt * (-accelerometrData.Z - Fd * vz / (mass * v));
+        dQ[4] = q[4];//dt * (-accelerometrData.z - Fd * vz / (mass * v));
         dQ[5] = q[5];//dt * vz;
         return dQ;
     }

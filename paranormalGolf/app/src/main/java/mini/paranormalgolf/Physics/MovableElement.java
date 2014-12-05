@@ -9,9 +9,10 @@ import mini.paranormalgolf.Primitives.Vector;
 public abstract class MovableElement extends Element {
 
     protected Vector velocity;
-    protected MovableElement(Vector _velocity, Point _location) {
-        super(_location);
-        velocity = _velocity;
+
+    protected MovableElement(Vector velocity, Point location) {
+        super(location);
+        this.velocity = velocity;
     }
 
 }
