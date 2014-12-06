@@ -1,6 +1,10 @@
 package mini.paranormalgolf.Physics;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
@@ -13,16 +17,18 @@ import static android.opengl.Matrix.translateM;
 import mini.paranormalgolf.Graphics.MatrixHelper;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Vector;
 
 /**
  * Created by Mateusz on 2014-12-05.
  */
-public class Updater {
+public class Updater implements SensorEventListener {
 
     private Context context;
     private Ball ball;
 
     private Board board;
+    private Vector accData=new Vector(0,0,0);
 
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
@@ -32,16 +38,18 @@ public class Updater {
 
     private ColorShaderProgram colorShaderProgram;
 
-    public Updater(Context context, Ball ball, Board board){
+    public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
         this.context = context;
         this.board = board;
         colorShaderProgram = new ColorShaderProgram(context);
+        Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public boolean update(){
-        //TODO updateowanie, sprawdzanie kolizji
-        return  false;
+    public boolean update() {
+        ball.Update(0.001f, accData);
+        return false;
     }
 
     //TODO zmienić tu żeby sie ekran nie obracal
@@ -80,4 +88,13 @@ public class Updater {
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        accData = new Vector(-event.values[1], -event.values[2], -event.values[0]);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }

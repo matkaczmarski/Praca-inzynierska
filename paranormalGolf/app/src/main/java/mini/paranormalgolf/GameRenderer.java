@@ -1,6 +1,7 @@
 package mini.paranormalgolf;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 
 import java.util.ArrayList;
@@ -33,10 +34,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     private final Context context;
     private Updater updater;
+    private SensorManager sensorManager;
 
-
-    public GameRenderer(Context context) {
+    public GameRenderer(Context context, SensorManager sensorManager) {
         this.context = context;
+        this.sensorManager = sensorManager;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 
         //TODO zmienić miejsce tworzenie updatera?
-        Ball ball = new Ball(new Point(0f, 0f, 0f), 0.1f, new Vector(0f, 0f, 0f));
+        Ball ball = new Ball(new Point(0f, 0.1f, 0f), 0.1f, new Vector(0f, 0f, 0f));
 
         Floor floor = new Floor(new CuboidMeasurement(1f, 1.6f, 1f),0, new Point(0f, 0f, 0f));
         Floor floor2 = new Floor(new CuboidMeasurement(1.6f, 1f, 1f),0, new Point(0f, 0f, 0f));
@@ -58,7 +60,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         floors.add(floor2);
         Board board = new Board(0, floors);
 
-        updater = new Updater(context, ball, board);
+        updater = new Updater(context, ball, board,sensorManager);
     }
 
     @Override

@@ -128,10 +128,10 @@ public class Ball extends MovableElement {
 // Compute the right-hand sides of the six ODEs.
         dQ[0] = dt * (-accelerometrData.X - Fd * vx / (mass * v));
         dQ[1] = dt * vx;
-        dQ[2] = dt * (-accelerometrData.Y - Fd * vy / (mass * v));
-        dQ[3] = dt * vy;
-        dQ[4] = 0;//dt * (-accelerometrData.Z - Fd * vz / (mass * v));
-        dQ[5] = 0;//dt * vz;
+        dQ[2] = 0;//dt * (-accelerometrData.Y - Fd * vy / (mass * v));
+        dQ[3] = 0;//dt * vy;
+        dQ[4] = dt * (-accelerometrData.Z - Fd * vz / (mass * v));
+        dQ[5] = dt * vz;
         return dQ;
     }
 /*
