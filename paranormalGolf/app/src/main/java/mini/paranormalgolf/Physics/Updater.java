@@ -48,7 +48,7 @@ public class Updater implements SensorEventListener {
     }
 
     public boolean update() {
-        ball.Update(0.001f, accData);
+        ball.Update(0.005f, accData);
         return false;
     }
 
@@ -90,7 +90,7 @@ public class Updater implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        accData = new Vector(-event.values[1], -event.values[2], -event.values[0]);
+        accData = new Vector(event.values[1], event.values[2], event.values[0]);
     }
 
     @Override
