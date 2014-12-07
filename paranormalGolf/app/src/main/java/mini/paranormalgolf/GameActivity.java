@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +23,8 @@ public class GameActivity extends Activity {
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet = false;
 
+    protected PowerManager.WakeLock mWakeLock;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,11 @@ public class GameActivity extends Activity {
                 (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager
                 .getDeviceConfigurationInfo();
+
+        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
+        this.mWakeLock.acquire();
+
         // Even though the latest emulator supports OpenGL ES 2.0,
         // it has a bug where it doesn't set the reqGlEsVersion so
         // the above check doesn't work. The below will detect if the
@@ -114,4 +122,10 @@ public class GameActivity extends Activity {
                 glSurfaceView.onResume();
             }
         }
+
+    @Override
+    protected void onDestroy() {
+        this.mWakeLock.release();
+        super.onDestroy();
+    }
 }

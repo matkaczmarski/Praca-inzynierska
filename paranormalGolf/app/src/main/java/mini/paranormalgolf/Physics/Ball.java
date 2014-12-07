@@ -17,12 +17,13 @@ public class Ball extends MovableElement {
     private final int MESH_DIMENSION = 32;
 
     public final float[] rgba = new float[] {0f, 1f, 0f, 0.4f};
-
+    //
     private float radius;
     private float omega;
     private Vector axis;
     private float mass;
     private float area;
+    private final static float mu=0.1f;
     private final static float Cd=0.4f;
     private final static float density=1.225f;
 
@@ -125,12 +126,13 @@ public class Ball extends MovableElement {
         float v = (float) (Math.sqrt(vx * vx + vy * vy + vz * vz) + 1e-8);
 //
         float Fd = 0.5f * density * area * Cd * v * v;
+        float Fr = mu * accelerometrData.Y * mass;
 // Compute the right-hand sides of the six ODEs.
-        dQ[0] = dt * (-accelerometrData.X - Fd * vx / (mass * v));
+        dQ[0] = dt * (accelerometrData.X - (Fd + Fr) * vx / (mass * v));
         dQ[1] = dt * vx;
         dQ[2] = 0;//dt * (-accelerometrData.Y - Fd * vy / (mass * v));
         dQ[3] = 0;//dt * vy;
-        dQ[4] = dt * (-accelerometrData.Z - Fd * vz / (mass * v));
+        dQ[4] = dt * (accelerometrData.Z - (Fd + Fr) * vz / (mass * v));
         dQ[5] = dt * vz;
         return dQ;
     }
