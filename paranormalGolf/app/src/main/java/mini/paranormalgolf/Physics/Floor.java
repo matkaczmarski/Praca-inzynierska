@@ -14,8 +14,8 @@ import mini.paranormalgolf.Primitives.Point;
 public class Floor extends Element {
 
     public final float[] rgba = new float[] {0f, 0f, 1f, 1f};
-    private CuboidMeasurement measurements;
-    private float mu;
+    public CuboidMeasurement measurements;
+    public float mu;
 
     public Floor(CuboidMeasurement measures,float mu, Point location) {
         super(location);

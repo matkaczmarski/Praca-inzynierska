@@ -48,7 +48,17 @@ public class Updater implements SensorEventListener {
     }
 
     public boolean update() {
-        ball.Update(0.005f, accData);
+        float mu = -1;
+        for (Floor floor : board.floors) {
+            if (floor.location.x - floor.measurements.sizeX / 2 <= ball.location.x && floor.location.x + floor.measurements.sizeX / 2 >= ball.location.x
+                    && floor.location.z - floor.measurements.sizeZ / 2 <= ball.location.z && floor.location.z + floor.measurements.sizeZ / 2 >= ball.location.z
+                    /*&& Math.abs(ball.location.y - ball.getRadius() - (floor.location.y - floor.measurements.sizeX)) < 0.0001*/) {
+                mu = floor.mu;
+                break;
+            }
+        }
+
+        ball.Update(0.005f, accData, mu);
         return false;
     }
 
