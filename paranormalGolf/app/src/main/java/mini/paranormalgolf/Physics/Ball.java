@@ -81,11 +81,11 @@ public class Ball extends MovableElement {
         // q=SolveEquation(q,dt,accelerometrData);
 
         //jeśli jest na powierzchni to liczymy następująco
-        if (mu>0) {
-            dq1 = RollingBall(q, q, dt, 0.0f, accelerometrData,mu);
-            dq2 = RollingBall(q, dq1, dt, 0.5f, accelerometrData,mu);
-            dq3 = RollingBall(q, dq2, dt, 0.5f, accelerometrData,mu);
-            dq4 = RollingBall(q, dq3, dt, 1.0f, accelerometrData,mu);
+        if (mu > 0) {
+            dq1 = RollingBall(q, q, dt, 0.0f, accelerometrData, mu);
+            dq2 = RollingBall(q, dq1, dt, 0.5f, accelerometrData, mu);
+            dq3 = RollingBall(q, dq2, dt, 0.5f, accelerometrData, mu);
+            dq4 = RollingBall(q, dq3, dt, 1.0f, accelerometrData, mu);
             for (j = 0; j < numEqns; ++j) {
                 q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
             }
@@ -100,12 +100,12 @@ public class Ball extends MovableElement {
         }
         //gdy jest w powietrzu to liczymy następująco
         else {
-            velocity.X = velocity.X + dt * -accelerometrData.X;
-            location.x = location.x + velocity.X * dt + -accelerometrData.X * dt * dt / 2.0f;
-            velocity.Y = velocity.Y + dt * -accelerometrData.Y;
-            location.y = location.y + velocity.Y * dt + -accelerometrData.Y * dt * dt / 2.0f;
-            velocity.Z = velocity.Z + dt * -accelerometrData.Z;
-            location.z = location.z + velocity.Z * dt + -accelerometrData.Z * dt * dt / 2.0f;
+            velocity.X = velocity.X + dt * accelerometrData.X;
+            location.x = location.x + velocity.X * dt + accelerometrData.X * dt * dt / 2.0f;
+            velocity.Y = velocity.Y + dt * accelerometrData.Y;
+            location.y = location.y + velocity.Y * dt + accelerometrData.Y * dt * dt / 2.0f;
+            velocity.Z = velocity.Z + dt * accelerometrData.Z;
+            location.z = location.z + velocity.Z * dt + accelerometrData.Z * dt * dt / 2.0f;
         }
         return;
     }
@@ -128,7 +128,7 @@ public class Ball extends MovableElement {
         float v = (float) (Math.sqrt(vx * vx + vy * vy + vz * vz) + 1e-8);
 //
         float Fd = 0.5f * density * area * Cd * v * v;
-        float Fr = mu * accelerometrData.Y * mass;
+        float Fr = mu * -accelerometrData.Y * mass;
 // Compute the right-hand sides of the six ODEs.
         dQ[0] = dt * (accelerometrData.X - (Fd + Fr) * vx / (mass * v));
         dQ[1] = dt * vx;
