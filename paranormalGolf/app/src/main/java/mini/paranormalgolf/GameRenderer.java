@@ -53,8 +53,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 0.1f, 0f), 0.1f, new Vector(0f, 0f, 0f));
 
-        Floor floor = new Floor(new CuboidMeasurement(1f, 1.6f, 1f),0, new Point(0f, 0f, 0f));
-        Floor floor2 = new Floor(new CuboidMeasurement(1.6f, 1f, 1f),0, new Point(0f, 0f, 0f));
+        Floor floor = new Floor(new CuboidMeasurement(1f, 1.6f, 1f),0.1f, new Point(0f, 0f, 0f));
+        Floor floor2 = new Floor(new CuboidMeasurement(1.6f, 1f, 1f),0.1f, new Point(0f, 0f, 0f));
         List<Floor> floors = new ArrayList<Floor>();
         floors.add(floor);
         floors.add(floor2);
