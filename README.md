@@ -1,4 +1,4 @@
 Praca-inzynierska
 =================
 
-Tworzymy coś pięknego
+Symulacja oddziaływań grawitacyjnych na urządzeniach mobilnych Android
