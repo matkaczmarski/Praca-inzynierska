@@ -22,7 +22,7 @@ public class Floor extends Element {
         this.measurements=measures;
         this.mu=mu;
 
-        GraphicsData generatedData = ObjectGenerator.createFloor(location, measures.sizeX, measures.sizeY);
+        GraphicsData generatedData = ObjectGenerator.createFloor(location, measures.sizeX, measures.sizeZ);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }
