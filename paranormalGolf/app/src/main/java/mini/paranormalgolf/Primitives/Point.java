@@ -5,14 +5,14 @@ package mini.paranormalgolf.Primitives;
  */
 public class Point {
 
-    public float x;
-    public float y;
-    public float z;
+    public float X;
+    public float Y;
+    public float Z;
 
     public Point(float x,float y, float z)
     {
-        this.x =x;
-        this.y =y;
-        this.z =z;
+        this.X =x;
+        this.Y =y;
+        this.Z =z;
     }
 }

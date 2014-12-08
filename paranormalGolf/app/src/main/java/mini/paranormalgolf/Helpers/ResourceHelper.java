@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
  */
 public class ResourceHelper {
 
-    //Metoda zwracająca tekst z pliku
+    //Metoda zwracająca tekst Z pliku
     public static String readTextFileFromResource(Context context, int resourceId) {
         StringBuilder body = new StringBuilder();
 

@@ -51,7 +51,7 @@ public class Ball extends MovableElement {
     }
 
     public void Update(float dt,Vector accelerometrData,float mu) {
-        //Update związany z poruszeniem się elementu
+        //Update związany Z poruszeniem się elementu
 
         SolveEquation(dt,accelerometrData,mu);
 
@@ -71,17 +71,17 @@ public class Ball extends MovableElement {
 // and independent variables.
         float[] q = new float[6];
         {
-            q[1] = location.x;
+            q[1] = location.X;
             q[0] = velocity.X;
-            q[3] = location.y;
+            q[3] = location.Y;
             q[2] = velocity.Y;
-            q[5] = location.z;
+            q[5] = location.Z;
             q[4] = velocity.Z;
         }
         // q=SolveEquation(q,dt,accelerometrData);
 
         //jeśli jest na powierzchni to liczymy następująco
-        if (mu > 0) {
+        if (mu >= 0) {
             dq1 = RollingBall(q, q, dt, 0.0f, accelerometrData, mu);
             dq2 = RollingBall(q, dq1, dt, 0.5f, accelerometrData, mu);
             dq3 = RollingBall(q, dq2, dt, 0.5f, accelerometrData, mu);
@@ -90,22 +90,22 @@ public class Ball extends MovableElement {
                 q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
             }
             {
-                location.x = q[1];
+                location.X = q[1];
                 velocity.X = q[0];
-                location.y = q[3];
+                location.Y = q[3];
                 velocity.Y = q[2];
-                location.z = q[5];
+                location.Z = q[5];
                 velocity.Z = q[4];
             }
         }
         //gdy jest w powietrzu to liczymy następująco
         else {
             velocity.X = velocity.X + dt * accelerometrData.X;
-            location.x = location.x + velocity.X * dt + accelerometrData.X * dt * dt / 2.0f;
+            location.X = location.X + velocity.X * dt + accelerometrData.X * dt * dt / 2.0f;
             velocity.Y = velocity.Y + dt * accelerometrData.Y;
-            location.y = location.y + velocity.Y * dt + accelerometrData.Y * dt * dt / 2.0f;
+            location.Y = location.Y + velocity.Y * dt + accelerometrData.Y * dt * dt / 2.0f;
             velocity.Z = velocity.Z + dt * accelerometrData.Z;
-            location.z = location.z + velocity.Z * dt + accelerometrData.Z * dt * dt / 2.0f;
+            location.Z = location.Z + velocity.Z * dt + accelerometrData.Z * dt * dt / 2.0f;
         }
         return;
     }

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Board;
 import mini.paranormalgolf.Physics.Floor;
@@ -53,8 +54,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 0.1f, 0f), 0.1f, new Vector(0f, 0f, 0f));
 
-        Floor floor = new Floor(new CuboidMeasurement(1f, 0f, 1.6f),0.1f, new Point(0f, 0f, 0f));
-        Floor floor2 = new Floor(new CuboidMeasurement(1.6f, 0f, 1f),0.1f, new Point(0f, 0f, 0f));
+        Floor floor = new Floor(new CuboidMeasurement(1f, 0f, 1.6f),0.05f, new Point(0f, 0f, 0f));
+        Floor floor2 = new Floor(new CuboidMeasurement(1.6f, 0f, 1f),0.05f, new Point(0f, 0f, 0f));
         List<Floor> floors = new ArrayList<Floor>();
         floors.add(floor);
         floors.add(floor2);
@@ -71,7 +72,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        if(updater.update()){
+        if (updater.update() != UpdateResult.NONE) {
             //dotarcie do mety?
         }
         updater.draw();

@@ -48,17 +48,17 @@ public class ObjectBuilder {
                 float jRadian = ((float)j/numPoints) * 2f * (float)Math.PI;
 
                 //theta - i
-                // x = r * cos(theta) * cos(phi)
-                // y = r * cos(theta) * sin(phi)
-                // z = r * sin(theta)
+                // X = r * cos(theta) * cos(phi)
+                // Y = r * cos(theta) * sin(phi)
+                // Z = r * sin(theta)
 
-                vertexData[offset++] = sphere.center.x + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
-                vertexData[offset++] = sphere.center.y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
-                vertexData[offset++] = sphere.center.z + sphere.radius * FloatMath.sin(iRadian);
+                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
+                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
+                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iRadian);
 
-                vertexData[offset++] = sphere.center.x + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
-                vertexData[offset++] = sphere.center.y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
-                vertexData[offset++] = sphere.center.z + sphere.radius * FloatMath.sin(iiRadian);
+                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
+                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
+                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iiRadian);
 
             }
 
@@ -75,29 +75,29 @@ public class ObjectBuilder {
 
         final int startVertex = offset / FLOATS_PER_VERTEX;
 
-        vertexData[offset++] = rectangle.center.x;
-        vertexData[offset++] = rectangle.center.y;
-        vertexData[offset++] = rectangle.center.z;
+        vertexData[offset++] = rectangle.center.X;
+        vertexData[offset++] = rectangle.center.Y;
+        vertexData[offset++] = rectangle.center.Z;
 
-        vertexData[offset++] = rectangle.center.x - rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.y ;//- rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.z - rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.X - rectangle.sizeX/2;
+        vertexData[offset++] = rectangle.center.Y;//- rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.Z - rectangle.sizeY/2;
 
-        vertexData[offset++] = rectangle.center.x - rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.y ;//+ rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.z+ rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.X - rectangle.sizeX/2;
+        vertexData[offset++] = rectangle.center.Y;//+ rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.Z + rectangle.sizeY/2;
 
-        vertexData[offset++] = rectangle.center.x + rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.y;// + rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.z  + rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.X + rectangle.sizeX/2;
+        vertexData[offset++] = rectangle.center.Y;// + rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.Z + rectangle.sizeY/2;
 
-        vertexData[offset++] = rectangle.center.x + rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.y ;//- rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.z - rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.X + rectangle.sizeX/2;
+        vertexData[offset++] = rectangle.center.Y;//- rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.Z - rectangle.sizeY/2;
 
-        vertexData[offset++] = rectangle.center.x - rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.y ;//- rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.z - rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.X - rectangle.sizeX/2;
+        vertexData[offset++] = rectangle.center.Y;//- rectangle.sizeY/2;
+        vertexData[offset++] = rectangle.center.Z - rectangle.sizeY/2;
 
         drawCommands.add(new DrawCommand() {
             @Override

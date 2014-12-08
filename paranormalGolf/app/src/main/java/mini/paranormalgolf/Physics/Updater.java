@@ -16,6 +16,7 @@ import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
 import mini.paranormalgolf.Graphics.MatrixHelper;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
+import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
@@ -47,19 +48,25 @@ public class Updater implements SensorEventListener {
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public boolean update() {
+    public UpdateResult update() {
+        //odświeżenie pozycji elementów ruchomych
+
+        float mu = getActualCoefficientFriction();
+        ball.Update(0.005f, accData, mu);
+        return UpdateResult.NONE;
+    }
+
+    private float getActualCoefficientFriction() {
         float mu = -1;
         for (Floor floor : board.floors) {
-            if (floor.location.x - floor.measurements.sizeX / 2 <= ball.location.x && floor.location.x + floor.measurements.sizeX / 2 >= ball.location.x
-                    && floor.location.z - floor.measurements.sizeZ / 2 <= ball.location.z && floor.location.z + floor.measurements.sizeZ / 2 >= ball.location.z
-                    /*&& Math.abs(ball.location.y - ball.getRadius() - (floor.location.y - floor.measurements.sizeX)) < 0.0001*/) {
+            if (floor.location.X - floor.measurements.sizeX / 2 <= ball.location.X && floor.location.X + floor.measurements.sizeX / 2 >= ball.location.X
+                    && floor.location.Z - floor.measurements.sizeZ / 2 <= ball.location.Z && floor.location.Z + floor.measurements.sizeZ / 2 >= ball.location.Z
+                    && Math.abs(ball.location.Y - ball.getRadius() - (floor.location.Y + floor.measurements.sizeY / 2)) < 0.0001) {
                 mu = floor.mu;
                 break;
             }
         }
-
-        ball.Update(0.005f, accData, mu);
-        return false;
+        return mu;
     }
 
     //TODO zmienić tu żeby sie ekran nie obracal
@@ -94,7 +101,7 @@ public class Updater implements SensorEventListener {
 
     private void positionObjectInScene(Point location) {
         setIdentityM(modelMatrix, 0);
-        translateM(modelMatrix, 0, location.x, location.y, location.z);
+        translateM(modelMatrix, 0, location.X, location.Y, location.Z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
     }
 

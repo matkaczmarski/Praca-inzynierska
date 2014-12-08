@@ -16,7 +16,7 @@ public class Wall extends Element {
     }
 
     public void bindData(ShaderProgram shaderProgram){
-        //TODO dodać bindowanie z texture program
+        //TODO dodać bindowanie Z texture program
     }
 
 }

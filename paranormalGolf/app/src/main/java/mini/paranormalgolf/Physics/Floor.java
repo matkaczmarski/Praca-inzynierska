@@ -28,7 +28,7 @@ public class Floor extends Element {
     }
 
     public void bindData(ShaderProgram shaderProgram){
-        //TODO dodać bindowanie z texture program
+        //TODO dodać bindowanie Z texture program
         vertexData.setVertexAttribPointer(0, ((ColorShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, 0);
     }
 }

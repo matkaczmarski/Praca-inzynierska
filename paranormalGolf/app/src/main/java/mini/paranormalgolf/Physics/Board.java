@@ -7,8 +7,16 @@ import java.util.List;
  */
 public class Board {
 
-    final int boardId;
-    List<Floor> floors;
+    public final int boardId;
+    public Start start;
+    public Finish finish;
+    public List<CheckPoint> checkpoints;
+    public List<Floor> floors;
+    public List<Wall> walls;
+    public List<Elevator> elevators;
+    public List<Bar> bars;
+    public List<Bonus> bonuses;
+
 
 
     public Board(int boardId, List<Floor> floors){
