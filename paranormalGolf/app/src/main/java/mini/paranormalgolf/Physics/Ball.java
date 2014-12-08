@@ -52,23 +52,54 @@ public class Ball extends MovableElement {
 
     public void Update(float dt,Vector accelerometrData,float mu) {
         //Update związany Z poruszeniem się elementu
+        Vector acceleration;
+        if (mu >= 0)
+            acceleration = CountAccelerationForRolling(accelerometrData, mu);
+        else
+            acceleration = CountAccelerationForFlying(accelerometrData);
+        MakeNextPosition(dt, acceleration);
+    }
 
-        SolveEquation(dt,accelerometrData,mu);
+    private Vector CountAccelerationForRolling(Vector accData,float mu) {
 
 
+        float v = (float) (Math.sqrt(velocity.X * velocity.X + velocity.Y * velocity.Y + velocity.Z * velocity.Z) + 1e-8);
+        float Fd = 0.5f * density * area * Cd * v * v;
+        float Fr = mu * Math.abs(accData.Y) * mass;
+        Vector acceleration = new Vector(
+                accData.X - (Fd + Fr) * velocity.X / (mass * v),
+                0,
+                accData.Z - (Fd + Fr) * velocity.Z / (mass * v));
+        return acceleration;
+    }
+//// Compute the right-hand sides of the six ODEs.
+//        dQ[0] = dt * (accelerometrData.X - (Fd + Fr) * vx / (mass * v));
+//        dQ[1] = dt * vx;
+//        dQ[2] = 0;//dt * (-accelerometrData.Y - Fd * vy / (mass * v));
+//        dQ[3] = 0;//dt * vy;
+//        dQ[4] = dt * (accelerometrData.Z - (Fd + Fr) * vz / (mass * v));
+//        dQ[5] = dt * vz;
+//        return dQ;
+
+
+
+    private Vector CountAccelerationForFlying(Vector accData){
+        return accData;
     }
 
 
-    private void SolveEquation(float dt,Vector accelerometrData,float mu) {
 
+
+
+    private void MakeNextPosition(float dt, Vector acceleration){
         int j;
         int numEqns = 6;
         float[] dq1 = new float[numEqns];
         float[] dq2 = new float[numEqns];
         float[] dq3 = new float[numEqns];
         float[] dq4 = new float[numEqns];
-// Retrieve the current values of the dependent
-// and independent variables.
+
+
         float[] q = new float[6];
         {
             q[1] = location.X;
@@ -78,39 +109,28 @@ public class Ball extends MovableElement {
             q[5] = location.Z;
             q[4] = velocity.Z;
         }
-        // q=SolveEquation(q,dt,accelerometrData);
 
-        //jeśli jest na powierzchni to liczymy następująco
-        if (mu >= 0) {
-            dq1 = RollingBall(q, q, dt, 0.0f, accelerometrData, mu);
-            dq2 = RollingBall(q, dq1, dt, 0.5f, accelerometrData, mu);
-            dq3 = RollingBall(q, dq2, dt, 0.5f, accelerometrData, mu);
-            dq4 = RollingBall(q, dq3, dt, 1.0f, accelerometrData, mu);
-            for (j = 0; j < numEqns; ++j) {
-                q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
-            }
-            {
-                location.X = q[1];
-                velocity.X = q[0];
-                location.Y = q[3];
-                velocity.Y = q[2];
-                location.Z = q[5];
-                velocity.Z = q[4];
-            }
+        dq1 = SolveEquation(q, q, dt, 0.0f, acceleration);
+        dq2 = SolveEquation(q, dq1, dt, 0.5f, acceleration);
+        dq3 = SolveEquation(q, dq2, dt, 0.5f, acceleration);
+        dq4 = SolveEquation(q, dq3, dt, 1.0f, acceleration);
+        for (j = 0; j < numEqns; ++j) {
+            q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
-        //gdy jest w powietrzu to liczymy następująco
-        else {
-            velocity.X = velocity.X + dt * accelerometrData.X;
-            location.X = location.X + velocity.X * dt + accelerometrData.X * dt * dt / 2.0f;
-            velocity.Y = velocity.Y + dt * accelerometrData.Y;
-            location.Y = location.Y + velocity.Y * dt + accelerometrData.Y * dt * dt / 2.0f;
-            velocity.Z = velocity.Z + dt * accelerometrData.Z;
-            location.Z = location.Z + velocity.Z * dt + accelerometrData.Z * dt * dt / 2.0f;
+
+        {
+            location.X = q[1];
+            velocity.X = q[0];
+            location.Y = q[3];
+            velocity.Y = q[2];
+            location.Z = q[5];
+            velocity.Z = q[4];
         }
-        return;
     }
 
-    private float[] RollingBall(float[] q, float deltaQ[], float dt, float qScale, Vector accelerometrData,float mu) {
+
+    private float[] SolveEquation(float[] q, float deltaQ[], float dt, float qScale, Vector acceleration) {
+
         float dQ[] = new float[6];
 // Compute the intermediate values of the
 // dependent variables.
@@ -125,19 +145,74 @@ public class Ball extends MovableElement {
 // Compute the velocity magnitude. The 1.0e-8 term
 // ensures there won't be a divide by zero later on
 // if all of the velocity components are zero.
-        float v = (float) (Math.sqrt(vx * vx + vy * vy + vz * vz) + 1e-8);
-//
-        float Fd = 0.5f * density * area * Cd * v * v;
-        float Fr = mu * -accelerometrData.Y * mass;
 // Compute the right-hand sides of the six ODEs.
-        dQ[0] = dt * (accelerometrData.X - (Fd + Fr) * vx / (mass * v));
+        dQ[0] = dt * (acceleration.X);
         dQ[1] = dt * vx;
-        dQ[2] = 0;//dt * (-accelerometrData.Y - Fd * vy / (mass * v));
-        dQ[3] = 0;//dt * vy;
-        dQ[4] = dt * (accelerometrData.Z - (Fd + Fr) * vz / (mass * v));
+        dQ[2] = dt * (acceleration.Y);
+        dQ[3] = dt * vy;
+        dQ[4] = dt * (acceleration.Z);
         dQ[5] = dt * vz;
         return dQ;
     }
+//        //jeśli jest na powierzchni to liczymy następująco
+//        if (mu >= 0) {
+//            dq1 = RollingBall(q, q, dt, 0.0f, accelerometrData, mu);
+//            dq2 = RollingBall(q, dq1, dt, 0.5f, accelerometrData, mu);
+//            dq3 = RollingBall(q, dq2, dt, 0.5f, accelerometrData, mu);
+//            dq4 = RollingBall(q, dq3, dt, 1.0f, accelerometrData, mu);
+//            for (j = 0; j < numEqns; ++j) {
+//                q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
+//            }
+//            {
+//                location.X = q[1];
+//                velocity.X = q[0];
+//                location.Y = q[3];
+//                velocity.Y = q[2];
+//                location.Z = q[5];
+//                velocity.Z = q[4];
+//            }
+//        }
+//        //gdy jest w powietrzu to liczymy następująco
+//        else {
+//            velocity.X = velocity.X + dt * accelerometrData.X;
+//            location.X = location.X + velocity.X * dt + accelerometrData.X * dt * dt / 2.0f;
+//            velocity.Y = velocity.Y + dt * accelerometrData.Y;
+//            location.Y = location.Y + velocity.Y * dt + accelerometrData.Y * dt * dt / 2.0f;
+//            velocity.Z = velocity.Z + dt * accelerometrData.Z;
+//            location.Z = location.Z + velocity.Z * dt + accelerometrData.Z * dt * dt / 2.0f;
+//        }
+//        return;
+
+
+
+//    private float[] RollingBall(float[] q, float deltaQ[], float dt, float qScale, Vector accelerometrData,float mu) {
+//        float dQ[] = new float[6];
+//// Compute the intermediate values of the
+//// dependent variables.
+//        for (int i = 0; i < 6; ++i) {
+//            q[i] = q[i] + qScale * deltaQ[i];
+//        }
+//// Declare some convenience variables representing
+//// the intermediate values of velocity.
+//        float vx = q[0];
+//        float vy = q[2];
+//        float vz = q[4];
+//// Compute the velocity magnitude. The 1.0e-8 term
+//// ensures there won't be a divide by zero later on
+//// if all of the velocity components are zero.
+//        float v = (float) (Math.sqrt(vx * vx + vy * vy + vz * vz) + 1e-8);
+////
+//        float Fd = 0.5f * density * area * Cd * v * v;
+//        float Fr = mu * -accelerometrData.Y * mass;
+//// Compute the right-hand sides of the six ODEs.
+//        dQ[0] = dt * (accelerometrData.X - (Fd + Fr) * vx / (mass * v));
+//        dQ[1] = dt * vx;
+//        dQ[2] = 0;//dt * (-accelerometrData.Y - Fd * vy / (mass * v));
+//        dQ[3] = 0;//dt * vy;
+//        dQ[4] = dt * (accelerometrData.Z - (Fd + Fr) * vz / (mass * v));
+//        dQ[5] = dt * vz;
+//        return dQ;
+//    }
 /*
 
 
