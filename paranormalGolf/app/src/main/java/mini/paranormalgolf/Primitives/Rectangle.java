@@ -6,12 +6,12 @@ package mini.paranormalgolf.Primitives;
 public class Rectangle {
 
     public Point center;
-    public float sizeX;
-    public float sizeY;
+    public float a;
+    public float b;
 
-    public Rectangle(Point center, float sizeX, float sizeY){
+    public Rectangle(Point center, float a, float b){
         this.center = center;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+        this.a = a;
+        this.b = b;
     }
 }

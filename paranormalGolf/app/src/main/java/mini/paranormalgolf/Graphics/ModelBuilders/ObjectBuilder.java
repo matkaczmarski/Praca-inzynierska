@@ -23,6 +23,12 @@ public class ObjectBuilder {
         void draw();
     }
 
+    public enum Axis{
+        xAxis,
+        yAxis,
+        zAxis
+    }
+
     private final float[] vertexData;
     private final List<DrawCommand> drawCommands;
     private int offset = 0;
@@ -71,7 +77,8 @@ public class ObjectBuilder {
         }
     }
 
-    public void appendRectangle(Rectangle rectangle){
+    //Axis constantsAxis - oś, dla której prostokąt leży "płasko"
+    public void appendRectangle(Rectangle rectangle, Axis constantAxis){
 
         final int startVertex = offset / FLOATS_PER_VERTEX;
 
@@ -79,25 +86,73 @@ public class ObjectBuilder {
         vertexData[offset++] = rectangle.center.Y;
         vertexData[offset++] = rectangle.center.Z;
 
-        vertexData[offset++] = rectangle.center.X - rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.Y;//- rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.Z - rectangle.sizeY/2;
+        switch (constantAxis)
+        {
+            case xAxis:
+                vertexData[offset++] = rectangle.center.X;
+                vertexData[offset++] = rectangle.center.Y - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
 
-        vertexData[offset++] = rectangle.center.X - rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.Y;//+ rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.Z + rectangle.sizeY/2;
+                vertexData[offset++] = rectangle.center.X;
+                vertexData[offset++] = rectangle.center.Y - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
 
-        vertexData[offset++] = rectangle.center.X + rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.Y;// + rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.Z + rectangle.sizeY/2;
+                vertexData[offset++] = rectangle.center.X;
+                vertexData[offset++] = rectangle.center.Y + rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
 
-        vertexData[offset++] = rectangle.center.X + rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.Y;//- rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.Z - rectangle.sizeY/2;
+                vertexData[offset++] = rectangle.center.X;
+                vertexData[offset++] = rectangle.center.Y + rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
 
-        vertexData[offset++] = rectangle.center.X - rectangle.sizeX/2;
-        vertexData[offset++] = rectangle.center.Y;//- rectangle.sizeY/2;
-        vertexData[offset++] = rectangle.center.Z - rectangle.sizeY/2;
+                vertexData[offset++] = rectangle.center.X;
+                vertexData[offset++] = rectangle.center.Y - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+                break;
+            case yAxis:
+                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+
+                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y;//+ rectangle.b/2;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+
+                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y;// + rectangle.b/2;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+
+                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+
+                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+                break;
+            case zAxis:
+                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Z;
+
+                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Z;
+
+                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Z;
+
+                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Z;
+
+                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+                vertexData[offset++] = rectangle.center.Y - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Z;
+                break;
+        }
+
 
         drawCommands.add(new DrawCommand() {
             @Override

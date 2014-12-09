@@ -75,12 +75,17 @@ public class Updater implements SensorEventListener {
 
         //ustawianie pozycji kamery, sceny itd
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width / (float) height, 1f, 10f);
-        setLookAtM(viewMatrix, 0, 0f, 1.2f, 2.2f, 0f, 0f, 0f, 0f, 1f, 0f);
+
+
+        //setLookAtM(viewMatrix, 0, 0f, 1.5f, 1.5f, 0f, 0f, 0f, 0f, 1f, 0f);
+        setLookAtM(viewMatrix, 0, ball.location.X, ball.location.Y + 1.5f, ball.location.Z + 1.5f, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
     }
 
     public void draw(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        setLookAtM(viewMatrix, 0, ball.location.X, ball.location.Y + 1.5f, ball.location.Z + 1.5f, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
 
 
         //rysowanie podlogi
