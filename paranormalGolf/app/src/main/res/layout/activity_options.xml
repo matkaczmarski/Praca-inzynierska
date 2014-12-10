@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mini.paranormalgolf.Activities.OptionsActivity"
+    android:background="@color/activity_background">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/menu"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/options_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/activity_main_menu_title"
+            android:textColor="@color/activity_main_menu_title"
+            android:text="@string/options_activity_title"
+            android:layout_marginTop="20dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/options_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/OptionsButton"
+                android:text="@string/options_activity_music"/>
+            <CheckBox
+                android:id="@+id/options_sounds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/OptionsButton"
+                android:text="@string/options_activity_sound"/>
+            <CheckBox
+                android:id="@+id/options_vibrations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/OptionsButton"
+                android:text="@string/options_activity_vibrations"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
