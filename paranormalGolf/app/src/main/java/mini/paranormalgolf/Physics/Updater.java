@@ -52,7 +52,7 @@ public class Updater implements SensorEventListener {
         //odświeżenie pozycji elementów ruchomych
 
         float mu = getActualCoefficientFriction();
-        ball.Update(0.005f, accData, mu);
+        ball.Update(0.01f, accData, mu);
         return UpdateResult.NONE;
     }
 
