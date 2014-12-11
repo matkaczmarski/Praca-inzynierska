@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">paranormalGolf</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main_menu">MainMenuActivity</string>
+    <string name="main_menu_activity_game">Paranormal Golf</string>
+    <string name="main_menu_activity_start">Start</string>
+    <string name="main_menu_activity_options">Opcje</string>
+    <string name="main_menu_activity_help">Pomoc</string>
+    <string name="main_menu_activity_exit">Koniec</string>
+    <string name="options_activity_title">OPCJE</string>
+    <string name="options_activity_music">Muzyka</string>
+    <string name="options_activity_sound">Dźwięki</string>
+    <string name="options_activity_vibrations">Wibracje</string>
+    <string name="options_activity_language">Język</string>
+    <string name="options_activity_appearance">Wygląd kulki</string>
+</resources>

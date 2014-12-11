@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mini.paranormalgolf.Activities.MainMenuActivity"
+    android:background="@color/activity_background">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/menu"
+        android:scaleType="centerCrop"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/main_menu_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/activity_main_menu_title"
+            android:textColor="@color/activity_main_menu_title"
+            android:text="@string/main_menu_activity_game"
+            android:layout_marginTop="20dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/main_menu_start"
+                android:text="@string/main_menu_activity_start"
+                style="@style/MenuButton"
+                android:onClick="onStartClick"/>
+
+            <TextView
+                android:id="@+id/main_menu_options"
+                android:text="@string/main_menu_activity_options"
+                style="@style/MenuButton"
+                android:onClick="onOptionsClick"/>
+
+            <TextView
+                android:id="@+id/main_menu_help"
+                android:text="@string/main_menu_activity_help"
+                style="@style/MenuButton"
+                android:onClick="onHelpClick"/>
+
+            <TextView
+                android:id="@+id/main_menu_exit"
+                android:text="@string/main_menu_activity_exit"
+                style="@style/MenuButton"
+                android:onClick="onExitClick"/>
+
+            </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        </LinearLayout>
+
+</RelativeLayout>
