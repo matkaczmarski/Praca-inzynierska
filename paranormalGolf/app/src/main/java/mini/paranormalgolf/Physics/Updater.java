@@ -44,6 +44,12 @@ public class Updater implements SensorEventListener {
 
     private Point lightPos =  new Point(3f, 3.0f, 1.5f);
 
+    private final float fieldOfViewDegree = 45;
+    private final float near = 1f;
+    private final float far = 10f;
+
+    private final Point cameraShift = new Point(0f, 1.5f, 1.5f);
+
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
         this.context = context;
@@ -78,15 +84,14 @@ public class Updater implements SensorEventListener {
     //TODO zmienić tu żeby sie ekran nie obracal
     public void surfaceChange(int width, int height){
         glViewport(0, 0, width, height);
-
-        //ustawianie pozycji kamery, sceny itd
-        MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width / (float) height, 1f, 10f);
+        //ustawianie pozycji sceny
+        MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / (float) height, near, far);
 
     }
 
     public void draw(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        setLookAtM(viewMatrix, 0, ball.location.X, ball.location.Y + 1.5f, ball.location.Z + 1.5f, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
+        setLookAtM(viewMatrix, 0, ball.location.X + cameraShift.X, ball.location.Y + cameraShift.Y, ball.location.Z + cameraShift.Z, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
         colorShaderProgram.useProgram();

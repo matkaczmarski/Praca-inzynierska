@@ -91,6 +91,7 @@ public class Ball extends MovableElement {
 
     private float[] SolveEquation(float[] q, float deltaQ[], float dt, float qScale, Vector accelerometrData,float mu) {
 
+
         float dQ[] = new float[6];
         float newQ[] = new float[6];
         for (int i = 0; i < 6; ++i) {
@@ -98,7 +99,9 @@ public class Ball extends MovableElement {
         }
         Vector localVelocity = new Vector(newQ[0], newQ[2], newQ[4]);
         Vector acceleration;
-        if (mu < 0) acceleration = CountAccelerationForFlying(accelerometrData, localVelocity);
+        if (mu < 0) {
+            acceleration = CountAccelerationForFlying(accelerometrData, localVelocity);
+        }
         else acceleration = CountAccelerationForRolling(accelerometrData, mu, localVelocity);
         // CountAcceleration(newVelocity,accData,mu);
         dQ[0] = dt * (acceleration.X);
