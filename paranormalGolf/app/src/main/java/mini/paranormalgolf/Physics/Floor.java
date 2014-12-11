@@ -3,6 +3,7 @@ package mini.paranormalgolf.Physics;
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Primitives.CuboidMeasurement;
@@ -13,7 +14,7 @@ import mini.paranormalgolf.Primitives.Point;
  */
 public class Floor extends Element {
 
-    public final float[] rgba = new float[] {0f, 0f, 1f, 1f};
+    public final float[] rgba = new float[] { 0.196078f, 0.703922f, 0.296078f, 1f};
     public CuboidMeasurement measurements;
     public float mu;
 
@@ -31,4 +32,9 @@ public class Floor extends Element {
         //TODO dodać bindowanie Z texture program
         vertexData.setVertexAttribPointer(0, ((ColorShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, 0);
     }
+
+//    public void bindData(ShaderProgram colorProgram) {
+//        //vertexData.setVertexAttribPointer(0, ((LightColorShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+//        //vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((LightColorShaderProgram)colorProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
+//    }
 }

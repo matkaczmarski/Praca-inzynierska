@@ -11,12 +11,15 @@ import mini.paranormalgolf.Helpers.ResourceHelper;
 abstract public class ShaderProgram {
 
     // Uniform constants
-    protected static final String U_MATRIX = "u_Matrix";
+    protected static final String U_MVPMATRIX = "u_MVPMatrix";
+    protected static final String U_MVMATRIX = "u_MVMatrix";
     protected static final String U_COLOR = "u_Color";
     protected static final String U_TEXTURE_UNIT = "u_TextureUnit";
+    protected static final String U_LIGHTPOS = "u_LightPos";
 
     // Attribute constants
     protected static final String A_POSITION = "a_Position";
+    protected static final String A_NORMAL = "a_Normal";
     protected static final String A_COLOR = "a_Color";
     protected static final String A_TEXTURE_COORDINATES = "a_TextureCoordinates";
 

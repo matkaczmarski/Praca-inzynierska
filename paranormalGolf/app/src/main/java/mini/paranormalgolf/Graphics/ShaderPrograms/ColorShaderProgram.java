@@ -24,16 +24,16 @@ public class ColorShaderProgram extends ShaderProgram {
         super(context, R.raw.simple_vertex_shader, R.raw.simple_fragment_shader);
 
         // Retrieve uniform locations for the shader program.
-        uMatrixLocation = glGetUniformLocation(program, U_MATRIX);
+        uMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
         uColorLocation = glGetUniformLocation(program, U_COLOR);
 
         // Retrieve attribute locations for the shader program.
         aPositionLocation = glGetAttribLocation(program, A_POSITION);
     }
 
-    public void setUniforms(float[] matrix, float r, float g, float b, float a) {
+    public void setUniforms(float[] matrix, float[] rgba) {
         glUniformMatrix4fv(uMatrixLocation, 1, false, matrix, 0);
-        glUniform4f(uColorLocation, r, g, b, a);
+        glUniform4f(uColorLocation, rgba[0], rgba[1], rgba[2], rgba[3]);
     }
 
     public int getPositionAttributeLocation() {

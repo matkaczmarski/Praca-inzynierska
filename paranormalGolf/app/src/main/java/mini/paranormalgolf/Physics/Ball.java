@@ -2,6 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
+import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
@@ -16,7 +17,7 @@ public class Ball extends MovableElement {
     private final static float G=-9.81f;
     private final int MESH_DIMENSION = 32;
 
-    public final float[] rgba = new float[] {0f, 1f, 0f, 0.4f};
+    public final float[] rgba = new float[] {0.0f, 0.0f, 0.9f, 1f};
     //
     private float radius;
     private float omega;
@@ -47,7 +48,8 @@ public class Ball extends MovableElement {
     }
 
     public void bindData(ShaderProgram colorProgram) {
-        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, 0);
+        vertexData.setVertexAttribPointer(0, ((LightColorShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((LightColorShaderProgram)colorProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
     }
 
     public void Update(float dt,Vector accelerometrData,float mu) {

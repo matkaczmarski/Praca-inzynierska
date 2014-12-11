@@ -16,6 +16,7 @@ import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
 import mini.paranormalgolf.Graphics.MatrixHelper;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
@@ -35,15 +36,20 @@ public class Updater implements SensorEventListener {
     private final float[] modelMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
     private final float[] viewProjectionMatrix = new float[16];
+    private final float[] modelViewMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
 
     private ColorShaderProgram colorShaderProgram;
+    private LightColorShaderProgram lightColorShaderProgram;
+
+    private Point lightPos =  new Point(3f, 3.0f, 1.5f);
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
         this.context = context;
         this.board = board;
         colorShaderProgram = new ColorShaderProgram(context);
+        lightColorShaderProgram = new LightColorShaderProgram(context);
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -76,9 +82,6 @@ public class Updater implements SensorEventListener {
         //ustawianie pozycji kamery, sceny itd
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width / (float) height, 1f, 10f);
 
-
-        //setLookAtM(viewMatrix, 0, 0f, 1.5f, 1.5f, 0f, 0f, 0f, 0f, 1f, 0f);
-        setLookAtM(viewMatrix, 0, ball.location.X, ball.location.Y + 1.5f, ball.location.Z + 1.5f, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
     }
 
     public void draw(){
@@ -86,21 +89,30 @@ public class Updater implements SensorEventListener {
         setLookAtM(viewMatrix, 0, ball.location.X, ball.location.Y + 1.5f, ball.location.Z + 1.5f, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-
-
+        colorShaderProgram.useProgram();
+        //lightColorShaderProgram.useProgram();
         //rysowanie podlogi
         for(Floor floor : board.floors) {
             positionObjectInScene(floor.location); //ustawianie pozycji
-            colorShaderProgram.setUniforms(modelViewProjectionMatrix, floor.rgba[0], floor.rgba[1], floor.rgba[2], floor.rgba[3]);
+            colorShaderProgram.setUniforms(modelViewProjectionMatrix, floor.rgba);
             floor.bindData(colorShaderProgram);
             floor.draw();
+//            positionObjectInScene(floor.location); //ustawianie pozycji
+//            lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, floor.rgba, lightPos);
+//            floor.bindData(lightColorShaderProgram);
+//            floor.draw();
         }
 
         //Rysowanie kulki
-        colorShaderProgram.useProgram();
-        positionObjectInScene(ball.location); //ustawianie pozycji
-        colorShaderProgram.setUniforms(modelViewProjectionMatrix, ball.rgba[0], ball.rgba[1], ball.rgba[2], ball.rgba[3]);
-        ball.bindData(colorShaderProgram);
+//        positionObjectInScene(ball.location); //ustawianie pozycji
+//        colorShaderProgram.setUniforms(modelViewProjectionMatrix, ball.rgba);
+//        ball.bindData(colorShaderProgram);
+//        ball.draw();
+
+       lightColorShaderProgram.useProgram();
+       positionObjectInScene(ball.location); //ustawianie pozycji
+        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, ball.rgba,lightPos);
+        ball.bindData(lightColorShaderProgram);
         ball.draw();
     }
 
@@ -108,6 +120,7 @@ public class Updater implements SensorEventListener {
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, location.X, location.Y, location.Z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
+        multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
     }
 
     @Override

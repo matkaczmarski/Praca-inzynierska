@@ -45,7 +45,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
 
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -54,11 +54,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 0.1f, 0f), 0.1f, new Vector(0f, 0f, 0f));
 
-        Floor floor = new Floor(new CuboidMeasurement(0.7f, 0.2f, 1.6f),0.05f, new Point(0f, -0.1f, 0f));
-        Floor floor2 = new Floor(new CuboidMeasurement(1.6f, 0.2f, 0.7f),0.05f, new Point(0f, -0.1f, 0f));
+        Floor floor = new Floor(new CuboidMeasurement(0.7f, 0.2f, 1.7f),0.05f, new Point(1f, -0.1f, 0f));
+        Floor floor2 = new Floor(new CuboidMeasurement(5.0f, 0.2f, 0.7f),0.05f, new Point(0f, -0.1f, 0f));
+        Floor floor3 = new Floor(new CuboidMeasurement(0.7f, 0.2f, 1.7f),0.05f, new Point(-1.0f, -0.1f, 0f));
         List<Floor> floors = new ArrayList<Floor>();
         floors.add(floor);
         floors.add(floor2);
+        floors.add(floor3);
         Board board = new Board(0, floors);
 
         updater = new Updater(context, ball, board,sensorManager);

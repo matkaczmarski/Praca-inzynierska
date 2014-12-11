@@ -15,7 +15,7 @@ public class ObjectGenerator {
     private static final int VERTEX_PER_RECTANGLE = 6;
 
     public static GraphicsData createBall(Point center, float radius, int numPoints) {
-        int size = 2 * (numPoints + 1) * (numPoints + 1);
+        int size = 4 * (numPoints + 1) * (numPoints + 1);
 
         ObjectBuilder builder = new ObjectBuilder(size);
         builder.appendSphere(new Sphere(center, radius), numPoints);
@@ -24,15 +24,15 @@ public class ObjectGenerator {
 
     public static GraphicsData createFloor(Point center, float sizeX, float sizeY, float sizeZ) {
 
-        ObjectBuilder builder = new ObjectBuilder(6 * VERTEX_PER_RECTANGLE);
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y + sizeY / 2, center.Z), sizeX, sizeZ), Axis.yAxis);
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y - sizeY / 2, center.Z), sizeX, sizeZ), Axis.yAxis);
+        ObjectBuilder builder = new ObjectBuilder( 6 * VERTEX_PER_RECTANGLE);
+        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y + sizeY / 2, center.Z), sizeX, sizeZ), Axis.yAxis, center);
+        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y - sizeY / 2, center.Z), sizeX, sizeZ), Axis.yAxis, center);
 
-        builder.appendRectangle(new Rectangle(new Point(center.X + sizeX / 2, center.Y, center.Z), sizeY, sizeZ), Axis.xAxis);
-        builder.appendRectangle(new Rectangle(new Point(center.X - sizeX / 2, center.Y, center.Z), sizeY, sizeZ), Axis.xAxis);
+        builder.appendRectangle(new Rectangle(new Point(center.X + sizeX / 2, center.Y, center.Z), sizeY, sizeZ), Axis.xAxis, center);
+        builder.appendRectangle(new Rectangle(new Point(center.X - sizeX / 2, center.Y, center.Z), sizeY, sizeZ), Axis.xAxis, center);
 
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y, center.Z - sizeZ / 2), sizeX, sizeY), Axis.zAxis);
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y, center.Z + sizeZ / 2), sizeX, sizeY), Axis.zAxis);
+        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y, center.Z - sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
+        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y, center.Z + sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
 
         return builder.build();
     }
