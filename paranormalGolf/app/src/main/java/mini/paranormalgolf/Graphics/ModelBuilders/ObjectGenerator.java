@@ -18,21 +18,21 @@ public class ObjectGenerator {
         int size = 4 * (numPoints + 1) * (numPoints + 1);
 
         ObjectBuilder builder = new ObjectBuilder(size);
-        builder.appendSphere(new Sphere(center, radius), numPoints);
+        builder.appendSphere(new Sphere(new Point(0,0,0), radius), numPoints);
         return builder.build();
     }
 
     public static GraphicsData createFloor(Point center, float sizeX, float sizeY, float sizeZ) {
 
-        ObjectBuilder builder = new ObjectBuilder( 6 * VERTEX_PER_RECTANGLE);
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y + sizeY / 2, center.Z), sizeX, sizeZ), Axis.yAxis, center);
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y - sizeY / 2, center.Z), sizeX, sizeZ), Axis.yAxis, center);
+        ObjectBuilder builder = new ObjectBuilder( 1 *6 * VERTEX_PER_RECTANGLE);
+        builder.appendRectangle(new Rectangle(new Point(0, sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
+        builder.appendRectangle(new Rectangle(new Point(0, - sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
 
-        builder.appendRectangle(new Rectangle(new Point(center.X + sizeX / 2, center.Y, center.Z), sizeY, sizeZ), Axis.xAxis, center);
-        builder.appendRectangle(new Rectangle(new Point(center.X - sizeX / 2, center.Y, center.Z), sizeY, sizeZ), Axis.xAxis, center);
+        builder.appendRectangle(new Rectangle(new Point( sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
+        builder.appendRectangle(new Rectangle(new Point(- sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
 
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y, center.Z - sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
-        builder.appendRectangle(new Rectangle(new Point(center.X, center.Y, center.Z + sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
+        builder.appendRectangle(new Rectangle(new Point(0, 0, - sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
+        builder.appendRectangle(new Rectangle(new Point(0, 0, sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
 
         return builder.build();
     }

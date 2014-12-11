@@ -48,7 +48,7 @@ public class Updater implements SensorEventListener {
     private final float near = 1f;
     private final float far = 10f;
 
-    private final Point cameraShift = new Point(0f, 1.5f, 1.5f);
+    private final Point cameraTranslation = new Point(0f, 1.5f, 1.5f);
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
@@ -91,7 +91,7 @@ public class Updater implements SensorEventListener {
 
     public void draw(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        setLookAtM(viewMatrix, 0, ball.location.X + cameraShift.X, ball.location.Y + cameraShift.Y, ball.location.Z + cameraShift.Z, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
+        setLookAtM(viewMatrix, 0, ball.location.X + cameraTranslation.X, ball.location.Y + cameraTranslation.Y, ball.location.Z + cameraTranslation.Z, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
         colorShaderProgram.useProgram();
@@ -109,11 +109,6 @@ public class Updater implements SensorEventListener {
         }
 
         //Rysowanie kulki
-//        positionObjectInScene(ball.location); //ustawianie pozycji
-//        colorShaderProgram.setUniforms(modelViewProjectionMatrix, ball.rgba);
-//        ball.bindData(colorShaderProgram);
-//        ball.draw();
-
        lightColorShaderProgram.useProgram();
        positionObjectInScene(ball.location); //ustawianie pozycji
         lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, ball.rgba,lightPos);

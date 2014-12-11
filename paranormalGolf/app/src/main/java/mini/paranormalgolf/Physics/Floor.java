@@ -34,7 +34,7 @@ public class Floor extends Element {
     }
 
 //    public void bindData(ShaderProgram colorProgram) {
-//        //vertexData.setVertexAttribPointer(0, ((LightColorShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        //vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((LightColorShaderProgram)colorProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
+//        vertexData.setVertexAttribPointer(0, ((LightColorShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((LightColorShaderProgram)colorProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
 //    }
 }
