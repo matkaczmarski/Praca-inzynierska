@@ -16,6 +16,8 @@ import mini.paranormalgolf.Primitives.Point;
 public class Floor extends Element {
 
     public final float[] rgba = new float[] { 0.196078f, 0.703922f, 0.296078f, 1f};
+    protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
+
     public CuboidMeasurement measurements;
     public float mu;
 
@@ -34,8 +36,8 @@ public class Floor extends Element {
 //        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, 0);
 //    }
         public void bindData(ShaderProgram colorProgram) {
-        vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, (POSITION_COMPONENT_COUNT + 2) * 4);
-        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)colorProgram).getTextureCoordinatesAttributeLocation(), 2, (POSITION_COMPONENT_COUNT + 2) * 4);
+        vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)colorProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
     }
 
 //    public void bindData(ShaderProgram colorProgram) {

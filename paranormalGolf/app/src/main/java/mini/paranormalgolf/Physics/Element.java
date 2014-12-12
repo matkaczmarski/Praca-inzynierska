@@ -14,7 +14,7 @@ public abstract class Element {
 
     protected final int POSITION_COMPONENT_COUNT = 3;
     protected final int NORMAL_COMPONENT_COUNT = 3;
-    protected final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
+    protected final int TEXTURE_COMPONENT_COUNT = 2;
 
     protected Point location;
     protected VertexArray vertexData;

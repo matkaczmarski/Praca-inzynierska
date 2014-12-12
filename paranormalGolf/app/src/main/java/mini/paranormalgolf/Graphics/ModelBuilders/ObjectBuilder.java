@@ -20,6 +20,8 @@ import static android.opengl.GLES20.glDrawArrays;
 public class ObjectBuilder {
 
     private static final int FLOATS_PER_VERTEX = 3;
+    private static final int FLOATS_PER_VERTEX_WITH_TETURES = 5;
+    private static final float GRASS_TEXTURE_UNIT = 0.5f;
 
     public static interface DrawCommand {
         void draw();
@@ -36,48 +38,9 @@ public class ObjectBuilder {
     private int offset = 0;
 
     public ObjectBuilder(int sizeInVertices, boolean ifTextured) {
-        vertexData = new float[sizeInVertices * (FLOATS_PER_VERTEX + (ifTextured ? 2 : 0))];
+        vertexData = new float[sizeInVertices * (ifTextured ? FLOATS_PER_VERTEX_WITH_TETURES :FLOATS_PER_VERTEX)];
         drawCommands = new ArrayList<DrawCommand>();
     }
-
-    //MOŻNA ZOPTYMALIZOWAć
-//    public void appendSphere(Sphere sphere, int numPoints){
-//
-//        final int verticesCount = (numPoints + 1) * 2;
-//
-//        for(int i=0; i<=numPoints; i++){
-//
-//            final int startVertex = offset / FLOATS_PER_VERTEX;
-//            float iRadian = -1f * (float)Math.PI/2 + (((float)i/numPoints)  * (float)Math.PI);
-//            float iiRadian = -1f * (float)Math.PI/2 + (((float)(i+1)/numPoints)  * (float)Math.PI);
-//
-//            for(int j=0; j<=numPoints; j++){
-//
-//                float jRadian = ((float)j/numPoints) * 2f * (float)Math.PI;
-//
-//                //theta - i
-//                // X = r * cos(theta) * cos(phi)
-//                // Y = r * cos(theta) * sin(phi)
-//                // Z = r * sin(theta)
-//
-//                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
-//                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
-//                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iRadian);
-//
-//                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
-//                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
-//                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iiRadian);
-//
-//            }
-//
-//            drawCommands.add(new DrawCommand() {
-//                @Override
-//                public void draw() {
-//                    glDrawArrays(GL_TRIANGLE_STRIP, startVertex, verticesCount);
-//                }
-//            });
-//        }
-//    }
 
     public void appendSphere(Sphere sphere, int numPoints){
 
@@ -127,41 +90,39 @@ public class ObjectBuilder {
     }
 
     //Axis constantsAxis - oś, dla której prostokąt leży "płasko"
-    public void appendRectangle(Rectangle rectangle, Axis constantAxis, Point cuboidCenter){
+    public void appendRectangle(Rectangle rectangle, Axis constantAxis, Point cuboidCenter) {
 
-        //final int startVertex = offset / (2 * FLOATS_PER_VERTEX);
-        final int startVertex = offset /  (FLOATS_PER_VERTEX + 2);
+        final int startVertex = offset / (FLOATS_PER_VERTEX_WITH_TETURES);
+        float aTextureUnits = rectangle.a / GRASS_TEXTURE_UNIT;
+        float bTextureUnits = rectangle.b / GRASS_TEXTURE_UNIT;
 
-        float ratio = rectangle.a > rectangle.b ? rectangle.a/rectangle.b : rectangle.b / rectangle.a;
+        vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+        vertexData[offset++] = rectangle.center.Y;
+        vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
+        vertexData[offset++] = 0;
+        vertexData[offset++] = 0;
 
-        vertexData[offset++] = rectangle.center.X - rectangle.a /2;
-        vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
-        vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+        vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+        vertexData[offset++] = rectangle.center.Y;
+        vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
+        vertexData[offset++] = 0;
+        vertexData[offset++] = bTextureUnits;
 
-        vertexData[offset++] = rectangle.center.X - rectangle.a /2;
-        vertexData[offset++] = rectangle.center.Y;//+ rectangle.b/2;
-        vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+        vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+        vertexData[offset++] = rectangle.center.Y;
+        vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = rectangle.a > rectangle.b ? 1 : ratio;
+        vertexData[offset++] = aTextureUnits;
+        vertexData[offset++] = 0;
 
-        vertexData[offset++] = rectangle.center.X + rectangle.a /2;
-        vertexData[offset++] = rectangle.center.Y;// + rectangle.b/2;
-        vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+        vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+        vertexData[offset++] = rectangle.center.Y;
+        vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-                vertexData[offset++] = rectangle.a > rectangle.b ? ratio : 1;
-                vertexData[offset++] = 0;
-
-        vertexData[offset++] = rectangle.center.X + rectangle.a /2;
-        vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
-        vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
-
-                vertexData[offset++] = rectangle.a > rectangle.b ? ratio : 1;
-                vertexData[offset++] = rectangle.a > rectangle.b ? 1 : ratio;
+        vertexData[offset++] = aTextureUnits;
+        vertexData[offset++] = bTextureUnits;
 
 
         /////////////////////////////////////////////////////////////////////
@@ -325,7 +286,7 @@ public class ObjectBuilder {
         drawCommands.add(new DrawCommand() {
             @Override
             public void draw() {
-                glDrawArrays(GL_TRIANGLE_STRIP, startVertex, 4);
+                glDrawArrays(GL_TRIANGLE_STRIP, startVertex, ObjectGenerator.VERTEX_PER_RECTANGLE);
             }
         });
 

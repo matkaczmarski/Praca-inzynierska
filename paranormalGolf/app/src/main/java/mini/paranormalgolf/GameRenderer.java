@@ -48,21 +48,39 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+       // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
         //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 0.1f, 0f), 0.1f, new Vector(0f, 0f, 0f));
 
-        Floor floor = new Floor(new CuboidMeasurement(0.5f, 0.2f, 1.5f),0.05f, new Point(1f, -0.1f, 0f));
-        Floor floor2 = new Floor(new CuboidMeasurement(5.0f, 0.2f, 0.5f),0.05f, new Point(0f, -0.1f, 0f));
-        Floor floor3 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 1.5f),0.05f, new Point(-1.0f, -0.1f, 0f));
-        Floor floor4 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 5.0f),0.05f, new Point(0f, -0.1f, 0f));
+        Floor floor1 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 1.5f),0.05f, new Point(0f, -0.1f, 0f));
+        Floor floor2 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, -2f));
+        Floor floor3 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, 2f));
+        Floor floor4 = new Floor(new CuboidMeasurement(2.5f, 0.2f, 0.5f),0.05f, new Point(-2f, -0.1f, 0f));
+        Floor floor5 = new Floor(new CuboidMeasurement(2.5f, 0.2f, 0.5f),0.05f, new Point(2f, -0.1f, 0f));
+        Floor floor6 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, 2f));
+        Floor floor7 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, 2f));
+        Floor floor8 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, -2f));
+        Floor floor9 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, -2f));
+        Floor floor10 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, 1.5f));
+        Floor floor11 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, 1.5f));
+        Floor floor12 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, -1.5f));
+        Floor floor13 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, -1.5f));
         List<Floor> floors = new ArrayList<Floor>();
-        floors.add(floor);
+        floors.add(floor1);
         floors.add(floor2);
         floors.add(floor3);
         floors.add(floor4);
+        floors.add(floor5);
+        floors.add(floor6);
+        floors.add(floor7);
+        floors.add(floor8);
+        floors.add(floor9);
+        floors.add(floor10);
+        floors.add(floor11);
+        floors.add(floor12);
+        floors.add(floor13);
         Board board = new Board(0, floors);
 
         updater = new Updater(context, ball, board,sensorManager);

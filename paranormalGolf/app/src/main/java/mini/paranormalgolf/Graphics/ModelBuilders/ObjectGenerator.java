@@ -12,7 +12,7 @@ import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder.Axis;
  */
 public class ObjectGenerator {
 
-    private static final int VERTEX_PER_RECTANGLE = 4;
+    public static final int VERTEX_PER_RECTANGLE = 4;
 
     public static GraphicsData createBall(Point center, float radius, int numPoints) {
         int size = 4 * (numPoints + 1) * (numPoints + 1);
@@ -24,7 +24,7 @@ public class ObjectGenerator {
 
     public static GraphicsData createFloor(Point center, float sizeX, float sizeY, float sizeZ) {
 
-        ObjectBuilder builder = new ObjectBuilder( 1 *1 * VERTEX_PER_RECTANGLE,true);
+        ObjectBuilder builder = new ObjectBuilder( 1 * VERTEX_PER_RECTANGLE,true);
         builder.appendRectangle(new Rectangle(new Point(0, sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
 //        builder.appendRectangle(new Rectangle(new Point(0, - sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
 //
