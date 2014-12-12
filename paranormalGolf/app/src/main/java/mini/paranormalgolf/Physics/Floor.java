@@ -5,6 +5,7 @@ import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Primitives.CuboidMeasurement;
 import mini.paranormalgolf.Primitives.Point;
@@ -28,9 +29,13 @@ public class Floor extends Element {
         drawCommands = generatedData.drawCommands;
     }
 
-    public void bindData(ShaderProgram shaderProgram){
-        //TODO dodać bindowanie Z texture program
-        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, 0);
+//    public void bindData(ShaderProgram shaderProgram){
+//        //TODO dodać bindowanie Z texture program
+//        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, 0);
+//    }
+        public void bindData(ShaderProgram colorProgram) {
+        vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, (POSITION_COMPONENT_COUNT + 2) * 4);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)colorProgram).getTextureCoordinatesAttributeLocation(), 2, (POSITION_COMPONENT_COUNT + 2) * 4);
     }
 
 //    public void bindData(ShaderProgram colorProgram) {

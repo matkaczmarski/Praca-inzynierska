@@ -17,9 +17,12 @@ import static android.opengl.Matrix.translateM;
 import mini.paranormalgolf.Graphics.MatrixHelper;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Mateusz on 2014-12-05.
@@ -41,6 +44,8 @@ public class Updater implements SensorEventListener {
 
     private ColorShaderProgram colorShaderProgram;
     private LightColorShaderProgram lightColorShaderProgram;
+    private TextureShaderProgram textureShaderProgram;
+    int texture;
 
     private Point lightPos =  new Point(3f, 3.0f, 1.5f);
 
@@ -58,6 +63,9 @@ public class Updater implements SensorEventListener {
         lightColorShaderProgram = new LightColorShaderProgram(context);
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        textureShaderProgram = new TextureShaderProgram(context);
+        texture = ResourceHelper.loadTexture(context, R.drawable.cat);
     }
 
     public UpdateResult update() {
@@ -94,14 +102,20 @@ public class Updater implements SensorEventListener {
         setLookAtM(viewMatrix, 0, ball.location.X + cameraTranslation.X, ball.location.Y + cameraTranslation.Y, ball.location.Z + cameraTranslation.Z, ball.location.X, ball.location.Y, ball.location.Z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-        colorShaderProgram.useProgram();
+        //colorShaderProgram.useProgram();
         //lightColorShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         //rysowanie podlogi
         for(Floor floor : board.floors) {
+
             positionObjectInScene(floor.location); //ustawianie pozycji
-            colorShaderProgram.setUniforms(modelViewProjectionMatrix, floor.rgba);
-            floor.bindData(colorShaderProgram);
+            textureShaderProgram.setUniforms(modelViewProjectionMatrix, texture);
+            floor.bindData(textureShaderProgram);
             floor.draw();
+//            positionObjectInScene(floor.location); //ustawianie pozycji
+//            colorShaderProgram.setUniforms(modelViewProjectionMatrix, floor.rgba);
+//            floor.bindData(colorShaderProgram);
+//            floor.draw();
 //            positionObjectInScene(floor.location); //ustawianie pozycji
 //            lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, floor.rgba, lightPos);
 //            floor.bindData(lightColorShaderProgram);

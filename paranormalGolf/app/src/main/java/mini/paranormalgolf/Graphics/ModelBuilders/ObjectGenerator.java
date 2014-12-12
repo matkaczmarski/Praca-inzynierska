@@ -12,27 +12,27 @@ import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder.Axis;
  */
 public class ObjectGenerator {
 
-    private static final int VERTEX_PER_RECTANGLE = 6;
+    private static final int VERTEX_PER_RECTANGLE = 4;
 
     public static GraphicsData createBall(Point center, float radius, int numPoints) {
         int size = 4 * (numPoints + 1) * (numPoints + 1);
 
-        ObjectBuilder builder = new ObjectBuilder(size);
+        ObjectBuilder builder = new ObjectBuilder(size, false);
         builder.appendSphere(new Sphere(new Point(0,0,0), radius), numPoints);
         return builder.build();
     }
 
     public static GraphicsData createFloor(Point center, float sizeX, float sizeY, float sizeZ) {
 
-        ObjectBuilder builder = new ObjectBuilder( 1 *6 * VERTEX_PER_RECTANGLE);
+        ObjectBuilder builder = new ObjectBuilder( 1 *1 * VERTEX_PER_RECTANGLE,true);
         builder.appendRectangle(new Rectangle(new Point(0, sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
-        builder.appendRectangle(new Rectangle(new Point(0, - sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
-
-        builder.appendRectangle(new Rectangle(new Point( sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
-        builder.appendRectangle(new Rectangle(new Point(- sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
-
-        builder.appendRectangle(new Rectangle(new Point(0, 0, - sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
-        builder.appendRectangle(new Rectangle(new Point(0, 0, sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
+//        builder.appendRectangle(new Rectangle(new Point(0, - sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
+//
+//        builder.appendRectangle(new Rectangle(new Point( sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
+//        builder.appendRectangle(new Rectangle(new Point(- sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
+//
+//        builder.appendRectangle(new Rectangle(new Point(0, 0, - sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
+//        builder.appendRectangle(new Rectangle(new Point(0, 0, sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
 
         return builder.build();
     }

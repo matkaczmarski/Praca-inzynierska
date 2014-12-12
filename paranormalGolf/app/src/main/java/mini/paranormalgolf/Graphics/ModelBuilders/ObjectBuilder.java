@@ -35,8 +35,8 @@ public class ObjectBuilder {
     private final List<DrawCommand> drawCommands;
     private int offset = 0;
 
-    public ObjectBuilder(int sizeInVertices) {
-        vertexData = new float[sizeInVertices * FLOATS_PER_VERTEX];
+    public ObjectBuilder(int sizeInVertices, boolean ifTextured) {
+        vertexData = new float[sizeInVertices * (FLOATS_PER_VERTEX + (ifTextured ? 2 : 0))];
         drawCommands = new ArrayList<DrawCommand>();
     }
 
@@ -130,8 +130,44 @@ public class ObjectBuilder {
     public void appendRectangle(Rectangle rectangle, Axis constantAxis, Point cuboidCenter){
 
         //final int startVertex = offset / (2 * FLOATS_PER_VERTEX);
-        final int startVertex = offset /  FLOATS_PER_VERTEX;
+        final int startVertex = offset /  (FLOATS_PER_VERTEX + 2);
 
+        float ratio = rectangle.a > rectangle.b ? rectangle.a/rectangle.b : rectangle.b / rectangle.a;
+
+
+        vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+        vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
+        vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
+
+        vertexData[offset++] = rectangle.center.X - rectangle.a /2;
+        vertexData[offset++] = rectangle.center.Y;//+ rectangle.b/2;
+        vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+
+                vertexData[offset++] = 0;
+                vertexData[offset++] = rectangle.a > rectangle.b ? 1 : ratio;
+
+        vertexData[offset++] = rectangle.center.X + rectangle.a /2;
+        vertexData[offset++] = rectangle.center.Y;// + rectangle.b/2;
+        vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+
+                vertexData[offset++] = rectangle.a > rectangle.b ? ratio : 1;
+                vertexData[offset++] = 0;
+
+        vertexData[offset++] = rectangle.center.X + rectangle.a /2;
+        vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
+        vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+
+                vertexData[offset++] = rectangle.a > rectangle.b ? ratio : 1;
+                vertexData[offset++] = rectangle.a > rectangle.b ? 1 : ratio;
+
+
+        /////////////////////////////////////////////////////////////////////
+
+
+        /*
         vertexData[offset++] = rectangle.center.X;
         vertexData[offset++] = rectangle.center.Y;
         vertexData[offset++] = rectangle.center.Z;
@@ -283,12 +319,13 @@ public class ObjectBuilder {
 //                vertexData[offset++] = v1.Z;
                 break;
         }
+        */
 
 
         drawCommands.add(new DrawCommand() {
             @Override
             public void draw() {
-                glDrawArrays(GL_TRIANGLE_STRIP, startVertex, 6);
+                glDrawArrays(GL_TRIANGLE_STRIP, startVertex, 4);
             }
         });
 
