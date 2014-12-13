@@ -2,12 +2,10 @@ package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
-import mini.paranormalgolf.Primitives.CuboidMeasurement;
+import mini.paranormalgolf.Primitives.BoxMeasurement;
 import mini.paranormalgolf.Primitives.Point;
 
 /**
@@ -18,10 +16,10 @@ public class Floor extends Element {
     public final float[] rgba = new float[] { 0.196078f, 0.703922f, 0.296078f, 1f};
     protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
 
-    public CuboidMeasurement measurements;
+    public BoxMeasurement measurements;
     public float mu;
 
-    public Floor(CuboidMeasurement measures,float mu, Point location) {
+    public Floor(BoxMeasurement measures,float mu, Point location) {
         super(location);
         this.measurements=measures;
         this.mu=mu;
@@ -44,4 +42,10 @@ public class Floor extends Element {
 //        vertexData.setVertexAttribPointer(0, ((LightColorShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
 //        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((LightColorShaderProgram)colorProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
 //    }
+
+
+    public void draw(){
+
+        super.draw();
+    }
 }

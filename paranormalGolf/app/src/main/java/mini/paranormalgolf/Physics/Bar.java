@@ -1,7 +1,7 @@
 package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Primitives.CuboidMeasurement;
+import mini.paranormalgolf.Primitives.BoxMeasurement;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
@@ -10,14 +10,14 @@ import mini.paranormalgolf.Primitives.Vector;
  */
 public class Bar extends MovableElement {
 
-    private CuboidMeasurement measurements;
+    private BoxMeasurement measurements;
 
     //punkty oznaczjące do jakiego miejsca ma dochodzić środek elementu
     private Point patrolFrom;
     private Point patrolTo;
   //  private float mu;
 
-    public Bar(Point location, Vector velocity,CuboidMeasurement measure, Point from, Point to/*, float mu*/) {
+    public Bar(Point location, Vector velocity,BoxMeasurement measure, Point from, Point to/*, float mu*/) {
         super(velocity, location);
         this.measurements = measure;
         this.patrolFrom = from;

@@ -1,7 +1,7 @@
 package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Primitives.CuboidMeasurement;
+import mini.paranormalgolf.Primitives.BoxMeasurement;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
@@ -10,12 +10,12 @@ import mini.paranormalgolf.Primitives.Vector;
  */
 public class Elevator extends MovableElement {
 
-    private CuboidMeasurement measurements;
+    private BoxMeasurement measurements;
     private Point patrolFrom;
     private Point patrolTo;
     private float mu;
 
-    public Elevator(Point location, Vector velocity,CuboidMeasurement measure, Point from, Point to, float mu) {
+    public Elevator(Point location, Vector velocity,BoxMeasurement measure, Point from, Point to, float mu) {
         super(velocity, location);
         this.measurements = measure;
         this.patrolFrom = from;

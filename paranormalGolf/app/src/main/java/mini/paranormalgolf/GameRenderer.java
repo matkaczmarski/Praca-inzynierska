@@ -15,15 +15,12 @@ import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Board;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.Updater;
-import mini.paranormalgolf.Primitives.CuboidMeasurement;
+import mini.paranormalgolf.Primitives.BoxMeasurement;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
-import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
-import static android.opengl.GLES20.GL_SRC_ALPHA;
-import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glEnable;
 
@@ -54,19 +51,19 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 0.1f, 0f), 0.1f, new Vector(0f, 0f, 0f));
 
-        Floor floor1 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 1.5f),0.05f, new Point(0f, -0.1f, 0f));
-        Floor floor2 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, -2f));
-        Floor floor3 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, 2f));
-        Floor floor4 = new Floor(new CuboidMeasurement(2.5f, 0.2f, 0.5f),0.05f, new Point(-2f, -0.1f, 0f));
-        Floor floor5 = new Floor(new CuboidMeasurement(2.5f, 0.2f, 0.5f),0.05f, new Point(2f, -0.1f, 0f));
-        Floor floor6 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, 2f));
-        Floor floor7 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, 2f));
-        Floor floor8 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, -2f));
-        Floor floor9 = new Floor(new CuboidMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, -2f));
-        Floor floor10 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, 1.5f));
-        Floor floor11 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, 1.5f));
-        Floor floor12 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, -1.5f));
-        Floor floor13 = new Floor(new CuboidMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, -1.5f));
+        Floor floor1 = new Floor(new BoxMeasurement(1.5f, 0.2f, 1.5f),0.05f, new Point(0f, -0.1f, 0f));
+        Floor floor2 = new Floor(new BoxMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, -2f));
+        Floor floor3 = new Floor(new BoxMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, 2f));
+        Floor floor4 = new Floor(new BoxMeasurement(2.5f, 0.2f, 0.5f),0.05f, new Point(-2f, -0.1f, 0f));
+        Floor floor5 = new Floor(new BoxMeasurement(2.5f, 0.2f, 0.5f),0.05f, new Point(2f, -0.1f, 0f));
+        Floor floor6 = new Floor(new BoxMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, 2f));
+        Floor floor7 = new Floor(new BoxMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, 2f));
+        Floor floor8 = new Floor(new BoxMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, -2f));
+        Floor floor9 = new Floor(new BoxMeasurement(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, -2f));
+        Floor floor10 = new Floor(new BoxMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, 1.5f));
+        Floor floor11 = new Floor(new BoxMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, 1.5f));
+        Floor floor12 = new Floor(new BoxMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, -1.5f));
+        Floor floor13 = new Floor(new BoxMeasurement(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, -1.5f));
         List<Floor> floors = new ArrayList<Floor>();
         floors.add(floor1);
         floors.add(floor2);

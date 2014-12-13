@@ -37,4 +37,12 @@ public class ObjectGenerator {
         return builder.build();
     }
 
+    public static GraphicsData createFloorPart(Rectangle rectangle, Axis axis) {
+
+        ObjectBuilder builder = new ObjectBuilder(VERTEX_PER_RECTANGLE,true);
+        // TODO poprawic punkt center!!!
+        builder.appendRectangle(rectangle, axis, new Point (0,0,0));
+        return builder.build();
+    }
+
 }

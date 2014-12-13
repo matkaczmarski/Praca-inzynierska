@@ -20,6 +20,8 @@ public abstract class Element {
     protected VertexArray vertexData;
     protected List<DrawCommand> drawCommands;
 
+    public Point getLocation() { return this.location;}
+
     protected Element(Point location){
      this.location=location;
     }
