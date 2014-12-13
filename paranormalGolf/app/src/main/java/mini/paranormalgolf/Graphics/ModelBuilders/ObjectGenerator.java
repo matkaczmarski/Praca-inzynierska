@@ -41,7 +41,7 @@ public class ObjectGenerator {
 
         ObjectBuilder builder = new ObjectBuilder(VERTEX_PER_RECTANGLE,true);
         // TODO poprawic punkt center!!!
-        builder.appendRectangle(rectangle, axis, new Point (0,0,0));
+        builder.appendRectangle(new Rectangle(new Point(0,0,0), rectangle.a, rectangle.b), axis, new Point (0,0,0));
         return builder.build();
     }
 

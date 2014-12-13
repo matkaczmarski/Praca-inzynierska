@@ -96,192 +96,96 @@ public class ObjectBuilder {
         float aTextureUnits = rectangle.a / GRASS_TEXTURE_UNIT;
         float bTextureUnits = rectangle.b / GRASS_TEXTURE_UNIT;
 
-        vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-        vertexData[offset++] = rectangle.center.Y;
-        vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
-        vertexData[offset++] = 0;
-        vertexData[offset++] = 0;
-
-        vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-        vertexData[offset++] = rectangle.center.Y;
-        vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
-
-        vertexData[offset++] = 0;
-        vertexData[offset++] = bTextureUnits;
-
-        vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-        vertexData[offset++] = rectangle.center.Y;
-        vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
-
-        vertexData[offset++] = aTextureUnits;
-        vertexData[offset++] = 0;
-
-        vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-        vertexData[offset++] = rectangle.center.Y;
-        vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
-
-        vertexData[offset++] = aTextureUnits;
-        vertexData[offset++] = bTextureUnits;
-
-
-        /////////////////////////////////////////////////////////////////////
-
-
-        /*
-        vertexData[offset++] = rectangle.center.X;
-        vertexData[offset++] = rectangle.center.Y;
-        vertexData[offset++] = rectangle.center.Z;
-
-//        Vector v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//        vertexData[offset++] = v1.X;
-//        vertexData[offset++] = v1.Y;
-//        vertexData[offset++] = v1.Z;
-
-        switch (constantAxis)
-        {
+        switch (constantAxis){
             case xAxis:
                 vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
 
                 vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = bTextureUnits;
 
                 vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y + rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = aTextureUnits;
+                vertexData[offset++] = 0;
 
                 vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y + rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
-
-                vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
-
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
-
+                vertexData[offset++] = aTextureUnits;
+                vertexData[offset++] = bTextureUnits;
                 break;
             case yAxis:
-                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y;//+ rectangle.b/2;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = bTextureUnits;
 
-                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y;// + rectangle.b/2;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y;
+                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = aTextureUnits;
+                vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y;
+                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
-
-                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y;//- rectangle.b/2;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b /2;
-
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = aTextureUnits;
+                vertexData[offset++] = bTextureUnits;
                 break;
             case zAxis:
-                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
                 vertexData[offset++] = rectangle.center.Z;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
                 vertexData[offset++] = rectangle.center.Z;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = bTextureUnits;
 
-                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y + rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
                 vertexData[offset++] = rectangle.center.Z;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = aTextureUnits;
+                vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X + rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y - rectangle.b /2;
+                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
                 vertexData[offset++] = rectangle.center.Z;
 
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
-
-                vertexData[offset++] = rectangle.center.X - rectangle.a /2;
-                vertexData[offset++] = rectangle.center.Y - rectangle.b /2;
-                vertexData[offset++] = rectangle.center.Z;
-
-//                v1 = new Vector(vertexData[offset - 3] - cuboidCenter.X, vertexData[offset - 2] - cuboidCenter.Y, vertexData[offset - 1] - cuboidCenter.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
+                vertexData[offset++] = aTextureUnits;
+                vertexData[offset++] = bTextureUnits;
                 break;
         }
-        */
-
 
         drawCommands.add(new DrawCommand() {
             @Override

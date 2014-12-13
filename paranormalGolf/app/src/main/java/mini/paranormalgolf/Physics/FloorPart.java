@@ -16,9 +16,6 @@ public class FloorPart  extends Element {
 
     protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
 
-    public BoxMeasurement measurements;
-    public float mu;
-
     public FloorPart(Rectangle rectangle, ObjectBuilder.Axis axis) {
         super(rectangle.center);
 
@@ -30,11 +27,6 @@ public class FloorPart  extends Element {
     public void bindData(ShaderProgram colorProgram) {
         vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
         vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)colorProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-    }
-
-    public void draw(int texture){
-
-        super.draw();
     }
 
 }
