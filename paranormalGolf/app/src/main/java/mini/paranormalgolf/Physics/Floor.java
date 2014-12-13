@@ -39,13 +39,13 @@ public class Floor extends Element {
     }
 
     private void createFloor(BoxMeasurement measures, Point location) {
-        topPart = new FloorPart(new Rectangle(new Point(location.X,location.Y + measures.sizeY / 2, location.Z), measures.sizeX, measures.sizeZ), ObjectBuilder.Axis.yAxis);
-        bottomPart = new FloorPart(new Rectangle(new Point(location.X, location.Y-measures.sizeY / 2, location.Z), measures.sizeX, measures.sizeZ), ObjectBuilder.Axis.yAxis);
+        topPart = new FloorPart(new Rectangle(new Point(location.X,location.Y + measures.sizeY / 2, location.Z), measures.sizeX, measures.sizeZ), ObjectBuilder.Axis.yAxis, 1);
+        bottomPart = new FloorPart(new Rectangle(new Point(location.X, location.Y-measures.sizeY / 2, location.Z), measures.sizeX, measures.sizeZ), ObjectBuilder.Axis.yAxis, -1);
 
-        FloorPart sidePart1 = new FloorPart(new Rectangle(new Point(location.X + measures.sizeX / 2, location.Y, location.Z), measures.sizeY, measures.sizeZ), ObjectBuilder.Axis.xAxis);
-        FloorPart sidePart2 = new FloorPart(new Rectangle(new Point(location.X -measures.sizeX / 2, location.Y, location.Z), measures.sizeY, measures.sizeZ), ObjectBuilder.Axis.xAxis);
-        FloorPart sidePart3 = new FloorPart(new Rectangle(new Point(location.X, location.Y, location.Z + measures.sizeZ / 2), measures.sizeX, measures.sizeY), ObjectBuilder.Axis.zAxis);
-        FloorPart sidePart4 = new FloorPart(new Rectangle(new Point(location.X, location.Y, location.Z - measures.sizeZ / 2), measures.sizeX, measures.sizeY), ObjectBuilder.Axis.zAxis);
+        FloorPart sidePart1 = new FloorPart(new Rectangle(new Point(location.X + measures.sizeX / 2, location.Y, location.Z), measures.sizeY, measures.sizeZ), ObjectBuilder.Axis.xAxis, 1);
+        FloorPart sidePart2 = new FloorPart(new Rectangle(new Point(location.X -measures.sizeX / 2, location.Y, location.Z), measures.sizeY, measures.sizeZ), ObjectBuilder.Axis.xAxis, -1);
+        FloorPart sidePart3 = new FloorPart(new Rectangle(new Point(location.X, location.Y, location.Z + measures.sizeZ / 2), measures.sizeX, measures.sizeY), ObjectBuilder.Axis.zAxis, 1);
+        FloorPart sidePart4 = new FloorPart(new Rectangle(new Point(location.X, location.Y, location.Z - measures.sizeZ / 2), measures.sizeX, measures.sizeY), ObjectBuilder.Axis.zAxis, -1);
 
         sideParts = Arrays.asList(sidePart1, sidePart2, sidePart3, sidePart4);
     }

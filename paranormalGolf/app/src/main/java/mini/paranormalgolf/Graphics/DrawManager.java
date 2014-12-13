@@ -4,6 +4,7 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Physics.Ball;
@@ -35,7 +36,7 @@ public class DrawManager {
 
     private Context context;
 
-    private Point lightPos =  new Point(3f, 3.0f, 1.5f);
+    private Point lightPos =  new Point(0f, 3.0f, 1.5f);
 
     private final float fieldOfViewDegree = 45;
     private final float near = 1f;
@@ -46,6 +47,7 @@ public class DrawManager {
     private ColorShaderProgram colorShaderProgram;
     private LightColorShaderProgram lightColorShaderProgram;
     private TextureShaderProgram textureShaderProgram;
+    private TextureLightShaderProgram textureLightShaderProgram;
 
     int topFloorTexture;
     int sideFloorTexture;
@@ -56,6 +58,8 @@ public class DrawManager {
         colorShaderProgram = new ColorShaderProgram(context);
         lightColorShaderProgram = new LightColorShaderProgram(context);
         textureShaderProgram = new TextureShaderProgram(context);
+        textureLightShaderProgram = new TextureLightShaderProgram(context);
+
         topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.top_floor_texture);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.side_floor_texture);
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.bottom_floor_texture);
@@ -84,25 +88,24 @@ public class DrawManager {
     }
 
    public void drawFloor(Floor floor){
-        textureShaderProgram.useProgram();
+       textureLightShaderProgram.useProgram();
 
        positionObjectInScene(floor.bottomPart.getLocation());
-       textureShaderProgram.setUniforms(modelViewProjectionMatrix, bottomFloorTexture);
-       floor.bottomPart.bindData(textureShaderProgram);
+       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
+       floor.bottomPart.bindData(textureLightShaderProgram);
        floor.bottomPart.draw();
 
        for(FloorPart floorPart : floor.sideParts){
            positionObjectInScene(floorPart.getLocation());
-           textureShaderProgram.setUniforms(modelViewProjectionMatrix, bottomFloorTexture);
-           floorPart.bindData(textureShaderProgram);
+           textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
+           floorPart.bindData(textureLightShaderProgram);
            floorPart.draw();
        }
 
        positionObjectInScene(floor.topPart.getLocation());
-       textureShaderProgram.setUniforms(modelViewProjectionMatrix, topFloorTexture);
-       floor.topPart.bindData(textureShaderProgram);
+       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, topFloorTexture);
+       floor.topPart.bindData(textureLightShaderProgram);
        floor.topPart.draw();
-
     }
 
     private void positionObjectInScene(Point location) {

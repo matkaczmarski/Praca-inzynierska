@@ -15,33 +15,26 @@ public class ObjectGenerator {
     public static final int VERTEX_PER_RECTANGLE = 4;
 
     public static GraphicsData createBall(Point center, float radius, int numPoints) {
-        int size = 4 * (numPoints + 1) * (numPoints + 1);
+        int size = 2 * (numPoints + 1) * (numPoints + 1);
 
         ObjectBuilder builder = new ObjectBuilder(size, false);
         builder.appendSphere(new Sphere(new Point(0,0,0), radius), numPoints);
         return builder.build();
     }
 
-    public static GraphicsData createFloor(Point center, float sizeX, float sizeY, float sizeZ) {
-
-        ObjectBuilder builder = new ObjectBuilder( 1 * VERTEX_PER_RECTANGLE,true);
-        builder.appendRectangle(new Rectangle(new Point(0, sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
-//        builder.appendRectangle(new Rectangle(new Point(0, - sizeY / 2, 0), sizeX, sizeZ), Axis.yAxis, center);
+//    public static GraphicsData createFloorPart(Rectangle rectangle, Axis axis) {
 //
-//        builder.appendRectangle(new Rectangle(new Point( sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
-//        builder.appendRectangle(new Rectangle(new Point(- sizeX / 2, 0, 0), sizeY, sizeZ), Axis.xAxis, center);
-//
-//        builder.appendRectangle(new Rectangle(new Point(0, 0, - sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
-//        builder.appendRectangle(new Rectangle(new Point(0, 0, sizeZ / 2), sizeX, sizeY), Axis.zAxis, center);
+//        ObjectBuilder builder = new ObjectBuilder(VERTEX_PER_RECTANGLE,true);
+//        // TODO poprawic punkt center!!!
+//        builder.appendRectangle(new Rectangle(new Point(0,0,0), rectangle.a, rectangle.b), axis, new Point (0,0,0));
+//        return builder.build();
+//    }
 
-        return builder.build();
-    }
-
-    public static GraphicsData createFloorPart(Rectangle rectangle, Axis axis) {
+    public static GraphicsData createFloorPart(Rectangle rectangle, Axis axis, float normalVectorDirection) {
 
         ObjectBuilder builder = new ObjectBuilder(VERTEX_PER_RECTANGLE,true);
         // TODO poprawic punkt center!!!
-        builder.appendRectangle(new Rectangle(new Point(0,0,0), rectangle.a, rectangle.b), axis, new Point (0,0,0));
+        builder.appendRectangle(new Rectangle(new Point(0,0,0), rectangle.a, rectangle.b), axis, normalVectorDirection);
         return builder.build();
     }
 

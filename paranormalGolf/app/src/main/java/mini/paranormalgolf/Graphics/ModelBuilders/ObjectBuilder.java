@@ -19,8 +19,8 @@ import static android.opengl.GLES20.glDrawArrays;
  */
 public class ObjectBuilder {
 
-    private static final int FLOATS_PER_VERTEX = 3;
-    private static final int FLOATS_PER_VERTEX_WITH_TETURES = 5;
+    private static final int FLOATS_PER_VERTEX = 6; //3 na pozycję oraz 3 na wektor normalny
+    private static final int FLOATS_PER_VERTEX_WITH_TETURES = 8; //3 na pozycje, 3 na wektor normalny oraz 2 na pozycje tekstury
     private static final float GRASS_TEXTURE_UNIT = 0.5f;
 
     public static interface DrawCommand {
@@ -48,7 +48,7 @@ public class ObjectBuilder {
 
         for(int i=0; i<=numPoints; i++){
 
-            final int startVertex = offset / (2 * FLOATS_PER_VERTEX);
+            final int startVertex = offset / FLOATS_PER_VERTEX;
             float iRadian = -1f * (float)Math.PI/2 + (((float)i/numPoints)  * (float)Math.PI);
             float iiRadian = -1f * (float)Math.PI/2 + (((float)(i+1)/numPoints)  * (float)Math.PI);
 
@@ -90,12 +90,119 @@ public class ObjectBuilder {
     }
 
     //Axis constantsAxis - oś, dla której prostokąt leży "płasko"
-    public void appendRectangle(Rectangle rectangle, Axis constantAxis, Point cuboidCenter) {
+//    public void appendRectangle(Rectangle rectangle, Axis constantAxis, Point cuboidCenter) {
+//
+//        final int startVertex = offset / (FLOATS_PER_VERTEX_WITH_TETURES);
+//        float aTextureUnits = rectangle.a / GRASS_TEXTURE_UNIT;
+//        float bTextureUnits = rectangle.b / GRASS_TEXTURE_UNIT;
+//
+//
+//        switch (constantAxis){
+//            case xAxis:
+//                vertexData[offset++] = rectangle.center.X;
+//                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+//
+//                vertexData[offset++] = 0;
+//                vertexData[offset++] = 0;
+//
+//                vertexData[offset++] = rectangle.center.X;
+//                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+//
+//                vertexData[offset++] = 0;
+//                vertexData[offset++] = bTextureUnits;
+//
+//                vertexData[offset++] = rectangle.center.X;
+//                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+//
+//                vertexData[offset++] = aTextureUnits;
+//                vertexData[offset++] = 0;
+//
+//                vertexData[offset++] = rectangle.center.X;
+//                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+//
+//                vertexData[offset++] = aTextureUnits;
+//                vertexData[offset++] = bTextureUnits;
+//                break;
+//            case yAxis:
+//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y;
+//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+//
+//                vertexData[offset++] = 0;
+//                vertexData[offset++] = 0;
+//
+//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y;
+//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+//
+//                vertexData[offset++] = 0;
+//                vertexData[offset++] = bTextureUnits;
+//
+//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y;
+//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+//
+//                vertexData[offset++] = aTextureUnits;
+//                vertexData[offset++] = 0;
+//
+//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y;
+//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+//
+//                vertexData[offset++] = aTextureUnits;
+//                vertexData[offset++] = bTextureUnits;
+//                break;
+//            case zAxis:
+//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
+//                vertexData[offset++] = rectangle.center.Z;
+//
+//                vertexData[offset++] = 0;
+//                vertexData[offset++] = 0;
+//
+//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
+//                vertexData[offset++] = rectangle.center.Z;
+//
+//                vertexData[offset++] = 0;
+//                vertexData[offset++] = bTextureUnits;
+//
+//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
+//                vertexData[offset++] = rectangle.center.Z;
+//
+//                vertexData[offset++] = aTextureUnits;
+//                vertexData[offset++] = 0;
+//
+//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
+//                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
+//                vertexData[offset++] = rectangle.center.Z;
+//
+//                vertexData[offset++] = aTextureUnits;
+//                vertexData[offset++] = bTextureUnits;
+//                break;
+//        }
+//
+//        drawCommands.add(new DrawCommand() {
+//            @Override
+//            public void draw() {
+//                glDrawArrays(GL_TRIANGLE_STRIP, startVertex, ObjectGenerator.VERTEX_PER_RECTANGLE);
+//            }
+//        });
+//
+//    }
+
+    public void appendRectangle(Rectangle rectangle, Axis constantAxis, float normalVectorDirection) {
 
         final int startVertex = offset / (FLOATS_PER_VERTEX_WITH_TETURES);
         float aTextureUnits = rectangle.a / GRASS_TEXTURE_UNIT;
         float bTextureUnits = rectangle.b / GRASS_TEXTURE_UNIT;
 
+        Vector tmp;
 
         switch (constantAxis){
             case xAxis:
@@ -106,12 +213,21 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
+                /////////////////////////////////////////////////
+
                 vertexData[offset++] = rectangle.center.X;
                 vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = bTextureUnits;
+
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
 
                 vertexData[offset++] = rectangle.center.X;
                 vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
@@ -120,12 +236,20 @@ public class ObjectBuilder {
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = 0;
 
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
+
                 vertexData[offset++] = rectangle.center.X;
                 vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = bTextureUnits;
+
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
                 break;
             case yAxis:
                 vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
@@ -135,12 +259,20 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
+
                 vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Y;
                 vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = bTextureUnits;
+
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
 
                 vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Y;
@@ -149,12 +281,20 @@ public class ObjectBuilder {
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = 0;
 
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
+
                 vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Y;
                 vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = bTextureUnits;
+
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
+                vertexData[offset++] = 0;
                 break;
             case zAxis:
                 vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
@@ -164,12 +304,20 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
+
                 vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
                 vertexData[offset++] = rectangle.center.Z;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = bTextureUnits;
+
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
 
                 vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
@@ -178,12 +326,20 @@ public class ObjectBuilder {
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = 0;
 
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
+
                 vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
                 vertexData[offset++] = rectangle.center.Z;
 
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = bTextureUnits;
+
+                vertexData[offset++] = 0;
+                vertexData[offset++] = 0;
+                vertexData[offset++] = normalVectorDirection;
                 break;
         }
 
