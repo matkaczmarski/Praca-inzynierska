@@ -11,6 +11,7 @@ import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
@@ -21,6 +22,7 @@ import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
+import static android.opengl.Matrix.rotateM;
 
 /**
  * Created by Mateusz on 2014-12-13.
@@ -52,6 +54,7 @@ public class DrawManager {
     int topFloorTexture;
     int sideFloorTexture;
     int bottomFloorTexture;
+    int golfTexture;
 
     public DrawManager(Context context){
         this.context = context;
@@ -63,6 +66,7 @@ public class DrawManager {
         topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.top_floor_texture);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.side_floor_texture);
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.bottom_floor_texture);
+        golfTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
     }
 
     public void surfaceChange(int width, int height){
@@ -79,12 +83,17 @@ public class DrawManager {
     }
 
 
-   public void drawBall(Ball ball){
-        lightColorShaderProgram.useProgram();
-        positionObjectInScene(ball.getLocation());
-        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, ball.rgba,lightPos);
-        ball.bindData(lightColorShaderProgram);
-        ball.draw();
+   public void drawBall(Ball ball, float rotationAngle, Vector rotationAxis){
+//        lightColorShaderProgram.useProgram();
+//        positionObjectInScene(ball.getLocation());
+//        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, ball.rgba,lightPos);
+//        ball.bindData(lightColorShaderProgram);
+//        ball.draw();
+       textureLightShaderProgram.useProgram();
+       positionBallInScene(ball.getLocation(), rotationAngle, rotationAxis);
+       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, golfTexture);
+       ball.bindData(textureLightShaderProgram);
+       ball.draw();
     }
 
    public void drawFloor(Floor floor){
@@ -106,6 +115,14 @@ public class DrawManager {
        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, topFloorTexture);
        floor.topPart.bindData(textureLightShaderProgram);
        floor.topPart.draw();
+    }
+
+    private void positionBallInScene(Point location, float rotationAngle, Vector rotationAxis){
+        setIdentityM(modelMatrix, 0);
+        translateM(modelMatrix, 0, location.X, location.Y, location.Z);
+        rotateM(modelMatrix, 0, rotationAngle, rotationAxis.X, rotationAxis.Y, rotationAxis.Z);
+        multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
+        multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
     }
 
     private void positionObjectInScene(Point location) {

@@ -17,7 +17,7 @@ public class ObjectGenerator {
     public static GraphicsData createBall(Point center, float radius, int numPoints) {
         int size = 2 * (numPoints + 1) * (numPoints + 1);
 
-        ObjectBuilder builder = new ObjectBuilder(size, false);
+        ObjectBuilder builder = new ObjectBuilder(size, true);
         builder.appendSphere(new Sphere(new Point(0,0,0), radius), numPoints);
         return builder.build();
     }

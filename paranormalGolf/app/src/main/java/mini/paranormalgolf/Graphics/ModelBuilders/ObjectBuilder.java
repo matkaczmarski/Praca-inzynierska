@@ -42,27 +42,82 @@ public class ObjectBuilder {
         drawCommands = new ArrayList<DrawCommand>();
     }
 
+//    public void appendSphere(Sphere sphere, int numPoints){
+//
+//        final int verticesCount = (numPoints + 1) * 2;
+//
+//        for(int i=0; i<=numPoints; i++){
+//
+//            final int startVertex = offset / FLOATS_PER_VERTEX;
+//            float iRadian = -1f * (float)Math.PI/2 + (((float)i/numPoints)  * (float)Math.PI);
+//            float iiRadian = -1f * (float)Math.PI/2 + (((float)(i+1)/numPoints)  * (float)Math.PI);
+//
+//            for(int j=0; j<=numPoints; j++){
+//
+//                float jRadian = ((float)j/numPoints) * 2f * (float)Math.PI;
+//
+//                // x = r * cos(theta) * cos(phi)
+//                // y = r * cos(theta) * sin(phi)
+//                // Z = r * sin(theta)
+//
+//                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
+//                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
+//                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iRadian);
+//
+//                Vector v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
+//                vertexData[offset++] = v1.X;
+//                vertexData[offset++] = v1.Y;
+//                vertexData[offset++] = v1.Z;
+//
+//                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
+//                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
+//                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iiRadian);
+//
+//                v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
+//                vertexData[offset++] = v1.X;
+//                vertexData[offset++] = v1.Y;
+//                vertexData[offset++] = v1.Z;
+//
+//            }
+//
+//            drawCommands.add(new DrawCommand() {
+//                @Override
+//                public void draw() {
+//                    glDrawArrays(GL_TRIANGLE_STRIP, startVertex, verticesCount);
+//                }
+//            });
+//        }
+//    }
+
+
     public void appendSphere(Sphere sphere, int numPoints){
 
         final int verticesCount = (numPoints + 1) * 2;
 
         for(int i=0; i<=numPoints; i++){
 
-            final int startVertex = offset / FLOATS_PER_VERTEX;
+            final int startVertex = offset / FLOATS_PER_VERTEX_WITH_TETURES;
             float iRadian = -1f * (float)Math.PI/2 + (((float)i/numPoints)  * (float)Math.PI);
             float iiRadian = -1f * (float)Math.PI/2 + (((float)(i+1)/numPoints)  * (float)Math.PI);
+
+            float textureY1 = (float)i/numPoints;
+            float textureY2 = (float)(i+1)/numPoints;
 
             for(int j=0; j<=numPoints; j++){
 
                 float jRadian = ((float)j/numPoints) * 2f * (float)Math.PI;
+                float textureX = (float)j/numPoints;
 
-                // X = r * cos(theta) * cos(phi)
-                // Y = r * cos(theta) * sin(phi)
+                // x = r * cos(theta) * cos(phi)
+                // y = r * cos(theta) * sin(phi)
                 // Z = r * sin(theta)
 
                 vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
                 vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
                 vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iRadian);
+
+                vertexData[offset++] = textureX;
+                vertexData[offset++] = textureY1;
 
                 Vector v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
                 vertexData[offset++] = v1.X;
@@ -72,6 +127,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
                 vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
                 vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iiRadian);
+
+                vertexData[offset++] = textureX;
+                vertexData[offset++] = textureY2;
 
                 v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
                 vertexData[offset++] = v1.X;
@@ -89,112 +147,6 @@ public class ObjectBuilder {
         }
     }
 
-    //Axis constantsAxis - oś, dla której prostokąt leży "płasko"
-//    public void appendRectangle(Rectangle rectangle, Axis constantAxis, Point cuboidCenter) {
-//
-//        final int startVertex = offset / (FLOATS_PER_VERTEX_WITH_TETURES);
-//        float aTextureUnits = rectangle.a / GRASS_TEXTURE_UNIT;
-//        float bTextureUnits = rectangle.b / GRASS_TEXTURE_UNIT;
-//
-//
-//        switch (constantAxis){
-//            case xAxis:
-//                vertexData[offset++] = rectangle.center.X;
-//                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
-//
-//                vertexData[offset++] = 0;
-//                vertexData[offset++] = 0;
-//
-//                vertexData[offset++] = rectangle.center.X;
-//                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
-//
-//                vertexData[offset++] = 0;
-//                vertexData[offset++] = bTextureUnits;
-//
-//                vertexData[offset++] = rectangle.center.X;
-//                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
-//
-//                vertexData[offset++] = aTextureUnits;
-//                vertexData[offset++] = 0;
-//
-//                vertexData[offset++] = rectangle.center.X;
-//                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
-//
-//                vertexData[offset++] = aTextureUnits;
-//                vertexData[offset++] = bTextureUnits;
-//                break;
-//            case yAxis:
-//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y;
-//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
-//
-//                vertexData[offset++] = 0;
-//                vertexData[offset++] = 0;
-//
-//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y;
-//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
-//
-//                vertexData[offset++] = 0;
-//                vertexData[offset++] = bTextureUnits;
-//
-//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y;
-//                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
-//
-//                vertexData[offset++] = aTextureUnits;
-//                vertexData[offset++] = 0;
-//
-//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y;
-//                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
-//
-//                vertexData[offset++] = aTextureUnits;
-//                vertexData[offset++] = bTextureUnits;
-//                break;
-//            case zAxis:
-//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
-//                vertexData[offset++] = rectangle.center.Z;
-//
-//                vertexData[offset++] = 0;
-//                vertexData[offset++] = 0;
-//
-//                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
-//                vertexData[offset++] = rectangle.center.Z;
-//
-//                vertexData[offset++] = 0;
-//                vertexData[offset++] = bTextureUnits;
-//
-//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
-//                vertexData[offset++] = rectangle.center.Z;
-//
-//                vertexData[offset++] = aTextureUnits;
-//                vertexData[offset++] = 0;
-//
-//                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-//                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
-//                vertexData[offset++] = rectangle.center.Z;
-//
-//                vertexData[offset++] = aTextureUnits;
-//                vertexData[offset++] = bTextureUnits;
-//                break;
-//        }
-//
-//        drawCommands.add(new DrawCommand() {
-//            @Override
-//            public void draw() {
-//                glDrawArrays(GL_TRIANGLE_STRIP, startVertex, ObjectGenerator.VERTEX_PER_RECTANGLE);
-//            }
-//        });
-//
-//    }
 
     public void appendRectangle(Rectangle rectangle, Axis constantAxis, float normalVectorDirection) {
 

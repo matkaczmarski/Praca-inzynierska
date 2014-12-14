@@ -66,7 +66,7 @@ public class GameActivity extends Activity {
             rendererSet = true;
         } else {
             /*
-             * This is where you could create an OpenGL ES 1.X compatible
+             * This is where you could create an OpenGL ES 1.x compatible
              * renderer if you wanted to support both ES 1 and ES 2. Since
              * we're not doing anything, the app will crash if the device
              * doesn't support OpenGL ES 2.0. If we publish on the market, we

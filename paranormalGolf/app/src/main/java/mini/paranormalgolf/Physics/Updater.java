@@ -43,9 +43,9 @@ public class Updater implements SensorEventListener {
     private float getActualCoefficientFriction() {
         float mu = -1;
         for (Floor floor : board.floors) {
-            if (floor.location.X - floor.measurements.sizeX / 2 <= ball.location.X && floor.location.X + floor.measurements.sizeX / 2 >= ball.location.X
-                    && floor.location.Z - floor.measurements.sizeZ / 2 <= ball.location.Z && floor.location.Z + floor.measurements.sizeZ / 2 >= ball.location.Z
-                    && Math.abs(ball.location.Y - ball.getRadius() - (floor.location.Y + floor.measurements.sizeY / 2)) < 0.0001) {
+            if (floor.location.X - floor.measurements.x / 2 <= ball.location.X && floor.location.X + floor.measurements.x / 2 >= ball.location.X
+                    && floor.location.Z - floor.measurements.z / 2 <= ball.location.Z && floor.location.Z + floor.measurements.z / 2 >= ball.location.Z
+                    && Math.abs(ball.location.Y - ball.getRadius() - (floor.location.Y + floor.measurements.y / 2)) < 0.0001) {
                 mu = floor.mu;
                 break;
             }
@@ -62,7 +62,8 @@ public class Updater implements SensorEventListener {
         for(Floor floor : board.floors) {
             drawManager.drawFloor(floor);
         }
-        drawManager.drawBall(ball);
+        //drugi argument - o ile stopni obrót, 3 argument - oś obrotu
+        drawManager.drawBall(ball, 0f, ball.velocity.normalize());
     }
 
     @Override

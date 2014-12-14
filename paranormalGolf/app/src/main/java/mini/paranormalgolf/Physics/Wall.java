@@ -1,16 +1,16 @@
 package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Primitives.BoxMeasurement;
+import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 
 /**
  * Created by Sławomir on 2014-12-03.
  */
 public class Wall extends Element {
-    private BoxMeasurement measurements;
+    private BoxSize measurements;
 
-    public Wall(BoxMeasurement measure,Point location) {
+    public Wall(BoxSize measure,Point location) {
         super(location);
         measurements = measure;
     }
