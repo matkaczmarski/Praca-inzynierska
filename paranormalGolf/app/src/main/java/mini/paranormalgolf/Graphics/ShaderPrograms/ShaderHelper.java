@@ -61,8 +61,7 @@ public class ShaderHelper {
 
         // Get the compilation status.
         final int[] compileStatus = new int[1];
-        glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS,
-                compileStatus, 0);
+        glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0);
 
         if (LoggerConfig.ON) {
             // Print the shader info log to the Android log output.

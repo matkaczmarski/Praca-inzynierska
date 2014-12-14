@@ -3,6 +3,7 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 import android.content.Context;
 
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 import static android.opengl.GLES20.GL_TEXTURE0;
@@ -45,7 +46,7 @@ public class TextureLightShaderProgram extends ShaderProgram {
         aTextureCoordinatesLocation = glGetAttribLocation(program, A_TEXTURE_COORDINATES);
     }
 
-    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, Point lightPosition, int textureId) {
+    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, Vector lightPosition, int textureId) {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
         glUniform3f(uLightPosLocation, lightPosition.X, lightPosition.Y, lightPosition.Z);

@@ -4,25 +4,35 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
+import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_TEST;
+import static android.opengl.GLES20.GL_LEQUAL;
+import static android.opengl.GLES20.GL_LESS;
 import static android.opengl.GLES20.glClear;
+import static android.opengl.GLES20.glDepthFunc;
+import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
+import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
 import static android.opengl.Matrix.rotateM;
+import static android.opengl.Matrix.transposeM;
 
 /**
  * Created by Mateusz on 2014-12-13.
@@ -35,10 +45,9 @@ public class DrawManager {
     private final float[] modelViewMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
 
-
     private Context context;
 
-    private Point lightPos =  new Point(0f, 3.0f, 1.5f);
+    private Vector lightPos =  new Vector(0f, 3.0f, 1.5f);//.normalize();
 
     private final float fieldOfViewDegree = 45;
     private final float near = 1f;
@@ -46,9 +55,9 @@ public class DrawManager {
 
     private final Point cameraTranslation = new Point(0f, 1.5f, 1.5f);
 
-    private ColorShaderProgram colorShaderProgram;
-    private LightColorShaderProgram lightColorShaderProgram;
-    private TextureShaderProgram textureShaderProgram;
+//    private ColorShaderProgram colorShaderProgram;
+//    private LightColorShaderProgram lightColorShaderProgram;
+//    private TextureShaderProgram textureShaderProgram;
     private TextureLightShaderProgram textureLightShaderProgram;
 
     int topFloorTexture;
@@ -56,28 +65,42 @@ public class DrawManager {
     int bottomFloorTexture;
     int golfTexture;
 
-    public DrawManager(Context context){
+    private SkyboxShaderProgram skyboxShaderProgram;
+    private Skybox skybox;
+    int skyboxTexture;
+
+    public DrawManager(Context context) {
         this.context = context;
-        colorShaderProgram = new ColorShaderProgram(context);
-        lightColorShaderProgram = new LightColorShaderProgram(context);
-        textureShaderProgram = new TextureShaderProgram(context);
+//        colorShaderProgram = new ColorShaderProgram(context);
+//        lightColorShaderProgram = new LightColorShaderProgram(context);
+//        textureShaderProgram = new TextureShaderProgram(context);
         textureLightShaderProgram = new TextureLightShaderProgram(context);
 
         topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.top_floor_texture);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.side_floor_texture);
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.bottom_floor_texture);
         golfTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
+
+        skyboxShaderProgram = new SkyboxShaderProgram(context);
+        skybox = new Skybox();
+//        skyboxTexture = ResourceHelper.loadCubeMap(context,
+//                new int[] { R.drawable.night_left, R.drawable.night_right,
+//                        R.drawable.night_bottom, R.drawable.night_top,
+//                        R.drawable.night_back, R.drawable.night_front});
+        skyboxTexture = ResourceHelper.loadCubeMap(context,
+                new int[]{R.drawable.left, R.drawable.right,
+                        R.drawable.bottom, R.drawable.top,
+                        R.drawable.front, R.drawable.back});
+
     }
 
     public void surfaceChange(int width, int height){
         glViewport(0, 0, width, height);
         //ustawianie pozycji sceny
         MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / (float) height, near, far);
-
     }
 
     public void preDraw(Point ballLocation){
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         setLookAtM(viewMatrix, 0, ballLocation.X + cameraTranslation.X, ballLocation.Y + cameraTranslation.Y, ballLocation.Z + cameraTranslation.Z, ballLocation.X, ballLocation.Y, ballLocation.Z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
     }
@@ -116,6 +139,20 @@ public class DrawManager {
        floor.topPart.bindData(textureLightShaderProgram);
        floor.topPart.draw();
     }
+
+
+
+    public void drawSkybox() {
+        setIdentityM(modelViewProjectionMatrix, 0);
+        glDepthFunc(GL_LEQUAL);
+        skyboxShaderProgram.useProgram();
+        skyboxShaderProgram.setUniforms(modelViewProjectionMatrix, skyboxTexture);
+        skybox.bindData(skyboxShaderProgram);
+        skybox.draw();
+        glDepthFunc(GL_LESS);
+    }
+
+
 
     private void positionBallInScene(Point location, float rotationAngle, Vector rotationAxis){
         setIdentityM(modelMatrix, 0);

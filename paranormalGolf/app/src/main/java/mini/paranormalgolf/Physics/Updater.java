@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.glClear;
 import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Graphics.DrawManager;
@@ -58,6 +61,8 @@ public class Updater implements SensorEventListener {
     }
 
     public void draw(){
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        drawManager.drawSkybox();
         drawManager.preDraw(ball.getLocation());
         for(Floor floor : board.floors) {
             drawManager.drawFloor(floor);

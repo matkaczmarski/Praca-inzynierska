@@ -39,7 +39,8 @@ vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
 	//UWAGA PRZY ROTACJI Z a_Normal!!!!!!!!!!!
 
 	//if (gl_FrontFacing) {
-        diffuse = max(dot(a_Normal, lightVector), 0.0);
+        diffuse = dot(a_Normal, lightVector);
+        diffuse = diffuse > 0.0 ? diffuse : 0.0;
     //} else {
    	//diffuse = max(dot(-a_Normal, lightVector), 0.0);
     //}
