@@ -82,15 +82,9 @@ public class DrawManager {
         golfTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
 
         skyboxShaderProgram = new SkyboxShaderProgram(context);
-        skybox = new Skybox();
-//        skyboxTexture = ResourceHelper.loadCubeMap(context,
-//                new int[] { R.drawable.night_left, R.drawable.night_right,
-//                        R.drawable.night_bottom, R.drawable.night_top,
-//                        R.drawable.night_back, R.drawable.night_front});
-        skyboxTexture = ResourceHelper.loadCubeMap(context,
-                new int[]{R.drawable.left, R.drawable.right,
-                        R.drawable.bottom, R.drawable.top,
-                        R.drawable.front, R.drawable.back});
+        skybox = new Skybox(new Point(0,0,0));
+        //skyboxTexture = ResourceHelper.loadCubeMap(context, new int[] { R.drawable.night_left, R.drawable.night_right, R.drawable.night_bottom, R.drawable.night_top, R.drawable.night_back, R.drawable.night_front});
+        skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.left, R.drawable.right, R.drawable.bottom, R.drawable.top, R.drawable.front, R.drawable.back});
 
     }
 

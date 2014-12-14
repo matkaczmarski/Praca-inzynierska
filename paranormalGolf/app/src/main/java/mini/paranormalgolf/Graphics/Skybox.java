@@ -1,24 +1,30 @@
 package mini.paranormalgolf.Graphics;
 
+import android.graphics.Shader;
+
 import java.nio.ByteBuffer;
 
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.glDrawElements;
+
+import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
+import mini.paranormalgolf.Physics.Element;
+import mini.paranormalgolf.Primitives.Point;
 
 /**
  * Created by Mateusz on 2014-12-14.
  */
 
-public class Skybox {
+public class Skybox extends Element {
     private static final int POSITION_COMPONENT_COUNT = 3;
 
     private final VertexArray vertexArray;
     private final ByteBuffer indexArray;
 
-    public Skybox() {
-        // Create a unit cube.
+    public Skybox(Point location) {
+        super(location);
         vertexArray = new VertexArray(new float[] {
                 -1,  1,  1,     // (0) Top-left near
                 1,  1,  1,     // (1) Top-right near
@@ -32,7 +38,7 @@ public class Skybox {
 
         // 6 indices per cube side
         indexArray =  ByteBuffer.allocateDirect(6 * 6)
-                .put(new byte[] {
+                .put(new byte[]{
                         // Front
                         1, 3, 0,
                         0, 3, 2,
@@ -60,8 +66,8 @@ public class Skybox {
         indexArray.position(0);
     }
 
-    public void bindData(SkyboxShaderProgram skyboxProgram) {
-        vertexArray.setVertexAttribPointer(0, skyboxProgram.getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
+    public void bindData(ShaderProgram skyboxProgram) {
+        vertexArray.setVertexAttribPointer(0, ((SkyboxShaderProgram)skyboxProgram).getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
     }
 
     public void draw() {
