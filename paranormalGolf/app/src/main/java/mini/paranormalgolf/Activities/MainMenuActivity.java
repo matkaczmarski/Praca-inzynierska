@@ -22,6 +22,7 @@ public class MainMenuActivity extends Activity
         setContentView(R.layout.activity_main_menu);
 
         LoadFonts();
+        ManageFiles();
     }
 
     public void LoadFonts()
@@ -41,6 +42,11 @@ public class MainMenuActivity extends Activity
 
         tv = (TextView)findViewById(R.id.main_menu_exit);
         tv.setTypeface(tf);
+    }
+
+    public void ManageFiles()
+    {
+        //TODO sprawdzenie czy pliki istnieją i ich ewentualne utworzenie
     }
 
     @Override
@@ -64,7 +70,7 @@ public class MainMenuActivity extends Activity
 
     public void onStartClick(View view)
     {
-        Intent intent = new Intent(this, GameActivity.class);
+        Intent intent = new Intent(this, LevelsActivity.class);
         startActivity(intent);
     }
 

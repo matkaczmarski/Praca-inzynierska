@@ -15,4 +15,8 @@
     <string name="options_activity_vibrations">Wibracje</string>
     <string name="options_activity_language">Język</string>
     <string name="options_activity_appearance">Wygląd kulki</string>
+    <string name="select_level_title">Wybierz poziom</string>
+    <string name="select_level_start">Start</string>
+    <string name="select_level_back">Wstecz</string>
+    <string name="level">Poziom</string>
 </resources>

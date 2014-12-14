@@ -5,4 +5,9 @@
 
     <dimen name="activity_main_menu_title">40dp</dimen>
     <dimen name="activity_main_menu_option">30dp</dimen>
+
+    <dimen name="activity_select_level_font">20dp</dimen>
+    <dimen name="activity_select_level_margin_top">20dp</dimen>
+
+    <dimen name="list_view_item_height">50dp</dimen>
 </resources>

@@ -33,4 +33,16 @@
         <item name="android:layout_marginTop">10dp</item>
     </style>
 
+    <style name="LevelSelectButton">
+        <item name="android:textSize">@dimen/activity_select_level_font</item>
+        <item name="android:textColor">@color/activity_main_menu_option</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_weight">3</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@drawable/level_select_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
 </resources>

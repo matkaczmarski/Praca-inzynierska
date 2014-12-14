@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/list_view_item_height"
+              android:gravity="center"
+              android:background="@android:color/transparent">
+    <TextView
+        android:id="@+id/list_view_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:textSize="@dimen/activity_select_level_font"
+        android:textColor="@color/activity_background"
+        android:gravity="center"/>
+
+</LinearLayout>
