@@ -21,7 +21,7 @@ void main()
 {
 
         float ka = 0.6;
-        float kd = 0.5;
+        float kd = 0.6;
         float ks = 0.5;
         int n = 10;
 

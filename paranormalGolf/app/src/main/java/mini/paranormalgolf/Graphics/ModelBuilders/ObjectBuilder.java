@@ -42,54 +42,6 @@ public class ObjectBuilder {
         drawCommands = new ArrayList<DrawCommand>();
     }
 
-//    public void appendSphere(Sphere sphere, int numPoints){
-//
-//        final int verticesCount = (numPoints + 1) * 2;
-//
-//        for(int i=0; i<=numPoints; i++){
-//
-//            final int startVertex = offset / FLOATS_PER_VERTEX;
-//            float iRadian = -1f * (float)Math.PI/2 + (((float)i/numPoints)  * (float)Math.PI);
-//            float iiRadian = -1f * (float)Math.PI/2 + (((float)(i+1)/numPoints)  * (float)Math.PI);
-//
-//            for(int j=0; j<=numPoints; j++){
-//
-//                float jRadian = ((float)j/numPoints) * 2f * (float)Math.PI;
-//
-//                // x = r * cos(theta) * cos(phi)
-//                // y = r * cos(theta) * sin(phi)
-//                // Z = r * sin(theta)
-//
-//                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
-//                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
-//                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iRadian);
-//
-//                Vector v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
-//
-//                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
-//                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
-//                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iiRadian);
-//
-//                v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
-//                vertexData[offset++] = v1.X;
-//                vertexData[offset++] = v1.Y;
-//                vertexData[offset++] = v1.Z;
-//
-//            }
-//
-//            drawCommands.add(new DrawCommand() {
-//                @Override
-//                public void draw() {
-//                    glDrawArrays(GL_TRIANGLE_STRIP, startVertex, verticesCount);
-//                }
-//            });
-//        }
-//    }
-
-
     public void appendSphere(Sphere sphere, int numPoints){
 
         final int verticesCount = (numPoints + 1) * 2;
@@ -97,20 +49,15 @@ public class ObjectBuilder {
         for(int i=0; i<=numPoints; i++){
 
             final int startVertex = offset / FLOATS_PER_VERTEX_WITH_TETURES;
-            float iRadian = -1f * (float)Math.PI/2 + (((float)i/numPoints)  * (float)Math.PI);
-            float iiRadian = -1f * (float)Math.PI/2 + (((float)(i+1)/numPoints)  * (float)Math.PI);
-
             float textureY1 = (float)i/numPoints;
             float textureY2 = (float)(i+1)/numPoints;
+            float iRadian = -1f * (float)Math.PI/2 + (textureY1  * (float)Math.PI);
+            float iiRadian = -1f * (float)Math.PI/2 + (textureY2 * (float)Math.PI);
 
             for(int j=0; j<=numPoints; j++){
 
-                float jRadian = ((float)j/numPoints) * 2f * (float)Math.PI;
                 float textureX = (float)j/numPoints;
-
-                // x = r * cos(theta) * cos(phi)
-                // y = r * cos(theta) * sin(phi)
-                // Z = r * sin(theta)
+                float jRadian = textureX * 2f * (float)Math.PI;
 
                 vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
                 vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
@@ -119,10 +66,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = textureX;
                 vertexData[offset++] = textureY1;
 
-                Vector v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
-                vertexData[offset++] = v1.X;
-                vertexData[offset++] = v1.Y;
-                vertexData[offset++] = v1.Z;
+                Vector vNormal = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
+                vertexData[offset++] = vNormal.X;
+                vertexData[offset++] = vNormal.Y;
+                vertexData[offset++] = vNormal.Z;
 
                 vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
                 vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
@@ -131,10 +78,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = textureX;
                 vertexData[offset++] = textureY2;
 
-                v1 = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
-                vertexData[offset++] = v1.X;
-                vertexData[offset++] = v1.Y;
-                vertexData[offset++] = v1.Z;
+                vNormal = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
+                vertexData[offset++] = vNormal.X;
+                vertexData[offset++] = vNormal.Y;
+                vertexData[offset++] = vNormal.Z;
 
             }
 

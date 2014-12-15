@@ -81,7 +81,7 @@ public class DrawManager {
 //        golfTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
 
         skyboxShaderProgram = new SkyboxShaderProgram(context);
-        skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.dayClouds);
+        skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.stars);
     }
 
     public void surfaceChange(int width, int height){
