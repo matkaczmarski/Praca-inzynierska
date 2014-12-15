@@ -82,6 +82,8 @@ public class Ball extends MovableElement {
             q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
 
+        
+
         {
             location.X = q[1];
             velocity.X = q[0];

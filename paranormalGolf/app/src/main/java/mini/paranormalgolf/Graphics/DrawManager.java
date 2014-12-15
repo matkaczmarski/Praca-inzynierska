@@ -114,24 +114,24 @@ public class DrawManager {
     }
 
    public void drawFloor(Floor floor){
-       textureLightShaderProgram.useProgram();
+        textureLightShaderProgram.useProgram();
 
-       positionObjectInScene(floor.bottomPart.getLocation());
-       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
-       floor.bottomPart.bindData(textureLightShaderProgram);
-       floor.bottomPart.draw();
+        positionObjectInScene(floor.bottomPart.getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
+        floor.bottomPart.bindData(textureLightShaderProgram);
+        floor.bottomPart.draw();
 
-       for(FloorPart floorPart : floor.sideParts){
-           positionObjectInScene(floorPart.getLocation());
-           textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
-           floorPart.bindData(textureLightShaderProgram);
-           floorPart.draw();
-       }
+        for(FloorPart floorPart : floor.sideParts){
+            positionObjectInScene(floorPart.getLocation());
+            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
+            floorPart.bindData(textureLightShaderProgram);
+            floorPart.draw();
+        }
 
-       positionObjectInScene(floor.topPart.getLocation());
-       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, topFloorTexture);
-       floor.topPart.bindData(textureLightShaderProgram);
-       floor.topPart.draw();
+        positionObjectInScene(floor.topPart.getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, topFloorTexture);
+        floor.topPart.bindData(textureLightShaderProgram);
+        floor.topPart.draw();
     }
 
 
