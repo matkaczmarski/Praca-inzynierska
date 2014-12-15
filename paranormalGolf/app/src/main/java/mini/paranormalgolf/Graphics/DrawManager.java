@@ -47,13 +47,13 @@ public class DrawManager {
 
     private Context context;
 
-    private Vector lightPos =  new Vector(0f, 3.0f, 1.5f);//.normalize();
+    private Vector lightPos =  new Vector(0f, 3f, 0f);//.normalize();
 
     private final float fieldOfViewDegree = 45;
     private final float near = 1f;
-    private final float far = 10f;
+    private final float far = 100f;
 
-    private final Point cameraTranslation = new Point(0f, 1.5f, 1.5f);
+    private final Point cameraTranslation = new Point(0f, 15f, 15f);
 
 //    private ColorShaderProgram colorShaderProgram;
 //    private LightColorShaderProgram lightColorShaderProgram;
@@ -63,11 +63,10 @@ public class DrawManager {
     int topFloorTexture;
     int sideFloorTexture;
     int bottomFloorTexture;
-    int golfTexture;
+    //int golfTexture;
 
     private SkyboxShaderProgram skyboxShaderProgram;
     private Skybox skybox;
-    int skyboxTexture;
 
     public DrawManager(Context context) {
         this.context = context;
@@ -79,13 +78,10 @@ public class DrawManager {
         topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.top_floor_texture);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.side_floor_texture);
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.bottom_floor_texture);
-        golfTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
+//        golfTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
 
         skyboxShaderProgram = new SkyboxShaderProgram(context);
-        skybox = new Skybox(new Point(0,0,0));
-        //skyboxTexture = ResourceHelper.loadCubeMap(context, new int[] { R.drawable.night_left, R.drawable.night_right, R.drawable.night_bottom, R.drawable.night_top, R.drawable.night_back, R.drawable.night_front});
-        skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.left, R.drawable.right, R.drawable.bottom, R.drawable.top, R.drawable.front, R.drawable.back});
-
+        skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.dayClouds);
     }
 
     public void surfaceChange(int width, int height){
@@ -107,8 +103,9 @@ public class DrawManager {
 //        ball.bindData(lightColorShaderProgram);
 //        ball.draw();
        textureLightShaderProgram.useProgram();
-       positionBallInScene(ball.getLocation(),ball.axis,ball.angle);
-       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, golfTexture);
+       positionBallInScene(ball.getLocation(), rotationAngle, rotationAxis);
+       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, ball.getTexture());
+
        ball.bindData(textureLightShaderProgram);
        ball.draw();
     }
@@ -148,7 +145,7 @@ public class DrawManager {
 
         glDepthFunc(GL_LEQUAL);
         skyboxShaderProgram.useProgram();
-        skyboxShaderProgram.setUniforms(modelViewProjectionMatrix, skyboxTexture);
+        skyboxShaderProgram.setUniforms(modelViewProjectionMatrix, skybox.getTexture());
         skybox.bindData(skyboxShaderProgram);
         skybox.draw();
         glDepthFunc(GL_LESS);
@@ -156,7 +153,7 @@ public class DrawManager {
 
 
 
-    private void positionBallInScene(Point location, Vector axis,float angle){
+    private void positionBallInScene(Point location, float angle,Vector axis){
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, location.X, location.Y, location.Z);
        // for(int i=0;i<ball.angles.size();i++){

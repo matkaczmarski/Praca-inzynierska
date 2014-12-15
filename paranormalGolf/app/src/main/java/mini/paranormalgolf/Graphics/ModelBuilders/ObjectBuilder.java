@@ -21,7 +21,7 @@ public class ObjectBuilder {
 
     private static final int FLOATS_PER_VERTEX = 6; //3 na pozycję oraz 3 na wektor normalny
     private static final int FLOATS_PER_VERTEX_WITH_TETURES = 8; //3 na pozycje, 3 na wektor normalny oraz 2 na pozycje tekstury
-    private static final float GRASS_TEXTURE_UNIT = 0.5f;
+    private static final float GRASS_TEXTURE_UNIT = 5f;
 
     public static interface DrawCommand {
         void draw();

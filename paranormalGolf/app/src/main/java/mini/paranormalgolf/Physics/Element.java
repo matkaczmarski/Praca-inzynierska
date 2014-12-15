@@ -17,10 +17,13 @@ public abstract class Element {
     protected final int TEXTURE_COMPONENT_COUNT = 2;
 
     protected Point location;
+    protected  int texture;
     protected VertexArray vertexData;
     protected List<DrawCommand> drawCommands;
 
     public Point getLocation() { return this.location;}
+
+    public int getTexture() {return  this.texture;}
 
     protected Element(Point location){
      this.location=location;
