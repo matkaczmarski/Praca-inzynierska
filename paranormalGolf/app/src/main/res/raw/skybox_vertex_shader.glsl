@@ -12,7 +12,7 @@ void main()
     // our cube map will still work but everything will be flipped.    
     v_Position.z = -v_Position.z;
 	           
-    //gl_Position = u_MVPMatrix * vec4(a_Position, 1.0);
-    //gl_Position = gl_Position.xyww;
-       gl_Position = vec4(a_Position, 1.0).xyww;
+    gl_Position = u_MVPMatrix * vec4(a_Position, 1.0);
+    gl_Position = gl_Position.xyww;
+       //gl_Position = vec4(a_Position, 1.0).xyww;
 }

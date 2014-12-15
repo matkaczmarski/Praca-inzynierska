@@ -137,7 +137,15 @@ public class DrawManager {
 
 
     public void drawSkybox() {
-        setIdentityM(modelViewProjectionMatrix, 0);
+        //setIdentityM(modelViewProjectionMatrix, 0);
+
+        setIdentityM(modelMatrix, 0);
+        setIdentityM(viewMatrix, 0);
+       // rotateM(viewMatrix, 0, 2f, 1f, 0f, 0f);
+        multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
+        multiplyMM(modelViewProjectionMatrix, 0, projectionMatrix, 0, modelViewMatrix, 0);
+
+
         glDepthFunc(GL_LEQUAL);
         skyboxShaderProgram.useProgram();
         skyboxShaderProgram.setUniforms(modelViewProjectionMatrix, skyboxTexture);
