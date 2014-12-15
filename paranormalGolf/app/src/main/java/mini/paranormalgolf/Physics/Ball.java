@@ -1,5 +1,8 @@
 package mini.paranormalgolf.Physics;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
@@ -23,7 +26,10 @@ public class Ball extends MovableElement {
     //
     private float radius;
     private float omega;
-    private Vector axis;
+    public Vector pole;
+    public Vector onEquator;
+    public Vector axis;
+    public float angle;
     private float mass;
     private float area;
     private final static float Cd=0.4f;
@@ -37,10 +43,13 @@ public class Ball extends MovableElement {
     public Ball(Point location, float radius, Vector velocity) {
         super(velocity, location);
         omega=0;
-        axis=new Vector(0,0,1);
+        pole=new Vector(0,1,0);
+        onEquator=new Vector(1,0,0);
         this.radius = radius;
         mass=5;
         area=(float)Math.PI*radius*radius;
+        //axises=new LinkedList<Vector>();
+       // angles=new LinkedList<Float>();
 
         GraphicsData generatedData = ObjectGenerator.createBall(location, radius, MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
@@ -74,16 +83,86 @@ public class Ball extends MovableElement {
             q[4] = velocity.Z;
         }
 
-        dq1 = SolveEquation(q, q, dt, 0.0f, accelerometrData,mu);
-        dq2 = SolveEquation(q, dq1, dt, 0.5f, accelerometrData,mu);
-        dq3 = SolveEquation(q, dq2, dt, 0.5f, accelerometrData,mu);
-        dq4 = SolveEquation(q, dq3, dt, 1.0f, accelerometrData,mu);
+        dq1 = SolveEquation(q, q, dt, 0.0f, accelerometrData, mu);
+        dq2 = SolveEquation(q, dq1, dt, 0.5f, accelerometrData, mu);
+        dq3 = SolveEquation(q, dq2, dt, 0.5f, accelerometrData, mu);
+        dq4 = SolveEquation(q, dq3, dt, 1.0f, accelerometrData, mu);
         for (j = 0; j < numEqns; ++j) {
             q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
+        float difX = q[1] - location.X;
+        float difY = q[3] - location.Y;
+        float difZ = q[5] - location.Z;
 
-        
+        if (difX != 0 || difZ != 0) {
+            axis = new Vector(difZ, 0, -difX).normalize();
+            angle = (float) (360*Math.sqrt(difX * difX + difZ * difZ) /(2*Math.PI*radius));
+            //axises.add(axis);
+            //angles.add(angle);
 
+            if (difX == 0) {
+                Point newPole = new Point(pole.X, 0, 0);
+                newPole.Z = (float) (pole.Z * Math.cos(angle) + pole.Y * Math.sin(angle));
+                newPole.Y = (float) (-pole.Z * Math.sin(angle) + pole.Y * Math.cos(angle));
+                pole = new Vector(newPole.X, newPole.X, newPole.Z);
+
+                Point newOnEquator = new Point(onEquator.X, 0, 0);
+                newOnEquator.Z = (float) (onEquator.Z * Math.cos(angle) + onEquator.Y * Math.sin(angle));
+                newOnEquator.Y = (float) (-onEquator.Z * Math.sin(angle) + onEquator.Y * Math.cos(angle));
+                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
+            } else if (difZ == 0) {
+                Point newPole = new Point(0, 0, pole.Z);
+                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
+                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
+                pole = new Vector(newPole.X, newPole.X, newPole.Z);
+
+                Point newOnEquator = new Point(0, 0, onEquator.Z);
+                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
+                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
+                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
+            } else {
+                float fi;
+                if (axis.X > 0 && axis.Z > 0)
+                    fi = (float) Math.atan(axis.X / axis.Z);
+                else if (axis.Z < 0)
+                    fi = (float) Math.PI + (float) Math.atan(axis.X / axis.Z);
+                else
+                    fi = (float) (2 * Math.PI) + (float) Math.atan(axis.X / axis.Z);
+
+                Point newPole = new Point(0, pole.Y, 0);
+                newPole.X = (float) (pole.X * Math.cos(fi) - pole.Z * Math.sin(fi));
+                newPole.Z = (float) (pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
+                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
+
+                newPole = new Point(0, 0, pole.Z);
+                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
+                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
+                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
+
+                newPole = new Point(0, pole.Y, 0);
+                newPole.X = (float) (pole.X * Math.cos(fi) + pole.Z * Math.sin(fi));
+                newPole.Z = (float) (-pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
+                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
+
+
+                Point newOnEquator = new Point(0, onEquator.Y, 0);
+                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) - onEquator.Z * Math.sin(fi));
+                newOnEquator.Z = (float) (onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
+                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
+
+                newOnEquator = new Point(0, 0, onEquator.Z);
+                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
+                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
+                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
+
+                newOnEquator = new Point(0, onEquator.Y, 0);
+                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) + onEquator.Z * Math.sin(fi));
+                newOnEquator.Z = (float) (-onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
+                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
+            }
+            pole = pole.normalize();
+            onEquator = onEquator.normalize();
+        }
         {
             location.X = q[1];
             velocity.X = q[0];
