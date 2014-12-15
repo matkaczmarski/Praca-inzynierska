@@ -53,21 +53,21 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 
         //TODO zmienić miejsce tworzenie updatera?
-        Ball ball = new Ball(new Point(0f, 0.1f, 0f), 0.1f, new Vector(0f, 0f, 0f), Ball.BallTexture.wooden, context);
+        Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.wooden, context);
 
-        Floor floor1 = new Floor(new BoxSize(1.5f, 0.2f, 1.5f),0.05f, new Point(0f, -0.1f, 0f));
-        Floor floor2 = new Floor(new BoxSize(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, -2f));
-        Floor floor3 = new Floor(new BoxSize(0.5f, 0.2f, 2.5f),0.05f, new Point(0f, -0.1f, 2f));
-        Floor floor4 = new Floor(new BoxSize(2.5f, 0.2f, 0.5f),0.05f, new Point(-2f, -0.1f, 0f));
-        Floor floor5 = new Floor(new BoxSize(2.5f, 0.2f, 0.5f),0.05f, new Point(2f, -0.1f, 0f));
-        Floor floor6 = new Floor(new BoxSize(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, 2f));
-        Floor floor7 = new Floor(new BoxSize(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, 2f));
-        Floor floor8 = new Floor(new BoxSize(1.5f, 0.2f, 0.5f),0.05f, new Point(-1f, -0.1f, -2f));
-        Floor floor9 = new Floor(new BoxSize(1.5f, 0.2f, 0.5f),0.05f, new Point(1f, -0.1f, -2f));
-        Floor floor10 = new Floor(new BoxSize(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, 1.5f));
-        Floor floor11 = new Floor(new BoxSize(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, 1.5f));
-        Floor floor12 = new Floor(new BoxSize(0.5f, 0.2f, 2.5f),0.05f, new Point(-2f, -0.1f, -1.5f));
-        Floor floor13 = new Floor(new BoxSize(0.5f, 0.2f, 2.5f),0.05f, new Point(2f, -0.1f, -1.5f));
+        Floor floor1 = new Floor(new BoxSize(15f, 2f, 15f),0.05f, new Point(0f, -1f, 0f));
+        Floor floor2 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, -20f));
+        Floor floor3 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, 20f));
+        Floor floor4 = new Floor(new BoxSize(25f, 2f, 5f),0.05f, new Point(-20f, -1f, 0f));
+        Floor floor5 = new Floor(new BoxSize(25f, 2f, 5f),0.05f, new Point(20f, -1f, 0f));
+        Floor floor6 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(-10f, -1f, 20f));
+        Floor floor7 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(10f, -1f, 20f));
+        Floor floor8 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(-10f, -1f, -20f));
+        Floor floor9 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(10f, -1f, -20f));
+        Floor floor10 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(-20f, -1f, 15f));
+        Floor floor11 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(20f, -1f, 15f));
+        Floor floor12 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(-20f, -1f, -15f));
+        Floor floor13 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(20f, -1f, -15f));
         List<Floor> floors = new ArrayList<Floor>();
         floors.add(floor1);
         floors.add(floor2);

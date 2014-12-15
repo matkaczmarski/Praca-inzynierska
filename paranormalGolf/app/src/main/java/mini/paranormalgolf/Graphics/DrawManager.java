@@ -47,13 +47,13 @@ public class DrawManager {
 
     private Context context;
 
-    private Vector lightPos =  new Vector(0f, 3.0f, 1.5f);//.normalize();
+    private Vector lightPos =  new Vector(0f, 3f, 0f);//.normalize();
 
     private final float fieldOfViewDegree = 45;
     private final float near = 1f;
-    private final float far = 10.0f;
+    private final float far = 100f;
 
-    private final Point cameraTranslation = new Point(0f, 1.5f, 1.5f);
+    private final Point cameraTranslation = new Point(0f, 15f, 15f);
 
 //    private ColorShaderProgram colorShaderProgram;
 //    private LightColorShaderProgram lightColorShaderProgram;
