@@ -53,7 +53,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 
         //TODO zmienić miejsce tworzenie updatera?
-        Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.wooden, context);
+        Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.tennis, context);
 
         Floor floor1 = new Floor(new BoxSize(15f, 2f, 15f),0.05f, new Point(0f, -1f, 0f));
         Floor floor2 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, -20f));

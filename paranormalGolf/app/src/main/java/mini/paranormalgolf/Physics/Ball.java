@@ -19,7 +19,11 @@ public class Ball extends MovableElement {
 
     public enum BallTexture{
         golf,
-        wooden
+        wooden,
+        basketball,
+        tennis,
+        billard,
+        red_white
     }
 
     private final static float G=-9.81f;
@@ -54,7 +58,6 @@ public class Ball extends MovableElement {
         drawCommands = generatedData.drawCommands;
 
         texture = textureLoader(ballTexture, context);
-
     }
 
     private int textureLoader(BallTexture ballTextureType, Context context){
@@ -66,6 +69,18 @@ public class Ball extends MovableElement {
                 break;
             case wooden:
                 ballTexture = ResourceHelper.loadTexture(context, R.drawable.wood_texture);
+                break;
+            case basketball:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.basketball_texture);
+                break;
+            case billard:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.billard_texture);
+                break;
+            case tennis:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.tennis_texture);
+                break;
+            case red_white:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.red_white_texture);
                 break;
         }
         return ballTexture;

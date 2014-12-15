@@ -20,7 +20,7 @@ varying float v_Light;
 void main()                    
 {
 
-        float ka = 0.4;
+        float ka = 0.6;
         float kd = 0.5;
         float ks = 0.5;
         int n = 10;
@@ -38,7 +38,7 @@ void main()
     float tmp = dot(modelViewNormal, lightVector);
     tmp = tmp > 0.0 ? tmp : 0.0;
 
-    v_Light =  tmp * (1.0 / (1.0 + (0.10 * distance)));
+    v_Light =  tmp * kd;//(1.0 / (1.0 + (0.10 * distance)));
     v_Light = v_Light + ka;
 
     v_TextureCoordinates = a_TextureCoordinates;	  	  
