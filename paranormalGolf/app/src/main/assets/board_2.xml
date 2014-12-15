@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Board id="2">
+    <Floor location_x="0" location_y="-1" location_z="0" boxsize_x="15" boxsize_y="2" boxsize_z="15" friction="0.05"/>
+    <Floor location_x="0" location_y="-1" location_z="-20" boxsize_x="5" boxsize_y="2" boxsize_z="25" friction="0.05"/>
+    <Floor location_x="0" location_y="-1" location_z="20" boxsize_x="5" boxsize_y="2" boxsize_z="25" friction="0.05"/>
+    <Floor location_x="-20" location_y="-1" location_z="0" boxsize_x="25" boxsize_y="2" boxsize_z="5" friction="0.05"/>
+    <Floor location_x="20" location_y="-1" location_z="0" boxsize_x="25" boxsize_y="2" boxsize_z="5" friction="0.05"/>
+    <Floor location_x="-10" location_y="-1" location_z="20" boxsize_x="15" boxsize_y="2" boxsize_z="5" friction="0.05"/>
+    <Floor location_x="10" location_y="-1" location_z="20" boxsize_x="15" boxsize_y="2" boxsize_z="5" friction="0.05"/>
+    <Floor location_x="-10" location_y="-1" location_z="-20" boxsize_x="15" boxsize_y="2" boxsize_z="5" friction="0.05"/>
+    <Floor location_x="10" location_y="-1" location_z="-20" boxsize_x="15" boxsize_y="2" boxsize_z="5" friction="0.05"/>
+</Board>
