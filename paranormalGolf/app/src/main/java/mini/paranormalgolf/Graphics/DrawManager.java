@@ -105,6 +105,7 @@ public class DrawManager {
        textureLightShaderProgram.useProgram();
        positionBallInScene(ball.getLocation(), rotationAngle, rotationAxis);
        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, ball.getTexture());
+
        ball.bindData(textureLightShaderProgram);
        ball.draw();
     }
@@ -152,10 +153,13 @@ public class DrawManager {
 
 
 
-    private void positionBallInScene(Point location, float rotationAngle, Vector rotationAxis){
+    private void positionBallInScene(Point location, float angle,Vector axis){
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, location.X, location.Y, location.Z);
-        rotateM(modelMatrix, 0, rotationAngle, rotationAxis.X, rotationAxis.Y, rotationAxis.Z);
+       // for(int i=0;i<ball.angles.size();i++){
+            rotateM(modelMatrix, 0, angle, axis.X, axis.Y, axis.Z);
+       // }
+      //  rotateM(modelMatrix, 0, (float)(360*Math.acos(pole.Y)/(2*Math.PI)), pole.Z, 0, -pole.X);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
     }
