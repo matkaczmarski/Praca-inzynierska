@@ -1,19 +1,26 @@
 package mini.paranormalgolf.Physics;
 
+import android.content.Context;
+
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import  mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Sławomir on 2014-12-03.
  */
 public class Ball extends MovableElement {
+
+    public enum BallTexture{
+        golf,
+        wooden
+    }
 
     private final static float G=-9.81f;
     private final int MESH_DIMENSION = 32;
@@ -34,7 +41,7 @@ public class Ball extends MovableElement {
     }
 
 
-    public Ball(Point location, float radius, Vector velocity) {
+    public Ball(Point location, float radius, Vector velocity, BallTexture ballTexture, Context context) {
         super(velocity, location);
         omega=0;
         axis=new Vector(0,0,1);
@@ -46,6 +53,22 @@ public class Ball extends MovableElement {
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
 
+        texture = textureLoader(ballTexture, context);
+
+    }
+
+    private int textureLoader(BallTexture ballTextureType, Context context){
+        int ballTexture = -1;
+
+        switch (ballTextureType){
+            case golf:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
+                break;
+            case wooden:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.wood_texture);
+                break;
+        }
+        return ballTexture;
     }
 
     public void bindData(ShaderProgram shaderProgram) {
