@@ -9,21 +9,28 @@ import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Physics.Ball;
+import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
+import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.GL_LEQUAL;
 import static android.opengl.GLES20.GL_LESS;
+import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
+import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glDepthFunc;
+import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.invertM;
@@ -38,12 +45,15 @@ import static android.opengl.Matrix.transposeM;
  * Created by Mateusz on 2014-12-13.
  */
 public class DrawManager {
+
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
     private final float[] viewProjectionMatrix = new float[16];
     private final float[] modelViewMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
+
+    float[] tempMatrix = new float[16];
 
     private Context context;
 
@@ -68,6 +78,7 @@ public class DrawManager {
     private SkyboxShaderProgram skyboxShaderProgram;
     private Skybox skybox;
 
+
     public DrawManager(Context context) {
         this.context = context;
 //        colorShaderProgram = new ColorShaderProgram(context);
@@ -78,7 +89,6 @@ public class DrawManager {
         topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.top_floor_texture);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.side_floor_texture);
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.bottom_floor_texture);
-//        golfTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
 
         skyboxShaderProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.stars);
@@ -104,29 +114,43 @@ public class DrawManager {
 //        ball.draw();
        textureLightShaderProgram.useProgram();
        positionBallInScene(ball.getLocation(), rotationAngle, rotationAxis);
-       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, ball.getTexture());
-
+       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, ball.getTexture(), ball.BALL_OPACITY);
        ball.bindData(textureLightShaderProgram);
        ball.draw();
     }
+
+
+    public void drawDiamond(Diamond diamond){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        textureLightShaderProgram.useProgram();
+        positionDiamondInScene(diamond);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, diamond.getTexture(), diamond.DIAMOND_OPACITY);
+        diamond.bindData(textureLightShaderProgram);
+        diamond.draw();
+
+        glDisable(GL_BLEND);
+    }
+
 
    public void drawFloor(Floor floor){
         textureLightShaderProgram.useProgram();
 
         positionObjectInScene(floor.bottomPart.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture, floor.FLOOR_OPACITY);
         floor.bottomPart.bindData(textureLightShaderProgram);
         floor.bottomPart.draw();
 
         for(FloorPart floorPart : floor.sideParts){
             positionObjectInScene(floorPart.getLocation());
-            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture);
+            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture, floor.FLOOR_OPACITY);
             floorPart.bindData(textureLightShaderProgram);
             floorPart.draw();
         }
 
         positionObjectInScene(floor.topPart.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, topFloorTexture);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, topFloorTexture, floor.FLOOR_OPACITY);
         floor.topPart.bindData(textureLightShaderProgram);
         floor.topPart.draw();
     }
@@ -164,10 +188,23 @@ public class DrawManager {
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
     }
 
+    private void positionDiamondInScene(Diamond diamond){
+        setIdentityM(modelMatrix, 0);
+        translateM(modelMatrix, 0, diamond.getLocation().X,  diamond.getLocation().Y,  diamond.getLocation().Z);
+        rotateM(modelMatrix, 0, diamond.rotate(), 0, 1, 0);
+        multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
+        multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
+        invertM(tempMatrix, 0, modelViewMatrix, 0);
+        transposeM(modelViewMatrix, 0, tempMatrix, 0);
+    }
+
     private void positionObjectInScene(Point location) {
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, location.X, location.Y, location.Z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
+       // invertM(tempMatrix, 0, modelViewMatrix, 0);
+       // transposeM(modelViewMatrix, 0, tempMatrix, 0);
     }
+
 }

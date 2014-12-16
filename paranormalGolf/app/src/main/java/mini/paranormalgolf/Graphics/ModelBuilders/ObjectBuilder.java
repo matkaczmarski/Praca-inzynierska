@@ -2,17 +2,22 @@ package mini.paranormalgolf.Graphics.ModelBuilders;
 
 import android.util.FloatMath;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Sphere;
 import mini.paranormalgolf.Primitives.Rectangle;
 import mini.paranormalgolf.Primitives.Vector;
 
+import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glDrawElements;
 
 /**
  * Created by Mateusz on 2014-12-05.
@@ -246,6 +251,59 @@ public class ObjectBuilder {
             @Override
             public void draw() {
                 glDrawArrays(GL_TRIANGLE_STRIP, startVertex, ObjectGenerator.VERTEX_PER_RECTANGLE);
+            }
+        });
+
+    }
+
+
+    public void appendPyramidWithoutBase(Point location, Pyramid pyramid, float direction) {
+
+        final int indicesCount = pyramid.baseVerticesCount * 3;
+        int vertexStar = offset / FLOATS_PER_VERTEX_WITH_TETURES;
+
+        for (int i = 0; i < pyramid.baseVerticesCount; i++) {
+            float alpha = ((float) i / pyramid.baseVerticesCount) * 2f * (float) Math.PI;
+
+            vertexData[offset++] = location.X + pyramid.radius * FloatMath.cos(alpha);
+            vertexData[offset++] = location.Y;
+            vertexData[offset++] = location.Z + pyramid.radius * FloatMath.sin(alpha);
+
+            vertexData[offset++] = i % 2; // co drugi trójkąt ma teksturowanie od 0
+            vertexData[offset++] = 1f;
+
+            Vector vNormal = new Vector(vertexData[offset - 3] - location.X, vertexData[offset - 2] - location.Y, vertexData[offset - 1] - location.Z).normalize();
+            vertexData[offset++] = vNormal.X;
+            vertexData[offset++] = vNormal.Y;
+            vertexData[offset++] = vNormal.Z;
+        }
+
+        vertexData[offset++] = location.X;
+        vertexData[offset++] = location.Y + (direction * pyramid.height);
+        vertexData[offset++] = location.Z;
+
+        vertexData[offset++] = 0.5f;
+        vertexData[offset++] = 0f;
+
+        vertexData[offset++] = 0;
+        vertexData[offset++] = direction;
+        vertexData[offset++] = 0;
+
+        byte[] indices = new byte[indicesCount];
+        int indicesOffset = 0;
+        for (int i = 0; i < pyramid.baseVerticesCount; i++) {
+            indices[indicesOffset++] = (byte)(vertexStar + pyramid.baseVerticesCount);
+            indices[indicesOffset++] = (byte)( vertexStar + i);
+            indices[indicesOffset++] = (byte)(vertexStar + ((i+1) % pyramid.baseVerticesCount));
+        }
+
+        final ByteBuffer indexArray = ByteBuffer.allocateDirect(indicesCount).put(indices);
+        indexArray.position(0);
+
+        drawCommands.add(new DrawCommand() {
+            @Override
+            public void draw() {
+                glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_BYTE, indexArray);
             }
         });
 
