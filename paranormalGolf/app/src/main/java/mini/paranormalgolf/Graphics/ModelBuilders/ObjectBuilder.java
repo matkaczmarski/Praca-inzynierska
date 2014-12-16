@@ -26,7 +26,6 @@ public class ObjectBuilder {
 
     private static final int FLOATS_PER_VERTEX = 6; //3 na pozycję oraz 3 na wektor normalny
     private static final int FLOATS_PER_VERTEX_WITH_TETURES = 8; //3 na pozycje, 3 na wektor normalny oraz 2 na pozycje tekstury
-    private static final float GRASS_TEXTURE_UNIT = 5f;
 
     public static interface DrawCommand {
         void draw();
@@ -100,13 +99,11 @@ public class ObjectBuilder {
     }
 
 
-    public void appendRectangle(Rectangle rectangle, Axis constantAxis, float normalVectorDirection) {
+    public void appendRectangle(Rectangle rectangle, Axis constantAxis, float normalVectorDirection, float textureUnit) {
 
         final int startVertex = offset / (FLOATS_PER_VERTEX_WITH_TETURES);
-        float aTextureUnits = rectangle.a / GRASS_TEXTURE_UNIT;
-        float bTextureUnits = rectangle.b / GRASS_TEXTURE_UNIT;
-
-        Vector tmp;
+        float aTextureUnits = rectangle.a / textureUnit;
+        float bTextureUnits = rectangle.b / textureUnit;
 
         switch (constantAxis){
             case xAxis:

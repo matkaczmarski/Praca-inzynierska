@@ -13,20 +13,16 @@ import mini.paranormalgolf.Primitives.Rectangle;
  */
 public class FloorPart  extends Element {
 
-    protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
+    private static final float GRASS_TEXTURE_UNIT = 5f;
+    private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
     public FloorPart(Rectangle rectangle, ObjectBuilder.Axis axis, float normalVectorDirection) {
         super(rectangle.center);
 
-        GraphicsData generatedData = ObjectGenerator.createFloorPart(rectangle, axis, normalVectorDirection);
+        GraphicsData generatedData = ObjectGenerator.createFloorPart(rectangle, axis, normalVectorDirection, GRASS_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }
-
-//    public void bindData(ShaderProgram colorProgram) {
-//        vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)colorProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-//    }
 
     public void bindData(ShaderProgram shaderProgram) {
         vertexData.setVertexAttribPointer(0, ((TextureLightShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);

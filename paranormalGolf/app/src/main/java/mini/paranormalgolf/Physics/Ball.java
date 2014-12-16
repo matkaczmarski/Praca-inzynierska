@@ -30,7 +30,7 @@ public class Ball extends MovableElement {
     private final static float G=-9.81f;
     private final int MESH_DIMENSION = 32;
     public final float BALL_OPACITY = 1f;
-    protected final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
+    private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
 
     public final float[] rgba = new float[] {0.0f, 0.0f, 0.9f, 1f};
     //

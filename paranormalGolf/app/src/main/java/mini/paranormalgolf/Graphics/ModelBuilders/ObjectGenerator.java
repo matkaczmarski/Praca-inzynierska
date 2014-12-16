@@ -1,6 +1,7 @@
 package mini.paranormalgolf.Graphics.ModelBuilders;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Rectangle;
@@ -25,10 +26,20 @@ public class ObjectGenerator {
     }
 
 
-    public static GraphicsData createFloorPart(Rectangle rectangle, Axis axis, float normalVectorDirection) {
-
+    public static GraphicsData createFloorPart(Rectangle rectangle, Axis axis, float normalVectorDirection, float textureUnit) {
         ObjectBuilder builder = new ObjectBuilder(VERTEX_PER_RECTANGLE,true);
-        builder.appendRectangle(new Rectangle(CENTER_POINT, rectangle.a, rectangle.b), axis, normalVectorDirection);
+        builder.appendRectangle(new Rectangle(CENTER_POINT, rectangle.a, rectangle.b), axis, normalVectorDirection, textureUnit);
+        return builder.build();
+    }
+
+    public static GraphicsData createWall(BoxSize boxSize, Point location, float textureUnit) {
+        ObjectBuilder builder = new ObjectBuilder(6 * VERTEX_PER_RECTANGLE, true);
+        builder.appendRectangle(new Rectangle(new Point(0f, boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, 1, textureUnit);
+        builder.appendRectangle(new Rectangle(new Point(0f, -boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, -1, textureUnit);
+        builder.appendRectangle(new Rectangle(new Point(boxSize.x / 2, 0f, 0f), boxSize.y, boxSize.z), Axis.xAxis, 1, textureUnit);
+        builder.appendRectangle(new Rectangle(new Point(-boxSize.x / 2, 0f, 0f), boxSize.y, boxSize.z), Axis.xAxis, -1, textureUnit);
+        builder.appendRectangle(new Rectangle(new Point(0f, 0f, boxSize.z / 2), boxSize.x, boxSize.y), Axis.zAxis, 1, textureUnit);
+        builder.appendRectangle(new Rectangle(new Point(0f, 0f, -boxSize.z / 2), boxSize.x, boxSize.y), Axis.zAxis, -1, textureUnit);
         return builder.build();
     }
 

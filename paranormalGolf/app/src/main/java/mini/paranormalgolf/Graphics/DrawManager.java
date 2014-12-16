@@ -12,6 +12,7 @@ import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
+import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Pyramid;
@@ -141,6 +142,14 @@ public class DrawManager {
         textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
         floor.getTopPart().bindData(textureLightShaderProgram);
         floor.getTopPart().draw();
+    }
+
+    public void drawWall(Wall wall){
+        textureLightShaderProgram.useProgram();
+        positionObjectInScene(wall.getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, wall.getTexture(), wall.WALL_OPACITY);
+        wall.bindData(textureLightShaderProgram);
+        wall.draw();
     }
 
 
