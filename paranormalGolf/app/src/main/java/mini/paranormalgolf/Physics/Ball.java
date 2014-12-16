@@ -133,7 +133,7 @@ public class Ball extends MovableElement {
 
         if (difX != 0 || difZ != 0) {
             axis = new Vector(difZ, 0, -difX).normalize();
-            angle = (float) (360*Math.sqrt(difX * difX + difZ * difZ) /(2*Math.PI*radius));
+            angle = (float) (Math.sqrt(difX * difX + difZ * difZ) /(radius));
             //axises.add(axis);
             //angles.add(angle);
 
