@@ -69,7 +69,7 @@ public class LevelsListAdapter extends BaseAdapter
         tagInfo.setResult(best_results[i]);
         rowView.setTag(tagInfo);
         TextView textView = (TextView)rowView.findViewById(R.id.list_view_item_text);
-        textView.setText(context.getString(R.string.level) + " #" + i);
+        textView.setText(context.getString(R.string.level) + " #" + (i + 1));
         if (i == selectedIndex)
             textView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.selected_item));
         else

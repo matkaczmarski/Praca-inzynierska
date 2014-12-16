@@ -3,6 +3,7 @@ package mini.paranormalgolf;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -54,7 +55,10 @@ public class GameActivity extends Activity {
                         || Build.MODEL.contains("Emulator")
                         || Build.MODEL.contains("Android SDK built for x86")));
 
-        final GameRenderer gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE));
+        Intent intent = getIntent();
+        String board_id = intent.getStringExtra("BOARD_ID");
+
+        final GameRenderer gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
 
         if (supportsEs2) {
             // ...
