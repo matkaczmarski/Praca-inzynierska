@@ -1,6 +1,7 @@
 package mini.paranormalgolf;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 
@@ -11,6 +12,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import mini.paranormalgolf.Helpers.UpdateResult;
+import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Board;
 import mini.paranormalgolf.Physics.Floor;
@@ -37,10 +39,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private final Context context;
     private Updater updater;
     private SensorManager sensorManager;
+    private String board_id;
 
-    public GameRenderer(Context context, SensorManager sensorManager) {
+    public GameRenderer(Context context, SensorManager sensorManager, String board_id) {
         this.context = context;
         this.sensorManager = sensorManager;
+        this.board_id = board_id;
     }
 
     @Override
@@ -48,14 +52,14 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
+        //glEnable(GL_BLEND);
        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
         //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.golf, context);
 
-        Floor floor1 = new Floor(new BoxSize(15f, 2f, 15f),0.05f, new Point(0f, -1f, 0f));
+        /*Floor floor1 = new Floor(new BoxSize(15f, 2f, 15f),0.05f, new Point(0f, -1f, 0f));
         Floor floor2 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, -20f));
         Floor floor3 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, 20f));
         Floor floor4 = new Floor(new BoxSize(25f, 2f, 5f),0.05f, new Point(-20f, -1f, 0f));
@@ -82,9 +86,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         floors.add(floor11);
         floors.add(floor12);
         floors.add(floor13);
-        Board board = new Board(0, floors);
+        Board board = new Board(0, floors);*/
 
-        updater = new Updater(context, ball, board,sensorManager);
+        XMLParser xmlParser = new XMLParser(context);
+        Board board = xmlParser.getBoard(board_id);
+
+        updater = new Updater(context, ball, board, sensorManager);
     }
 
     @Override

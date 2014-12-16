@@ -15,7 +15,7 @@ import mini.paranormalgolf.Primitives.Rectangle;
  */
 public class Floor extends Element {
 
-    public final float[] rgba = new float[]{0.196078f, 0.703922f, 0.296078f, 1f};
+    public final float FLOOR_OPACITY = 1f;
     protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
 
     public BoxSize measurements;
@@ -24,6 +24,11 @@ public class Floor extends Element {
     public FloorPart topPart;
     public FloorPart bottomPart;
     public List<FloorPart> sideParts;
+
+
+//    public int getTopFloorTexture(){return topFloorTexture;}
+//    public  int getSideFloorTexture() {return  sideFloorTexture;}
+//    public  int getBottomFloorTexture() {return  bottomFloorTexture;}
 
 
     public Floor(BoxSize measures, float mu, Point location) {

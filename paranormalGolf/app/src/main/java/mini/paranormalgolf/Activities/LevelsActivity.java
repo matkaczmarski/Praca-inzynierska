@@ -20,6 +20,7 @@ import mini.paranormalgolf.R;
 
 public class LevelsActivity extends Activity
 {
+    String board_id = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +95,17 @@ public class LevelsActivity extends Activity
 
     public void onStartClick (View view)
     {
-        Intent intent = new Intent(this, GameActivity.class);
-        startActivity(intent);
+        if (board_id != null)
+        {
+            Intent intent = new Intent(this, GameActivity.class);
+            intent.putExtra("BOARD_ID", board_id);
+            startActivity(intent);
+        }
     }
 
     public void selectedBoardChanged(String id, int result, int nr)
     {
+        board_id = id;
         int picId = getResources().getIdentifier("board_" + nr, "drawable", getApplicationContext().getPackageName());
         ((ImageView)findViewById(R.id.board_image)).setImageDrawable(getResources().getDrawable(picId));
 

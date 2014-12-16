@@ -6,6 +6,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
@@ -13,6 +17,8 @@ import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Helpers.UpdateResult;
+import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Vector;
 
 /**
@@ -23,10 +29,13 @@ public class Updater implements SensorEventListener {
     private Context context;
     private Ball ball;
 
+
     private Board board;
     private Vector accData=new Vector(0,0,0);
 
     DrawManager drawManager;
+
+    private List<Diamond> diamonds;
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
@@ -35,6 +44,13 @@ public class Updater implements SensorEventListener {
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         drawManager = new DrawManager(context);
+
+        Diamond diamond1 = new Diamond(new Point(0f, 2f, -5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+        Diamond diamond2 = new Diamond(new Point(0f, 2f, 5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+        Diamond diamond3 = new Diamond(new Point(5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+        Diamond diamond4 = new Diamond(new Point(-5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+
+        diamonds = Arrays.asList(diamond1, diamond2, diamond3, diamond4);
     }
 
     public UpdateResult update() {
@@ -70,6 +86,10 @@ public class Updater implements SensorEventListener {
         }
         //drugi argument - o ile stopni obrót, 3 argument - oś obrotu
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());
+
+        for(Diamond diamond : diamonds) {
+            drawManager.drawDiamond(diamond);
+        }
     }
 
     @Override

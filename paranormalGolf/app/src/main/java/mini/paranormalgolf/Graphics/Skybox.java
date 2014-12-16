@@ -1,6 +1,7 @@
 package mini.paranormalgolf.Graphics;
 
 import android.content.Context;
+import android.view.WindowManager;
 
 import java.nio.ByteBuffer;
 
@@ -27,6 +28,7 @@ public class Skybox extends Element {
         stars
     }
     private static final int POSITION_COMPONENT_COUNT = 3;
+    private static final int INDICES_COUNT = 36;
 
     private final VertexArray vertexArray;
     private final ByteBuffer indexArray;
@@ -47,7 +49,7 @@ public class Skybox extends Element {
         });
 
         // 6 indices per cube side
-        indexArray =  ByteBuffer.allocateDirect(6 * 6)
+        indexArray =  ByteBuffer.allocateDirect(INDICES_COUNT)
                 .put(new byte[]{
                         // Front
                         1, 3, 0,
@@ -85,6 +87,12 @@ public class Skybox extends Element {
             case nightClouds:
                 skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.night_left, R.drawable.night_right, R.drawable.night_bottom, R.drawable.night_top, R.drawable.night_back, R.drawable.night_front});
                 break;
+//            case stars:
+//                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.star_left, R.drawable.star_right, R.drawable.star_bottom, R.drawable.star_top, R.drawable.star_back, R.drawable.star_front});
+//                break;
+            case stars:
+                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky});
+                break;
         }
         return skyboxTexture;
     }
@@ -94,6 +102,6 @@ public class Skybox extends Element {
     }
 
     public void draw() {
-        glDrawElements(GL_TRIANGLES, 36,  GL_UNSIGNED_BYTE, indexArray);
+        glDrawElements(GL_TRIANGLES, INDICES_COUNT,  GL_UNSIGNED_BYTE, indexArray);
     }
 }

@@ -12,6 +12,7 @@ import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUniform1f;
 import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniform3f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
@@ -25,6 +26,7 @@ public class TextureLightShaderProgram extends ShaderProgram {
     private final int uMVMatrixLocation;
     private final int uLightPosLocation;
     private final int uTextureUnitLocation;
+    private final int uOpacityLocation;
 
     // Attribute locations
     private final int aPositionLocation;
@@ -39,6 +41,7 @@ public class TextureLightShaderProgram extends ShaderProgram {
         uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
         uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
         uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE_UNIT);
+        uOpacityLocation = glGetUniformLocation(program, U_OPACITY);
 
         // Retrieve attribute locations for the shader program.
         aPositionLocation = glGetAttribLocation(program, A_POSITION);
@@ -46,10 +49,11 @@ public class TextureLightShaderProgram extends ShaderProgram {
         aTextureCoordinatesLocation = glGetAttribLocation(program, A_TEXTURE_COORDINATES);
     }
 
-    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, Vector lightPosition, int textureId) {
+    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, Vector lightPosition, int textureId, float opacity) {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
         glUniform3f(uLightPosLocation, lightPosition.X, lightPosition.Y, lightPosition.Z);
+        glUniform1f(uOpacityLocation, opacity);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureId);
