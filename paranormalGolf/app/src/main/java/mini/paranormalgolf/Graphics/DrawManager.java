@@ -184,16 +184,16 @@ public class DrawManager {
             if (ball.pole.X != 0 && ball.pole.Z != 0) {
                 // Vector axis=new Vector(-ball.pole.Z,0,ball.pole.X).normalize();
                 if (ball.pole.X > 0) {
-                    rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), ball.pole.Z, 0, -ball.pole.X);
-                    rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), ball.pole.Z, 0, -ball.pole.X);
-                    multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
-
-                } else {
                     rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), -ball.pole.Z, 0, ball.pole.X);
                     rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), -ball.pole.Z, 0, ball.pole.X);
                     multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
+
+                } else {
+                    rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)),ball.pole.Z, 0, -ball.pole.X);
+                    rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), ball.pole.Z, 0, -ball.pole.X);
+                    multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
                 }
-            } else{
+            } else {
                 rotateM(modelMatrix, 0, 180, 0, 0, 1);
                 rotateM(helpMatrix, 0, 180, 0, 0, 1);
                 multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
@@ -201,8 +201,7 @@ public class DrawManager {
             float d = (float) Math.sqrt((result[0] - ball.onEquator.X) * (result[0] - ball.onEquator.X) + (result[1] - ball.onEquator.Y) * (result[1] - ball.onEquator.Y) +
                     (result[2] - ball.onEquator.Z) * (result[2] - ball.onEquator.Z));
             float alfa = (float) (360 * Math.acos((2 - d * d) / 2) / (2 * Math.PI));
-            float sign = (-ball.onEquator.X) * (result[0] - ball.onEquator.X) + (-ball.onEquator.Y) * (result[1] - ball.onEquator.Y) +
-                    (-ball.onEquator.Z) * (result[2] - ball.onEquator.Z);
+            float sign = (-ball.onEquator.Z) * (result[0] - ball.onEquator.X) - (-ball.onEquator.X) * (result[2] - ball.onEquator.Z);
             if (sign > 0)
                 rotateM(modelMatrix, 0, alfa, -ball.pole.X, -ball.pole.Y, -ball.pole.Z);
             else
