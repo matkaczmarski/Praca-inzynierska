@@ -100,7 +100,8 @@ public class DrawManager {
 //        ball.bindData(lightColorShaderProgram);
 //        ball.draw();
        textureLightShaderProgram.useProgram();
-       positionBallInScene(ball.getLocation(), rotationAngle, rotationAxis);
+
+       positionBallInScene(ball);
        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, ball.getTexture(), ball.BALL_OPACITY);
        ball.bindData(textureLightShaderProgram);
        ball.draw();
@@ -162,11 +163,15 @@ public class DrawManager {
 
 
 
-    private void positionBallInScene(Point location, float angle,Vector axis){
+    private void positionBallInScene(Ball ball){
         setIdentityM(modelMatrix, 0);
-        translateM(modelMatrix, 0, location.X, location.Y, location.Z);
+        translateM(modelMatrix, 0, ball.getLocation().X, ball.getLocation().Y, ball.getLocation().Z);
+        if(ball.pole.X>0)
+            rotateM(modelMatrix,0,(float)(360*Math.acos(ball.pole.Y)/(2*Math.PI)),ball.pole.Z,0,-ball.pole.X);
+        else
+            rotateM(modelMatrix,0,(float)(360*Math.acos(ball.pole.Y)/(2*Math.PI)),ball.pole.Z,0,-ball.pole.X);
        // for(int i=0;i<ball.angles.size();i++){
-            rotateM(modelMatrix, 0, angle, axis.X, axis.Y, axis.Z);
+       //     rotateM(modelMatrix, 0, angle, axis.X, axis.Y, axis.Z);
        // }
       //  rotateM(modelMatrix, 0, (float)(360*Math.acos(pole.Y)/(2*Math.PI)), pole.Z, 0, -pole.X);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
