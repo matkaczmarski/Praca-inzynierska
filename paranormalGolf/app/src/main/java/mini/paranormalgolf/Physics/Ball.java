@@ -13,6 +13,10 @@ import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.R;
 
+import static android.opengl.Matrix.multiplyMV;
+import static android.opengl.Matrix.rotateM;
+import static android.opengl.Matrix.setIdentityM;
+
 /**
  * Created by Sławomir on 2014-12-03.
  */
@@ -134,71 +138,84 @@ public class Ball extends MovableElement {
         if (difX != 0 || difZ != 0) {
             axis = new Vector(difZ, 0, -difX).normalize();
             angle = (float) (360*Math.sqrt(difX * difX + difZ * difZ) /(2*Math.PI*radius));
+            float[] helpMatrix=new float[16];
+            float[] result=new float[4];
+            setIdentityM(helpMatrix,0);
+            rotateM(helpMatrix, 0, angle, axis.X, axis.Y, axis.Z);
+
+            multiplyMV(result, 0, helpMatrix, 0, new float[]{pole.X, pole.Y, pole.Z, 1}, 0);
+            pole=new Vector(result[0],result[1],result[2]);
+            pole=pole.normalize();
+
+            multiplyMV(result,0,helpMatrix,0,new float[]{onEquator.X,onEquator.Y,onEquator.Z,1},0);
+            onEquator=new Vector(result[0],result[1],result[2]);
+            onEquator=onEquator.normalize();
             //axises.add(axis);
             //angles.add(angle);
 
-            if (difX == 0) {
-                Point newPole = new Point(pole.X, 0, 0);
-                newPole.Z = (float) (pole.Z * Math.cos(angle) + pole.Y * Math.sin(angle));
-                newPole.Y = (float) (-pole.Z * Math.sin(angle) + pole.Y * Math.cos(angle));
-                pole = new Vector(newPole.X, newPole.X, newPole.Z);
 
-                Point newOnEquator = new Point(onEquator.X, 0, 0);
-                newOnEquator.Z = (float) (onEquator.Z * Math.cos(angle) + onEquator.Y * Math.sin(angle));
-                newOnEquator.Y = (float) (-onEquator.Z * Math.sin(angle) + onEquator.Y * Math.cos(angle));
-                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
-            } else if (difZ == 0) {
-                Point newPole = new Point(0, 0, pole.Z);
-                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
-                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
-                pole = new Vector(newPole.X, newPole.X, newPole.Z);
-
-                Point newOnEquator = new Point(0, 0, onEquator.Z);
-                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
-                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
-                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
-            } else {
-                float fi;
-                if (axis.X > 0 && axis.Z > 0)
-                    fi = (float) Math.atan(axis.X / axis.Z);
-                else if (axis.Z < 0)
-                    fi = (float) Math.PI + (float) Math.atan(axis.X / axis.Z);
-                else
-                    fi = (float) (2 * Math.PI) + (float) Math.atan(axis.X / axis.Z);
-
-                Point newPole = new Point(0, pole.Y, 0);
-                newPole.X = (float) (pole.X * Math.cos(fi) - pole.Z * Math.sin(fi));
-                newPole.Z = (float) (pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
-                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
-
-                newPole = new Point(0, 0, pole.Z);
-                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
-                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
-                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
-
-                newPole = new Point(0, pole.Y, 0);
-                newPole.X = (float) (pole.X * Math.cos(fi) + pole.Z * Math.sin(fi));
-                newPole.Z = (float) (-pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
-                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
-
-
-                Point newOnEquator = new Point(0, onEquator.Y, 0);
-                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) - onEquator.Z * Math.sin(fi));
-                newOnEquator.Z = (float) (onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
-                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
-
-                newOnEquator = new Point(0, 0, onEquator.Z);
-                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
-                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
-                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
-
-                newOnEquator = new Point(0, onEquator.Y, 0);
-                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) + onEquator.Z * Math.sin(fi));
-                newOnEquator.Z = (float) (-onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
-                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
-            }
-            pole = pole.normalize();
-            onEquator = onEquator.normalize();
+//            if (difX == 0) {
+//                Point newPole = new Point(pole.X, 0, 0);
+//                newPole.Z = (float) (pole.Z * Math.cos(angle) + pole.Y * Math.sin(angle));
+//                newPole.Y = (float) (-pole.Z * Math.sin(angle) + pole.Y * Math.cos(angle));
+//                pole = new Vector(newPole.X, newPole.X, newPole.Z);
+//
+//                Point newOnEquator = new Point(onEquator.X, 0, 0);
+//                newOnEquator.Z = (float) (onEquator.Z * Math.cos(angle) + onEquator.Y * Math.sin(angle));
+//                newOnEquator.Y = (float) (-onEquator.Z * Math.sin(angle) + onEquator.Y * Math.cos(angle));
+//                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
+//            } else if (difZ == 0) {
+//                Point newPole = new Point(0, 0, pole.Z);
+//                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
+//                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
+//                pole = new Vector(newPole.X, newPole.X, newPole.Z);
+//
+//                Point newOnEquator = new Point(0, 0, onEquator.Z);
+//                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
+//                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
+//                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
+//            } else {
+//                float fi;
+//                if (axis.X > 0 && axis.Z > 0)
+//                    fi = (float) Math.atan(axis.X / axis.Z);
+//                else if (axis.Z < 0)
+//                    fi = (float) Math.PI + (float) Math.atan(axis.X / axis.Z);
+//                else
+//                    fi = (float) (2 * Math.PI) + (float) Math.atan(axis.X / axis.Z);
+//
+//                Point newPole = new Point(0, pole.Y, 0);
+//                newPole.X = (float) (pole.X * Math.cos(fi) - pole.Z * Math.sin(fi));
+//                newPole.Z = (float) (pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
+//                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
+//
+//                newPole = new Point(0, 0, pole.Z);
+//                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
+//                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
+//                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
+//
+//                newPole = new Point(0, pole.Y, 0);
+//                newPole.X = (float) (pole.X * Math.cos(fi) + pole.Z * Math.sin(fi));
+//                newPole.Z = (float) (-pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
+//                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
+//
+//
+//                Point newOnEquator = new Point(0, onEquator.Y, 0);
+//                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) - onEquator.Z * Math.sin(fi));
+//                newOnEquator.Z = (float) (onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
+//                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
+//
+//                newOnEquator = new Point(0, 0, onEquator.Z);
+//                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
+//                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
+//                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
+//
+//                newOnEquator = new Point(0, onEquator.Y, 0);
+//                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) + onEquator.Z * Math.sin(fi));
+//                newOnEquator.Z = (float) (-onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
+//                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
+//            }
+//            pole = pole.normalize();
+//            onEquator = onEquator.normalize();
         }
         {
             location.X = q[1];
