@@ -1,14 +1,18 @@
 package mini.paranormalgolf.Physics;
 
+import android.content.Context;
+
 import java.util.Arrays;
 import java.util.List;
 
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Rectangle;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Sławomir on 2014-12-03.
@@ -21,21 +25,32 @@ public class Floor extends Element {
     public BoxSize measurements;
     public float mu;
 
-    public FloorPart topPart;
-    public FloorPart bottomPart;
-    public List<FloorPart> sideParts;
+    private FloorPart topPart;
+    private FloorPart bottomPart;
+    private List<FloorPart> sideParts;
+
+    private int topFloorTexture;
+    private int sideFloorTexture;
+    private int bottomFloorTexture;
+
+    public  FloorPart getTopPart(){return topPart;}
+    public FloorPart getBottomPart(){return  bottomPart;}
+    public List<FloorPart> getSideParts(){return sideParts;}
+    public int getTopFloorTexture(){return topFloorTexture;}
+    public  int getSideFloorTexture() {return  sideFloorTexture;}
+    public  int getBottomFloorTexture() {return  bottomFloorTexture;}
 
 
-//    public int getTopFloorTexture(){return topFloorTexture;}
-//    public  int getSideFloorTexture() {return  sideFloorTexture;}
-//    public  int getBottomFloorTexture() {return  bottomFloorTexture;}
-
-
-    public Floor(BoxSize measures, float mu, Point location) {
+    public Floor(BoxSize measures, float mu, Point location, Context context) {
         super(location);
         this.measurements = measures;
         this.mu = mu;
         createFloor(measures, location);
+
+        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.top_floor_texture);
+        sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.side_floor_texture);
+        bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.bottom_floor_texture);
+
     }
 
     private void createFloor(BoxSize measures, Point location) {

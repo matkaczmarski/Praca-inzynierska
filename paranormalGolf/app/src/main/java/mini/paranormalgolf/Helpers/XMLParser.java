@@ -57,7 +57,7 @@ public class XMLParser
 
                         float friction = Float.parseFloat(xpp.getAttributeValue(null, "friction"));
 
-                        floors.add(new Floor(new BoxSize(boxsize_x, boxsize_y, boxsize_z), friction, new Point(location_x, location_y, location_z)));
+                        floors.add(new Floor(new BoxSize(boxsize_x, boxsize_y, boxsize_z), friction, new Point(location_x, location_y, location_z),context));
                     }
                 }
                 eventType = xpp.next();

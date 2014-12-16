@@ -70,10 +70,6 @@ public class DrawManager {
 //    private TextureShaderProgram textureShaderProgram;
     private TextureLightShaderProgram textureLightShaderProgram;
 
-    int topFloorTexture;
-    int sideFloorTexture;
-    int bottomFloorTexture;
-    //int golfTexture;
 
     private SkyboxShaderProgram skyboxShaderProgram;
     private Skybox skybox;
@@ -81,22 +77,13 @@ public class DrawManager {
 
     public DrawManager(Context context) {
         this.context = context;
-//        colorShaderProgram = new ColorShaderProgram(context);
-//        lightColorShaderProgram = new LightColorShaderProgram(context);
-//        textureShaderProgram = new TextureShaderProgram(context);
         textureLightShaderProgram = new TextureLightShaderProgram(context);
-
-        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.top_floor_texture);
-        sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.side_floor_texture);
-        bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.bottom_floor_texture);
-
         skyboxShaderProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.stars);
     }
 
     public void surfaceChange(int width, int height){
         glViewport(0, 0, width, height);
-        //ustawianie pozycji sceny
         MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / (float) height, near, far);
     }
 
@@ -138,29 +125,27 @@ public class DrawManager {
    public void drawFloor(Floor floor){
         textureLightShaderProgram.useProgram();
 
-        positionObjectInScene(floor.bottomPart.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture, floor.FLOOR_OPACITY);
-        floor.bottomPart.bindData(textureLightShaderProgram);
-        floor.bottomPart.draw();
+        positionObjectInScene(floor.getBottomPart().getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+        floor.getBottomPart().bindData(textureLightShaderProgram);
+        floor.getBottomPart().draw();
 
-        for(FloorPart floorPart : floor.sideParts){
+        for(FloorPart floorPart : floor.getSideParts()){
             positionObjectInScene(floorPart.getLocation());
-            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, bottomFloorTexture, floor.FLOOR_OPACITY);
+            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
             floorPart.bindData(textureLightShaderProgram);
             floorPart.draw();
         }
 
-        positionObjectInScene(floor.topPart.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, topFloorTexture, floor.FLOOR_OPACITY);
-        floor.topPart.bindData(textureLightShaderProgram);
-        floor.topPart.draw();
+        positionObjectInScene(floor.getTopPart().getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
+        floor.getTopPart().bindData(textureLightShaderProgram);
+        floor.getTopPart().draw();
     }
 
 
 
     public void drawSkybox() {
-        //setIdentityM(modelViewProjectionMatrix, 0);
-
         setIdentityM(modelMatrix, 0);
         setIdentityM(viewMatrix, 0);
        // rotateM(viewMatrix, 0, 2f, 1f, 0f, 0f);

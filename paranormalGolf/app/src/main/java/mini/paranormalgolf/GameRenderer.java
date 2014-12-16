@@ -57,36 +57,37 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 
         //TODO zmienić miejsce tworzenie updatera?
-        Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.golf, context);
 
-        /*Floor floor1 = new Floor(new BoxSize(15f, 2f, 15f),0.05f, new Point(0f, -1f, 0f));
-        Floor floor2 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, -20f));
-        Floor floor3 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, 20f));
-        Floor floor4 = new Floor(new BoxSize(25f, 2f, 5f),0.05f, new Point(-20f, -1f, 0f));
-        Floor floor5 = new Floor(new BoxSize(25f, 2f, 5f),0.05f, new Point(20f, -1f, 0f));
-        Floor floor6 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(-10f, -1f, 20f));
-        Floor floor7 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(10f, -1f, 20f));
-        Floor floor8 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(-10f, -1f, -20f));
-        Floor floor9 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(10f, -1f, -20f));
-        Floor floor10 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(-20f, -1f, 15f));
-        Floor floor11 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(20f, -1f, 15f));
-        Floor floor12 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(-20f, -1f, -15f));
-        Floor floor13 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(20f, -1f, -15f));
-        List<Floor> floors = new ArrayList<Floor>();
-        floors.add(floor1);
-        floors.add(floor2);
-        floors.add(floor3);
-        floors.add(floor4);
-        floors.add(floor5);
-        floors.add(floor6);
-        floors.add(floor7);
-        floors.add(floor8);
-        floors.add(floor9);
-        floors.add(floor10);
-        floors.add(floor11);
-        floors.add(floor12);
-        floors.add(floor13);
-        Board board = new Board(0, floors);*/
+        Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.wooden, context);
+
+//        Floor floor1 = new Floor(new BoxSize(15f, 2f, 15f),0.05f, new Point(0f, -1f, 0f), context);
+//        Floor floor2 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, -20f), context);
+//        Floor floor3 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(0f, -1f, 20f),context);
+//        Floor floor4 = new Floor(new BoxSize(25f, 2f, 5f),0.05f, new Point(-20f, -1f, 0f),context);
+//        Floor floor5 = new Floor(new BoxSize(25f, 2f, 5f),0.05f, new Point(20f, -1f, 0f),context);
+//        Floor floor6 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(-10f, -1f, 20f), context);
+//        Floor floor7 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(10f, -1f, 20f),context);
+//        Floor floor8 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(-10f, -1f, -20f),context);
+//        Floor floor9 = new Floor(new BoxSize(15f, 2f, 5f),0.05f, new Point(10f, -1f, -20f),context);
+//        Floor floor10 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(-20f, -1f, 15f),context);
+//        Floor floor11 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(20f, -1f, 15f),context);
+//        Floor floor12 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(-20f, -1f, -15f),context);
+//        Floor floor13 = new Floor(new BoxSize(5f, 2f, 25f),0.05f, new Point(20f, -1f, -15f),context);
+//        List<Floor> floors = new ArrayList<Floor>();
+//        floors.add(floor1);
+//        floors.add(floor2);
+//        floors.add(floor3);
+//        floors.add(floor4);
+//        floors.add(floor5);
+//        floors.add(floor6);
+//        floors.add(floor7);
+//        floors.add(floor8);
+//        floors.add(floor9);
+//        floors.add(floor10);
+//        floors.add(floor11);
+//        floors.add(floor12);
+//        floors.add(floor13);
+//        Board board = new Board(0, floors);
 
         XMLParser xmlParser = new XMLParser(context);
         Board board = xmlParser.getBoard(board_id);
