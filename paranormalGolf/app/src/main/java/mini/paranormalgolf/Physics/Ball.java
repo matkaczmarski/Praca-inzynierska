@@ -25,10 +25,13 @@ public class Ball extends MovableElement {
     public enum BallTexture{
         golf,
         wooden,
-        basketball,
         tennis,
         billard,
-        red_white
+        red_white,
+        Slawek,
+        Kuba,
+        cat,
+        noise
     }
 
     private final static float G=-9.81f;
@@ -82,9 +85,6 @@ public class Ball extends MovableElement {
             case wooden:
                 ballTexture = ResourceHelper.loadTexture(context, R.drawable.wood_texture);
                 break;
-            case basketball:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.basketball_texture);
-                break;
             case billard:
                 ballTexture = ResourceHelper.loadTexture(context, R.drawable.billard_texture);
                 break;
@@ -93,6 +93,18 @@ public class Ball extends MovableElement {
                 break;
             case red_white:
                 ballTexture = ResourceHelper.loadTexture(context, R.drawable.red_white_texture);
+                break;
+            case Slawek:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.slawek_texture);
+                break;
+            case Kuba:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.kuba_texture);
+                break;
+            case cat:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.cat_texture);
+                break;
+            case noise:
+                ballTexture = ResourceHelper.loadTexture(context, R.drawable.goodnoise_texture);
                 break;
         }
         return ballTexture;
