@@ -169,63 +169,47 @@ public class DrawManager {
         translateM(modelMatrix, 0, ball.getLocation().X, ball.getLocation().Y, ball.getLocation().Z);
         //obrót-start
         if(ball.pole.Y!=1) {
-            if (ball.pole.X != 0 && ball.pole.Z != 0) {
-                // Vector axis=new Vector(-ball.pole.Z,0,ball.pole.X).normalize();
-                if (ball.pole.X > 0) {
-                    rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), -ball.pole.Z, 0, ball.pole.X);
-                    rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), -ball.pole.Z, 0, ball.pole.X);
-                    multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
-
-                } else {
-                    rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)),ball.pole.Z, 0, -ball.pole.X);
-                    rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), ball.pole.Z, 0, -ball.pole.X);
-                    multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
-                }
-            } else {
-                rotateM(modelMatrix, 0, 180, 0, 0, 1);
-                rotateM(helpMatrix, 0, 180, 0, 0, 1);
+            Vector axis = new Vector(ball.pole.Z, 0, -ball.pole.X);
+            axis = axis.normalize();
+            if(ball.pole.X>0) {
+                rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), axis.X, axis.Y, axis.Z);
                 multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
+                rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)),axis.X, axis.Y, axis.Z);
+            }
+            else{
+                rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), axis.X, axis.Y, -axis.Z);
+                multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
+                rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)),axis.X, axis.Y, -axis.Z);
             }
             float d = (float) Math.sqrt((result[0] - ball.onEquator.X) * (result[0] - ball.onEquator.X) + (result[1] - ball.onEquator.Y) * (result[1] - ball.onEquator.Y) +
                     (result[2] - ball.onEquator.Z) * (result[2] - ball.onEquator.Z));
-            float alfa = (float) (360 * Math.acos((2 - d * d) / 2) / (2 * Math.PI));
+            float alfa = (float) (360 * Math.acos((2 - (d * d)) / 2) / (2 * Math.PI));
             float sign = (-ball.onEquator.Z) * (result[0] - ball.onEquator.X) - (-ball.onEquator.X) * (result[2] - ball.onEquator.Z);
-            if (sign > 0)
-                rotateM(modelMatrix, 0, alfa, -ball.pole.X, -ball.pole.Y, -ball.pole.Z);
-            else
+            if (sign < 0)
                 rotateM(modelMatrix, 0, alfa, ball.pole.X, ball.pole.Y, ball.pole.Z);
+            else
+                rotateM(modelMatrix, 0, alfa, -ball.pole.X, -ball.pole.Y, -ball.pole.Z);
+            //   if (ball.pole.X != 0 && ball.pole.Z != 0) {
+            //      if (ball.pole.X > 0) {
+
+
+            //      } else {
+            //         rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)),axis.X, axis.Y, -axis.Z);
+            //         rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), axis.X, axis.Y, -axis.Z);
+            //         multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
+            //      }
+            //   }
+//            else {
+//                rotateM(modelMatrix, 0, 180, 0, 0, 1);
+//                rotateM(helpMatrix, 0, 180, 0, 0, 1);
+//                multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
+//            }
         }
       //  rotateM(modelMatrix, 0, (float)(360*Math.acos(pole.Y)/(2*Math.PI)), pole.Z, 0, -pole.X);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
         invertM(tempMatrix, 0, modelViewMatrix, 0);
         transposeM(itModelViewMatrix, 0, tempMatrix, 0);
-    }
-
-    private Point rotatePoint(Point point,float angle,Vector axis){
-        float fi;
-        if (axis.X > 0 && axis.Z > 0)
-            fi = (float) Math.atan(axis.X / axis.Z);
-        else if (axis.Z < 0)
-            fi = (float) Math.PI + (float) Math.atan(axis.X / axis.Z);
-        else
-            fi = (float) (2 * Math.PI) + (float) Math.atan(axis.X / axis.Z);
-
-        Point newPole = new Point(0, point.Y, 0);
-        newPole.X = (float) (point.X * Math.cos(fi) - point.Z * Math.sin(fi));
-        newPole.Z = (float) (point.X * Math.sin(fi) + point.Z * Math.cos(fi));
-        point = new Point(newPole.X, newPole.Y, newPole.Z);
-
-        newPole = new Point(0, 0, point.Z);
-        newPole.X = (float) (point.X * Math.cos(angle) - point.Y * Math.sin(angle));
-        newPole.Y = (float) (point.X * Math.sin(angle) + point.Y * Math.cos(angle));
-        point = new Point(newPole.X, newPole.Y, newPole.Z);
-
-        newPole = new Point(0, point.Y, 0);
-        newPole.X = (float) (point.X * Math.cos(fi) + point.Z * Math.sin(fi));
-        newPole.Z = (float) (-point.X * Math.sin(fi) + point.Z * Math.cos(fi));
-        point = new Point(newPole.X, newPole.Y, newPole.Z);
-        return point;
     }
 
     private void positionDiamondInScene(Diamond diamond){
