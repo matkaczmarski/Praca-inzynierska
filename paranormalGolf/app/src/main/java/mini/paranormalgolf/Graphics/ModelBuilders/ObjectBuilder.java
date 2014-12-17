@@ -117,14 +117,13 @@ public class ObjectBuilder {
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
-                /////////////////////////////////////////////////
 
                 vertexData[offset++] = rectangle.center.X;
                 vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-                vertexData[offset++] = 0;
                 vertexData[offset++] = bTextureUnits;
+                vertexData[offset++] = 0;
 
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
@@ -134,8 +133,8 @@ public class ObjectBuilder {
                 vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
 
-                vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = 0;
+                vertexData[offset++] = aTextureUnits;
 
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
@@ -145,8 +144,8 @@ public class ObjectBuilder {
                 vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
 
-                vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = bTextureUnits;
+                vertexData[offset++] = aTextureUnits;
 
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;

@@ -34,8 +34,6 @@ void main()
     if(tmp < 0.0){
         tmp = 0.0;
     }
-    //tmp = tmp > 0.0 ? tmp : 0.0;
-
     v_Light =  tmp * kd;//(1.0 / (1.0 + (0.10 * distance)));
     v_Light = v_Light + ka;
 

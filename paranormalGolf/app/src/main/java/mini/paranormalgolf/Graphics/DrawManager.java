@@ -47,7 +47,7 @@ public class DrawManager {
 
     private Context context;
 
-    private Vector lightPos =  new Vector(0f, 3f, 0f);//.normalize();
+    private Vector lightPos =  new Vector(0f, 10f, 0f);//.normalize();
 
     private final float fieldOfViewDegree = 45;
     private final float near = 1f;
@@ -115,19 +115,19 @@ public class DrawManager {
         textureLightShaderProgram.useProgram();
 
         positionObjectInScene(floor.getBottomPart().getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
         floor.getBottomPart().bindData(textureLightShaderProgram);
         floor.getBottomPart().draw();
 
         for(FloorPart floorPart : floor.getSideParts()){
             positionObjectInScene(floorPart.getLocation());
-            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
             floorPart.bindData(textureLightShaderProgram);
             floorPart.draw();
         }
 
         positionObjectInScene(floor.getTopPart().getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
         floor.getTopPart().bindData(textureLightShaderProgram);
         floor.getTopPart().draw();
     }
@@ -135,7 +135,7 @@ public class DrawManager {
     public void drawWall(Wall wall){
         textureLightShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, wall.getTexture(), wall.WALL_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, wall.getTexture(), wall.WALL_OPACITY);
         wall.bindData(textureLightShaderProgram);
         wall.draw();
     }
