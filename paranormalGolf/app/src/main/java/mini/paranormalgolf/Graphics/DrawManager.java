@@ -2,34 +2,22 @@ package mini.paranormalgolf.Graphics;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.Wall;
-import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
-import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Vector;
-import mini.paranormalgolf.R;
 
 import static android.opengl.GLES20.GL_BLEND;
-import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
-import static android.opengl.GLES20.GL_CULL_FACE;
-import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
-import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.GL_LEQUAL;
 import static android.opengl.GLES20.GL_LESS;
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
-import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glDepthFunc;
 import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
@@ -54,8 +42,8 @@ public class DrawManager {
     private final float[] viewProjectionMatrix = new float[16];
     private final float[] modelViewMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
-
-    float[] tempMatrix = new float[16];
+    private final float[] itModelViewMatrix = new float[16];
+    private final float[] tempMatrix = new float[16];
 
     private Context context;
 
@@ -103,7 +91,7 @@ public class DrawManager {
 //        ball.draw();
        textureLightShaderProgram.useProgram();
        positionBallInScene(ball);
-       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, ball.getTexture(), ball.BALL_OPACITY);
+       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix,  lightPos, ball.getTexture(), ball.BALL_OPACITY);
        ball.bindData(textureLightShaderProgram);
        ball.draw();
     }
@@ -115,7 +103,7 @@ public class DrawManager {
 
         textureLightShaderProgram.useProgram();
         positionDiamondInScene(diamond);
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, diamond.getTexture(), diamond.DIAMOND_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, diamond.getTexture(), diamond.DIAMOND_OPACITY);
         diamond.bindData(textureLightShaderProgram);
         diamond.draw();
 
@@ -127,19 +115,19 @@ public class DrawManager {
         textureLightShaderProgram.useProgram();
 
         positionObjectInScene(floor.getBottomPart().getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
         floor.getBottomPart().bindData(textureLightShaderProgram);
         floor.getBottomPart().draw();
 
         for(FloorPart floorPart : floor.getSideParts()){
             positionObjectInScene(floorPart.getLocation());
-            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
             floorPart.bindData(textureLightShaderProgram);
             floorPart.draw();
         }
 
         positionObjectInScene(floor.getTopPart().getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
         floor.getTopPart().bindData(textureLightShaderProgram);
         floor.getTopPart().draw();
     }
@@ -147,7 +135,7 @@ public class DrawManager {
     public void drawWall(Wall wall){
         textureLightShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix,lightPos, wall.getTexture(), wall.WALL_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, wall.getTexture(), wall.WALL_OPACITY);
         wall.bindData(textureLightShaderProgram);
         wall.draw();
     }
@@ -211,7 +199,7 @@ public class DrawManager {
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
         invertM(tempMatrix, 0, modelViewMatrix, 0);
-        transposeM(modelViewMatrix, 0, tempMatrix, 0);
+        transposeM(itModelViewMatrix, 0, tempMatrix, 0);
     }
 
     private Point rotatePoint(Point point,float angle,Vector axis){
@@ -247,16 +235,18 @@ public class DrawManager {
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
         invertM(tempMatrix, 0, modelViewMatrix, 0);
-        transposeM(modelViewMatrix, 0, tempMatrix, 0);
+        transposeM(itModelViewMatrix, 0, tempMatrix, 0);
     }
+
+
 
     private void positionObjectInScene(Point location) {
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, location.X, location.Y, location.Z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
-       // invertM(tempMatrix, 0, modelViewMatrix, 0);
-       // transposeM(modelViewMatrix, 0, tempMatrix, 0);
+        invertM(tempMatrix, 0, modelViewMatrix, 0);
+        transposeM(itModelViewMatrix, 0, tempMatrix, 0);
     }
 
 }

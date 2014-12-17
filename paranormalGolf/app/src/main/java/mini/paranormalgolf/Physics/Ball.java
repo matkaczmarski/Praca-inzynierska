@@ -31,7 +31,9 @@ public class Ball extends MovableElement {
         Slawek,
         Kuba,
         cat,
-        noise
+        noise,
+        beach,
+        poziomeKreski
     }
 
     private final static float G=-9.81f;
@@ -76,38 +78,31 @@ public class Ball extends MovableElement {
     }
 
     private int textureLoader(BallTexture ballTextureType, Context context){
-        int ballTexture = -1;
-
         switch (ballTextureType){
             case golf:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.golf_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.golf_texture);
             case wooden:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.wood_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.wood_texture);
             case billard:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.billard_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.billard_texture);
             case tennis:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.tennis_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.tennis_texture);
             case red_white:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.red_white_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.red_white_texture);
             case Slawek:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.slawek_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.slawek_texture);
             case Kuba:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.kuba_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.kuba_texture);
             case cat:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.cat_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.cat_texture);
             case noise:
-                ballTexture = ResourceHelper.loadTexture(context, R.drawable.goodnoise_texture);
-                break;
+                return ResourceHelper.loadTexture(context, R.drawable.goodnoise_texture);
+            case beach:
+                return ResourceHelper.loadTexture(context, R.drawable.beach_ball_texture);
+            case poziomeKreski:
+                return ResourceHelper.loadTexture(context, R.drawable.poziome_kreski);
         }
-        return ballTexture;
+        return -1;
     }
 
     public void bindData(ShaderProgram shaderProgram) {

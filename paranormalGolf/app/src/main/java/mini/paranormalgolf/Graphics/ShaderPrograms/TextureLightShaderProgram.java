@@ -24,6 +24,7 @@ public class TextureLightShaderProgram extends ShaderProgram {
 
     private final int uMVPMatrixLocation;
     private final int uMVMatrixLocation;
+    private final int uItMVMatrixLocation;
     private final int uLightPosLocation;
     private final int uTextureUnitLocation;
     private final int uOpacityLocation;
@@ -39,6 +40,7 @@ public class TextureLightShaderProgram extends ShaderProgram {
         // Retrieve uniform locations for the shader program.
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
         uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
+        uItMVMatrixLocation = glGetUniformLocation(program, U_ITMVMATRIX);
         uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
         uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE_UNIT);
         uOpacityLocation = glGetUniformLocation(program, U_OPACITY);
@@ -49,9 +51,10 @@ public class TextureLightShaderProgram extends ShaderProgram {
         aTextureCoordinatesLocation = glGetAttribLocation(program, A_TEXTURE_COORDINATES);
     }
 
-    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, Vector lightPosition, int textureId, float opacity) {
+    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, float[] itMvMatrix, Vector lightPosition, int textureId, float opacity) {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
+        glUniformMatrix4fv(uItMVMatrixLocation, 1, false, itMvMatrix, 0);
         glUniform3f(uLightPosLocation, lightPosition.X, lightPosition.Y, lightPosition.Z);
         glUniform1f(uOpacityLocation, opacity);
 
