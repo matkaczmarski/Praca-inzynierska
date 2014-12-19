@@ -1,9 +1,11 @@
 package mini.paranormalgolf;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +28,12 @@ import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.GL_FRONT;
 import static android.opengl.GLES20.GL_FRONT_AND_BACK;
+import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glCompressedTexImage2D;
 import static android.opengl.GLES20.glCullFace;
 import static android.opengl.GLES20.glEnable;
+import static android.opengl.GLES20.glFinish;
 
 
 /**
@@ -36,12 +41,12 @@ import static android.opengl.GLES20.glEnable;
  */
 public class GameRenderer implements GLSurfaceView.Renderer {
 
-    private final Context context;
+    private final Activity context;
     private Updater updater;
     private SensorManager sensorManager;
     private String board_id;
 
-    public GameRenderer(Context context, SensorManager sensorManager, String board_id) {
+    public GameRenderer(Activity context, SensorManager sensorManager, String board_id) {
         this.context = context;
         this.sensorManager = sensorManager;
         this.board_id = board_id;
@@ -102,8 +107,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        if (updater.update() != UpdateResult.NONE) {
+        UpdateResult updateResult = updater.update();
+        if (updateResult != UpdateResult.NONE) {
             //dotarcie do mety?
+            if (updateResult == UpdateResult.DEFEAT)
+            {
+                context.finish();
+            }
         }
         updater.draw();
     }

@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +62,17 @@ public class Updater implements SensorEventListener {
     public UpdateResult update() {
         float mu = getActualCoefficientFriction();
         ball.Update(0.035f, accData, mu);
+        if (isUnderFloors())
+            return UpdateResult.DEFEAT;
         return UpdateResult.NONE;
+    }
+
+    private boolean isUnderFloors()
+    {
+        for (Floor floor : board.floors)
+            if (floor.location.Y - floor.measurements.y / 2 > ball.location.Y + ball.getRadius())
+                return true;
+        return false;
     }
 
     private float getActualCoefficientFriction() {
