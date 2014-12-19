@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import mini.paranormalgolf.Physics.Beam;
 import mini.paranormalgolf.Physics.Board;
 import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Floor;
@@ -36,6 +37,7 @@ public class XMLParser
         List<Floor> floors = new ArrayList<Floor>();
         List<Wall> walls = new ArrayList<Wall>();
         List<Diamond> diamonds = new ArrayList<Diamond>();
+        List<Beam> beams = new ArrayList<Beam>();
         try
         {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -95,6 +97,30 @@ public class XMLParser
 
                         diamonds.add(new Diamond(new Point(location_x, location_y, location_z), value, new Pyramid(radius, height, new Vector(vector_x, vector_y, vector_z), verticesCount), context));
                     }
+                    else if (name.equals("Beam"))
+                    {
+                        float location_x = Float.parseFloat(xpp.getAttributeValue(null, "location_x"));
+                        float location_y = Float.parseFloat(xpp.getAttributeValue(null, "location_y"));
+                        float location_z = Float.parseFloat(xpp.getAttributeValue(null, "location_z"));
+
+                        float vector_x = Float.parseFloat(xpp.getAttributeValue(null, "vector_x"));
+                        float vector_y = Float.parseFloat(xpp.getAttributeValue(null, "vector_y"));
+                        float vector_z = Float.parseFloat(xpp.getAttributeValue(null, "vector_z"));
+
+                        float boxsize_x = Float.parseFloat(xpp.getAttributeValue(null, "boxsize_x"));
+                        float boxsize_y = Float.parseFloat(xpp.getAttributeValue(null, "boxsize_y"));
+                        float boxsize_z = Float.parseFloat(xpp.getAttributeValue(null, "boxsize_z"));
+
+                        float from_x = Float.parseFloat(xpp.getAttributeValue(null, "from_x"));
+                        float from_y = Float.parseFloat(xpp.getAttributeValue(null, "from_y"));
+                        float from_z = Float.parseFloat(xpp.getAttributeValue(null, "from_z"));
+
+                        float to_x = Float.parseFloat(xpp.getAttributeValue(null, "to_x"));
+                        float to_y = Float.parseFloat(xpp.getAttributeValue(null, "to_y"));
+                        float to_z = Float.parseFloat(xpp.getAttributeValue(null, "to_z"));
+
+                        beams.add(new Beam(new Point(location_x, location_y, location_z), new Vector(vector_x, vector_y, vector_z), new BoxSize(boxsize_x, boxsize_y, boxsize_z), new Point(from_x, from_y, from_z), new Point(to_x, to_y, to_z), context));
+                    }
                 }
                 eventType = xpp.next();
             }
@@ -104,7 +130,7 @@ public class XMLParser
             return null;
         }
 
-        Board board = new Board(Integer.valueOf(board_id.split("_")[1]), floors, walls, diamonds);
+        Board board = new Board(Integer.valueOf(board_id.split("_")[1]), floors, walls, diamonds, beams);
         return board;
     }
 }

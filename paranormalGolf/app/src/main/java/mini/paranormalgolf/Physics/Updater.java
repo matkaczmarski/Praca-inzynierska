@@ -37,10 +37,6 @@ public class Updater implements SensorEventListener {
 
     DrawManager drawManager;
 
-    //private List<Diamond> diamonds;
-    //private List<Wall> walls;
-    private List<Beam> beams;
-
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
         this.context = context;
@@ -48,26 +44,13 @@ public class Updater implements SensorEventListener {
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         drawManager = new DrawManager(context);
-
-        //Diamond diamond1 = new Diamond(new Point(5f, 2f, 5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
-        //Diamond diamond2 = new Diamond(new Point(-5f, 2f, 5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
-        //Diamond diamond3 = new Diamond(new Point(5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
-        //Diamond diamond4 = new Diamond(new Point(-5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
-
-        //diamonds = Arrays.asList(diamond1, diamond2, diamond3, diamond4);
-
-        //Wall wall1 = new Wall(new Point(0f,2.5f,-5f), new BoxSize(10f, 5f, 2f), context);
-        //walls = Arrays.asList(wall1);
-
-        Beam beam1 = new Beam(new Point(0f, 1.5f, -20f), new Vector(1f, 0f, 0f), new BoxSize(15f, 2f, 2f), new Point(-15f, 2.5f, -20f), new Point(15f, 2.5f, -20f), context);
-        beams = Arrays.asList(beam1);
     }
 
     public UpdateResult update() {
         float mu = getActualCoefficientFriction();
         ball.Update(0.035f, accData, mu);
 
-        for(Beam beam : beams){
+        for(Beam beam : board.beams){
             beam.Update(0.035f);
         }
         if (isUnderFloors())
@@ -113,7 +96,7 @@ public class Updater implements SensorEventListener {
         for(Wall wall : board.walls){
             drawManager.drawWall(wall);
         }
-        for(Beam beam: beams){
+        for(Beam beam: board.beams){
             drawManager.drawBeam(beam);
         }
 
