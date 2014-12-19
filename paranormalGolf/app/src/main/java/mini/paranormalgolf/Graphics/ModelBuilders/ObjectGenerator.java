@@ -32,7 +32,7 @@ public class ObjectGenerator {
         return builder.build();
     }
 
-    public static GraphicsData createWall(BoxSize boxSize, Point location, float textureUnit) {
+    public static GraphicsData createBox(BoxSize boxSize, Point location, float textureUnit) {
         ObjectBuilder builder = new ObjectBuilder(6 * VERTEX_PER_RECTANGLE, true);
         builder.appendRectangle(new Rectangle(new Point(0f, boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, 1, textureUnit);
         builder.appendRectangle(new Rectangle(new Point(0f, -boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, -1, textureUnit);

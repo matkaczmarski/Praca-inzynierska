@@ -14,7 +14,7 @@ public class Board {
     public List<Floor> floors;
     public List<Wall> walls;
     public List<Elevator> elevators;
-    public List<Bar> bars;
+    public List<Beam> bars;
     public List<Bonus> bonuses;
 
 

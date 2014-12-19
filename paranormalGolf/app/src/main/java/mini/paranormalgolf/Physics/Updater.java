@@ -38,6 +38,7 @@ public class Updater implements SensorEventListener {
 
     private List<Diamond> diamonds;
     private List<Wall> walls;
+    private List<Beam> beams;
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
@@ -56,11 +57,17 @@ public class Updater implements SensorEventListener {
 
         Wall wall1 = new Wall(new Point(0f,2.5f,-5f), new BoxSize(10f, 5f, 2f), context);
         walls = Arrays.asList(wall1);
+
+        Beam beam1 = new Beam(new Point(0f, 1.5f, -20f), new Vector(1f, 0f, 0f), new BoxSize(15f, 2f, 2f), new Point(-15f, 2.5f, -20f), new Point(15f, 2.5f, -20f), context);
+        beams = Arrays.asList(beam1);
     }
 
     public UpdateResult update() {
         float mu = getActualCoefficientFriction();
         ball.Update(0.035f, accData, mu);
+        for(Beam beam : beams){
+            beam.Update(0.035f);
+        }
         return UpdateResult.NONE;
     }
 
@@ -93,6 +100,10 @@ public class Updater implements SensorEventListener {
         for(Wall wall : walls){
             drawManager.drawWall(wall);
         }
+        for(Beam beam: beams){
+            drawManager.drawBeam(beam);
+        }
+
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());
 
         for(Diamond diamond : diamonds) {
