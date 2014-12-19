@@ -36,8 +36,8 @@ public class Updater implements SensorEventListener {
 
     DrawManager drawManager;
 
-    private List<Diamond> diamonds;
-    private List<Wall> walls;
+    //private List<Diamond> diamonds;
+    //private List<Wall> walls;
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
@@ -47,15 +47,15 @@ public class Updater implements SensorEventListener {
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         drawManager = new DrawManager(context);
 
-        Diamond diamond1 = new Diamond(new Point(5f, 2f, 5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
-        Diamond diamond2 = new Diamond(new Point(-5f, 2f, 5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
-        Diamond diamond3 = new Diamond(new Point(5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
-        Diamond diamond4 = new Diamond(new Point(-5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+        //Diamond diamond1 = new Diamond(new Point(5f, 2f, 5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+        //Diamond diamond2 = new Diamond(new Point(-5f, 2f, 5f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+        //Diamond diamond3 = new Diamond(new Point(5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
+        //Diamond diamond4 = new Diamond(new Point(-5f, 2f, 0f), 100, new Pyramid(1f, 2f, new Vector(0f, 1f, 0f), 6), context);
 
-        diamonds = Arrays.asList(diamond1, diamond2, diamond3, diamond4);
+        //diamonds = Arrays.asList(diamond1, diamond2, diamond3, diamond4);
 
-        Wall wall1 = new Wall(new Point(0f,2.5f,-5f), new BoxSize(10f, 5f, 2f), context);
-        walls = Arrays.asList(wall1);
+        //Wall wall1 = new Wall(new Point(0f,2.5f,-5f), new BoxSize(10f, 5f, 2f), context);
+        //walls = Arrays.asList(wall1);
     }
 
     public UpdateResult update() {
@@ -90,12 +90,12 @@ public class Updater implements SensorEventListener {
             drawManager.drawFloor(floor);
         }
 
-        for(Wall wall : walls){
+        for(Wall wall : board.walls){
             drawManager.drawWall(wall);
         }
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());
 
-        for(Diamond diamond : diamonds) {
+        for(Diamond diamond : board.diamonds) {
             drawManager.drawDiamond(diamond);
         }
     }

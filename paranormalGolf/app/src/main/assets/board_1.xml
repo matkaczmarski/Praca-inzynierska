@@ -13,4 +13,12 @@
     <Floor location_x="20" location_y="-1" location_z="15" boxsize_x="5" boxsize_y="2" boxsize_z="25" friction="0.05"/>
     <Floor location_x="-20" location_y="-1" location_z="-15" boxsize_x="5" boxsize_y="2" boxsize_z="25" friction="0.05"/>
     <Floor location_x="20" location_y="-1" location_z="-15" boxsize_x="5" boxsize_y="2" boxsize_z="25" friction="0.05"/>
+
+    <Wall location_x="0" location_y="2.5" location_z="-5" boxsize_x="10" boxsize_y="5" boxsize_z="2"/>
+
+    <Diamond location_x="5" location_y="2" location_z="5" value="100" radius="1" height="2" vector_x="0" vector_y="1" vector_z="0" verticesCount="6"/>
+    <Diamond location_x="-5" location_y="2" location_z="5" value="100" radius="1" height="2" vector_x="0" vector_y="1" vector_z="0" verticesCount="6"/>
+    <Diamond location_x="5" location_y="2" location_z="0" value="100" radius="1" height="2" vector_x="0" vector_y="1" vector_z="0" verticesCount="6"/>
+    <Diamond location_x="-5" location_y="2" location_z="0" value="100" radius="1" height="2" vector_x="0" vector_y="1" vector_z="0" verticesCount="6"/>
+
 </Board>

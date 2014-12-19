@@ -1,5 +1,7 @@
 package mini.paranormalgolf.Physics;
 
+import android.widget.ListView;
+
 import java.util.List;
 
 /**
@@ -16,13 +18,15 @@ public class Board {
     public List<Elevator> elevators;
     public List<Bar> bars;
     public List<Bonus> bonuses;
+    public List<Diamond> diamonds;
 
 
 
-    public Board(int boardId, List<Floor> floors){
+    public Board(int boardId, List<Floor> floors, List<Wall> walls, List<Diamond> diamonds){
         this.boardId = boardId;
         this.floors = floors;
-
+        this.walls = walls;
+        this.diamonds = diamonds;
 
     }
 
