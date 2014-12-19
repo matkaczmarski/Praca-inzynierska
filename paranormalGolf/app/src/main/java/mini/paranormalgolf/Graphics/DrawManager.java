@@ -5,6 +5,7 @@ import android.content.Context;
 import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Physics.Ball;
+import mini.paranormalgolf.Physics.Beam;
 import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
@@ -69,7 +70,7 @@ public class DrawManager {
         this.context = context;
         textureLightShaderProgram = new TextureLightShaderProgram(context);
         skyboxShaderProgram = new SkyboxShaderProgram(context);
-        skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.stars);
+        skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.dayClouds);
     }
 
     public void surfaceChange(int width, int height){
@@ -138,6 +139,14 @@ public class DrawManager {
         textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, wall.getTexture(), wall.WALL_OPACITY);
         wall.bindData(textureLightShaderProgram);
         wall.draw();
+    }
+
+    public void drawBeam(Beam beam){
+        textureLightShaderProgram.useProgram();
+        positionObjectInScene(beam.getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, beam.getTexture(), beam.BEAM_OPACITY);
+        beam.bindData(textureLightShaderProgram);
+        beam.draw();
     }
 
 

@@ -10,32 +10,53 @@ import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 /**
  * Created by Sławomir on 2014-12-03.
  */
-public class Wall extends Element {
+public class Beam extends MovableElement {
 
-    private BoxSize measurements;
-    private static final float WALL_TEXTURE_UNIT = 5f;
-    public final float WALL_OPACITY = 1f;
+    private static final float BEAM_TEXTURE_UNIT = 5f;
+    public final float BEAM_OPACITY = 1f;
     private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
-    public Wall(Point location, BoxSize measure, Context context) {
-        super(location);
-        measurements = measure;
+    private BoxSize measurements;
 
-        GraphicsData generatedData = ObjectGenerator.createBox(measure, location, WALL_TEXTURE_UNIT);
+    //punkty oznaczjące do jakiego miejsca ma dochodzić środek elementu
+    private Point patrolFrom;
+    private Point patrolTo;
+  //  private float mu;
+
+    public Beam(Point location, Vector velocity, BoxSize measure, Point from, Point to/*, float mu*/, Context context) {
+        super(velocity, location);
+        this.measurements = measure;
+        this.patrolFrom = from;
+        this.patrolTo = to;
+        //  this.mu = mu;
+
+        GraphicsData generatedData = ObjectGenerator.createBox(measure, location, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+        texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture_2);
     }
 
+    @Override
     public void bindData(ShaderProgram shaderProgram) {
         vertexData.setVertexAttribPointer(0, ((TextureLightShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
         vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureLightShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
         vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT, ((TextureLightShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
     }
 
+    public void Update(float dt) {
+        //zmniejszony update ze względu na to, że to jest bar
+        location.X = location.X + velocity.X * dt;
+        location.Z = location.Z + velocity.Z * dt;
+        if (location.X > patrolTo.X || location.X < patrolFrom.X ||
+                location.Z > patrolTo.Z || location.Z < patrolFrom.Z) {
+            velocity.X = -velocity.X;
+            velocity.Z = -velocity.Z;
+        }
+    }
 }
