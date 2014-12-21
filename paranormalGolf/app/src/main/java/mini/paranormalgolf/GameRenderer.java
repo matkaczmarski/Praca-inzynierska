@@ -13,6 +13,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.Physics.Ball;
@@ -45,6 +46,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private Updater updater;
     private SensorManager sensorManager;
     private String board_id;
+    private BoardInfo boardInfo;
 
     public GameRenderer(Activity context, SensorManager sensorManager, String board_id) {
         this.context = context;
@@ -66,6 +68,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         XMLParser xmlParser = new XMLParser(context);
         Board board = xmlParser.getBoard(board_id);
+        boardInfo = xmlParser.getBoardInfo(board_id);
 
         updater = new Updater(context, ball, board, sensorManager);
     }

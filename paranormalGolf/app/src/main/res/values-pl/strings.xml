@@ -20,4 +20,6 @@
     <string name="select_level_back">Wstecz</string>
     <string name="level">Poziom</string>
     <string name="game_over">Koniec gry</string>
+    <string name="time">Czas:</string>
+    <string name="diamonds">Diamenty:</string>
 </resources>

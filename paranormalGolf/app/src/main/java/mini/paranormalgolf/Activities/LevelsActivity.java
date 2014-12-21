@@ -3,7 +3,6 @@ package mini.paranormalgolf.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 
-import mini.paranormalgolf.GameActivity;
+import mini.paranormalgolf.Helpers.BoardInfo;
+import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.R;
 
 public class LevelsActivity extends Activity
@@ -109,9 +110,27 @@ public class LevelsActivity extends Activity
         int picId = getResources().getIdentifier("board_" + nr, "drawable", getApplicationContext().getPackageName());
         ((ImageView)findViewById(R.id.board_image)).setImageDrawable(getResources().getDrawable(picId));
 
-        ((ImageView)findViewById(R.id.level_select_first_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
-        ((ImageView)findViewById(R.id.level_select_second_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
-        ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
+        XMLParser xmlParser = new XMLParser(this);
+        BoardInfo boardInfo = xmlParser.getBoardInfo(id);
+
+        if (boardInfo == null)
+        {
+            Toast.makeText(this, "No board info data!", Toast.LENGTH_SHORT);
+            finish();
+            return;
+        }
+        if (boardInfo.isAccomplished())
+            ((ImageView) findViewById(R.id.level_select_first_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_full));
+        else
+            ((ImageView) findViewById(R.id.level_select_first_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
+        if (boardInfo.getTwo_stars() <= boardInfo.getBest_result())
+            ((ImageView)findViewById(R.id.level_select_second_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_full));
+        else
+            ((ImageView)findViewById(R.id.level_select_second_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
+        if (boardInfo.getThree_stars() <= boardInfo.getBest_result())
+            ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_full));
+        else
+            ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
     }
 
     public static int getResId(String variableName, Class<?> c) {

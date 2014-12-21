@@ -21,6 +21,7 @@ import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Vector;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Kuba on 2014-12-15.
@@ -132,5 +133,46 @@ public class XMLParser
 
         Board board = new Board(Integer.valueOf(board_id.split("_")[1]), floors, walls, diamonds, beams);
         return board;
+    }
+
+    public BoardInfo getBoardInfo(String board_id)
+    {
+        try
+        {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(false);
+            XmlPullParser xpp = factory.newPullParser();
+
+            AssetManager manager = context.getResources().getAssets();
+            InputStream input = manager.open(context.getString(R.string.boardInfoFile));
+            xpp.setInput(input, null);
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT)
+            {
+                String name = xpp.getName();
+                if (eventType == XmlPullParser.START_TAG)
+                {
+                    if(name.equals("Board"))
+                    {
+                        if (board_id.equalsIgnoreCase(String.valueOf(xpp.getAttributeValue(null, "id"))))
+                        {
+                            int best_result = Integer.parseInt(xpp.getAttributeValue(null, "best_result"));
+                            int two_stars = Integer.parseInt(xpp.getAttributeValue(null, "two_stars"));
+                            int three_stars = Integer.parseInt(xpp.getAttributeValue(null, "three_stars"));
+                            int time = Integer.parseInt(xpp.getAttributeValue(null, "time"));
+                            boolean accomplished = Boolean.parseBoolean(xpp.getAttributeValue(null, "accomplished"));
+
+                            return new BoardInfo(board_id, best_result, two_stars, three_stars, accomplished, time);
+                        }
+                    }
+                }
+                eventType = xpp.next();
+            }
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+        return null;
     }
 }

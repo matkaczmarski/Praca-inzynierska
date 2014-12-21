@@ -10,6 +10,7 @@ import java.util.List;
 public class Board {
 
     public final int boardId;
+    public int time;
     public Start start;
     public Finish finish;
     public List<CheckPoint> checkpoints;

@@ -23,5 +23,7 @@
     <string name="select_level_back">Back</string>
     <string name="level">Level</string>
     <string name="game_over">Game over</string>
-
+    <string name="time">Time:</string>
+    <string name="diamonds">Diamonds:</string>
+    <string name="boardInfoFile">board_info.xml</string>
 </resources>

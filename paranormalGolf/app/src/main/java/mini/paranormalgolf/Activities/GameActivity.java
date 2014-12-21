@@ -1,4 +1,4 @@
-package mini.paranormalgolf;
+package mini.paranormalgolf.Activities;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -18,6 +18,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import mini.paranormalgolf.GameRenderer;
+import mini.paranormalgolf.R;
+
 
 public class GameActivity extends Activity {
 
@@ -29,7 +32,8 @@ public class GameActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        glSurfaceView = new GLSurfaceView(this);
+        setContentView(R.layout.activity_game);
+        glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
         // Check if the system supports OpenGL ES 2.0.
         ActivityManager activityManager =
@@ -86,7 +90,7 @@ public class GameActivity extends Activity {
                     Toast.LENGTH_LONG).show();
             return;
         }
-        setContentView(glSurfaceView);
+        //setContentView(glSurfaceView);
     }
 
 /*

@@ -62,9 +62,9 @@ public class Updater implements SensorEventListener {
     private boolean isUnderFloors()
     {
         for (Floor floor : board.floors)
-            if (floor.location.Y - floor.measurements.y / 2 > ball.location.Y + ball.getRadius())
-                return true;
-        return false;
+            if (floor.location.Y - floor.measurements.y / 2 <= ball.location.Y + ball.getRadius())
+                return false;
+        return true;
     }
 
     private float getActualCoefficientFriction() {

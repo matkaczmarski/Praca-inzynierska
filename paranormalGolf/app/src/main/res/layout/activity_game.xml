@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="mini.paranormalgolf.Activities.GameActivity"
+                android:background="@color/activity_background">
+    <android.opengl.GLSurfaceView
+        android:id="@+id/game_glsurface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.opengl.GLSurfaceView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/panel_height"
+        android:background="@color/activity_background"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@color/abc_primary_text_material_dark"
+                android:textSize="20dp"
+                android:text="@string/time"
+                android:gravity="center"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@color/abc_primary_text_material_dark"
+                android:textSize="20dp"
+                android:text="@string/diamonds"
+                android:gravity="center"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/pause"
+                android:layout_marginRight="20dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+</RelativeLayout>
