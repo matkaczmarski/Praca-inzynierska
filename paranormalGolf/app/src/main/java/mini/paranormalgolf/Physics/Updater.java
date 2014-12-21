@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Vector;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Mateusz on 2014-12-05.
@@ -113,7 +115,15 @@ public class Updater implements SensorEventListener {
         if (last_diamonds_count != board.diamonds.size())
         {
             last_diamonds_count = board.diamonds.size();
-            ((GameActivity)context).updatePanelDiamonds(max_diamonds_count - last_diamonds_count);
+            ((GameActivity)context).runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ((GameActivity)context).updatePanelDiamonds(max_diamonds_count - last_diamonds_count);
+                }
+            });
+            //((GameActivity)context).updatePanelDiamonds(max_diamonds_count - last_diamonds_count);
         }
     }
 

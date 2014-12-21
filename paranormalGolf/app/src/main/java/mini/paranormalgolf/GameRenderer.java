@@ -73,6 +73,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Board board = xmlParser.getBoard(board_id);
         boardInfo = xmlParser.getBoardInfo(board_id);
 
+        ((GameActivity)context).runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                ((GameActivity)context).updatePanel(boardInfo.getTime(), 0);
+            }
+        });
+
         updater = new Updater(context, ball, board, sensorManager);
         startTime = System.currentTimeMillis();
     }
@@ -89,7 +98,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         long actual_time = System.currentTimeMillis();
         long seconds_past = (actual_time - startTime) / 1000;
         final long seconds_left = boardInfo.getTime() - seconds_past;
-        //((GameActivity)context.runOnUiThread();).updatePanelTime(seconds_left);
         ((GameActivity)context).runOnUiThread(new Runnable()
         {
             @Override

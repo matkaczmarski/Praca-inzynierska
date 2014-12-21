@@ -142,7 +142,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void updatePanel(int time, int diamonds)
     {
-        ((TextView)findViewById(R.id.game_activity_time)).setText(time + " [s]");
+        ((TextView)findViewById(R.id.game_activity_time)).setText(time + "");
         ((TextView)findViewById(R.id.game_activity_diamonds)).setText(diamonds + "");
     }
 
@@ -153,7 +153,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void updatePanelTime(long time)
     {
-        ((TextView)findViewById(R.id.game_activity_time)).setText(time + " [s]");
+        ((TextView)findViewById(R.id.game_activity_time)).setText(time + "");
     }
 
     @Override
