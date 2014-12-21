@@ -13,9 +13,11 @@ import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.R;
 
+import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.multiplyMV;
 import static android.opengl.Matrix.rotateM;
 import static android.opengl.Matrix.setIdentityM;
+import static android.opengl.Matrix.setRotateM;
 
 /**
  * Created by Sławomir on 2014-12-03.
@@ -42,6 +44,7 @@ public class Ball extends MovableElement {
     private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
 
     public final float[] rgba = new float[] {0.0f, 0.0f, 0.9f, 1f};
+    public final float[] rotation=new float[16];
     //
     private float radius;
     private float omega;
@@ -67,6 +70,7 @@ public class Ball extends MovableElement {
         this.radius = radius;
         mass=5;
         area=(float)Math.PI*radius*radius;
+        setIdentityM(rotation,0);
         //axises=new LinkedList<Vector>();
        // angles=new LinkedList<Float>();
 
@@ -145,18 +149,24 @@ public class Ball extends MovableElement {
         if (difX != 0 || difZ != 0) {
             axis = new Vector(difZ, 0, -difX).normalize();
             angle = (float) (360*Math.sqrt(difX * difX + difZ * difZ) /(2*Math.PI*radius));
+
             float[] helpMatrix=new float[16];
-            float[] result=new float[4];
-            setIdentityM(helpMatrix,0);
-            rotateM(helpMatrix, 0, angle, axis.X, axis.Y, axis.Z);
-
-            multiplyMV(result, 0, helpMatrix, 0, new float[]{pole.X, pole.Y, pole.Z, 1}, 0);
-            pole=new Vector(result[0],result[1],result[2]);
-            pole=pole.normalize();
-
-            multiplyMV(result,0,helpMatrix,0,new float[]{onEquator.X,onEquator.Y,onEquator.Z,1},0);
-            onEquator=new Vector(result[0],result[1],result[2]);
-            onEquator=onEquator.normalize();
+            setRotateM(helpMatrix,0,angle,axis.X,axis.Y,axis.Z);
+            float[] helpMatrix2=new float[16];
+            multiplyMM(helpMatrix2,0,helpMatrix,0,rotation,0);
+            for(int i=0;i<16;i++)
+                rotation[i]=helpMatrix2[i];
+//            float[] result=new float[4];
+//            setIdentityM(helpMatrix,0);
+//            rotateM(helpMatrix, 0, angle, axis.X, axis.Y, axis.Z);
+//
+//            multiplyMV(result, 0, helpMatrix, 0, new float[]{pole.X, pole.Y, pole.Z, 1}, 0);
+//            pole=new Vector(result[0],result[1],result[2]);
+//            pole=pole.normalize();
+//
+//            multiplyMV(result,0,helpMatrix,0,new float[]{onEquator.X,onEquator.Y,onEquator.Z,1},0);
+//            onEquator=new Vector(result[0],result[1],result[2]);
+//            onEquator=onEquator.normalize();
             //axises.add(axis);
             //angles.add(angle);
 
