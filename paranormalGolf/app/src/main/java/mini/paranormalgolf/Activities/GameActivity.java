@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
@@ -16,13 +17,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.R;
 
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements Runnable {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet = false;
@@ -33,6 +35,7 @@ public class GameActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        LoadFonts();
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
         // Check if the system supports OpenGL ES 2.0.
@@ -135,5 +138,43 @@ public class GameActivity extends Activity {
     protected void onDestroy() {
         this.mWakeLock.release();
         super.onDestroy();
+    }
+
+    public void updatePanel(int time, int diamonds)
+    {
+        ((TextView)findViewById(R.id.game_activity_time)).setText(time + " [s]");
+        ((TextView)findViewById(R.id.game_activity_diamonds)).setText(diamonds + "");
+    }
+
+    public void updatePanelDiamonds(int diamonds)
+    {
+        ((TextView)findViewById(R.id.game_activity_diamonds)).setText(diamonds + "");
+    }
+
+    public void updatePanelTime(long time)
+    {
+        ((TextView)findViewById(R.id.game_activity_time)).setText(time + " [s]");
+    }
+
+    @Override
+    public void run()
+    {
+
+    }
+
+    public void LoadFonts()
+    {
+        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
+        TextView tv = (TextView) findViewById(R.id.game_activity_time_header);
+        tv.setTypeface(tf);
+
+        tv = (TextView)findViewById(R.id.game_activity_time);
+        tv.setTypeface(tf);
+
+        tv = (TextView)findViewById(R.id.game_activity_diamonds_header);
+        tv.setTypeface(tf);
+
+        tv = (TextView)findViewById(R.id.game_activity_diamonds);
+        tv.setTypeface(tf);
     }
 }

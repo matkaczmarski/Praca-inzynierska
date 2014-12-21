@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import mini.paranormalgolf.Activities.GameActivity;
 import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Helpers.XMLParser;
@@ -47,6 +49,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private SensorManager sensorManager;
     private String board_id;
     private BoardInfo boardInfo;
+    private long startTime;
 
     public GameRenderer(Activity context, SensorManager sensorManager, String board_id) {
         this.context = context;
@@ -71,6 +74,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         boardInfo = xmlParser.getBoardInfo(board_id);
 
         updater = new Updater(context, ball, board, sensorManager);
+        startTime = System.currentTimeMillis();
     }
 
     @Override
@@ -80,8 +84,24 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 
     @Override
-    public void onDrawFrame(GL10 glUnused) {
+    public void onDrawFrame(GL10 glUnused)
+    {
+        long actual_time = System.currentTimeMillis();
+        long seconds_past = (actual_time - startTime) / 1000;
+        final long seconds_left = boardInfo.getTime() - seconds_past;
+        //((GameActivity)context.runOnUiThread();).updatePanelTime(seconds_left);
+        ((GameActivity)context).runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                ((TextView)context.findViewById(R.id.game_activity_time)).setText(seconds_left + "");
+            }
+        });
+
         UpdateResult updateResult = updater.update();
+        if (seconds_left <= 0)
+            updateResult = UpdateResult.DEFEAT;
         if (updateResult != UpdateResult.NONE) {
             //dotarcie do mety?
             if (updateResult == UpdateResult.DEFEAT)

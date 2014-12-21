@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Board_Information>
-    <Board id="board_1" best_result="0" two_stars="100" three_stars="200" accomplished="false" time="100"/>
+    <Board id="board_1" best_result="0" two_stars="100" three_stars="200" accomplished="false" time="10"/>
     <Board id="board_2" best_result="0" two_stars="100" three_stars="200" accomplished="true" time="100"/>
 </Board_Information>

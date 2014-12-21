@@ -16,6 +16,8 @@ import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.Matrix.translateM;
 
+import mini.paranormalgolf.Activities.GameActivity;
+import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.BoxSize;
@@ -31,6 +33,8 @@ public class Updater implements SensorEventListener {
     private Context context;
     private Ball ball;
 
+    private int max_diamonds_count;
+    private int last_diamonds_count;
 
     private Board board;
     private Vector accData=new Vector(0,0,0);
@@ -41,6 +45,7 @@ public class Updater implements SensorEventListener {
         this.ball = ball;
         this.context = context;
         this.board = board;
+        last_diamonds_count = max_diamonds_count = board.diamonds.size();
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         drawManager = new DrawManager(context);
@@ -104,6 +109,11 @@ public class Updater implements SensorEventListener {
 
         for(Diamond diamond : board.diamonds) {
             drawManager.drawDiamond(diamond);
+        }
+        if (last_diamonds_count != board.diamonds.size())
+        {
+            last_diamonds_count = board.diamonds.size();
+            ((GameActivity)context).updatePanelDiamonds(max_diamonds_count - last_diamonds_count);
         }
     }
 
