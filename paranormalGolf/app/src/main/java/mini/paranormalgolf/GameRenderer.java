@@ -67,7 +67,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 
         //TODO zmienić miejsce tworzenie updatera?
-        Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.poziomeKreski, context);
+        Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.beach, context);
 
         XMLParser xmlParser = new XMLParser(context);
         Board board = xmlParser.getBoard(board_id);

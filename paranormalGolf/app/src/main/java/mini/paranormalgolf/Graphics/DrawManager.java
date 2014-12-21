@@ -7,6 +7,7 @@ import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Beam;
 import mini.paranormalgolf.Physics.Diamond;
+import mini.paranormalgolf.Physics.Elevator;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.Wall;
@@ -150,6 +151,13 @@ public class DrawManager {
         beam.draw();
     }
 
+    public void drawElevator(Elevator elevator){
+        textureLightShaderProgram.useProgram();
+        positionObjectInScene(elevator.getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, elevator.getTexture(), elevator.ELEVATOR_OPACITY);
+        elevator.bindData(textureLightShaderProgram);
+        elevator.draw();
+    }
 
 
     public void drawSkybox() {

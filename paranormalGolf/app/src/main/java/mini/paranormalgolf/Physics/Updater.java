@@ -43,6 +43,9 @@ public class Updater implements SensorEventListener {
 
     DrawManager drawManager;
 
+    List<Elevator> elevators;
+
+
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
         this.context = context;
@@ -51,6 +54,9 @@ public class Updater implements SensorEventListener {
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         drawManager = new DrawManager(context);
+
+        Elevator elevator1 = new Elevator(new Point(10f,0f,-10f), new Vector(0f,1f,0f), new BoxSize(5f,1f,5f), new Point(10f, -5f, -10f), new Point(10f, 5f, -10f), 0f, context);
+        elevators = Arrays.asList(elevator1);
     }
 
     public UpdateResult update() {
@@ -59,6 +65,9 @@ public class Updater implements SensorEventListener {
 
         for(Beam beam : board.beams){
             beam.Update(0.035f);
+        }
+        for(Elevator elevator : elevators){
+            elevator.Update(0.035f);
         }
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
@@ -105,6 +114,9 @@ public class Updater implements SensorEventListener {
         }
         for(Beam beam: board.beams){
             drawManager.drawBeam(beam);
+        }
+        for(Elevator elevator : elevators){
+            drawManager.drawElevator(elevator);
         }
 
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());

@@ -42,6 +42,7 @@ public class ObjectGenerator {
         builder.appendRectangle(new Rectangle(new Point(0f, 0f, -boxSize.z / 2), boxSize.x, boxSize.y), Axis.zAxis, -1, textureUnit);
         return builder.build();
     }
+    
 
     public static GraphicsData createDiamond(Pyramid pyramid) {
 

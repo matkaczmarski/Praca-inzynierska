@@ -23,12 +23,13 @@ public class Board {
 
 
 
-    public Board(int boardId, List<Floor> floors, List<Wall> walls, List<Diamond> diamonds, List<Beam> beams){
+    public Board(int boardId, List<Floor> floors, List<Wall> walls, List<Diamond> diamonds, List<Beam> beams/*, List<Elevator> elevators*/){
         this.boardId = boardId;
         this.floors = floors;
         this.walls = walls;
         this.diamonds = diamonds;
         this.beams = beams;
+        //this.elevators = elevators;
     }
 
 }
