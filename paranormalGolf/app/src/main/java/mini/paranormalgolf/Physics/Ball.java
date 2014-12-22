@@ -7,6 +7,7 @@ import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
+import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
@@ -14,8 +15,6 @@ import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.R;
 
 import static android.opengl.Matrix.multiplyMM;
-import static android.opengl.Matrix.multiplyMV;
-import static android.opengl.Matrix.rotateM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setRotateM;
 
@@ -142,97 +141,21 @@ public class Ball extends MovableElement {
         for (j = 0; j < numEqns; ++j) {
             q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
+
         float difX = q[1] - location.X;
         float difY = q[3] - location.Y;
         float difZ = q[5] - location.Z;
 
         if (difX != 0 || difZ != 0) {
+            float[] helpMatrix=new float[16];
+            float[] helpMatrix2=new float[16];
+
             axis = new Vector(difZ, 0, -difX).normalize();
             angle = (float) (360*Math.sqrt(difX * difX + difZ * difZ) /(2*Math.PI*radius));
 
-            float[] helpMatrix=new float[16];
             setRotateM(helpMatrix,0,angle,axis.X,axis.Y,axis.Z);
-            float[] helpMatrix2=new float[16];
             multiplyMM(helpMatrix2,0,helpMatrix,0,rotation,0);
-            for(int i=0;i<16;i++)
-                rotation[i]=helpMatrix2[i];
-//            float[] result=new float[4];
-//            setIdentityM(helpMatrix,0);
-//            rotateM(helpMatrix, 0, angle, axis.X, axis.Y, axis.Z);
-//
-//            multiplyMV(result, 0, helpMatrix, 0, new float[]{pole.X, pole.Y, pole.Z, 1}, 0);
-//            pole=new Vector(result[0],result[1],result[2]);
-//            pole=pole.normalize();
-//
-//            multiplyMV(result,0,helpMatrix,0,new float[]{onEquator.X,onEquator.Y,onEquator.Z,1},0);
-//            onEquator=new Vector(result[0],result[1],result[2]);
-//            onEquator=onEquator.normalize();
-            //axises.add(axis);
-            //angles.add(angle);
-
-
-//            if (difX == 0) {
-//                Point newPole = new Point(pole.X, 0, 0);
-//                newPole.Z = (float) (pole.Z * Math.cos(angle) + pole.Y * Math.sin(angle));
-//                newPole.Y = (float) (-pole.Z * Math.sin(angle) + pole.Y * Math.cos(angle));
-//                pole = new Vector(newPole.X, newPole.X, newPole.Z);
-//
-//                Point newOnEquator = new Point(onEquator.X, 0, 0);
-//                newOnEquator.Z = (float) (onEquator.Z * Math.cos(angle) + onEquator.Y * Math.sin(angle));
-//                newOnEquator.Y = (float) (-onEquator.Z * Math.sin(angle) + onEquator.Y * Math.cos(angle));
-//                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
-//            } else if (difZ == 0) {
-//                Point newPole = new Point(0, 0, pole.Z);
-//                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
-//                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
-//                pole = new Vector(newPole.X, newPole.X, newPole.Z);
-//
-//                Point newOnEquator = new Point(0, 0, onEquator.Z);
-//                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
-//                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
-//                onEquator = new Vector(newOnEquator.X, newOnEquator.X, newOnEquator.Z);
-//            } else {
-//                float fi;
-//                if (axis.X > 0 && axis.Z > 0)
-//                    fi = (float) Math.atan(axis.X / axis.Z);
-//                else if (axis.Z < 0)
-//                    fi = (float) Math.PI + (float) Math.atan(axis.X / axis.Z);
-//                else
-//                    fi = (float) (2 * Math.PI) + (float) Math.atan(axis.X / axis.Z);
-//
-//                Point newPole = new Point(0, pole.Y, 0);
-//                newPole.X = (float) (pole.X * Math.cos(fi) - pole.Z * Math.sin(fi));
-//                newPole.Z = (float) (pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
-//                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
-//
-//                newPole = new Point(0, 0, pole.Z);
-//                newPole.X = (float) (pole.X * Math.cos(angle) - pole.Y * Math.sin(angle));
-//                newPole.Y = (float) (pole.X * Math.sin(angle) + pole.Y * Math.cos(angle));
-//                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
-//
-//                newPole = new Point(0, pole.Y, 0);
-//                newPole.X = (float) (pole.X * Math.cos(fi) + pole.Z * Math.sin(fi));
-//                newPole.Z = (float) (-pole.X * Math.sin(fi) + pole.Z * Math.cos(fi));
-//                pole = new Vector(newPole.X, newPole.Y, newPole.Z);
-//
-//
-//                Point newOnEquator = new Point(0, onEquator.Y, 0);
-//                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) - onEquator.Z * Math.sin(fi));
-//                newOnEquator.Z = (float) (onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
-//                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
-//
-//                newOnEquator = new Point(0, 0, onEquator.Z);
-//                newOnEquator.X = (float) (onEquator.X * Math.cos(angle) - onEquator.Y * Math.sin(angle));
-//                newOnEquator.Y = (float) (onEquator.X * Math.sin(angle) + onEquator.Y * Math.cos(angle));
-//                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
-//
-//                newOnEquator = new Point(0, onEquator.Y, 0);
-//                newOnEquator.X = (float) (onEquator.X * Math.cos(fi) + onEquator.Z * Math.sin(fi));
-//                newOnEquator.Z = (float) (-onEquator.X * Math.sin(fi) + onEquator.Z * Math.cos(fi));
-//                onEquator = new Vector(newOnEquator.X, newOnEquator.Y, newOnEquator.Z);
-//            }
-//            pole = pole.normalize();
-//            onEquator = onEquator.normalize();
+            System.arraycopy(helpMatrix2,0,rotation,0,16);
         }
         {
             location.X = q[1];
@@ -254,9 +177,8 @@ public class Ball extends MovableElement {
         }
         Vector localVelocity = new Vector(newQ[0], newQ[2], newQ[4]);
         Vector acceleration;
-        if (mu < 0) {
+        if (mu < 0)
             acceleration = CountAccelerationForFlying(accelerometrData, localVelocity);
-        }
         else acceleration = CountAccelerationForRolling(accelerometrData, mu, localVelocity);
         // CountAcceleration(newVelocity,accData,mu);
         dQ[0] = dt * (acceleration.X);
@@ -283,16 +205,36 @@ public class Ball extends MovableElement {
     private Vector CountAccelerationForFlying(Vector accData,Vector localVelocity){
         return accData;
     }
-/*
+
+
+    public boolean CheckCollision(Wall element){
+        Point wallLocation=element.getLocation();
+        BoxSize wallSize=element.getMeasurements();
+        Point min=new Point(wallLocation.X-wallSize.x/2,wallLocation.Y-wallSize.y/2,wallLocation.Z-wallSize.z/2);
+        Point max=new Point(wallLocation.X+wallSize.x/2,wallLocation.Y+wallSize.y/2,wallLocation.Z+wallSize.z/2);
+        float d=0;
+        if (location.X < min.X) {
+            d += (location.X-min.X)*(location.X-min.X);
+        } else if (location.X > max.X) {
+            d += (location.X-max.X)*(location.X-max.X);
+        }
+
+        if (location.Y < min.Y) {
+            d += (location.Y-min.Y)*(location.Y-min.Y);
+        } else if (location.Y > max.Y) {
+            d += (location.Y-max.Y)*(location.Y-max.Y);
+        }
+
+        if (location.Z < min.Z) {
+            d += (location.Z-min.Z)*(location.Z-min.Z);
+        } else if (location.Z > max.Z) {
+            d += (location.Z-max.Z)*(location.Z-max.Z);
+        }
+
+        return d <= radius*radius;
     }
 
-    public boolean CheckCollision(MovableElement element){
-        return false;
-    }
-  //  public boolean CheckCollision(Bonus element){
-   //     return false;
-   // }
-    public boolean CheckCollision(Wall element) {
+    public boolean CheckCollision(Bonus element){
         return false;
     }
 
@@ -300,11 +242,11 @@ public class Ball extends MovableElement {
 
     }
 
- //   public void ReactOnCollision(Bonus element){
-//
- //   }
+    public void ReactOnCollision(Bonus element) {
 
-    public void ReactOnCollision(Wall element){
+    }
 
-    }*/
+    public void ReactOnCollision(Wall element) {
+        velocity = new Vector(-velocity.X, -velocity.Y, -velocity.Z);
+    }
 }

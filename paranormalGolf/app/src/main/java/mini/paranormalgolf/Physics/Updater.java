@@ -69,6 +69,9 @@ public class Updater implements SensorEventListener {
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
 
+        for(Wall wall:board.walls)
+            if(ball.CheckCollision(wall))
+                ball.ReactOnCollision(wall);
         return UpdateResult.NONE;
     }
 

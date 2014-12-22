@@ -17,7 +17,12 @@ import mini.paranormalgolf.R;
  */
 public class Wall extends Element {
 
+    public BoxSize getMeasurements() {
+        return measurements;
+    }
+
     private BoxSize measurements;
+
     private static final float WALL_TEXTURE_UNIT = 5f;
     public final float WALL_OPACITY = 1f;
     private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
