@@ -247,6 +247,18 @@ public class Ball extends MovableElement {
     }
 
     public void ReactOnCollision(Wall element) {
-        velocity = new Vector(-velocity.X, -velocity.Y, -velocity.Z);
+        Point wallLocation = element.getLocation();
+        BoxSize wallSize = element.getMeasurements();
+        Point min = new Point(wallLocation.X - wallSize.x / 2, wallLocation.Y - wallSize.y / 2, wallLocation.Z - wallSize.z / 2);
+        Point max = new Point(wallLocation.X + wallSize.x / 2, wallLocation.Y + wallSize.y / 2, wallLocation.Z + wallSize.z / 2);
+        if (min.X <= location.X && location.X <= max.X && min.Y <= location.Y && location.Y <= max.Y &&
+                (max.Z >= location.Z - radius || min.Z <= location.Z + radius))
+            velocity.Z = -velocity.Z;
+        if (min.X <= location.X && location.X <= max.X && min.Z <= location.Z && location.Z <= max.Z &&
+                (max.Y >= location.Y - radius || min.Y <= location.Y + radius))
+            velocity.Y = -velocity.Y;
+        if (min.Y <= location.Y && location.Y <= max.Y && min.Z <= location.Z && location.Z <= max.Z &&
+                (max.X >= location.X - radius || min.X <= location.X + radius))
+            velocity.X = -velocity.X;
     }
 }
