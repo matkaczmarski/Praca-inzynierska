@@ -26,10 +26,8 @@ import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
-import static android.opengl.Matrix.multiplyMV;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setLookAtM;
-import static android.opengl.Matrix.setRotateM;
 import static android.opengl.Matrix.translateM;
 import static android.opengl.Matrix.rotateM;
 import static android.opengl.Matrix.transposeM;
@@ -180,71 +178,12 @@ public class DrawManager {
 
 
     private void positionBallInScene(Ball ball) {
-        float[] helpMatrix = new float[16];
-        float[] result = new float[4];
-        float[] rotateFirst = new float[16];
-        float[] rotateSecond = new float[16];
-        float[] res1 = new float[16];
-        float[] res2 = new float[16];
-        setIdentityM(helpMatrix, 0);
-        setIdentityM(modelMatrix, 0);
-        translateM(helpMatrix, 0, ball.getLocation().X, ball.getLocation().Y, ball.getLocation().Z);
-        //obrót-start
-        //if (ball.pole.Y != 1) {
+        float[] tmp1 = new float[16];
+        float[] tmp2 = new float[16];
 
-        multiplyMM(res1, 0, ball.rotation, 0, modelMatrix, 0);
-        multiplyMM(modelMatrix, 0, helpMatrix, 0, res1, 0);
-//            Vector axis = new Vector(ball.pole.Z, 0, -ball.pole.X);
-//            axis = axis.normalize();
-//            if (ball.pole.Z > 0) {
-//                setRotateM(helpMatrix,0,(float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), axis.X, axis.Y, axis.Z);
-//                multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
-//            } else {
-//                setRotateM(helpMatrix,0,(float) (360-(360 * Math.acos(ball.pole.Y) / (2 * Math.PI))), -axis.X, -axis.Y, -axis.Z);
-//                multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
-//            }
-//
-//            float d = (float) Math.sqrt((result[0] - ball.onEquator.X) * (result[0] - ball.onEquator.X) + (result[1] - ball.onEquator.Y) * (result[1] - ball.onEquator.Y) +
-//                    (result[2] - ball.onEquator.Z) * (result[2] - ball.onEquator.Z));
-//            float alfa = (float) (360 * Math.acos((2 - (d * d)) / 2) / (2 * Math.PI));
-//            float sign = (-ball.onEquator.Z) * (result[0] - ball.onEquator.X) - (-ball.onEquator.X) * (result[2] - ball.onEquator.Z);
-//          setRotateM(res1,0,alfa,ball.pole.X,ball.pole.Y,ball.pole.Z);
-//            float[] local=new float[4];
-//            multiplyMV(local,0,res1,0,result,0);
-//            {
-//                local[0] -= ball.onEquator.X;
-//                local[1] -= ball.onEquator.Y;
-//                local[2] -= ball.onEquator.Z;
-//            }
-//            if (ball.pole.Z > 0)
-//                rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), axis.X, axis.Y, axis.Z);
-//            else
-//                rotateM(modelMatrix, 0, (float) (360 - (360 * Math.acos(ball.pole.Y) / (2 * Math.PI))), -axis.X, -axis.Y, -axis.Z);
-//            if(sign<0)
-//                rotateM(modelMatrix, 0, alfa,0,1,0);
-//            else
-//                rotateM(modelMatrix, 0, 360-alfa, 0,1,0);
-
-
-//            multiplyMM(modelMatrix,0,rotateSecond,0,res1,0);
-        //   if (ball.pole.X != 0 && ball.pole.Z != 0) {
-        //      if (ball.pole.X > 0) {
-
-
-        //      } else {
-        //         rotateM(modelMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)),axis.X, axis.Y, -axis.Z);
-        //         rotateM(helpMatrix, 0, (float) (360 * Math.acos(ball.pole.Y) / (2 * Math.PI)), axis.X, axis.Y, -axis.Z);
-        //         multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
-        //      }
-        //   }
-//            else {
-//                rotateM(modelMatrix, 0, 180, 0, 0, 1);
-//                rotateM(helpMatrix, 0, 180, 0, 0, 1);
-//                multiplyMV(result, 0, helpMatrix, 0, new float[]{1, 0, 0, 1}, 0);
-//            }
-        // }
-        //  rotateM(modelMatrix, 0, (float)(360*Math.acos(pole.Y)/(2*Math.PI)), pole.Z, 0, -pole.X);
-        //  }
+        setIdentityM(tmp1, 0);
+        translateM(tmp1, 0, ball.getLocation().X, ball.getLocation().Y, ball.getLocation().Z);
+        multiplyMM(modelMatrix, 0, tmp1, 0, ball.rotation, 0);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
         invertM(tempMatrix, 0, modelViewMatrix, 0);
