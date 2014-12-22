@@ -7,6 +7,7 @@ import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Beam;
+import mini.paranormalgolf.Physics.CheckPoint;
 import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Elevator;
 import mini.paranormalgolf.Physics.Finish;
@@ -177,6 +178,27 @@ public class DrawManager {
         finish.getGlow().draw();
 
         glDisable(GL_BLEND);
+    }
+
+    public void drawCheckPoint(CheckPoint checkPoint){
+        textureLightShaderProgram.useProgram();
+        positionObjectInScene(checkPoint.getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY);
+        checkPoint.bindData(textureLightShaderProgram);
+        checkPoint.draw();
+
+        if(!checkPoint.ifVisited()){
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            lightColorShaderProgram.useProgram();
+            positionObjectInScene(checkPoint.getGlow().getLocation());
+            lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, checkPoint.getGlow().getIfCanFinish()? checkPoint.getGlow().getCanFinishColor() : checkPoint.getGlow().getCannotFinishColor());
+            checkPoint.getGlow().bindData(lightColorShaderProgram);
+            checkPoint.getGlow().draw();
+
+            glDisable(GL_BLEND);
+        }
     }
 
 

@@ -40,6 +40,7 @@ public class Updater implements SensorEventListener {
 
     List<Elevator> elevators;
     Finish finish;
+    List<CheckPoint> checkPoints;
 
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
@@ -54,6 +55,9 @@ public class Updater implements SensorEventListener {
         Elevator elevator1 = new Elevator(new Point(10f,0f,-10f), new Vector(0f,1f,0f), new BoxSize(5f,1f,5f), new Point(10f, -5f, -10f), new Point(10f, 5f, -10f), 0f, context);
         elevators = Arrays.asList(elevator1);
         finish = new Finish(new Point(0f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
+        CheckPoint checkPoint1 = new CheckPoint(new Point(-30f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
+        CheckPoint checkPoint2 = new CheckPoint(new Point(30f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
+        checkPoints = Arrays.asList(checkPoint1, checkPoint2);
     }
 
     public UpdateResult update() {
@@ -121,9 +125,11 @@ public class Updater implements SensorEventListener {
 
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());
 
+        for(CheckPoint checkPoint : checkPoints){
+            drawManager.drawCheckPoint(checkPoint);
+        }
+
         drawManager.drawFinish(finish);
-
-
 
         for(Diamond diamond : board.diamonds) {
             drawManager.drawDiamond(diamond);

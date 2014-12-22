@@ -35,7 +35,6 @@ public class Finish extends ControlPoint {
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
-
         glow = new Glow(location, conicalFrustum, canFinish);
     }
 
