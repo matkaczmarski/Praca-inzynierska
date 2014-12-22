@@ -2,12 +2,14 @@ package mini.paranormalgolf.Graphics;
 
 import android.content.Context;
 
+import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Beam;
 import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Elevator;
+import mini.paranormalgolf.Physics.Finish;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.Wall;
@@ -59,7 +61,7 @@ public class DrawManager {
     private final Point cameraTranslation = new Point(0f, 15f, 15f);
 
 //    private ColorShaderProgram colorShaderProgram;
-//    private LightColorShaderProgram lightColorShaderProgram;
+    private LightColorShaderProgram lightColorShaderProgram;
 //    private TextureShaderProgram textureShaderProgram;
     private TextureLightShaderProgram textureLightShaderProgram;
 
@@ -71,6 +73,7 @@ public class DrawManager {
     public DrawManager(Context context) {
         this.context = context;
         textureLightShaderProgram = new TextureLightShaderProgram(context);
+        lightColorShaderProgram = new LightColorShaderProgram(context);
         skyboxShaderProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox(context, new Point(0,0,0), Skybox.SkyboxTexture.dayClouds);
     }
@@ -157,6 +160,25 @@ public class DrawManager {
         textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, elevator.getTexture(), elevator.ELEVATOR_OPACITY);
         elevator.bindData(textureLightShaderProgram);
         elevator.draw();
+    }
+
+    public void drawFinish(Finish finish){
+        textureLightShaderProgram.useProgram();
+        positionObjectInScene(finish.getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, finish.getTexture(), finish.FINISH_OPACITY);
+        finish.bindData(textureLightShaderProgram);
+        finish.draw();
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        lightColorShaderProgram.useProgram();
+        positionObjectInScene(finish.getGlow().getLocation());
+        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, finish.getGlow().getIfCanFinish()? finish.getGlow().getCanFinishColor() : finish.getGlow().getCannotFinishColor());
+        finish.getGlow().bindData(lightColorShaderProgram);
+        finish.getGlow().draw();
+
+        glDisable(GL_BLEND);
     }
 
 

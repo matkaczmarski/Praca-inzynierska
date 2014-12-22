@@ -54,11 +54,11 @@ public class Floor extends Element {
     }
 
     private void createFloor(BoxSize measures, Point location) {
-        topPart = new FloorPart(new Rectangle(new Point(location.X,location.Y + measures.y / 2, location.Z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, 1);
-        bottomPart = new FloorPart(new Rectangle(new Point(location.X, location.Y-measures.y / 2, location.Z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, -1);
+        topPart = new FloorPart(new Rectangle(new Point(location.X, location.Y + measures.y / 2, location.Z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, 1);
+        bottomPart = new FloorPart(new Rectangle(new Point(location.X, location.Y - measures.y / 2, location.Z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, -1);
 
         FloorPart sidePart1 = new FloorPart(new Rectangle(new Point(location.X + measures.x / 2, location.Y, location.Z), measures.y, measures.z), ObjectBuilder.Axis.xAxis, 1);
-        FloorPart sidePart2 = new FloorPart(new Rectangle(new Point(location.X -measures.x / 2, location.Y, location.Z), measures.y, measures.z), ObjectBuilder.Axis.xAxis, -1);
+        FloorPart sidePart2 = new FloorPart(new Rectangle(new Point(location.X - measures.x / 2, location.Y, location.Z), measures.y, measures.z), ObjectBuilder.Axis.xAxis, -1);
         FloorPart sidePart3 = new FloorPart(new Rectangle(new Point(location.X, location.Y, location.Z + measures.z / 2), measures.x, measures.y), ObjectBuilder.Axis.zAxis, 1);
         FloorPart sidePart4 = new FloorPart(new Rectangle(new Point(location.X, location.Y, location.Z - measures.z / 2), measures.x, measures.y), ObjectBuilder.Axis.zAxis, -1);
 
@@ -66,8 +66,6 @@ public class Floor extends Element {
     }
 
     public void bindData(ShaderProgram colorProgram) {
-        vertexData.setVertexAttribPointer(0, ((TextureShaderProgram) colorProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram) colorProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
     }
 
 }

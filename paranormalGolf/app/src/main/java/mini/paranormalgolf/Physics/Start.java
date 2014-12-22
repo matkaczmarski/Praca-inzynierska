@@ -1,7 +1,7 @@
 package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Primitives.Cylinder;
+import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
 
 /**
@@ -9,7 +9,7 @@ import mini.paranormalgolf.Primitives.Point;
  */
 public class Start extends ControlPoint {
 
-    public Start(Point location, Cylinder cylinder){
+    public Start(Point location, ConicalFrustum cylinder){
         super(location,cylinder);
     }
 

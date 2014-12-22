@@ -5,10 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,14 +15,12 @@ import static android.opengl.GLES20.glClear;
 import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Activities.GameActivity;
-import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.BoxSize;
+import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
-import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Vector;
-import mini.paranormalgolf.R;
 
 /**
  * Created by Mateusz on 2014-12-05.
@@ -44,6 +39,7 @@ public class Updater implements SensorEventListener {
     DrawManager drawManager;
 
     List<Elevator> elevators;
+    Finish finish;
 
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
@@ -57,6 +53,7 @@ public class Updater implements SensorEventListener {
 
         Elevator elevator1 = new Elevator(new Point(10f,0f,-10f), new Vector(0f,1f,0f), new BoxSize(5f,1f,5f), new Point(10f, -5f, -10f), new Point(10f, 5f, -10f), 0f, context);
         elevators = Arrays.asList(elevator1);
+        finish = new Finish(new Point(0f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
     }
 
     public UpdateResult update() {
@@ -120,6 +117,10 @@ public class Updater implements SensorEventListener {
         }
 
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());
+
+        drawManager.drawFinish(finish);
+
+
 
         for(Diamond diamond : board.diamonds) {
             drawManager.drawDiamond(diamond);

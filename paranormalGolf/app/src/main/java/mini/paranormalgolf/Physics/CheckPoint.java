@@ -1,7 +1,7 @@
 package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Primitives.Cylinder;
+import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
 
 /**
@@ -11,7 +11,7 @@ public class CheckPoint extends ControlPoint {
 
     private boolean visited;
 
-    public CheckPoint(Point location, Cylinder cylinder, boolean visited){
+    public CheckPoint(Point location, ConicalFrustum cylinder, boolean visited){
         super(location,cylinder);
         this.visited=visited;
     }

@@ -1,14 +1,14 @@
 uniform mat4 u_MVPMatrix;
 uniform mat4 u_MVMatrix;
+uniform mat4 u_itMVMatrix;
 uniform vec3 u_LightPos;
 
 attribute vec4 a_Position;
 attribute vec3 a_Normal;
 
-uniform vec4 u_Color;
+//uniform vec4 u_Color;
 
-varying float v_diffuse;
-varying vec4 v_color;
+varying float v_Light;
 
 void main()
 {
@@ -25,6 +25,8 @@ void main()
      v_color = u_Color * v_diffuse;
 
 */
+
+/*
 
 vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
     float distance = length(u_LightPos - modelViewVertex);
@@ -52,6 +54,32 @@ vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
     diffuse = diffuse + 0.4;
 
        v_color = u_Color * diffuse;
+
+    gl_Position = u_MVPMatrix * a_Position;
+    */
+
+
+        float ka = 0.6;
+        float kd = 0.6;
+        float ks = 0.5;
+        int n = 10;
+
+        float Ia = 1.0;
+        float Id = 1.0;
+        float Is = 1.0;
+
+    vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
+    float distance = length(u_LightPos - modelViewVertex);
+    vec3 lightVector = normalize(u_LightPos - modelViewVertex);
+    vec3 modelViewNormal = vec3(normalize(u_itMVMatrix * vec4(a_Normal,0)));
+    //v_Light = max(dot(a_Normal, lightVector), 0.0) * kd;
+
+    float tmp = dot(modelViewNormal, lightVector);
+    if(tmp < 0.0){
+        tmp = 0.0;
+    }
+    v_Light =  tmp * kd;//(1.0 / (1.0 + (0.10 * distance)));
+    v_Light = v_Light + ka;
 
     gl_Position = u_MVPMatrix * a_Position;
 }

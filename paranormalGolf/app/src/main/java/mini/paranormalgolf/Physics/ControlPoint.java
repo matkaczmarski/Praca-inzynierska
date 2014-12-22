@@ -1,6 +1,6 @@
 package mini.paranormalgolf.Physics;
 
-import mini.paranormalgolf.Primitives.Cylinder;
+import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
 
 /**
@@ -8,10 +8,10 @@ import mini.paranormalgolf.Primitives.Point;
  */
 public abstract class ControlPoint extends Element {
 
-    protected Cylinder cylinder;
+    protected ConicalFrustum conicalFrustum;
 
-    public ControlPoint(Point location, Cylinder cylinder) {
+    public ControlPoint(Point location, ConicalFrustum conicalFrustum) {
         super(location);
-        this.cylinder = cylinder;
+        this.conicalFrustum = conicalFrustum;
     }
 }

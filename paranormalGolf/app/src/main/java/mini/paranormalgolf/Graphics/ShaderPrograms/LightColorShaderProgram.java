@@ -3,6 +3,7 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 import android.content.Context;
 
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 import static android.opengl.GLES20.glGetAttribLocation;
@@ -18,6 +19,7 @@ public class LightColorShaderProgram extends ShaderProgram {
     // Uniform locations
     private final int uMVPMatrixLocation;
     private final int uMVMatrixLocation;
+    private  final int uItMVMatrixLocation;
     private final int uColorLocation;
     private final int uLightPosLocation;
 
@@ -31,6 +33,7 @@ public class LightColorShaderProgram extends ShaderProgram {
         // Retrieve uniform locations for the shader program.
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
         uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
+        uItMVMatrixLocation = glGetUniformLocation(program,U_ITMVMATRIX);
         uColorLocation = glGetUniformLocation(program, U_COLOR);
         uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
 
@@ -39,9 +42,10 @@ public class LightColorShaderProgram extends ShaderProgram {
         aNormalLocation = glGetAttribLocation(program, A_NORMAL);
     }
 
-    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, float[]rgba, Point lightPosition) {
+    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, float[] itMvMatrix, Vector lightPosition, float[]rgba) {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
+        glUniformMatrix4fv(uItMVMatrixLocation, 1, false, itMvMatrix, 0);
         glUniform4f(uColorLocation, rgba[0], rgba[1], rgba[2], rgba[3]);
         glUniform3f(uLightPosLocation, lightPosition.X, lightPosition.Y, lightPosition.Z);
     }

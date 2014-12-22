@@ -1,23 +1,48 @@
 package mini.paranormalgolf.Physics;
 
+import android.content.Context;
+
+import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Primitives.Cylinder;
+import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
+import mini.paranormalgolf.Graphics.VertexArray;
+import mini.paranormalgolf.Helpers.ResourceHelper;
+import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Sławomir on 2014-12-08.
  */
 public class Finish extends ControlPoint {
 
-    private boolean canFinish;
+    public final float FINISH_OPACITY = 1f;
+    private final int FINISH_PLATFORM_DIMENSION = 32;
+    private  final float FINISH_PLATFORM_SHIFT = 0.01f;
+    private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
-    public Finish(Point location, Cylinder cylinder, boolean canFinish) {
-        super(location, cylinder);
+    private boolean canFinish;
+    private Glow glow;
+
+    public Glow getGlow(){return glow;}
+
+    public Finish(Point location, ConicalFrustum conicalFrustum, boolean canFinish, Context context) {
+        super(location, conicalFrustum);
         this.canFinish = canFinish;
+
+        GraphicsData generatedData = ObjectGenerator.createControlPointPlatform(conicalFrustum.getBottomRadius(), FINISH_PLATFORM_DIMENSION, FINISH_PLATFORM_SHIFT);
+        vertexData = new VertexArray(generatedData.vertexData);
+        drawCommands = generatedData.drawCommands;
+        texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
+
+        glow = new Glow(location, conicalFrustum, canFinish);
     }
 
     @Override
     public void bindData(ShaderProgram shaderProgram) {
-
+        vertexData.setVertexAttribPointer(0, ((TextureLightShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureLightShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((TextureLightShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
     }
 }
