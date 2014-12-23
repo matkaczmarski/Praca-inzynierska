@@ -10,6 +10,7 @@ import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Pyramid;
+import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 /**
@@ -17,27 +18,16 @@ import mini.paranormalgolf.R;
  */
 public class Diamond extends Bonus {
 
-    public final float DIAMOND_OPACITY = 0.85f;
-    private final float DIAMOND_ROTATION_SPEED = 1f;
-    private float diamondCurrentRotation;
-
+    public final float DIAMOND_OPACITY = 0.7f;
     protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
+    private final Pyramid pyramid = new Pyramid(0.7f, 1.4f, 6);
 
-    private Pyramid pyramid;
-
-    public Diamond(Point location, int value, Pyramid pyramid, Context context) {
+    public Diamond(Point location, int value, Context context) {
         super(location, value);
-        this.pyramid = pyramid;
         GraphicsData generatedData = ObjectGenerator.createDiamond(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
-        diamondCurrentRotation = 0f;
-    }
-
-    public float rotate(){
-        diamondCurrentRotation = (diamondCurrentRotation + DIAMOND_ROTATION_SPEED) % 360;
-        return  diamondCurrentRotation;
     }
 
     @Override

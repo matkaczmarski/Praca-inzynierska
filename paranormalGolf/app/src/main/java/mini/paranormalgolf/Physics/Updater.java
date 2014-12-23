@@ -37,7 +37,6 @@ public class Updater implements SensorEventListener {
     private Vector accData=new Vector(0,0,0);
 
     DrawManager drawManager;
-
     List<Elevator> elevators;
     Finish finish;
     List<CheckPoint> checkPoints;
@@ -55,12 +54,13 @@ public class Updater implements SensorEventListener {
 
         Elevator elevator1 = new Elevator(new Point(10f,0f,-10f), new Vector(0f,1f,0f), new BoxSize(5f,1f,5f), new Point(10f, -5f, -10f), new Point(10f, 5f, -10f), 0f, context);
         elevators = Arrays.asList(elevator1);
-        finish = new Finish(new Point(0f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
-        CheckPoint checkPoint1 = new CheckPoint(new Point(-30f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
-        CheckPoint checkPoint2 = new CheckPoint(new Point(30f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
+        finish = new Finish(new Point(0f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
+        CheckPoint checkPoint1 = new CheckPoint(new Point(-30f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
+        CheckPoint checkPoint2 = new CheckPoint(new Point(30f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
         checkPoints = Arrays.asList(checkPoint1, checkPoint2);
-        HourGlass hourGlass1 = new HourGlass(new Point(-15f, 1f, 0f), 5, new ConicalFrustum(1f, 0.7f, 0.2f), new ConicalFrustum(1f, 0.2f, 0.7f),context);
-        hourGlasses = Arrays.asList(hourGlass1);
+        HourGlass hourGlass1 = new HourGlass(new Point(-15f, 1f, 0f), 5, context);
+        HourGlass hourGlass2 = new HourGlass(new Point(15f, 1f, 0f), 5, context);
+        hourGlasses = Arrays.asList(hourGlass1, hourGlass2);
     }
 
     public UpdateResult update() {
@@ -109,13 +109,12 @@ public class Updater implements SensorEventListener {
 
     public void draw(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         drawManager.preDraw(ball.getLocation());
         drawManager.drawSkybox();
-        //drawManager.preDraw(ball.getLocation());
         for(Floor floor : board.floors) {
             drawManager.drawFloor(floor);
         }
-
         for(Wall wall : board.walls){
             drawManager.drawWall(wall);
         }
@@ -125,19 +124,14 @@ public class Updater implements SensorEventListener {
         for(Elevator elevator : elevators){
             drawManager.drawElevator(elevator);
         }
-
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());
-
         for(CheckPoint checkPoint : checkPoints){
             drawManager.drawCheckPoint(checkPoint);
         }
-
         drawManager.drawFinish(finish);
-
         for(HourGlass hourGlass : hourGlasses) {
             drawManager.drawHourglass(hourGlass);
         }
-
         for(Diamond diamond : board.diamonds) {
             drawManager.drawDiamond(diamond);
         }

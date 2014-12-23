@@ -20,7 +20,17 @@ import mini.paranormalgolf.R;
 
 public class HourGlass extends Bonus {
 
-    public class HourGlassWoodenParts extends Element{
+    private float HOURGLASS_ROTATION_SPEED = 0.5f;
+    public final float HOURGLASS_OPACITY = 0.75f;
+    private final int HOURGLASS_MESH_DIMENSION = 32;
+    private final float WOODEN_BASE_HEIGHT_RATIO = 0.1f;
+    private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
+    public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
+
+    private final ConicalFrustum lowerCone = new ConicalFrustum(1f, 0.7f, 0.2f);
+    private final ConicalFrustum upperCone = new ConicalFrustum(1f, 0.2f, 0.7f);
+
+    public class HourGlassWoodenParts extends Bonus{
 
         public final float HOURGLASS_WOODEN_PART_OPACITY = 1f;
         private final int HOURGLASS_MESH_DIMENSION = 32;
@@ -29,12 +39,13 @@ public class HourGlass extends Bonus {
 
 
         public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder, Context context) {
-            super(location);
+            super(location, 0);
 
             GraphicsData generatedData = ObjectGenerator.createHourglassWoodenParts(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION,TEXTURE_UNIT );
             vertexData = new VertexArray(generatedData.vertexData);
             drawCommands = generatedData.drawCommands;
             texture = ResourceHelper.loadTexture(context, R.drawable.hourglass_wooden_part_texture);
+            ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         }
 
         @Override
@@ -46,30 +57,18 @@ public class HourGlass extends Bonus {
     }
 
 
-    public final float HOURGLASS_OPACITY = 0.75f;
-    private final int HOURGLASS_MESH_DIMENSION = 32;
-    private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
-    public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
-
-
-    private ConicalFrustum lowerCone;
-    private ConicalFrustum upperCone;
-
     private HourGlassWoodenParts woodenParts;
     public HourGlassWoodenParts getWoodenParts(){return woodenParts;}
 
-    private final float WOODEN_BASE_HEIGHT_RATIO = 0.1f;
-
-    public HourGlass(Point location, int value, ConicalFrustum lowerCone, ConicalFrustum upperCone, Context context) {
+    public HourGlass(Point location, int value, Context context) {
         super(location, value);
-        this.lowerCone = lowerCone;
-        this.upperCone = upperCone;
 
         GraphicsData generatedData = ObjectGenerator.createHourglassGlassPart(lowerCone, upperCone, HOURGLASS_MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         float woodenBaseHeight = (lowerCone.getHeight() + upperCone.getHeight()) * WOODEN_BASE_HEIGHT_RATIO;
         woodenParts = new HourGlassWoodenParts(location, new Cylinder(new Point(0f, -lowerCone.getHeight() + woodenBaseHeight /2,0f),lowerCone.getBottomRadius(), woodenBaseHeight), new Cylinder(new Point(0f, upperCone.getHeight() - woodenBaseHeight /2,0f),upperCone.getTopRadius(), woodenBaseHeight), context);
+        ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
     }
 
     @Override

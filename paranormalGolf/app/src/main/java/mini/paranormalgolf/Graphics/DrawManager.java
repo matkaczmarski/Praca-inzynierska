@@ -7,6 +7,7 @@ import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Beam;
+import mini.paranormalgolf.Physics.Bonus;
 import mini.paranormalgolf.Physics.CheckPoint;
 import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Elevator;
@@ -108,7 +109,7 @@ public class DrawManager {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         textureLightShaderProgram.useProgram();
-        positionDiamondInScene(diamond);
+        positionBonusInScene(diamond);
         textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, diamond.getTexture(), diamond.DIAMOND_OPACITY);
         diamond.bindData(textureLightShaderProgram);
         diamond.draw();
@@ -205,7 +206,7 @@ public class DrawManager {
     public void drawHourglass(HourGlass hourGlass){
 
         textureLightShaderProgram.useProgram();
-        positionObjectInScene(hourGlass.getWoodenParts().getLocation());
+        positionBonusInScene(hourGlass);
         textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
         hourGlass.getWoodenParts().bindData(textureLightShaderProgram);
         hourGlass.getWoodenParts().draw();
@@ -214,7 +215,7 @@ public class DrawManager {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         lightColorShaderProgram.useProgram();
-        positionObjectInScene(hourGlass.getLocation());
+        positionBonusInScene(hourGlass);
         lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, hourGlass.GLASS_COLOR);
         hourGlass.bindData(lightColorShaderProgram);
         hourGlass.draw();
@@ -255,10 +256,10 @@ public class DrawManager {
         transposeM(itModelViewMatrix, 0, tempMatrix, 0);
     }
 
-    private void positionDiamondInScene(Diamond diamond){
+    private void positionBonusInScene(Bonus bonus){
         setIdentityM(modelMatrix, 0);
-        translateM(modelMatrix, 0, diamond.getLocation().X,  diamond.getLocation().Y,  diamond.getLocation().Z);
-        rotateM(modelMatrix, 0, diamond.rotate(), 0, 1, 0);
+        translateM(modelMatrix, 0, bonus.getLocation().X,  bonus.getLocation().Y,  bonus.getLocation().Z);
+        rotateM(modelMatrix, 0, bonus.rotate(), 0, 1, 0);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
         invertM(tempMatrix, 0, modelViewMatrix, 0);

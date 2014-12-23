@@ -87,16 +87,9 @@ public class XMLParser
                         float location_z = Float.parseFloat(xpp.getAttributeValue(null, "location_z"));
 
                         int value = Integer.parseInt(xpp.getAttributeValue(null, "value"));
-                        float radius = Float.parseFloat(xpp.getAttributeValue(null, "radius"));
-                        float height = Float.parseFloat(xpp.getAttributeValue(null, "height"));
-
-                        float vector_x = Float.parseFloat(xpp.getAttributeValue(null, "vector_x"));
-                        float vector_y = Float.parseFloat(xpp.getAttributeValue(null, "vector_y"));
-                        float vector_z = Float.parseFloat(xpp.getAttributeValue(null, "vector_z"));
-
                         int verticesCount = Integer.parseInt(xpp.getAttributeValue(null, "verticesCount"));
 
-                        diamonds.add(new Diamond(new Point(location_x, location_y, location_z), value, new Pyramid(radius, height, new Vector(vector_x, vector_y, vector_z), verticesCount), context));
+                        diamonds.add(new Diamond(new Point(location_x, location_y, location_z), value, context));
                     }
                     else if (name.equals("Beam"))
                     {
