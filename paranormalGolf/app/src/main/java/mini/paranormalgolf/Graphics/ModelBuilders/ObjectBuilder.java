@@ -1,5 +1,6 @@
 package mini.paranormalgolf.Graphics.ModelBuilders;
 
+import android.opengl.Matrix;
 import android.util.FloatMath;
 
 import java.nio.ByteBuffer;
@@ -309,9 +310,15 @@ public class ObjectBuilder {
 
     }
 
-    public void appendCylindersCurvedSurface( Point bottomCenter, float bottomRadius, Point topCenter, float topRadius, int numPoints) {
+    public void appendCylindersCurvedSurface( Point bottomCenter, float bottomRadius, Point topCenter, float topRadius, int numPoints, float textureUnit) {
         final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = (numPoints + 1) * 2;
+
+        float height = Math.abs(new Vector(bottomCenter.Substract(topCenter)).length());
+        float basePerimeter = 2f * (float) Math.PI * ((bottomRadius + topRadius)/2); // uśredniłem promienie obu podstaw
+
+        float aTextureUnits = basePerimeter / textureUnit;
+        float bTextureUnits = height / textureUnit;
 
         for (int i = 0; i <= numPoints; i++) {
             float angleInRadians = ((float) i / numPoints) * ((float) Math.PI * 2f);
@@ -325,6 +332,11 @@ public class ObjectBuilder {
             vertexData[offset++] = vNormal.Y;
             vertexData[offset++] = vNormal.Z;
 
+            if(isTextured){
+                vertexData[offset++] = ((float)i / numPoints) * aTextureUnits;
+                vertexData[offset++] = 0f;
+            }
+
 
             vertexData[offset++] = bottomCenter.X + bottomRadius * FloatMath.cos(angleInRadians);
             vertexData[offset++] = bottomCenter.Y;
@@ -335,13 +347,17 @@ public class ObjectBuilder {
             vertexData[offset++] = vNormal.Y;
             vertexData[offset++] = vNormal.Z;
 
+            if(isTextured){
+                vertexData[offset++] = ((float)i / numPoints) * aTextureUnits;
+                vertexData[offset++] = bTextureUnits;
+            }
+
         }
 
         drawCommands.add(new DrawCommand() {
             @Override
             public void draw() {
-                glDrawArrays(GL_TRIANGLE_STRIP, startVertex,
-                        numVertices);
+                glDrawArrays(GL_TRIANGLE_STRIP, startVertex, numVertices);
             }
         });
     }

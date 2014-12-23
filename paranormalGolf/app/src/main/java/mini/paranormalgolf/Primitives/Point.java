@@ -15,4 +15,13 @@ public class Point {
         this.Y =y;
         this.Z =z;
     }
+
+
+    public Point Add(Point other){
+        return new Point(this.X + other.X, this.Y + other.Y, this.Z + other.Z);
+    }
+
+    public Point Substract(Point other){
+        return new Point(this.X - other.X, this.Y - other.Y, this.Z - other.Z);
+    }
 }

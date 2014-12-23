@@ -1,17 +1,12 @@
 package mini.paranormalgolf.Physics;
 
-import android.content.Context;
-
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureLightShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
-import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
-import mini.paranormalgolf.R;
 
 /**
  * Created by Mateusz on 2014-12-22.
@@ -24,12 +19,10 @@ public class Glow extends ControlPoint {
 
     private boolean canFinish;
 
-    private final float[] canFinishColor = new float[] {0.678431f, 1.0f, 0.184314f, GLOW_OPACITY};
-    private final float[] cannotFinishColor = new float[] {1f, 0.388235f, 0.278431f, GLOW_OPACITY};
+    public final float[] CAN_FINISH_COLOR = new float[] {0.678431f, 1.0f, 0.184314f, GLOW_OPACITY};
+    public final float[] CANNOT_FINISH_COLOR = new float[] {1f, 0.388235f, 0.278431f, GLOW_OPACITY};
 
     public boolean getIfCanFinish() {return canFinish;}
-    public float[] getCanFinishColor() {return canFinishColor;}
-    public float[] getCannotFinishColor() {return cannotFinishColor;}
 
     public Glow(Point location, ConicalFrustum conicalFrustum, boolean canFinish) {
         super(location, conicalFrustum);

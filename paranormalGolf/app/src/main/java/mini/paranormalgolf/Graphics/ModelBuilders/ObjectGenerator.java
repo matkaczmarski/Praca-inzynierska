@@ -3,6 +3,7 @@ package mini.paranormalgolf.Graphics.ModelBuilders;
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
+import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Rectangle;
@@ -81,7 +82,27 @@ public class ObjectGenerator {
 
     public static GraphicsData createControlPointGlow(ConicalFrustum conicalFrustum, int numPoints) {
         ObjectBuilder builder = new ObjectBuilder(2 * (numPoints + 1),false);
-        builder.appendCylindersCurvedSurface(new Point(0, 0, 0f), conicalFrustum.getBottomRadius(),new Point(0, conicalFrustum.getHeight(), 0f), conicalFrustum.getTopRadius(), numPoints );
+        builder.appendCylindersCurvedSurface(new Point(0, 0, 0f), conicalFrustum.getBottomRadius(),new Point(0, conicalFrustum.getHeight(), 0f), conicalFrustum.getTopRadius(), numPoints, 0f );
+        return builder.build();
+    }
+
+    public static GraphicsData createHourglassGlassPart(ConicalFrustum lowerCone, ConicalFrustum upperCone, int numPoints) {
+        ObjectBuilder builder = new ObjectBuilder(2 * 2 * (numPoints + 1),false);
+        builder.appendCylindersCurvedSurface(new Point(0f, 0f, 0f), upperCone.getBottomRadius(),new Point(0,upperCone.getHeight(), 0f), upperCone.getTopRadius(), numPoints, 0f );
+        builder.appendCylindersCurvedSurface(new Point(0f, -lowerCone.getHeight(), 0f), lowerCone.getBottomRadius(),new Point(0, 0f, 0f), lowerCone.getTopRadius(), numPoints, 0f );
+        return builder.build();
+    }
+
+    public static GraphicsData createHourglassWoodenParts(Cylinder upperCylinder, Cylinder lowerCylinder, int numPoints, float textureUnit) {
+        ObjectBuilder builder = new ObjectBuilder(2*(2 * (1 + (numPoints + 1)) + 2 * (numPoints + 1)),true);
+        builder.appendCircle(new Point(0f, upperCylinder.getCenter().Y + upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(), 1, numPoints);
+        builder.appendCircle(new Point(0f, upperCylinder.getCenter().Y - upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(), -1, numPoints);
+        builder.appendCylindersCurvedSurface(new Point(0f, upperCylinder.getCenter().Y - upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(), new Point(0f, upperCylinder.getCenter().Y + upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(),numPoints, textureUnit );
+
+        builder.appendCircle(new Point(0f, lowerCylinder.getCenter().Y + lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(), 1, numPoints);
+        builder.appendCircle(new Point(0f, lowerCylinder.getCenter().Y - lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(), -1, numPoints);
+        builder.appendCylindersCurvedSurface(new Point(0f, lowerCylinder.getCenter().Y - lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(), new Point(0f, lowerCylinder.getCenter().Y + lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(),numPoints, textureUnit );
+
         return builder.build();
     }
 

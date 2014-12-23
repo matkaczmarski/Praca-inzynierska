@@ -13,6 +13,7 @@ import mini.paranormalgolf.Physics.Elevator;
 import mini.paranormalgolf.Physics.Finish;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
+import mini.paranormalgolf.Physics.HourGlass;
 import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
@@ -173,7 +174,7 @@ public class DrawManager {
 
         lightColorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, finish.getGlow().getIfCanFinish()? finish.getGlow().getCanFinishColor() : finish.getGlow().getCannotFinishColor());
+        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, finish.getGlow().getIfCanFinish()? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
         finish.getGlow().bindData(lightColorShaderProgram);
         finish.getGlow().draw();
 
@@ -193,12 +194,32 @@ public class DrawManager {
 
             lightColorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
-            lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, checkPoint.getGlow().getIfCanFinish()? checkPoint.getGlow().getCanFinishColor() : checkPoint.getGlow().getCannotFinishColor());
+            lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, checkPoint.getGlow().getIfCanFinish()? checkPoint.getGlow().CAN_FINISH_COLOR : checkPoint.getGlow().CANNOT_FINISH_COLOR);
             checkPoint.getGlow().bindData(lightColorShaderProgram);
             checkPoint.getGlow().draw();
 
             glDisable(GL_BLEND);
         }
+    }
+
+    public void drawHourglass(HourGlass hourGlass){
+
+        textureLightShaderProgram.useProgram();
+        positionObjectInScene(hourGlass.getWoodenParts().getLocation());
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
+        hourGlass.getWoodenParts().bindData(textureLightShaderProgram);
+        hourGlass.getWoodenParts().draw();
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        lightColorShaderProgram.useProgram();
+        positionObjectInScene(hourGlass.getLocation());
+        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, hourGlass.GLASS_COLOR);
+        hourGlass.bindData(lightColorShaderProgram);
+        hourGlass.draw();
+
+        glDisable(GL_BLEND);
     }
 
 

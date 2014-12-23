@@ -41,6 +41,7 @@ public class Updater implements SensorEventListener {
     List<Elevator> elevators;
     Finish finish;
     List<CheckPoint> checkPoints;
+    List<HourGlass> hourGlasses;
 
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
@@ -58,6 +59,8 @@ public class Updater implements SensorEventListener {
         CheckPoint checkPoint1 = new CheckPoint(new Point(-30f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
         CheckPoint checkPoint2 = new CheckPoint(new Point(30f,0f,0f), new ConicalFrustum(10f, 2f, 3f), false, context);
         checkPoints = Arrays.asList(checkPoint1, checkPoint2);
+        HourGlass hourGlass1 = new HourGlass(new Point(-15f, 1f, 0f), 5, new ConicalFrustum(1f, 0.7f, 0.2f), new ConicalFrustum(1f, 0.2f, 0.7f),context);
+        hourGlasses = Arrays.asList(hourGlass1);
     }
 
     public UpdateResult update() {
@@ -130,6 +133,10 @@ public class Updater implements SensorEventListener {
         }
 
         drawManager.drawFinish(finish);
+
+        for(HourGlass hourGlass : hourGlasses) {
+            drawManager.drawHourglass(hourGlass);
+        }
 
         for(Diamond diamond : board.diamonds) {
             drawManager.drawDiamond(diamond);

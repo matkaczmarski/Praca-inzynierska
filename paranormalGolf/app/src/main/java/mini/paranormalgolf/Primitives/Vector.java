@@ -18,6 +18,12 @@ public class Vector {
         Z=z;
     }
 
+    public Vector(Point point){
+        X = point.X;
+        Y = point.Y;
+        Z = point.Z;
+    }
+
     public float length() {
         return FloatMath.sqrt(X * X + Y * Y + Z * Z);
     }
