@@ -1,7 +1,6 @@
 package mini.paranormalgolf.Graphics;
 
 import android.content.Context;
-import android.view.WindowManager;
 
 import java.nio.ByteBuffer;
 
@@ -38,15 +37,14 @@ public class Skybox extends Element {
         texture = textureLoader(skyboxTexture, context);
 
         vertexArray = new VertexArray(new float[] {
-                -1,  1,  1,     // (0) Top-left near
-                1,  1,  1,     // (1) Top-right near
-                -1, -1,  1,     // (2) Bottom-left near
-                1, -1,  1,     // (3) Bottom-right near
-                -1,  1, -1,     // (4) Top-left far
-                1,  1, -1,     // (5) Top-right far
-                -1, -1, -1,     // (6) Bottom-left far
-                1, -1, -1      // (7) Bottom-right far
-        });
+                -1,  1,  1,
+                1,  1,  1,
+                -1, -1,  1,
+                1, -1,  1,
+                -1,  1, -1,
+                1,  1, -1,
+                -1, -1, -1,
+                1, -1, -1 });
 
         // 6 indices per cube side
         indexArray =  ByteBuffer.allocateDirect(INDICES_COUNT)
@@ -82,16 +80,16 @@ public class Skybox extends Element {
         int skyboxTexture = -1;
         switch (skyboxTextureType) {
             case dayClouds:
-                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.left, R.drawable.right, R.drawable.bottom, R.drawable.top, R.drawable.front, R.drawable.back});
+                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_dayclouds_left, R.drawable.skybox_texture_dayclouds_right, R.drawable.skybox_texture_dayclouds_bottom, R.drawable.skybox_texture_dayclouds_top, R.drawable.skybox_texture_dayclouds_front, R.drawable.skybox_texture_dayclouds_back});
                 break;
             case nightClouds:
-                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.night_left, R.drawable.night_right, R.drawable.night_bottom, R.drawable.night_top, R.drawable.night_back, R.drawable.night_front});
+                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_nightclouds_left, R.drawable.skybox_texture_nightclouds_right, R.drawable.skybox_texture_nightclouds_bottom, R.drawable.skybox_texture_nightclouds_top, R.drawable.skybox_texture_nightclouds_back, R.drawable.skybox_texture_nightclouds_front});
                 break;
 //            case stars:
-//                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.star_left, R.drawable.star_right, R.drawable.star_bottom, R.drawable.star_top, R.drawable.star_back, R.drawable.star_front});
+//                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_stars_left, R.drawable.skybox_texture_stars_right, R.drawable.skybox_texture_stars_bottom, R.drawable.skybox_texture_stars_top, R.drawable.skybox_texture_stars_back, R.drawable.skybox_texture_stars_front});
 //                break;
             case stars:
-                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky, R.drawable.stars_sky});
+                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky});
                 break;
         }
         return skyboxTexture;

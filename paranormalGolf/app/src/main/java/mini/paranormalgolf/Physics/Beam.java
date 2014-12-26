@@ -39,7 +39,7 @@ public class Beam extends MovableElement {
         GraphicsData generatedData = ObjectGenerator.createBox(measure, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture_2);
+        texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
     }
 
     @Override
@@ -51,12 +51,12 @@ public class Beam extends MovableElement {
 
     public void Update(float dt) {
         //zmniejszony update ze względu na to, że to jest bar
-        location.X = location.X + velocity.X * dt;
-        location.Z = location.Z + velocity.Z * dt;
-        if (location.X > patrolTo.X || location.X < patrolFrom.X ||
-                location.Z > patrolTo.Z || location.Z < patrolFrom.Z) {
-            velocity.X = -velocity.X;
-            velocity.Z = -velocity.Z;
+        location.x = location.x + velocity.x * dt;
+        location.z = location.z + velocity.z * dt;
+        if (location.x > patrolTo.x || location.x < patrolFrom.x ||
+                location.z > patrolTo.z || location.z < patrolFrom.z) {
+            velocity.x = -velocity.x;
+            velocity.z = -velocity.z;
         }
     }
 }

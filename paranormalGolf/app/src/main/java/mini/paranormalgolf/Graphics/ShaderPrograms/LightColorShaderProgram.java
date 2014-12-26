@@ -2,7 +2,6 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
@@ -47,7 +46,7 @@ public class LightColorShaderProgram extends ShaderProgram {
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
         glUniformMatrix4fv(uItMVMatrixLocation, 1, false, itMvMatrix, 0);
         glUniform4f(uColorLocation, rgba[0], rgba[1], rgba[2], rgba[3]);
-        glUniform3f(uLightPosLocation, lightPosition.X, lightPosition.Y, lightPosition.Z);
+        glUniform3f(uLightPosLocation, lightPosition.x, lightPosition.y, lightPosition.z);
     }
 
     public int getPositionAttributeLocation() {

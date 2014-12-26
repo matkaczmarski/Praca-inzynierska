@@ -49,9 +49,9 @@ public class Elevator extends MovableElement {
 
     public void Update(float dt) {
         //zmniejszony update ze względu na to, że to jest elevator
-        location.Y = location.Y + velocity.Y * dt;
-        if (location.Y > patrolTo.Y || location.Y < patrolFrom.Y)
-            velocity.Y = -velocity.Y;
+        location.y = location.y + velocity.y * dt;
+        if (location.y > patrolTo.y || location.y < patrolFrom.y)
+            velocity.y = -velocity.y;
     }
 
 }

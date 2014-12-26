@@ -5,23 +5,23 @@ package mini.paranormalgolf.Primitives;
  */
 public class Point {
 
-    public float X;
-    public float Y;
-    public float Z;
+    public float x;
+    public float y;
+    public float z;
 
     public Point(float x,float y, float z)
     {
-        this.X =x;
-        this.Y =y;
-        this.Z =z;
+        this.x =x;
+        this.y =y;
+        this.z =z;
     }
 
 
     public Point Add(Point other){
-        return new Point(this.X + other.X, this.Y + other.Y, this.Z + other.Z);
+        return new Point(this.x + other.x, this.y + other.y, this.z + other.z);
     }
 
     public Point Substract(Point other){
-        return new Point(this.X - other.X, this.Y - other.Y, this.Z - other.Z);
+        return new Point(this.x - other.x, this.y - other.y, this.z - other.z);
     }
 }

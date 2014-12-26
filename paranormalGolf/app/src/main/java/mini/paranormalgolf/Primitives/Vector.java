@@ -7,40 +7,40 @@ import android.util.FloatMath;
  */
 public class Vector {
 
-    public float X;
-    public float Y;
-    public float Z;
+    public float x;
+    public float y;
+    public float z;
 
     public Vector(float x,float y, float z)
     {
-        X=x;
-        Y=y;
-        Z=z;
+        this.x =x;
+        this.y =y;
+        this.z =z;
     }
 
     public Vector(Point point){
-        X = point.X;
-        Y = point.Y;
-        Z = point.Z;
+        x = point.x;
+        y = point.y;
+        z = point.z;
     }
 
     public float length() {
-        return FloatMath.sqrt(X * X + Y * Y + Z * Z);
+        return FloatMath.sqrt(x * x + y * y + z * z);
     }
 
     public Vector crossProduct(Vector other) {
         return new Vector(
-                (Y * other.Z) - (Z * other.Y),
-                (Z * other.X) - (X * other.Z),
-                (X * other.Y) - (Y * other.X));
+                (y * other.z) - (z * other.y),
+                (z * other.x) - (x * other.z),
+                (x * other.y) - (y * other.x));
     }
 
     public float dotProduct(Vector other) {
-        return X * other.X + Y * other.Y  + Z * other.Z;
+        return x * other.x + y * other.y + z * other.z;
     }
 
     public Vector scale(float f) {
-        return new Vector( X * f, Y * f, Z * f);
+        return new Vector( x * f, y * f, z * f);
     }
 
     public Vector normalize(){

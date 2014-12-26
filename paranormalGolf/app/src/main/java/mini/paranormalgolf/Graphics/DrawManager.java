@@ -85,7 +85,7 @@ public class DrawManager {
     }
 
     public void preDraw(Point ballLocation){
-        setLookAtM(viewMatrix, 0, ballLocation.X + cameraTranslation.X, ballLocation.Y + cameraTranslation.Y, ballLocation.Z + cameraTranslation.Z, ballLocation.X, ballLocation.Y, ballLocation.Z, 0f, 1f, 0f);
+        setLookAtM(viewMatrix, 0, ballLocation.x + cameraTranslation.x, ballLocation.y + cameraTranslation.y, ballLocation.z + cameraTranslation.z, ballLocation.x, ballLocation.y, ballLocation.z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
     }
 
@@ -128,7 +128,7 @@ public class DrawManager {
 
         for(FloorPart floorPart : floor.getSideParts()){
             positionObjectInScene(floorPart.getLocation());
-            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getSideFloorTexture(), floor.FLOOR_OPACITY);
             floorPart.bindData(textureLightShaderProgram);
             floorPart.draw();
         }
@@ -248,7 +248,7 @@ public class DrawManager {
         float[] tmp2 = new float[16];
 
         setIdentityM(tmp1, 0);
-        translateM(tmp1, 0, ball.getLocation().X, ball.getLocation().Y, ball.getLocation().Z);
+        translateM(tmp1, 0, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z);
         multiplyMM(modelMatrix, 0, tmp1, 0, ball.rotation, 0);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
@@ -258,7 +258,7 @@ public class DrawManager {
 
     private void positionBonusInScene(Bonus bonus){
         setIdentityM(modelMatrix, 0);
-        translateM(modelMatrix, 0, bonus.getLocation().X,  bonus.getLocation().Y,  bonus.getLocation().Z);
+        translateM(modelMatrix, 0, bonus.getLocation().x,  bonus.getLocation().y,  bonus.getLocation().z);
         rotateM(modelMatrix, 0, bonus.rotate(), 0, 1, 0);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
@@ -270,7 +270,7 @@ public class DrawManager {
 
     private void positionObjectInScene(Point location) {
         setIdentityM(modelMatrix, 0);
-        translateM(modelMatrix, 0, location.X, location.Y, location.Z);
+        translateM(modelMatrix, 0, location.x, location.y, location.z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
         invertM(tempMatrix, 0, modelViewMatrix, 0);

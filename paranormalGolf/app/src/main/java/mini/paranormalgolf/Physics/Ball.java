@@ -29,12 +29,9 @@ public class Ball extends MovableElement {
         tennis,
         billard,
         red_white,
-        Slawek,
-        Kuba,
         cat,
         noise,
         beach,
-        poziomeKreski
     }
 
     private final static float G=-9.81f;
@@ -83,27 +80,21 @@ public class Ball extends MovableElement {
     private int textureLoader(BallTexture ballTextureType, Context context){
         switch (ballTextureType){
             case golf:
-                return ResourceHelper.loadTexture(context, R.drawable.golf_texture);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_golf);
             case wooden:
-                return ResourceHelper.loadTexture(context, R.drawable.wood_texture);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_wooden);
             case billard:
-                return ResourceHelper.loadTexture(context, R.drawable.billard_texture);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_billard);
             case tennis:
-                return ResourceHelper.loadTexture(context, R.drawable.tennis_texture);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_tennis);
             case red_white:
-                return ResourceHelper.loadTexture(context, R.drawable.red_white_texture);
-            case Slawek:
-                return ResourceHelper.loadTexture(context, R.drawable.slawek_texture);
-            case Kuba:
-                return ResourceHelper.loadTexture(context, R.drawable.kuba_texture);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_red_white_dots);
             case cat:
-                return ResourceHelper.loadTexture(context, R.drawable.cat_texture);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_cat);
             case noise:
-                return ResourceHelper.loadTexture(context, R.drawable.goodnoise_texture);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_noise);
             case beach:
-                return ResourceHelper.loadTexture(context, R.drawable.beach_ball_texture);
-            case poziomeKreski:
-                return ResourceHelper.loadTexture(context, R.drawable.poziome_kreski);
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_beachball);
         }
         return -1;
     }
@@ -126,12 +117,12 @@ public class Ball extends MovableElement {
 
         float[] q = new float[6];
         {
-            q[1] = location.X;
-            q[0] = velocity.X;
-            q[3] = location.Y;
-            q[2] = velocity.Y;
-            q[5] = location.Z;
-            q[4] = velocity.Z;
+            q[1] = location.x;
+            q[0] = velocity.x;
+            q[3] = location.y;
+            q[2] = velocity.y;
+            q[5] = location.z;
+            q[4] = velocity.z;
         }
 
         dq1 = SolveEquation(q, q, dt, 0.0f, accelerometrData, mu);
@@ -142,9 +133,9 @@ public class Ball extends MovableElement {
             q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
 
-        float difX = q[1] - location.X;
-        float difY = q[3] - location.Y;
-        float difZ = q[5] - location.Z;
+        float difX = q[1] - location.x;
+        float difY = q[3] - location.y;
+        float difZ = q[5] - location.z;
 
         if (difX != 0 || difZ != 0) {
             float[] helpMatrix=new float[16];
@@ -153,17 +144,17 @@ public class Ball extends MovableElement {
             axis = new Vector(difZ, 0, -difX).normalize();
             angle = (float) (360*Math.sqrt(difX * difX + difZ * difZ) /(2*Math.PI*radius));
 
-            setRotateM(helpMatrix,0,angle,axis.X,axis.Y,axis.Z);
+            setRotateM(helpMatrix,0,angle,axis.x,axis.y,axis.z);
             multiplyMM(helpMatrix2,0,helpMatrix,0,rotation,0);
             System.arraycopy(helpMatrix2,0,rotation,0,16);
         }
         {
-            location.X = q[1];
-            velocity.X = q[0];
-            location.Y = q[3];
-            velocity.Y = q[2];
-            location.Z = q[5];
-            velocity.Z = q[4];
+            location.x = q[1];
+            velocity.x = q[0];
+            location.y = q[3];
+            velocity.y = q[2];
+            location.z = q[5];
+            velocity.z = q[4];
         }
     }
 
@@ -181,24 +172,24 @@ public class Ball extends MovableElement {
             acceleration = CountAccelerationForFlying(accelerometrData, localVelocity);
         else acceleration = CountAccelerationForRolling(accelerometrData, mu, localVelocity);
         // CountAcceleration(newVelocity,accData,mu);
-        dQ[0] = dt * (acceleration.X);
-        dQ[1] = dt * localVelocity.X;
-        dQ[2] = dt * (acceleration.Y);
-        dQ[3] = dt * localVelocity.Y;
-        dQ[4] = dt * (acceleration.Z);
-        dQ[5] = dt * localVelocity.Z;
+        dQ[0] = dt * (acceleration.x);
+        dQ[1] = dt * localVelocity.x;
+        dQ[2] = dt * (acceleration.y);
+        dQ[3] = dt * localVelocity.y;
+        dQ[4] = dt * (acceleration.z);
+        dQ[5] = dt * localVelocity.z;
         return dQ;
     }
 
 
     private Vector CountAccelerationForRolling(Vector accData,float mu,Vector actualVelocity) {
-        float v = (float) (Math.sqrt(actualVelocity.X * actualVelocity.X + actualVelocity.Y * actualVelocity.Y + actualVelocity.Z * actualVelocity.Z) + 1e-8);
+        float v = (float) (Math.sqrt(actualVelocity.x * actualVelocity.x + actualVelocity.y * actualVelocity.y + actualVelocity.z * actualVelocity.z) + 1e-8);
         float Fd = 0.5f * density * area * Cd * v * v;
-        float Fr = mu * Math.abs(accData.Y) * mass;
+        float Fr = mu * Math.abs(accData.y) * mass;
         Vector acceleration = new Vector(
-                accData.X - (Fd + Fr) * actualVelocity.X / (mass * v),
+                accData.x - (Fd + Fr) * actualVelocity.x / (mass * v),
                 0,
-                accData.Z - (Fd + Fr) * actualVelocity.Z / (mass * v));
+                accData.z - (Fd + Fr) * actualVelocity.z / (mass * v));
         return acceleration;
     }
 
@@ -210,25 +201,25 @@ public class Ball extends MovableElement {
     public boolean CheckCollision(Wall element){
         Point wallLocation=element.getLocation();
         BoxSize wallSize=element.getMeasurements();
-        Point min=new Point(wallLocation.X-wallSize.x/2,wallLocation.Y-wallSize.y/2,wallLocation.Z-wallSize.z/2);
-        Point max=new Point(wallLocation.X+wallSize.x/2,wallLocation.Y+wallSize.y/2,wallLocation.Z+wallSize.z/2);
+        Point min=new Point(wallLocation.x -wallSize.x/2,wallLocation.y -wallSize.y/2,wallLocation.z -wallSize.z/2);
+        Point max=new Point(wallLocation.x +wallSize.x/2,wallLocation.y +wallSize.y/2,wallLocation.z +wallSize.z/2);
         float d=0;
-        if (location.X < min.X) {
-            d += (location.X-min.X)*(location.X-min.X);
-        } else if (location.X > max.X) {
-            d += (location.X-max.X)*(location.X-max.X);
+        if (location.x < min.x) {
+            d += (location.x -min.x)*(location.x -min.x);
+        } else if (location.x > max.x) {
+            d += (location.x -max.x)*(location.x -max.x);
         }
 
-        if (location.Y < min.Y) {
-            d += (location.Y-min.Y)*(location.Y-min.Y);
-        } else if (location.Y > max.Y) {
-            d += (location.Y-max.Y)*(location.Y-max.Y);
+        if (location.y < min.y) {
+            d += (location.y -min.y)*(location.y -min.y);
+        } else if (location.y > max.y) {
+            d += (location.y -max.y)*(location.y -max.y);
         }
 
-        if (location.Z < min.Z) {
-            d += (location.Z-min.Z)*(location.Z-min.Z);
-        } else if (location.Z > max.Z) {
-            d += (location.Z-max.Z)*(location.Z-max.Z);
+        if (location.z < min.z) {
+            d += (location.z -min.z)*(location.z -min.z);
+        } else if (location.z > max.z) {
+            d += (location.z -max.z)*(location.z -max.z);
         }
 
         return d <= radius*radius;
@@ -249,16 +240,16 @@ public class Ball extends MovableElement {
     public void ReactOnCollision(Wall element) {
         Point wallLocation = element.getLocation();
         BoxSize wallSize = element.getMeasurements();
-        Point min = new Point(wallLocation.X - wallSize.x / 2, wallLocation.Y - wallSize.y / 2, wallLocation.Z - wallSize.z / 2);
-        Point max = new Point(wallLocation.X + wallSize.x / 2, wallLocation.Y + wallSize.y / 2, wallLocation.Z + wallSize.z / 2);
-        if (min.X <= location.X && location.X <= max.X && min.Y <= location.Y && location.Y <= max.Y &&
-                (max.Z >= location.Z - radius || min.Z <= location.Z + radius))
-            velocity.Z = -velocity.Z;
-        if (min.X <= location.X && location.X <= max.X && min.Z <= location.Z && location.Z <= max.Z &&
-                (max.Y >= location.Y - radius || min.Y <= location.Y + radius))
-            velocity.Y = -velocity.Y;
-        if (min.Y <= location.Y && location.Y <= max.Y && min.Z <= location.Z && location.Z <= max.Z &&
-                (max.X >= location.X - radius || min.X <= location.X + radius))
-            velocity.X = -velocity.X;
+        Point min = new Point(wallLocation.x - wallSize.x / 2, wallLocation.y - wallSize.y / 2, wallLocation.z - wallSize.z / 2);
+        Point max = new Point(wallLocation.x + wallSize.x / 2, wallLocation.y + wallSize.y / 2, wallLocation.z + wallSize.z / 2);
+        if (min.x <= location.x && location.x <= max.x && min.y <= location.y && location.y <= max.y &&
+                (max.z >= location.z - radius || min.z <= location.z + radius))
+            velocity.z = -velocity.z;
+        if (min.x <= location.x && location.x <= max.x && min.z <= location.z && location.z <= max.z &&
+                (max.y >= location.y - radius || min.y <= location.y + radius))
+            velocity.y = -velocity.y;
+        if (min.y <= location.y && location.y <= max.y && min.z <= location.z && location.z <= max.z &&
+                (max.x >= location.x - radius || min.x <= location.x + radius))
+            velocity.x = -velocity.x;
     }
 }

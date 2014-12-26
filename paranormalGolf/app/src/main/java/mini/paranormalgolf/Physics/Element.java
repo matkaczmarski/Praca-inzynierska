@@ -17,7 +17,7 @@ public abstract class Element {
     protected final int TEXTURE_COMPONENT_COUNT = 2;
 
     protected Point location;
-    protected  int texture;
+    protected int texture;
     protected VertexArray vertexData;
     protected List<DrawCommand> drawCommands;
 

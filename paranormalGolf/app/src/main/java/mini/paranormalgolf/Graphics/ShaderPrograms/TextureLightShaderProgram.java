@@ -2,7 +2,6 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
@@ -55,7 +54,7 @@ public class TextureLightShaderProgram extends ShaderProgram {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
         glUniformMatrix4fv(uItMVMatrixLocation, 1, false, itMvMatrix, 0);
-        glUniform3f(uLightPosLocation, lightPosition.X, lightPosition.Y, lightPosition.Z);
+        glUniform3f(uLightPosLocation, lightPosition.x, lightPosition.y, lightPosition.z);
         glUniform1f(uOpacityLocation, opacity);
 
         glActiveTexture(GL_TEXTURE0);

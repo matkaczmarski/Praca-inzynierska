@@ -44,7 +44,7 @@ public class HourGlass extends Bonus {
             GraphicsData generatedData = ObjectGenerator.createHourglassWoodenParts(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION,TEXTURE_UNIT );
             vertexData = new VertexArray(generatedData.vertexData);
             drawCommands = generatedData.drawCommands;
-            texture = ResourceHelper.loadTexture(context, R.drawable.hourglass_wooden_part_texture);
+            texture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
             ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         }
 

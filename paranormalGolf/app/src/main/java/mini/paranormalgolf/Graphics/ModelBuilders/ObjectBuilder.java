@@ -1,6 +1,5 @@
 package mini.paranormalgolf.Graphics.ModelBuilders;
 
-import android.opengl.Matrix;
 import android.util.FloatMath;
 
 import java.nio.ByteBuffer;
@@ -68,26 +67,26 @@ public class ObjectBuilder {
                 float textureX = (float)j/numPoints;
                 float jRadian = textureX * 2f * (float)Math.PI;
 
-                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
-                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
-                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iRadian);
+                vertexData[offset++] = sphere.center.x + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
+                vertexData[offset++] = sphere.center.y + sphere.radius * FloatMath.cos(iRadian) * FloatMath.sin(jRadian);
+                vertexData[offset++] = sphere.center.z + sphere.radius * FloatMath.sin(iRadian);
 
-                Vector vNormal = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
-                vertexData[offset++] = vNormal.X;
-                vertexData[offset++] = vNormal.Y;
-                vertexData[offset++] = vNormal.Z;
+                Vector vNormal = new Vector(vertexData[offset - 3] - sphere.center.x, vertexData[offset - 2] - sphere.center.y, vertexData[offset - 1] - sphere.center.z).normalize();
+                vertexData[offset++] = vNormal.x;
+                vertexData[offset++] = vNormal.y;
+                vertexData[offset++] = vNormal.z;
 
                 vertexData[offset++] = textureX;
                 vertexData[offset++] = textureY1;
 
-                vertexData[offset++] = sphere.center.X + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
-                vertexData[offset++] = sphere.center.Y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
-                vertexData[offset++] = sphere.center.Z + sphere.radius * FloatMath.sin(iiRadian);
+                vertexData[offset++] = sphere.center.x + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
+                vertexData[offset++] = sphere.center.y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
+                vertexData[offset++] = sphere.center.z + sphere.radius * FloatMath.sin(iiRadian);
 
-                vNormal = new Vector(vertexData[offset - 3] - sphere.center.X, vertexData[offset - 2] - sphere.center.Y, vertexData[offset - 1] - sphere.center.Z ).normalize();
-                vertexData[offset++] = vNormal.X;
-                vertexData[offset++] = vNormal.Y;
-                vertexData[offset++] = vNormal.Z;
+                vNormal = new Vector(vertexData[offset - 3] - sphere.center.x, vertexData[offset - 2] - sphere.center.y, vertexData[offset - 1] - sphere.center.z).normalize();
+                vertexData[offset++] = vNormal.x;
+                vertexData[offset++] = vNormal.y;
+                vertexData[offset++] = vNormal.z;
 
                 vertexData[offset++] = textureX;
                 vertexData[offset++] = textureY2;
@@ -111,9 +110,9 @@ public class ObjectBuilder {
 
         switch (constantAxis){
             case xAxis:
-                vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x;
+                vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
@@ -122,9 +121,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x;
+                vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
 
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
@@ -133,9 +132,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = bTextureUnits;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x;
+                vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
@@ -144,9 +143,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = aTextureUnits;
 
-                vertexData[offset++] = rectangle.center.X;
-                vertexData[offset++] = rectangle.center.Y + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x;
+                vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
 
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
@@ -157,9 +156,9 @@ public class ObjectBuilder {
 
                 break;
             case yAxis:
-                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y;
+                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
@@ -168,9 +167,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y;
+                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
@@ -179,9 +178,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = bTextureUnits;
 
-                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y;
-                vertexData[offset++] = rectangle.center.Z - rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y;
+                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
@@ -190,9 +189,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y;
-                vertexData[offset++] = rectangle.center.Z + rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y;
+                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
@@ -203,9 +202,9 @@ public class ObjectBuilder {
 
                 break;
             case zAxis:
-                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.Z;
+                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.z;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
@@ -214,9 +213,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.Z;
+                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.z;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
@@ -225,9 +224,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = bTextureUnits;
 
-                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y - rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.Z;
+                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.z;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
@@ -236,9 +235,9 @@ public class ObjectBuilder {
                 vertexData[offset++] = aTextureUnits;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = rectangle.center.X + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.Y + rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.Z;
+                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
+                vertexData[offset++] = rectangle.center.z;
 
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
@@ -266,22 +265,22 @@ public class ObjectBuilder {
         for (int i = 0; i < pyramid.baseVerticesCount; i++) {
             float alpha = ((float) i / pyramid.baseVerticesCount) * 2f * (float) Math.PI;
 
-            vertexData[offset++] = location.X + pyramid.radius * FloatMath.cos(alpha);
-            vertexData[offset++] = location.Y;
-            vertexData[offset++] = location.Z + pyramid.radius * FloatMath.sin(alpha);
+            vertexData[offset++] = location.x + pyramid.radius * FloatMath.cos(alpha);
+            vertexData[offset++] = location.y;
+            vertexData[offset++] = location.z + pyramid.radius * FloatMath.sin(alpha);
 
-            Vector vNormal = new Vector(vertexData[offset - 3] - location.X, vertexData[offset - 2] - location.Y, vertexData[offset - 1] - location.Z).normalize();
-            vertexData[offset++] = vNormal.X;
-            vertexData[offset++] = vNormal.Y;
-            vertexData[offset++] = vNormal.Z;
+            Vector vNormal = new Vector(vertexData[offset - 3] - location.x, vertexData[offset - 2] - location.y, vertexData[offset - 1] - location.z).normalize();
+            vertexData[offset++] = vNormal.x;
+            vertexData[offset++] = vNormal.y;
+            vertexData[offset++] = vNormal.z;
 
             vertexData[offset++] = i % 2; // co drugi trójkąt ma teksturowanie od 0
             vertexData[offset++] = 1f;
         }
 
-        vertexData[offset++] = location.X;
-        vertexData[offset++] = location.Y + (direction * pyramid.height);
-        vertexData[offset++] = location.Z;
+        vertexData[offset++] = location.x;
+        vertexData[offset++] = location.y + (direction * pyramid.height);
+        vertexData[offset++] = location.z;
 
         vertexData[offset++] = 0;
         vertexData[offset++] = direction;
@@ -323,14 +322,14 @@ public class ObjectBuilder {
         for (int i = 0; i <= numPoints; i++) {
             float angleInRadians = ((float) i / numPoints) * ((float) Math.PI * 2f);
 
-            vertexData[offset++] = topCenter.X + topRadius * FloatMath.cos(angleInRadians);
-            vertexData[offset++] = topCenter.Y;
-            vertexData[offset++] = topCenter.Z + topRadius * FloatMath.sin(angleInRadians);
+            vertexData[offset++] = topCenter.x + topRadius * FloatMath.cos(angleInRadians);
+            vertexData[offset++] = topCenter.y;
+            vertexData[offset++] = topCenter.z + topRadius * FloatMath.sin(angleInRadians);
 
-            Vector vNormal = new Vector(vertexData[offset - 3] - topCenter.X, vertexData[offset - 2] - topCenter.Y, vertexData[offset - 1] - topCenter.Z).normalize();
-            vertexData[offset++] = vNormal.X;
-            vertexData[offset++] = vNormal.Y;
-            vertexData[offset++] = vNormal.Z;
+            Vector vNormal = new Vector(vertexData[offset - 3] - topCenter.x, vertexData[offset - 2] - topCenter.y, vertexData[offset - 1] - topCenter.z).normalize();
+            vertexData[offset++] = vNormal.x;
+            vertexData[offset++] = vNormal.y;
+            vertexData[offset++] = vNormal.z;
 
             if(isTextured){
                 vertexData[offset++] = ((float)i / numPoints) * aTextureUnits;
@@ -338,14 +337,14 @@ public class ObjectBuilder {
             }
 
 
-            vertexData[offset++] = bottomCenter.X + bottomRadius * FloatMath.cos(angleInRadians);
-            vertexData[offset++] = bottomCenter.Y;
-            vertexData[offset++] = bottomCenter.Z + bottomRadius * FloatMath.sin(angleInRadians);
+            vertexData[offset++] = bottomCenter.x + bottomRadius * FloatMath.cos(angleInRadians);
+            vertexData[offset++] = bottomCenter.y;
+            vertexData[offset++] = bottomCenter.z + bottomRadius * FloatMath.sin(angleInRadians);
 
-            vNormal = new Vector(vertexData[offset - 3] - bottomCenter.X, vertexData[offset - 2] - bottomCenter.Y, vertexData[offset - 1] - bottomCenter.Z).normalize();
-            vertexData[offset++] = vNormal.X;
-            vertexData[offset++] = vNormal.Y;
-            vertexData[offset++] = vNormal.Z;
+            vNormal = new Vector(vertexData[offset - 3] - bottomCenter.x, vertexData[offset - 2] - bottomCenter.y, vertexData[offset - 1] - bottomCenter.z).normalize();
+            vertexData[offset++] = vNormal.x;
+            vertexData[offset++] = vNormal.y;
+            vertexData[offset++] = vNormal.z;
 
             if(isTextured){
                 vertexData[offset++] = ((float)i / numPoints) * aTextureUnits;
@@ -366,9 +365,9 @@ public class ObjectBuilder {
         final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = 1 + (numPoints + 1);
 
-        vertexData[offset++] = center.X;
-        vertexData[offset++] = center.Y;
-        vertexData[offset++] = center.Z;
+        vertexData[offset++] = center.x;
+        vertexData[offset++] = center.y;
+        vertexData[offset++] = center.z;
 
         vertexData[offset++] = 0f;
         vertexData[offset++] = direction;
@@ -380,14 +379,14 @@ public class ObjectBuilder {
         for (int i = 0; i <= numPoints; i++) {
             float alpha = ((float) i / numPoints) * ((float) Math.PI * 2f);
 
-            vertexData[offset++] = center.X + radius * FloatMath.cos(alpha);
-            vertexData[offset++] = center.Y;
-            vertexData[offset++] = center.Z + radius * FloatMath.sin(alpha);
+            vertexData[offset++] = center.x + radius * FloatMath.cos(alpha);
+            vertexData[offset++] = center.y;
+            vertexData[offset++] = center.z + radius * FloatMath.sin(alpha);
 
-            Vector vNormal = new Vector(vertexData[offset - 3] - center.X, vertexData[offset - 2] - center.Y, vertexData[offset - 1] - center.Z).normalize();
-            vertexData[offset++] = vNormal.X;
-            vertexData[offset++] = vNormal.Y;
-            vertexData[offset++] = vNormal.Z;
+            Vector vNormal = new Vector(vertexData[offset - 3] - center.x, vertexData[offset - 2] - center.y, vertexData[offset - 1] - center.z).normalize();
+            vertexData[offset++] = vNormal.x;
+            vertexData[offset++] = vNormal.y;
+            vertexData[offset++] = vNormal.z;
 
             vertexData[offset++] = FloatMath.cos(alpha)/2 + 0.5f;
             vertexData[offset++] = FloatMath.sin(alpha)/2 + 0.5f;
