@@ -36,6 +36,8 @@ public class Updater implements SensorEventListener {
     private Board board;
     private Vector accData=new Vector(0,0,0);
 
+    private boolean paused = false;
+
     DrawManager drawManager;
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
@@ -48,7 +50,10 @@ public class Updater implements SensorEventListener {
         drawManager = new DrawManager(context);
     }
 
-    public UpdateResult update() {
+    public UpdateResult update()
+    {
+        if (paused)
+            return UpdateResult.PAUSE;
         float mu = getActualCoefficientFriction();
         ball.Update(0.035f, accData, mu);
 
@@ -143,5 +148,15 @@ public class Updater implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public void pause()
+    {
+        paused = true;
+    }
+
+    public void resume()
+    {
+        paused = false;
     }
 }

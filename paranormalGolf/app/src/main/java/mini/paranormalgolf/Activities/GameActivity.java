@@ -2,6 +2,7 @@ package mini.paranormalgolf.Activities;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
@@ -28,6 +29,8 @@ public class GameActivity extends Activity implements Runnable {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet = false;
+    private GameRenderer gameRenderer = null;
+    private Dialog pause_dialog = null;
 
     protected PowerManager.WakeLock mWakeLock;
 
@@ -65,7 +68,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        final GameRenderer gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
 
         if (supportsEs2) {
             // ...
@@ -176,5 +179,31 @@ public class GameActivity extends Activity implements Runnable {
 
         tv = (TextView)findViewById(R.id.game_activity_diamonds);
         tv.setTypeface(tf);
+    }
+
+    public void onPauseClick(View view)
+    {
+        if (gameRenderer != null)
+            gameRenderer.pause();
+
+        if (pause_dialog == null)
+        {
+            pause_dialog = new Dialog(this);
+            pause_dialog.setContentView(R.layout.pause_dialog);
+            ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    onPauseClick(view);
+                }
+            });
+            pause_dialog.show();
+        }
+        else
+        {
+            pause_dialog.dismiss();
+            pause_dialog = null;
+        }
     }
 }
