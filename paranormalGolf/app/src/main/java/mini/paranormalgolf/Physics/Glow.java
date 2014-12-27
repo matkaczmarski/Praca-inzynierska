@@ -2,7 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.LightColorShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
@@ -13,7 +13,7 @@ import mini.paranormalgolf.Primitives.Point;
  */
 public class Glow extends ControlPoint {
 
-    public final float GLOW_OPACITY = 0.75f;
+    public final float GLOW_OPACITY = 0.65f;
     private final int GLOW_MESH_DIMENSION = 32;
     private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
@@ -35,7 +35,7 @@ public class Glow extends ControlPoint {
 
     @Override
     public void bindData(ShaderProgram shaderProgram) {
-        vertexData.setVertexAttribPointer(0, ((LightColorShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((LightColorShaderProgram) shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ColorShaderProgram) shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
     }
 }

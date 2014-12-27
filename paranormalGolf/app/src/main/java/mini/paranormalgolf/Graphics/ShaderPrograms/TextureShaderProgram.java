@@ -2,6 +2,8 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 
 import android.content.Context;
 
+import mini.paranormalgolf.Graphics.DrawManager;
+import mini.paranormalgolf.Graphics.LightData;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
@@ -19,12 +21,14 @@ import static android.opengl.GLES20.glUniformMatrix4fv;
 /**
  * Created by Mateusz on 2014-12-13.
  */
-public class TextureLightShaderProgram extends ShaderProgram {
+public class TextureShaderProgram extends ShaderProgram {
 
     private final int uMVPMatrixLocation;
     private final int uMVMatrixLocation;
     private final int uItMVMatrixLocation;
     private final int uLightPosLocation;
+    private final int uLightAmbLocation;
+    private final int uLightDiffLocation;
     private final int uTextureUnitLocation;
     private final int uOpacityLocation;
 
@@ -33,7 +37,7 @@ public class TextureLightShaderProgram extends ShaderProgram {
     private final int aNormalLocation;
     private final int aTextureCoordinatesLocation;
 
-    public TextureLightShaderProgram(Context context) {
+    public TextureShaderProgram(Context context) {
         super(context, R.raw.texture_light_vertex_shader, R.raw.texture_light_fragment_shader);
 
         // Retrieve uniform locations for the shader program.
@@ -41,6 +45,8 @@ public class TextureLightShaderProgram extends ShaderProgram {
         uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
         uItMVMatrixLocation = glGetUniformLocation(program, U_ITMVMATRIX);
         uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
+        uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMB);
+        uLightDiffLocation = glGetUniformLocation(program, U_LIGHTDIFF);
         uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE_UNIT);
         uOpacityLocation = glGetUniformLocation(program, U_OPACITY);
 
@@ -50,11 +56,13 @@ public class TextureLightShaderProgram extends ShaderProgram {
         aTextureCoordinatesLocation = glGetAttribLocation(program, A_TEXTURE_COORDINATES);
     }
 
-    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, float[] itMvMatrix, Vector lightPosition, int textureId, float opacity) {
+    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, float[] itMvMatrix, LightData light, int textureId, float opacity) {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
         glUniformMatrix4fv(uItMVMatrixLocation, 1, false, itMvMatrix, 0);
-        glUniform3f(uLightPosLocation, lightPosition.x, lightPosition.y, lightPosition.z);
+        glUniform3f(uLightPosLocation, light.position.x, light.position.y, light.position.z);
+        glUniform1f(uLightAmbLocation, light.ambient);
+        glUniform1f(uLightDiffLocation, light.diffusion);
         glUniform1f(uOpacityLocation, opacity);
 
         glActiveTexture(GL_TEXTURE0);

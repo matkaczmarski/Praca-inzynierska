@@ -17,6 +17,8 @@ abstract public class ShaderProgram {
     protected static final String U_COLOR = "u_Color";
     protected static final String U_TEXTURE_UNIT = "u_TextureUnit";
     protected static final String U_LIGHTPOS = "u_LightPos";
+    protected static final String U_LIGHTAMB = "u_LightsAmbient";
+    protected static final String U_LIGHTDIFF = "u_LightsDiffusion";
     protected static final String U_OPACITY = "u_Opacity";
 
 
