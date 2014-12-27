@@ -76,8 +76,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = vNormal.y;
                 vertexData[offset++] = vNormal.z;
 
-                vertexData[offset++] = textureX;
-                vertexData[offset++] = textureY1;
+                if(isTextured) {
+                    vertexData[offset++] = textureX;
+                    vertexData[offset++] = textureY1;
+                }
 
                 vertexData[offset++] = sphere.center.x + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.cos(jRadian);
                 vertexData[offset++] = sphere.center.y + sphere.radius * FloatMath.cos(iiRadian) * FloatMath.sin(jRadian);
@@ -88,8 +90,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = vNormal.y;
                 vertexData[offset++] = vNormal.z;
 
-                vertexData[offset++] = textureX;
-                vertexData[offset++] = textureY2;
+                if(isTextured) {
+                    vertexData[offset++] = textureX;
+                    vertexData[offset++] = textureY2;
+                }
 
             }
 
@@ -118,8 +122,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
+                if(isTextured) {
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                }
 
                 vertexData[offset++] = rectangle.center.x;
                 vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
@@ -129,8 +135,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = bTextureUnits;
-                vertexData[offset++] = 0;
+                if(isTextured) {
+                    vertexData[offset++] = bTextureUnits;
+                    vertexData[offset++] = 0;
+                }
 
                 vertexData[offset++] = rectangle.center.x;
                 vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
@@ -140,8 +148,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = aTextureUnits;
+                if(isTextured) {
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = aTextureUnits;
+                }
 
                 vertexData[offset++] = rectangle.center.x;
                 vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
@@ -151,8 +161,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = bTextureUnits;
-                vertexData[offset++] = aTextureUnits;
+                if(isTextured) {
+                    vertexData[offset++] = bTextureUnits;
+                    vertexData[offset++] = aTextureUnits;
+                }
 
                 break;
             case yAxis:
@@ -164,8 +176,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
+                if(isTextured) {
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                }
 
                 vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.y;
@@ -175,8 +189,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = bTextureUnits;
+                if(isTextured) {
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = bTextureUnits;
+                }
 
                 vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.y;
@@ -186,8 +202,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = aTextureUnits;
-                vertexData[offset++] = 0;
+                if(isTextured) {
+                    vertexData[offset++] = aTextureUnits;
+                    vertexData[offset++] = 0;
+                }
 
                 vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.y;
@@ -197,8 +215,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = normalVectorDirection;
                 vertexData[offset++] = 0;
 
-                vertexData[offset++] = aTextureUnits;
-                vertexData[offset++] = bTextureUnits;
+                if(isTextured) {
+                    vertexData[offset++] = aTextureUnits;
+                    vertexData[offset++] = bTextureUnits;
+                }
 
                 break;
             case zAxis:
@@ -210,8 +230,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
+                if(isTextured) {
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                }
 
                 vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
@@ -221,8 +243,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = bTextureUnits;
+                if(isTextured) {
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = bTextureUnits;
+                }
 
                 vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
@@ -232,8 +256,10 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
 
-                vertexData[offset++] = aTextureUnits;
-                vertexData[offset++] = 0;
+                if(isTextured) {
+                    vertexData[offset++] = aTextureUnits;
+                    vertexData[offset++] = 0;
+                }
 
                 vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
                 vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
@@ -243,9 +269,11 @@ public class ObjectBuilder {
                 vertexData[offset++] = 0;
                 vertexData[offset++] = normalVectorDirection;
 
-                vertexData[offset++] = aTextureUnits;
-                vertexData[offset++] = bTextureUnits;
-                break;
+                if(isTextured) {
+                    vertexData[offset++] = aTextureUnits;
+                    vertexData[offset++] = bTextureUnits;
+                    break;
+                }
         }
 
         drawCommands.add(new DrawCommand() {
@@ -274,8 +302,10 @@ public class ObjectBuilder {
             vertexData[offset++] = vNormal.y;
             vertexData[offset++] = vNormal.z;
 
-            vertexData[offset++] = i % 2; // co drugi trójkąt ma teksturowanie od 0
-            vertexData[offset++] = 1f;
+            if(isTextured) {
+                vertexData[offset++] = i % 2; // co drugi trójkąt ma teksturowanie od 0
+                vertexData[offset++] = 1f;
+            }
         }
 
         vertexData[offset++] = location.x;
@@ -286,8 +316,10 @@ public class ObjectBuilder {
         vertexData[offset++] = direction;
         vertexData[offset++] = 0;
 
-        vertexData[offset++] = 0.5f;
-        vertexData[offset++] = 0f;
+        if(isTextured) {
+            vertexData[offset++] = 0.5f;
+            vertexData[offset++] = 0f;
+        }
 
         byte[] indices = new byte[indicesCount];
         int indicesOffset = 0;
@@ -373,8 +405,10 @@ public class ObjectBuilder {
         vertexData[offset++] = direction;
         vertexData[offset++] = 0f;
 
-        vertexData[offset++] = 0.5f;
-        vertexData[offset++] = 0.5f;
+        if(isTextured) {
+            vertexData[offset++] = 0.5f;
+            vertexData[offset++] = 0.5f;
+        }
 
         for (int i = 0; i <= numPoints; i++) {
             float alpha = ((float) i / numPoints) * ((float) Math.PI * 2f);
@@ -388,8 +422,10 @@ public class ObjectBuilder {
             vertexData[offset++] = vNormal.y;
             vertexData[offset++] = vNormal.z;
 
-            vertexData[offset++] = FloatMath.cos(alpha)/2 + 0.5f;
-            vertexData[offset++] = FloatMath.sin(alpha)/2 + 0.5f;
+            if(isTextured) {
+                vertexData[offset++] = FloatMath.cos(alpha) / 2 + 0.5f;
+                vertexData[offset++] = FloatMath.sin(alpha) / 2 + 0.5f;
+            }
         }
 
         drawCommands.add(new DrawCommand() {

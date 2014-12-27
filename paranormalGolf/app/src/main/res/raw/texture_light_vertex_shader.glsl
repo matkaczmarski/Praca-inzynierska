@@ -25,7 +25,7 @@ void main()
         float Is = 1.0;
 
     vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
-    float distance = length(u_LightPos - modelViewVertex);
+    //float distance = length(u_LightPos - modelViewVertex);
     vec3 lightVector = normalize(u_LightPos - modelViewVertex);
     vec3 modelViewNormal = vec3(normalize(u_itMVMatrix * vec4(a_Normal,0)));
     //v_Light = max(dot(a_Normal, lightVector), 0.0) * kd;

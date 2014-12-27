@@ -14,6 +14,8 @@ import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder.Axis;
 /**
  * Created by Mateusz on 2014-12-05.
  */
+
+//Modele generowane są względem punktu (0,0,0).
 public class ObjectGenerator {
 
     public static final int VERTEX_PER_RECTANGLE = 4;

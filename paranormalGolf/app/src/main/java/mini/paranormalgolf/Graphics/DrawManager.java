@@ -48,8 +48,7 @@ public class DrawManager {
     private final float[] viewProjectionMatrix = new float[16];
     private final float[] modelViewMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
-    private final float[] itModelViewMatrix = new float[16];
-    private final float[] tempMatrix = new float[16];
+    private final float[] normalsRotationMatrix = new float[16];
 
     private Context context;
 
@@ -98,7 +97,7 @@ public class DrawManager {
 //        ball.draw();
        textureLightShaderProgram.useProgram();
        positionBallInScene(ball);
-       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix,  lightPos, ball.getTexture(), ball.BALL_OPACITY);
+       textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix,  lightPos, ball.getTexture(), ball.BALL_OPACITY);
        ball.bindData(textureLightShaderProgram);
        ball.draw();
     }
@@ -110,7 +109,7 @@ public class DrawManager {
 
         textureLightShaderProgram.useProgram();
         positionBonusInScene(diamond);
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, diamond.getTexture(), diamond.DIAMOND_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, diamond.getTexture(), diamond.DIAMOND_OPACITY);
         diamond.bindData(textureLightShaderProgram);
         diamond.draw();
 
@@ -122,19 +121,19 @@ public class DrawManager {
         textureLightShaderProgram.useProgram();
 
         positionObjectInScene(floor.getBottomPart().getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
         floor.getBottomPart().bindData(textureLightShaderProgram);
         floor.getBottomPart().draw();
 
         for(FloorPart floorPart : floor.getSideParts()){
             positionObjectInScene(floorPart.getLocation());
-            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getSideFloorTexture(), floor.FLOOR_OPACITY);
+            textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, floor.getSideFloorTexture(), floor.FLOOR_OPACITY);
             floorPart.bindData(textureLightShaderProgram);
             floorPart.draw();
         }
 
         positionObjectInScene(floor.getTopPart().getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
         floor.getTopPart().bindData(textureLightShaderProgram);
         floor.getTopPart().draw();
     }
@@ -142,7 +141,7 @@ public class DrawManager {
     public void drawWall(Wall wall){
         textureLightShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, wall.getTexture(), wall.WALL_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, wall.getTexture(), wall.WALL_OPACITY);
         wall.bindData(textureLightShaderProgram);
         wall.draw();
     }
@@ -150,7 +149,7 @@ public class DrawManager {
     public void drawBeam(Beam beam){
         textureLightShaderProgram.useProgram();
         positionObjectInScene(beam.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, beam.getTexture(), beam.BEAM_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, beam.getTexture(), beam.BEAM_OPACITY);
         beam.bindData(textureLightShaderProgram);
         beam.draw();
     }
@@ -158,7 +157,7 @@ public class DrawManager {
     public void drawElevator(Elevator elevator){
         textureLightShaderProgram.useProgram();
         positionObjectInScene(elevator.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, elevator.getTexture(), elevator.ELEVATOR_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, elevator.getTexture(), elevator.ELEVATOR_OPACITY);
         elevator.bindData(textureLightShaderProgram);
         elevator.draw();
     }
@@ -166,7 +165,7 @@ public class DrawManager {
     public void drawFinish(Finish finish){
         textureLightShaderProgram.useProgram();
         positionObjectInScene(finish.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, finish.getTexture(), finish.FINISH_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, finish.getTexture(), finish.FINISH_OPACITY);
         finish.bindData(textureLightShaderProgram);
         finish.draw();
 
@@ -175,7 +174,7 @@ public class DrawManager {
 
         lightColorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, finish.getGlow().getIfCanFinish()? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
+        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, finish.getGlow().getIfCanFinish()? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
         finish.getGlow().bindData(lightColorShaderProgram);
         finish.getGlow().draw();
 
@@ -185,7 +184,7 @@ public class DrawManager {
     public void drawCheckPoint(CheckPoint checkPoint){
         textureLightShaderProgram.useProgram();
         positionObjectInScene(checkPoint.getLocation());
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY);
         checkPoint.bindData(textureLightShaderProgram);
         checkPoint.draw();
 
@@ -195,7 +194,7 @@ public class DrawManager {
 
             lightColorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
-            lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, checkPoint.getGlow().getIfCanFinish()? checkPoint.getGlow().CAN_FINISH_COLOR : checkPoint.getGlow().CANNOT_FINISH_COLOR);
+            lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, checkPoint.getGlow().getIfCanFinish()? checkPoint.getGlow().CAN_FINISH_COLOR : checkPoint.getGlow().CANNOT_FINISH_COLOR);
             checkPoint.getGlow().bindData(lightColorShaderProgram);
             checkPoint.getGlow().draw();
 
@@ -207,7 +206,7 @@ public class DrawManager {
 
         textureLightShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
-        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, modelViewMatrix, lightPos, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
+        textureLightShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
         hourGlass.getWoodenParts().bindData(textureLightShaderProgram);
         hourGlass.getWoodenParts().draw();
 
@@ -216,7 +215,7 @@ public class DrawManager {
 
         lightColorShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
-        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, itModelViewMatrix, lightPos, hourGlass.GLASS_COLOR);
+        lightColorShaderProgram.setUniforms(modelViewProjectionMatrix, modelViewMatrix, normalsRotationMatrix, lightPos, hourGlass.GLASS_COLOR);
         hourGlass.bindData(lightColorShaderProgram);
         hourGlass.draw();
 
@@ -227,7 +226,6 @@ public class DrawManager {
     public void drawSkybox() {
         setIdentityM(modelMatrix, 0);
         setIdentityM(viewMatrix, 0);
-       // rotateM(viewMatrix, 0, 2f, 1f, 0f, 0f);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewProjectionMatrix, 0, projectionMatrix, 0, modelViewMatrix, 0);
 
@@ -252,8 +250,11 @@ public class DrawManager {
         multiplyMM(modelMatrix, 0, tmp1, 0, ball.rotation, 0);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
-        invertM(tempMatrix, 0, modelViewMatrix, 0);
-        transposeM(itModelViewMatrix, 0, tempMatrix, 0);
+
+        setIdentityM(tmp1, 0);
+        multiplyMM(tmp2, 0, tmp1, 0, ball.rotation, 0);
+        invertM(tmp1, 0, tmp2, 0);
+        transposeM(normalsRotationMatrix, 0, tmp1, 0);
     }
 
     private void positionBonusInScene(Bonus bonus){
@@ -262,8 +263,13 @@ public class DrawManager {
         rotateM(modelMatrix, 0, bonus.rotate(), 0, 1, 0);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
-        invertM(tempMatrix, 0, modelViewMatrix, 0);
-        transposeM(itModelViewMatrix, 0, tempMatrix, 0);
+
+        float[] tmp1 = new float[16];
+        float[] tmp2 = new float[16];
+        setIdentityM(tmp1, 0);
+        rotateM(tmp1, 0, bonus.rotate(), 0, 1, 0);
+        invertM(tmp2, 0, tmp1, 0);
+        transposeM(normalsRotationMatrix, 0, tmp2, 0);
     }
 
 
@@ -273,8 +279,7 @@ public class DrawManager {
         translateM(modelMatrix, 0, location.x, location.y, location.z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         multiplyMM(modelViewMatrix, 0, viewMatrix, 0, modelMatrix, 0);
-        invertM(tempMatrix, 0, modelViewMatrix, 0);
-        transposeM(itModelViewMatrix, 0, tempMatrix, 0);
+        setIdentityM(normalsRotationMatrix, 0); //bo gdy nie ma rotacji, to nie musimy nic robić z wektorami normalnymi
     }
 
 }
