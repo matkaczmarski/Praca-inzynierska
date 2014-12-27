@@ -20,16 +20,20 @@ public class Board {
     public List<Beam> beams;
     public List<Bonus> bonuses;
     public List<Diamond> diamonds;
+    public List<HourGlass> hourGlasses;
 
 
 
-    public Board(int boardId, List<Floor> floors, List<Wall> walls, List<Diamond> diamonds, List<Beam> beams/*, List<Elevator> elevators*/){
+    public Board(int boardId, List<Floor> floors, List<Wall> walls, List<Diamond> diamonds, List<Beam> beams, List<Elevator> elevators, List<CheckPoint> checkPoints, List<HourGlass> hourGlasses, Finish finish){
         this.boardId = boardId;
         this.floors = floors;
         this.walls = walls;
         this.diamonds = diamonds;
         this.beams = beams;
-        //this.elevators = elevators;
+        this.elevators = elevators;
+        this.checkpoints = checkPoints;
+        this.hourGlasses = hourGlasses;
+        this.finish = finish;
     }
 
 }

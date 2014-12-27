@@ -37,11 +37,6 @@ public class Updater implements SensorEventListener {
     private Vector accData=new Vector(0,0,0);
 
     DrawManager drawManager;
-    List<Elevator> elevators;
-    Finish finish;
-    List<CheckPoint> checkPoints;
-    List<HourGlass> hourGlasses;
-
 
     public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
         this.ball = ball;
@@ -51,16 +46,6 @@ public class Updater implements SensorEventListener {
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         drawManager = new DrawManager(context);
-
-        Elevator elevator1 = new Elevator(new Point(10f,0f,-10f), new Vector(0f,1f,0f), new BoxSize(5f,1f,5f), new Point(10f, -5f, -10f), new Point(10f, 5f, -10f), 0f, context);
-        elevators = Arrays.asList(elevator1);
-        finish = new Finish(new Point(0f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
-        CheckPoint checkPoint1 = new CheckPoint(new Point(-30f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
-        CheckPoint checkPoint2 = new CheckPoint(new Point(30f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
-        checkPoints = Arrays.asList(checkPoint1, checkPoint2);
-        HourGlass hourGlass1 = new HourGlass(new Point(-15f, 1f, 0f), 5, 0.5f, context);
-        HourGlass hourGlass2 = new HourGlass(new Point(15f, 1f, 0f), 5, 0.5f, context);
-        hourGlasses = Arrays.asList(hourGlass1, hourGlass2);
     }
 
     public UpdateResult update() {
@@ -70,7 +55,7 @@ public class Updater implements SensorEventListener {
         for(Beam beam : board.beams){
             beam.Update(0.035f);
         }
-        for(Elevator elevator : elevators){
+        for(Elevator elevator : board.elevators){
             elevator.Update(0.035f);
         }
         if (isUnderFloors())
@@ -121,15 +106,15 @@ public class Updater implements SensorEventListener {
         for(Beam beam: board.beams){
             drawManager.drawBeam(beam);
         }
-        for(Elevator elevator : elevators){
+        for(Elevator elevator : board.elevators){
             drawManager.drawElevator(elevator);
         }
         drawManager.drawBall(ball, 0f, ball.velocity.normalize());
-        for(CheckPoint checkPoint : checkPoints){
+        for(CheckPoint checkPoint : board.checkpoints){
             drawManager.drawCheckPoint(checkPoint);
         }
-        drawManager.drawFinish(finish);
-        for(HourGlass hourGlass : hourGlasses) {
+        drawManager.drawFinish(board.finish);
+        for(HourGlass hourGlass : board.hourGlasses) {
             drawManager.drawHourglass(hourGlass);
         }
         for(Diamond diamond : board.diamonds) {
