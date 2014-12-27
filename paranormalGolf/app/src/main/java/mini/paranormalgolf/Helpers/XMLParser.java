@@ -87,9 +87,9 @@ public class XMLParser
                         float location_z = Float.parseFloat(xpp.getAttributeValue(null, "location_z"));
 
                         int value = Integer.parseInt(xpp.getAttributeValue(null, "value"));
-                        int verticesCount = Integer.parseInt(xpp.getAttributeValue(null, "verticesCount"));
+                        float yShift = Float.parseFloat(xpp.getAttributeValue(null, "y_shift"));
 
-                        diamonds.add(new Diamond(new Point(location_x, location_y, location_z), value, context));
+                        diamonds.add(new Diamond(new Point(location_x, location_y, location_z), value, yShift, context));
                     }
                     else if (name.equals("Beam"))
                     {

@@ -22,8 +22,8 @@ public class Diamond extends Bonus {
     protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
     private final Pyramid pyramid = new Pyramid(0.7f, 1.4f, 6);
 
-    public Diamond(Point location, int value, Context context) {
-        super(location, value);
+    public Diamond(Point location, int value, float yShift, Context context) {
+        super(location, value, yShift);
         GraphicsData generatedData = ObjectGenerator.createDiamond(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;

@@ -58,8 +58,8 @@ public class Updater implements SensorEventListener {
         CheckPoint checkPoint1 = new CheckPoint(new Point(-30f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
         CheckPoint checkPoint2 = new CheckPoint(new Point(30f,0f,0f), new ConicalFrustum(15f, 2f, 3f), false, context);
         checkPoints = Arrays.asList(checkPoint1, checkPoint2);
-        HourGlass hourGlass1 = new HourGlass(new Point(-15f, 1f, 0f), 5, context);
-        HourGlass hourGlass2 = new HourGlass(new Point(15f, 1f, 0f), 5, context);
+        HourGlass hourGlass1 = new HourGlass(new Point(-15f, 1f, 0f), 5, 0.5f, context);
+        HourGlass hourGlass2 = new HourGlass(new Point(15f, 1f, 0f), 5, 0.5f, context);
         hourGlasses = Arrays.asList(hourGlass1, hourGlass2);
     }
 
