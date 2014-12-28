@@ -242,6 +242,18 @@ public class Ball extends MovableElement {
         BoxSize wallSize = element.getMeasurements();
         Point min = new Point(wallLocation.x - wallSize.x / 2, wallLocation.y - wallSize.y / 2, wallLocation.z - wallSize.z / 2);
         Point max = new Point(wallLocation.x + wallSize.x / 2, wallLocation.y + wallSize.y / 2, wallLocation.z + wallSize.z / 2);
+        Vector difference=new Vector(0.2f,0f,0.4f);
+        Point lastLocation=new Point(location.x-difference.x,location.y-difference.y,location.z-difference.z);
+        Point granica=new Point(0,0,0);
+        granica.x=difference.x>0?max.x:min.x;
+        granica.y=difference.y>0?max.y:min.y;
+        granica.z=difference.z>0?max.z:min.z;
+
+        float percentX=(granica.x-lastLocation.x)/difference.x;
+        float percentY=(granica.y-lastLocation.y)/difference.y;
+        float percentZ=(granica.z-lastLocation.z)/difference.z;
+
+
         if (min.x <= location.x && location.x <= max.x && min.y <= location.y && location.y <= max.y &&
                 (max.z >= location.z - radius || min.z <= location.z + radius))
             velocity.z = -velocity.z;
