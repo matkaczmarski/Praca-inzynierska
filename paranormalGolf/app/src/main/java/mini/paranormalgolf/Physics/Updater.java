@@ -74,8 +74,12 @@ public class Updater implements SensorEventListener {
 
     private boolean isUnderFloors()
     {
+        float value = ball.location.y + ball.getRadius();
         for (Floor floor : board.floors)
-            if (floor.location.y - floor.measures.y / 2 <= ball.location.y + ball.getRadius())
+            if (floor.location.y - floor.measures.y / 2 <= value)
+                return false;
+        for (Elevator elevator : board.elevators)
+            if (elevator.location.y - elevator.measurements.y / 2 <= value)
                 return false;
         return true;
     }

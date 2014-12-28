@@ -198,6 +198,35 @@ public class GameActivity extends Activity implements Runnable {
                     onPauseClick(view);
                 }
             });
+            ((TextView)pause_dialog.findViewById(R.id.pause_restart)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    restart();
+                }
+            });
+            ((TextView)pause_dialog.findViewById(R.id.pause_menu)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    pause_dialog.dismiss();
+                    pause_dialog = null;
+                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
+            ((TextView)pause_dialog.findViewById(R.id.pause_options)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                    startActivity(intent);
+                }
+            });
             pause_dialog.show();
         }
         else
@@ -205,5 +234,31 @@ public class GameActivity extends Activity implements Runnable {
             pause_dialog.dismiss();
             pause_dialog = null;
         }
+    }
+
+    public void restart()
+    {
+        setContentView(R.layout.activity_game);
+        LoadFonts();
+        glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
+
+        Intent intent = getIntent();
+        String board_id = intent.getStringExtra("BOARD_ID");
+
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
+        glSurfaceView.setEGLContextClientVersion(2);
+        glSurfaceView.setRenderer(gameRenderer);
+        rendererSet = true;
+        if (pause_dialog != null)
+        {
+            pause_dialog.dismiss();
+            pause_dialog = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        onPauseClick(glSurfaceView);
     }
 }
