@@ -31,7 +31,10 @@ import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.GL_FRONT;
 import static android.opengl.GLES20.GL_FRONT_AND_BACK;
+import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glActiveTexture;
+import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glCompressedTexImage2D;
 import static android.opengl.GLES20.glCullFace;
@@ -54,6 +57,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean lastTimeUpdated = false;
     private boolean paused = false;
 
+    public Updater getUpdater(){return updater;}
+
     public GameRenderer(Activity context, SensorManager sensorManager, String board_id) {
         this.context = context;
         this.sensorManager = sensorManager;
@@ -65,11 +70,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);
-        //glEnable(GL_BLEND);
-       // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-        //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 1f, 0f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.golf, context);
 
         XMLParser xmlParser = new XMLParser(context);

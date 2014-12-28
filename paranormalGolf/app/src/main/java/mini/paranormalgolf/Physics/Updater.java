@@ -40,7 +40,9 @@ public class Updater implements SensorEventListener {
 
     DrawManager drawManager;
 
-    public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
+    public DrawManager getDrawManager(){return drawManager;}
+
+    public Updater(Context context, Ball ball, Board board, SensorManager sensorManager) {
         this.ball = ball;
         this.context = context;
         this.board = board;
