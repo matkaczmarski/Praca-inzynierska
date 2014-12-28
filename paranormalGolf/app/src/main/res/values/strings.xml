@@ -26,4 +26,8 @@
     <string name="time">Time:</string>
     <string name="diamonds">Diamonds:</string>
     <string name="boardInfoFile">board_info.xml</string>
+    <string name="pause_resume">Resume</string>
+    <string name="pause_restart">Restart</string>
+    <string name="pause_options">Options</string>
+    <string name="pause_menu">Menu</string>
 </resources>

@@ -49,7 +49,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private SensorManager sensorManager;
     private String board_id;
     private BoardInfo boardInfo;
-    private long startTime;
+    private long lastTime;
+    private long timeLeft;
+    private boolean lastTimeUpdated = false;
+    private boolean paused = false;
 
     public GameRenderer(Activity context, SensorManager sensorManager, String board_id) {
         this.context = context;
@@ -73,6 +76,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Board board = xmlParser.getBoard(board_id);
         boardInfo = xmlParser.getBoardInfo(board_id);
 
+        timeLeft = boardInfo.getTime() * 1000;
+
         ((GameActivity)context).runOnUiThread(new Runnable()
         {
             @Override
@@ -83,7 +88,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         });
 
         updater = new Updater(context, ball, board, sensorManager);
-        startTime = System.currentTimeMillis();
     }
 
     @Override
@@ -95,9 +99,25 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
-        long actual_time = System.currentTimeMillis();
-        long seconds_past = (actual_time - startTime) / 1000;
-        final long seconds_left = boardInfo.getTime() - seconds_past;
+        if (!lastTimeUpdated)
+        {
+            lastTime = System.currentTimeMillis();
+            lastTimeUpdated = true;
+        }
+        if (!paused)
+        {
+            long actual_time = System.currentTimeMillis();
+            timeLeft -= actual_time - lastTime;
+            lastTime = actual_time;
+        }
+        //long seconds_past = (actual_time - startTime) / 1000;
+        final long seconds_left = timeLeft / 1000;
+        if (paused)
+        {
+            lastTimeUpdated = false;
+            boardInfo.setTime((int)seconds_left);
+            return;
+        }
         ((GameActivity)context).runOnUiThread(new Runnable()
         {
             @Override
@@ -108,7 +128,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         });
 
         UpdateResult updateResult = updater.update();
-        if (seconds_left <= 0)
+        if (timeLeft <= 0)
             updateResult = UpdateResult.DEFEAT;
         if (updateResult != UpdateResult.NONE) {
             //dotarcie do mety?
@@ -116,8 +136,24 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             {
                 context.finish();
             }
+            if (updateResult == UpdateResult.PAUSE)
+                return;
         }
         updater.draw();
+    }
+
+    public void pause()
+    {
+        if (paused)
+        {
+            updater.resume();
+            paused = false;
+        }
+        else
+        {
+            paused = true;
+            updater.pause();
+        }
     }
 
 }

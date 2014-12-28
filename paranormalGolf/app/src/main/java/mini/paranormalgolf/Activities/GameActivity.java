@@ -2,6 +2,7 @@ package mini.paranormalgolf.Activities;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
@@ -28,6 +29,8 @@ public class GameActivity extends Activity implements Runnable {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet = false;
+    private GameRenderer gameRenderer = null;
+    private Dialog pause_dialog = null;
 
     protected PowerManager.WakeLock mWakeLock;
 
@@ -65,7 +68,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        final GameRenderer gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
 
         if (supportsEs2) {
             // ...
@@ -176,5 +179,86 @@ public class GameActivity extends Activity implements Runnable {
 
         tv = (TextView)findViewById(R.id.game_activity_diamonds);
         tv.setTypeface(tf);
+    }
+
+    public void onPauseClick(View view)
+    {
+        if (gameRenderer != null)
+            gameRenderer.pause();
+
+        if (pause_dialog == null)
+        {
+            pause_dialog = new Dialog(this);
+            pause_dialog.setContentView(R.layout.pause_dialog);
+            ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    onPauseClick(view);
+                }
+            });
+            ((TextView)pause_dialog.findViewById(R.id.pause_restart)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    restart();
+                }
+            });
+            ((TextView)pause_dialog.findViewById(R.id.pause_menu)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    pause_dialog.dismiss();
+                    pause_dialog = null;
+                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
+            ((TextView)pause_dialog.findViewById(R.id.pause_options)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                    startActivity(intent);
+                }
+            });
+            pause_dialog.show();
+        }
+        else
+        {
+            pause_dialog.dismiss();
+            pause_dialog = null;
+        }
+    }
+
+    public void restart()
+    {
+        setContentView(R.layout.activity_game);
+        LoadFonts();
+        glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
+
+        Intent intent = getIntent();
+        String board_id = intent.getStringExtra("BOARD_ID");
+
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
+        glSurfaceView.setEGLContextClientVersion(2);
+        glSurfaceView.setRenderer(gameRenderer);
+        rendererSet = true;
+        if (pause_dialog != null)
+        {
+            pause_dialog.dismiss();
+            pause_dialog = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        onPauseClick(glSurfaceView);
     }
 }

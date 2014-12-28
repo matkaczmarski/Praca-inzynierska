@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#000000A0">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@color/activity_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pause_resume"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/abc_primary_text_material_dark"
+                android:textSize="20dp"
+                android:clickable="true"
+                android:text="@string/pause_resume"/>
+
+            <TextView
+                android:id="@+id/pause_restart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/abc_primary_text_material_dark"
+                android:textSize="20dp"
+                android:clickable="true"
+                android:text="@string/pause_restart"/>
+
+            <TextView
+                android:id="@+id/pause_options"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/abc_primary_text_material_dark"
+                android:textSize="20dp"
+                android:clickable="true"
+                android:text="@string/pause_options"/>
+
+            <TextView
+                android:id="@+id/pause_menu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/abc_primary_text_material_dark"
+                android:textSize="20dp"
+                android:clickable="true"
+                android:text="@string/pause_menu"/>
+
+            </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>
