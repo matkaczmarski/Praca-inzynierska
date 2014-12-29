@@ -26,42 +26,106 @@
             android:text="@string/options_activity_title"
             android:layout_marginTop="20dp"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="6"
             android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/options_music"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/OptionsButton"
-                android:text="@string/options_activity_music"/>
-            <CheckBox
-                android:id="@+id/options_sounds"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/OptionsButton"
-                android:text="@string/options_activity_sound"/>
-            <CheckBox
-                android:id="@+id/options_vibrations"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/OptionsButton"
-                android:text="@string/options_activity_vibrations"/>
+                android:orientation="vertical"
+                android:gravity="center">
+                <CheckBox
+                    android:id="@+id/options_music"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/OptionsButton"
+                    android:text="@string/options_activity_music"
+                    android:onClick="onMusicClick"/>
+                <CheckBox
+                    android:id="@+id/options_sounds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/OptionsButton"
+                    android:text="@string/options_activity_sound"
+                    android:onClick="onSoundClick"/>
+                <CheckBox
+                    android:id="@+id/options_vibrations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/OptionsButton"
+                    android:text="@string/options_activity_vibrations"
+                    android:onClick="onVibrationsClick"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+                    <CheckBox
+                        android:id="@+id/options_pl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/OptionsButtonLanguage"
+                        android:text="pl"
+                        android:onClick="onPolishPick"/>
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"/>
+                    <CheckBox
+                        android:id="@+id/options_en"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/OptionsButtonLanguage"
+                        android:text="en"
+                        android:onClick="onEnglishPick"/>
+                    </LinearLayout>
+            </LinearLayout>
 
-        </LinearLayout>
-
+        </ScrollView>
         <View
             android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/options_cancel_button"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    style="@style/OptionsButtonSaveCancel"
+                    android:text="@string/cancel"
+                    android:layout_marginLeft="50dp"
+                    android:onClick="onCancelClick"/>
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right">
+                <TextView
+                    android:id="@+id/options_save_button"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    style="@style/OptionsButtonSaveCancel"
+                    android:text="@string/save"
+                    android:layout_marginRight="50dp"
+                    android:onClick="onSaveClick"/>
+            </LinearLayout>
+
+            </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
 
     </LinearLayout>
 

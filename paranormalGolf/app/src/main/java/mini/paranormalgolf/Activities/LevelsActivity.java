@@ -1,9 +1,14 @@
 package mini.paranormalgolf.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.Helpers.XMLParser;
@@ -22,6 +28,9 @@ import mini.paranormalgolf.R;
 public class LevelsActivity extends Activity
 {
     String board_id = null;
+    private boolean music;
+    private boolean sound;
+    private boolean vibrations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,22 @@ public class LevelsActivity extends Activity
 
         LoadFonts();
         InitializeBoardList();
+        checkSharedPreferences();
+    }
+
+    public void checkSharedPreferences()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
+        if (sharedPreferences.getAll().size() == 0)
+        {
+            finish();
+        }
+        else
+        {
+            music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
+            sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
+            vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
+        }
     }
 
     public void LoadFonts()
@@ -91,11 +116,13 @@ public class LevelsActivity extends Activity
 
     public void onBackClick (View view)
     {
+        vibrate();
         finish();
     }
 
     public void onStartClick (View view)
     {
+        vibrate();
         if (board_id != null)
         {
             Intent intent = new Intent(this, GameActivity.class);
@@ -106,6 +133,7 @@ public class LevelsActivity extends Activity
 
     public void selectedBoardChanged(String id, int result, int nr)
     {
+        vibrate();
         board_id = id;
         int picId = getResources().getIdentifier("board_" + nr, "drawable", getApplicationContext().getPackageName());
         ((ImageView)findViewById(R.id.board_image)).setImageDrawable(getResources().getDrawable(picId));
@@ -144,6 +172,15 @@ public class LevelsActivity extends Activity
         {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public void vibrate()
+    {
+        if (vibrations)
+        {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(getResources().getInteger(R.integer.vibrations_click_time));
         }
     }
 }

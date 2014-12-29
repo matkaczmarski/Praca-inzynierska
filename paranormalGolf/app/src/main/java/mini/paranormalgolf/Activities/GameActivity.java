@@ -246,7 +246,7 @@ public class GameActivity extends Activity implements Runnable {
                     pause_dialog = null;
                     Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    startActivityForResult(intent, 0);
                 }
             });
             ((TextView)pause_dialog.findViewById(R.id.pause_options)).setOnClickListener(new View.OnClickListener()

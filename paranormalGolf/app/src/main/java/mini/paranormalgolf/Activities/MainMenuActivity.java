@@ -1,26 +1,75 @@
 package mini.paranormalgolf.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import mini.paranormalgolf.R;
 
 public class MainMenuActivity extends Activity
 {
+    private boolean music = false;
+    private boolean sound = false;
+    private boolean vibrations = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
 
+        checkSharedPreferences();
+
+        setContentView(R.layout.activity_main_menu);
         LoadFonts();
         ManageFiles();
+    }
+
+    public void checkSharedPreferences()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
+        if (sharedPreferences.getAll().size() == 0)
+        {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(getString(R.string.options_music), true);
+            editor.putBoolean(getString(R.string.options_sound_effects), true);
+            editor.putBoolean(getString(R.string.options_vibrations), true);
+            String language = Locale.getDefault().getLanguage();
+            if (!language.equalsIgnoreCase("pl"))
+                language = "en";
+            editor.putString(getString(R.string.options_language), language);
+            editor.commit();
+
+            music = sound = vibrations = true;
+        }
+        else
+        {
+            music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
+            sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
+            vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
+
+            String language = sharedPreferences.getString(getString(R.string.options_language), "en");
+            changeLanguage(language);
+        }
+    }
+
+    public void changeLanguage(String language)
+    {
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.locale = new Locale(language.equalsIgnoreCase("pl") ? "pl_PL" : "en_US");
+        res.updateConfiguration(conf, dm);
     }
 
     public void LoadFonts()
@@ -68,23 +117,44 @@ public class MainMenuActivity extends Activity
 
     public void onStartClick(View view)
     {
+        vibrate();
         Intent intent = new Intent(this, LevelsActivity.class);
         startActivity(intent);
     }
 
     public void onOptionsClick(View view)
     {
+        vibrate();
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 
     public void onHelpClick(View view)
     {
-
+        vibrate();
     }
 
     public void onExitClick(View view)
     {
+        vibrate();
         finish();
+    }
+
+    public void vibrate()
+    {
+        if (vibrations)
+        {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(getResources().getInteger(R.integer.vibrations_click_time));
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        checkSharedPreferences();
+        setContentView(R.layout.activity_main_menu);
+        LoadFonts();
     }
 }

@@ -23,14 +23,27 @@
         <item name="android:textSize">@dimen/activity_main_menu_option</item>
         <item name="android:textColor">@color/activity_main_menu_option</item>
         <item name="android:clickable">true</item>
-        <item name="android:layout_weight">2</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_marginLeft">50dp</item>
         <item name="android:background">@drawable/options_button</item>
         <!--item name="android:gravity">center_vertical|left</item-->
         <item name="android:gravity">center</item>
         <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="OptionsButtonLanguage">
+        <item name="android:textSize">@dimen/activity_main_menu_option</item>
+        <item name="android:textColor">@color/activity_main_menu_option</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/options_button_language</item>
+        <!--item name="android:gravity">center_vertical|left</item-->
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="OptionsButtonSaveCancel">
+        <item name="android:textSize">@dimen/activity_main_menu_option</item>
+        <item name="android:textColor">@color/activity_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/options_button_language</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="LevelSelectButton">
