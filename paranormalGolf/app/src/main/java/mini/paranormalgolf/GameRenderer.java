@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import mini.paranormalgolf.Activities.GameActivity;
 import mini.paranormalgolf.Helpers.BoardInfo;
+import mini.paranormalgolf.Helpers.FPSCounter;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.Physics.Ball;
@@ -57,6 +59,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean lastTimeUpdated = false;
     private boolean paused = false;
 
+    private FPSCounter fpsCounter;
+
     public Updater getUpdater(){return updater;}
 
     public GameRenderer(Activity context, SensorManager sensorManager, String board_id) {
@@ -91,6 +95,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         });
 
         updater = new Updater(context, ball, board, sensorManager);
+
+        //String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
+        //boolean bul = extensions.contains("OES_depth_texture");
+
+        fpsCounter = new FPSCounter();
     }
 
     @Override
@@ -102,6 +111,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
+        if(LoggerConfig.ON) {
+            fpsCounter.logFrame();
+        }
         if (!lastTimeUpdated)
         {
             lastTime = System.currentTimeMillis();

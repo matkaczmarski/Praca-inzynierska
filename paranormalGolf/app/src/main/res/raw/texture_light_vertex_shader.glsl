@@ -21,11 +21,11 @@ void main()
     vec3 lightVector = normalize(u_LightPos - modelViewVertex);
     vec3 modelViewNormal = vec3(normalize(u_itMVMatrix * vec4(a_Normal,0)));
 
-    float tmp = dot(modelViewNormal, lightVector);
-    if(tmp < 0.0){
-        tmp = 0.0;
+    float diffuseComponent = dot(modelViewNormal, lightVector);
+    if(diffuseComponent < 0.0){
+        diffuseComponent = 0.0;
     }
-    v_Light =  tmp * u_LightsDiffusion;
+    v_Light =  diffuseComponent * u_LightsDiffusion;
     v_Light = v_Light + u_LightsAmbient;
 
     v_TextureCoordinates = a_TextureCoordinates;	  	  
