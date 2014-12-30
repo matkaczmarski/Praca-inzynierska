@@ -96,6 +96,37 @@ public class GameActivity extends Activity implements Runnable {
                     Toast.LENGTH_LONG).show();
             return;
         }
+
+        glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            float previousX, previousY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event != null) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        previousX = event.getX();
+                        previousY = event.getY();
+                    } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        final float deltaX = event.getX() - previousX;
+                        final float deltaY = event.getY() - previousY;
+
+                        previousX = event.getX();
+                        previousY = event.getY();
+
+                        glSurfaceView.queueEvent(new Runnable() {
+                            @Override
+                            public void run() {
+                                gameRenderer.getUpdater().getDrawManager().handleTouchDrag(deltaX, deltaY);
+                            }
+                        });
+                    }
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
         //setContentView(glSurfaceView);
     }
 
@@ -198,6 +229,35 @@ public class GameActivity extends Activity implements Runnable {
                     onPauseClick(view);
                 }
             });
+            ((TextView)pause_dialog.findViewById(R.id.pause_restart)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    restart();
+                }
+            });
+            ((TextView)pause_dialog.findViewById(R.id.pause_menu)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    pause_dialog.dismiss();
+                    pause_dialog = null;
+                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, 0);
+                }
+            });
+            ((TextView)pause_dialog.findViewById(R.id.pause_options)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                    startActivity(intent);
+                }
+            });
             pause_dialog.show();
         }
         else
@@ -205,5 +265,31 @@ public class GameActivity extends Activity implements Runnable {
             pause_dialog.dismiss();
             pause_dialog = null;
         }
+    }
+
+    public void restart()
+    {
+        setContentView(R.layout.activity_game);
+        LoadFonts();
+        glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
+
+        Intent intent = getIntent();
+        String board_id = intent.getStringExtra("BOARD_ID");
+
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
+        glSurfaceView.setEGLContextClientVersion(2);
+        glSurfaceView.setRenderer(gameRenderer);
+        rendererSet = true;
+        if (pause_dialog != null)
+        {
+            pause_dialog.dismiss();
+            pause_dialog = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        onPauseClick(glSurfaceView);
     }
 }

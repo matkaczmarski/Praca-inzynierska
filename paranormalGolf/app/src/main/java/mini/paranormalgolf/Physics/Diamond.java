@@ -17,7 +17,7 @@ import mini.paranormalgolf.R;
  */
 public class Diamond extends Bonus {
 
-    public final float DIAMOND_OPACITY = 0.7f;
+    public final float DIAMOND_OPACITY = 0.9f;
     protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
     private final Pyramid pyramid = new Pyramid(0.7f, 1.4f, 6);
 

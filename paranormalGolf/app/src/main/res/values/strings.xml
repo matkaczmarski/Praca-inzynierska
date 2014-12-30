@@ -30,4 +30,12 @@
     <string name="pause_restart">Restart</string>
     <string name="pause_options">Options</string>
     <string name="pause_menu">Menu</string>
+    <string name="options_music">MUSIC</string>
+    <string name="options_sound_effects">SOUND_EFFECTS</string>
+    <string name="options_vibrations">VIBRATIONS</string>
+    <string name="options_language">LANGUAGE</string>
+    <string name="options_texture">TEXTURE</string>
+    <string name="preferences">PREFERENCES</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

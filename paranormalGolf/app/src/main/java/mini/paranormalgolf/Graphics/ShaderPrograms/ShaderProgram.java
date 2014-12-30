@@ -2,7 +2,12 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 
 import android.content.Context;
 
+import static android.opengl.GLES20.glUniform1f;
+import static android.opengl.GLES20.glUniform3f;
+import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glUseProgram;
+
+import mini.paranormalgolf.Graphics.LightData;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 
 /**
@@ -31,10 +36,9 @@ abstract public class ShaderProgram {
     protected final int program;
 
     protected ShaderProgram(Context context, int vertexShaderResourceId, int fragmentShaderResourceId) {
-
-        program = ShaderHelper.buildProgram(ResourceHelper.readTextFileFromResource(context, vertexShaderResourceId),
-                                            ResourceHelper.readTextFileFromResource(context, fragmentShaderResourceId));
+        program = ShaderHelper.buildProgram(ResourceHelper.readTextFileFromResource(context, vertexShaderResourceId), ResourceHelper.readTextFileFromResource(context, fragmentShaderResourceId));
     }
+
 
     public void useProgram() {
         glUseProgram(program);

@@ -26,4 +26,6 @@
     <string name="pause_restart">Zacznij od nowa</string>
     <string name="pause_options">Opcje</string>
     <string name="pause_menu">Menu</string>
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
 </resources>

@@ -40,7 +40,9 @@ public class Updater implements SensorEventListener {
 
     DrawManager drawManager;
 
-    public Updater(Context context, Ball ball, Board board,SensorManager sensorManager) {
+    public DrawManager getDrawManager(){return drawManager;}
+
+    public Updater(Context context, Ball ball, Board board, SensorManager sensorManager) {
         this.ball = ball;
         this.context = context;
         this.board = board;
@@ -74,8 +76,12 @@ public class Updater implements SensorEventListener {
 
     private boolean isUnderFloors()
     {
+        float value = ball.location.y + ball.getRadius();
         for (Floor floor : board.floors)
-            if (floor.location.y - floor.measures.y / 2 <= ball.location.y + ball.getRadius())
+            if (floor.location.y - floor.measures.y / 2 <= value)
+                return false;
+        for (Elevator elevator : board.elevators)
+            if (elevator.location.y - elevator.measurements.y / 2 <= value)
                 return false;
         return true;
     }
