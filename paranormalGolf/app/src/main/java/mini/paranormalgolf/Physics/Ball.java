@@ -7,8 +7,10 @@ import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
+import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Sphere;
 import mini.paranormalgolf.Primitives.Vector;
 import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
@@ -38,16 +40,17 @@ public class Ball extends MovableElement {
     private final int MESH_DIMENSION = 32;
     public final float BALL_OPACITY = 1f;
     private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
+    private final float USER_EXPERIENCE=1e-5f;
 
     public final float[] rgba = new float[] {0.0f, 0.0f, 0.9f, 1f};
     public final float[] rotation=new float[16];
     //
     private float radius;
     private float omega;
-    public Vector pole;
-    public Vector onEquator;
     public Vector axis;
     public float angle;
+    public Vector difference;
+
     private float mass;
     private float area;
     private final static float Cd=0.4f;
@@ -61,14 +64,11 @@ public class Ball extends MovableElement {
     public Ball(Point location, float radius, Vector velocity, BallTexture ballTexture, Context context) {
         super(velocity, location);
         omega=0;
-        pole=new Vector(0,1,0);
-        onEquator=new Vector(1,0,0);
         this.radius = radius;
         mass=5;
         area=(float)Math.PI*radius*radius;
         setIdentityM(rotation,0);
-        //axises=new LinkedList<Vector>();
-       // angles=new LinkedList<Float>();
+        difference=new Vector(0,0,0);
 
         GraphicsData generatedData = ObjectGenerator.createBall(location, radius, MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
@@ -133,16 +133,14 @@ public class Ball extends MovableElement {
             q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
         }
 
-        float difX = q[1] - location.x;
-        float difY = q[3] - location.y;
-        float difZ = q[5] - location.z;
+        difference=new Vector(q[1] - location.x,q[3] - location.y,q[5] - location.z);
 
-        if (difX != 0 || difZ != 0) {
+        if (difference.x != 0 || difference.z != 0) {
             float[] helpMatrix=new float[16];
             float[] helpMatrix2=new float[16];
 
-            axis = new Vector(difZ, 0, -difX).normalize();
-            angle = (float) (360*Math.sqrt(difX * difX + difZ * difZ) /(2*Math.PI*radius));
+            axis = new Vector(difference.z, 0, -difference.x).normalize();
+            angle = (float) (360*Math.sqrt(difference.x * difference.x + difference.z * difference.z) /(2*Math.PI*radius));
 
             setRotateM(helpMatrix,0,angle,axis.x,axis.y,axis.z);
             multiplyMM(helpMatrix2,0,helpMatrix,0,rotation,0);
@@ -171,7 +169,7 @@ public class Ball extends MovableElement {
         if (mu < 0)
             acceleration = CountAccelerationForFlying(accelerometrData, localVelocity);
         else acceleration = CountAccelerationForRolling(accelerometrData, mu, localVelocity);
-        // CountAcceleration(newVelocity,accData,mu);
+
         dQ[0] = dt * (acceleration.x);
         dQ[1] = dt * localVelocity.x;
         dQ[2] = dt * (acceleration.y);
@@ -199,30 +197,7 @@ public class Ball extends MovableElement {
 
 
     public boolean CheckCollision(Wall element){
-        Point wallLocation=element.getLocation();
-        BoxSize wallSize=element.getMeasurements();
-        Point min=new Point(wallLocation.x -wallSize.x/2,wallLocation.y -wallSize.y/2,wallLocation.z -wallSize.z/2);
-        Point max=new Point(wallLocation.x +wallSize.x/2,wallLocation.y +wallSize.y/2,wallLocation.z +wallSize.z/2);
-        float d=0;
-        if (location.x < min.x) {
-            d += (location.x -min.x)*(location.x -min.x);
-        } else if (location.x > max.x) {
-            d += (location.x -max.x)*(location.x -max.x);
-        }
-
-        if (location.y < min.y) {
-            d += (location.y -min.y)*(location.y -min.y);
-        } else if (location.y > max.y) {
-            d += (location.y -max.y)*(location.y -max.y);
-        }
-
-        if (location.z < min.z) {
-            d += (location.z -min.z)*(location.z -min.z);
-        } else if (location.z > max.z) {
-            d += (location.z -max.z)*(location.z -max.z);
-        }
-
-        return d <= radius*radius;
+        return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
     }
 
     public boolean CheckCollision(Bonus element){
@@ -238,30 +213,102 @@ public class Ball extends MovableElement {
     }
 
     public void ReactOnCollision(Wall element) {
+        //find time collision
+        Point startLocation=new Point(location.x-difference.x,location.y-difference.y,location.z-difference.z);
+        Point endLocation=new Point(location.x,location.y,location.z);
+        Point halfLocation= new Point((startLocation.x + endLocation.x) / 2, (startLocation.y + endLocation.y) / 2, (startLocation.z + endLocation.z) / 2);
+        float startTime=0,endTime=1,halfTime=0.5f;
+        Box collidedWall=new Box(element.getLocation(),element.getMeasurements());
+        for(int i=0;i<10;i++) {
+            if (Collisions.CheckSphereAABBCollsion(new Sphere(halfLocation, radius), collidedWall)) {
+                endTime = halfTime;
+                endLocation = halfLocation;
+            } else {
+                startTime = halfTime;
+                startLocation = halfLocation;
+            }
+            halfTime = (startTime + endTime) / 2;
+            halfLocation = new Point((startLocation.x + endLocation.x) / 2, (startLocation.y + endLocation.y) / 2, (startLocation.z + endLocation.z) / 2);
+        }
         Point wallLocation = element.getLocation();
         BoxSize wallSize = element.getMeasurements();
+        Vector normal=new Vector(0,0,0);
         Point min = new Point(wallLocation.x - wallSize.x / 2, wallLocation.y - wallSize.y / 2, wallLocation.z - wallSize.z / 2);
         Point max = new Point(wallLocation.x + wallSize.x / 2, wallLocation.y + wallSize.y / 2, wallLocation.z + wallSize.z / 2);
-        Vector difference=new Vector(0.2f,0f,0.4f);
-        Point lastLocation=new Point(location.x-difference.x,location.y-difference.y,location.z-difference.z);
-        Point granica=new Point(0,0,0);
-        granica.x=difference.x>0?max.x:min.x;
-        granica.y=difference.y>0?max.y:min.y;
-        granica.z=difference.z>0?max.z:min.z;
+        if(min.x-halfLocation.x>0&&min.x-halfLocation.x<=radius+USER_EXPERIENCE)
+            normal.x=-1;
+        else if(halfLocation.x-max.x>0&&halfLocation.x-max.x<=radius+USER_EXPERIENCE)
+            normal.x=1;
+        if(min.y-halfLocation.y>0&&min.y-halfLocation.y<=radius+USER_EXPERIENCE)
+            normal.y=-1;
+        else if(halfLocation.y-max.y>0&&halfLocation.y-max.y<=radius+USER_EXPERIENCE)
+            normal.y=1;
+        if(min.z-halfLocation.z>0&&min.z-halfLocation.z<=radius+USER_EXPERIENCE)
+            normal.z=-1;
+        else if(halfLocation.z-max.z>0&&halfLocation.z-max.z<=radius+USER_EXPERIENCE)
+            normal.z=1;
+        if(Math.abs(normal.x)+Math.abs(normal.z)==1) {
+            if (Math.abs(normal.x) == 1) velocity.x = -velocity.x;
+            else if (Math.abs(normal.z) == 1) velocity.z = -velocity.z;
+        }
+        else if(Math.abs(normal.x)+Math.abs(normal.z)==2) {
+            normal = normal.normalize();
+            Vector normalVelocity = velocity.normalize();
+            normalVelocity=new Vector(-normalVelocity.x,-normalVelocity.y,-normalVelocity.z);
+            if(Math.abs(normalVelocity.z*normal.x-normal.z*normalVelocity.x)<0.0001)
+                velocity=new Vector(-velocity.x,-velocity.y,-velocity.z);
+            else {
+                float alfa = (float) Math.acos(normal.dotProduct(normalVelocity));
+                Vector newNormalVelocity = new Vector(0, 0, 0);
+                newNormalVelocity.z =
+                        ((float) (normal.x * Math.cos(2 * alfa) - normal.x * normalVelocity.y * normalVelocity.y - Math.cos(alfa) * normalVelocity.x)) /
+                                (normalVelocity.z * normal.x - normal.z * normalVelocity.x);
+                newNormalVelocity.x =
+                        ((float) Math.cos(alfa) - newNormalVelocity.z * normal.z) / (normal.x);
+                newNormalVelocity.y = normalVelocity.y;
+                float length = velocity.length();
+                velocity = new Vector(length * newNormalVelocity.x, length * newNormalVelocity.y, length * newNormalVelocity.z);
+            }
+//            if (alfa < Math.PI / 4) {
+//                velocity = new Vector(-velocity.z, 0, -velocity.x);
+//            } else velocity = new Vector(velocity.z, 0, velocity.x);
+        }
+        location=new Point(halfLocation.x+velocity.x*(1-halfTime)*0.035f,
+                halfLocation.y+velocity.y*(1-halfTime)*0.035f,
+                halfLocation.z+velocity.z*(1-halfTime)*0.035f);
 
-        float percentX=(granica.x-lastLocation.x)/difference.x;
-        float percentY=(granica.y-lastLocation.y)/difference.y;
-        float percentZ=(granica.z-lastLocation.z)/difference.z;
+//        Point limit=new Point(difference.x>0?min.x:max.x,difference.y>0?min.y:max.y,difference.z>0?min.z:max.z);
+//
+//        float percentToX=(Math.abs(limit.x-lastLocation.x)-radius)/Math.abs(difference.x);
+//        float percentToY=(Math.abs(limit.y-lastLocation.y)-radius)/Math.abs(difference.y);
+//        float percentToZ=(Math.abs(limit.z-lastLocation.z)-radius)/Math.abs(difference.z);
+//        float newX=-10000,newY=-10000,newZ=-10000;
+//        Vector normal=new Vector(0,0,0);
+//        if(percentToZ>0&&percentToZ<1)
+//            newX=lastLocation.x+percentToZ*difference.x;
+//        if(percentToX>0&&percentToX<1)
+//            newZ=lastLocation.z+percentToX*difference.z;
+//        if(newX>=min.x&&newX<=max.x)
+//            normal.z=-Math.signum(difference.z);
+//        else if(newZ>=min.z&&newZ<=max.z)
+//            normal.x=-Math.signum(difference.x);
+//        else {
+//            normal.x = newX < min.x ? -1 : 1;
+//            normal.z = newZ < min.z ? -1 : 1;
+//            normal = normal.normalize();
+//        }
+//        Vector tangential=new Vector(-normal.z,0,normal.x);
+//        float b=(velocity.x*tangential.z-velocity.z*tangential.x)/(normal.x*tangential.z-normal.z*tangential.x);
+//        velocity=new Vector(velocity.x-2*b*normal.x,0,velocity.z-2*b*normal.z);
 
-
-        if (min.x <= location.x && location.x <= max.x && min.y <= location.y && location.y <= max.y &&
-                (max.z >= location.z - radius || min.z <= location.z + radius))
-            velocity.z = -velocity.z;
-        if (min.x <= location.x && location.x <= max.x && min.z <= location.z && location.z <= max.z &&
-                (max.y >= location.y - radius || min.y <= location.y + radius))
-            velocity.y = -velocity.y;
-        if (min.y <= location.y && location.y <= max.y && min.z <= location.z && location.z <= max.z &&
-                (max.x >= location.x - radius || min.x <= location.x + radius))
-            velocity.x = -velocity.x;
+//        if (min.x <= location.x && location.x <= max.x && min.y <= location.y && location.y <= max.y &&
+//                (max.z >= location.z - radius || min.z <= location.z + radius))
+//            velocity.z = -velocity.z;
+//        if (min.x <= location.x && location.x <= max.x && min.z <= location.z && location.z <= max.z &&
+//                (max.y >= location.y - radius || min.y <= location.y + radius))
+//            velocity.y = -velocity.y;
+//        if (min.y <= location.y && location.y <= max.y && min.z <= location.z && location.z <= max.z &&
+//                (max.x >= location.x - radius || min.x <= location.x + radius))
+//            velocity.x = -velocity.x;
     }
 }
