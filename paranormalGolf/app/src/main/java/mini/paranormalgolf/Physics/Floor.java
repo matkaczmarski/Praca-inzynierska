@@ -21,6 +21,14 @@ public class Floor extends Element {
     public final float FLOOR_OPACITY = 1f;
     protected final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
 
+    public BoxSize getMeasurements() {
+        return measures;
+    }
+
+    public void setMeasures(BoxSize measures) {
+        this.measures = measures;
+    }
+
     public BoxSize measures;
     public float mu;
 

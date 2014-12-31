@@ -27,6 +27,8 @@ import mini.paranormalgolf.Primitives.Vector;
  */
 public class Updater implements SensorEventListener {
 
+    public final static float INTERVAL_TIME=0.035f;
+
     private Context context;
     private Ball ball;
 
@@ -57,13 +59,13 @@ public class Updater implements SensorEventListener {
         if (paused)
             return UpdateResult.PAUSE;
         float mu = getActualCoefficientFriction();
-        ball.Update(0.035f, accData, mu);
+        ball.Update(INTERVAL_TIME, accData, mu);
 
         for(Beam beam : board.beams){
-            beam.Update(0.035f);
+            beam.Update(INTERVAL_TIME);
         }
         for(Elevator elevator : board.elevators){
-            elevator.Update(0.035f);
+            elevator.Update(INTERVAL_TIME);
         }
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
@@ -71,6 +73,10 @@ public class Updater implements SensorEventListener {
         for(Wall wall:board.walls)
             if(ball.CheckCollision(wall))
                 ball.ReactOnCollision(wall);
+        if(mu<0)
+            for(Floor floor:board.floors)
+                if(ball.CheckCollision(floor))
+                    ball.ReactOnCollision(floor);
         return UpdateResult.NONE;
     }
 

@@ -35,7 +35,7 @@ public final class Collisions {
         } else if (sphereCenter.z > max.z) {
             d += (sphereCenter.z - max.z) * (sphereCenter.z - max.z);
         }
-        return d <= sphereRadius * sphereRadius;
+        return d < sphereRadius * sphereRadius +Ball.USER_EXPERIENCE;
     }
 
 }
