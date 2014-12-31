@@ -28,6 +28,10 @@ public class HourGlass extends Bonus {
     private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
     public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
 
+    public ConicalFrustum getLowerCone() {
+        return lowerCone;
+    }
+
     private final ConicalFrustum lowerCone = new ConicalFrustum(0.7f, 0.5f, 0.15f);
     private final ConicalFrustum upperCone = new ConicalFrustum(0.7f, 0.15f, 0.5f);
 

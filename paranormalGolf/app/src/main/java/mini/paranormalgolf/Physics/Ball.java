@@ -9,6 +9,7 @@ import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.BoxSize;
+import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Sphere;
 import mini.paranormalgolf.Primitives.Vector;
@@ -204,8 +205,14 @@ public class Ball extends MovableElement {
         return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
     }
 
-    public boolean CheckCollision(Bonus element){
-        return false;
+    public boolean CheckCollision(Diamond diamond) {
+        if (diamond == null) return false;
+        return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(diamond.location, diamond.getPyramid().radius, 2 * diamond.getPyramid().height));
+    }
+
+    public boolean CheckCollision(HourGlass hourGlass) {
+        if (hourGlass == null) return false;
+        return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(hourGlass.location, hourGlass.getLowerCone().getBottomRadius(), 2 * hourGlass.getLowerCone().getHeight()));
     }
 
     public void ReactOnCollision(MovableElement element){

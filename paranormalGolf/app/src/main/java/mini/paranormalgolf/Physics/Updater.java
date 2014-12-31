@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
@@ -54,31 +55,43 @@ public class Updater implements SensorEventListener {
         drawManager = new DrawManager(context);
     }
 
-    public UpdateResult update()
-    {
+    public UpdateResult update() {
         if (paused)
             return UpdateResult.PAUSE;
         float mu = getActualCoefficientFriction();
         ball.Update(INTERVAL_TIME, accData, mu);
 
-        for(Beam beam : board.beams){
+        for (Beam beam : board.beams) {
             beam.Update(INTERVAL_TIME);
         }
-        for(Elevator elevator : board.elevators){
+        for (Elevator elevator : board.elevators) {
             elevator.Update(INTERVAL_TIME);
         }
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
 
-        for(Wall wall:board.walls)
-            if(ball.CheckCollision(wall))
+        for (Wall wall : board.walls)
+            if (ball.CheckCollision(wall))
                 ball.ReactOnCollision(wall);
-        if(mu<0)
-            for(Floor floor:board.floors)
-                if(ball.CheckCollision(floor))
+        if (mu < 0)
+            for (Floor floor : board.floors)
+                if (ball.CheckCollision(floor))
                     ball.ReactOnCollision(floor);
+        ;
+        for (int i = 0; i < board.diamonds.size(); i++)
+            if (ball.CheckCollision(board.diamonds.get(i))) {
+                board.diamonds.set(i, null);
+                // i dodaj jakieś punkty
+            }
+
+        for (int i = 0; i < board.hourGlasses.size(); i++)
+            if (ball.CheckCollision(board.hourGlasses.get(i))) {
+                board.hourGlasses.set(i, null);
+                // i dodaj jakiś czas
+            }
         return UpdateResult.NONE;
     }
+
 
     private boolean isUnderFloors()
     {
@@ -132,10 +145,12 @@ public class Updater implements SensorEventListener {
         }
         drawManager.drawFinish(board.finish);
         for(HourGlass hourGlass : board.hourGlasses) {
-            drawManager.drawHourglass(hourGlass);
+            if (hourGlass != null)
+                drawManager.drawHourglass(hourGlass);
         }
         for(Diamond diamond : board.diamonds) {
-            drawManager.drawDiamond(diamond);
+            if (diamond != null)
+                drawManager.drawDiamond(diamond);
         }
         if (last_diamonds_count != board.diamonds.size())
         {

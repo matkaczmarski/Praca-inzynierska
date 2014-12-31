@@ -12,7 +12,7 @@ public class ConicalFrustum {
     public float getTopRadius(){return  topRadius;}
     public float getHeight(){return  height;}
 
-    public ConicalFrustum(float height, float bottomRadius, float topRadius){
+    public ConicalFrustum(float height, float bottomRadius, float topRadius) {
         this.height = height;
         this.bottomRadius = bottomRadius;
         this.topRadius = topRadius;

@@ -2,6 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.BoxSize;
+import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Sphere;
 
@@ -9,7 +10,7 @@ import mini.paranormalgolf.Primitives.Sphere;
  * Created by Sławomir on 2014-12-29.
  */
 public final class Collisions {
-    public static boolean CheckSphereAABBCollsion(Sphere sphere,Box box) {
+    public static boolean CheckSphereAABBCollsion(Sphere sphere, Box box) {
 
         Point boxCenter = box.center;
         BoxSize boxSize = box.size;
@@ -35,7 +36,23 @@ public final class Collisions {
         } else if (sphereCenter.z > max.z) {
             d += (sphereCenter.z - max.z) * (sphereCenter.z - max.z);
         }
-        return d < sphereRadius * sphereRadius +Ball.USER_EXPERIENCE;
+        return d < sphereRadius * sphereRadius + Ball.USER_EXPERIENCE;
     }
 
+    public static boolean CheckSphereCylinderCollsion(Sphere sphere, Cylinder cylinder) {
+        Point cylinderCenter = cylinder.getCenter();
+        float cylinderRadius = cylinder.getRadius();
+        float cylinderMinY = cylinderCenter.y - cylinder.getHeight() / 2;
+        float cylinderMaxY = cylinderCenter.y + cylinder.getHeight() / 2;
+        Point sphereCenter = sphere.center;
+        float sphereRadius = sphere.radius;
+        float d = 0;
+        if (sphereCenter.y < cylinderMinY) {
+            d += (sphereCenter.y - cylinderMinY) * (sphereCenter.y - cylinderMinY);
+        } else if (sphereCenter.y > cylinderMaxY) {
+            d += (sphereCenter.y - cylinderMaxY) * (sphereCenter.y - cylinderMaxY);
+        }
+        d += (sphereCenter.x - cylinderCenter.x) * (sphereCenter.x - cylinderCenter.x) + (sphereCenter.z - cylinderCenter.z) * (sphereCenter.z - cylinderCenter.z);
+        return d < (sphereRadius + cylinderRadius) * (sphereRadius + cylinderRadius) + Ball.USER_EXPERIENCE;
+    }
 }
