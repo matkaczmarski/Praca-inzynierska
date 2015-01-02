@@ -86,7 +86,7 @@ public class DrawManager {
     }
 
 
-    public void drawBall(Ball ball, float rotationAngle, Vector rotationAxis) {
+    public void drawBall(Ball ball) {
         textureShaderProgram.useProgram();
         positionBallInScene(ball);
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, ball.getTexture(), ball.BALL_OPACITY);
@@ -232,11 +232,11 @@ public class DrawManager {
 
         setIdentityM(tmp1, 0);
         translateM(tmp1, 0, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z);
-        multiplyMM(modelMatrix, 0, tmp1, 0, ball.rotation, 0);
+        multiplyMM(modelMatrix, 0, tmp1, 0, ball.getRotation(), 0);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
 
         setIdentityM(tmp1, 0);
-        multiplyMM(tmp2, 0, tmp1, 0, ball.rotation, 0);
+        multiplyMM(tmp2, 0, tmp1, 0, ball.getRotation(), 0);
         invertM(tmp1, 0, tmp2, 0);
         transposeM(normalsRotationMatrix, 0, tmp1, 0);
     }
