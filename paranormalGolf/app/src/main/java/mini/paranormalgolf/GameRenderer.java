@@ -59,14 +59,21 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean lastTimeUpdated = false;
     private boolean paused = false;
 
+    private boolean vibrations;
+    private boolean music;
+    private boolean sound;
+
     private FPSCounter fpsCounter;
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity context, SensorManager sensorManager, String board_id) {
+    public GameRenderer(Activity context, SensorManager sensorManager, String board_id, boolean vibrations, boolean music, boolean sound) {
         this.context = context;
         this.sensorManager = sensorManager;
         this.board_id = board_id;
+        this.vibrations = vibrations;
+        this.music = music;
+        this.sound = sound;
     }
 
     @Override
@@ -95,7 +102,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
 
-        updater = new Updater(context, ball, board, sensorManager);
+        updater = new Updater(context, ball, board, sensorManager, vibrations, music, sound, this);
 
         //String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
         //boolean bul = extensions.contains("OES_depth_texture");
@@ -170,6 +177,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             paused = true;
             updater.pause();
         }
+    }
+
+    public void addTime(int value)
+    {
+        timeLeft += value * 1000;
     }
 
 }

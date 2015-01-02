@@ -37,4 +37,9 @@ public abstract class Bonus extends Element {
         location = new Point(location.x, location.y + UP_DOWN_SPEED, location.z);
         return location;
     }
+
+    public int getValue()
+    {
+        return value;
+    }
 }

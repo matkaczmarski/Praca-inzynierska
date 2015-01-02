@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Vibrator;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
@@ -12,9 +13,11 @@ import static android.opengl.GLES20.glClear;
 import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Activities.GameActivity;
+import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.Vector;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Mateusz on 2014-12-05.
@@ -34,12 +37,22 @@ public class Updater implements SensorEventListener {
     private Board board;
     private Vector accData=new Vector(0,0,0);
 
+    private boolean vibrations;
+    private boolean sound;
+    private boolean music;
+
+    private GameRenderer gameRenderer;
+
     public DrawManager getDrawManager(){return drawManager;}
 
-    public Updater(Context context, Ball ball, Board board, SensorManager sensorManager) {
+    public Updater(Context context, Ball ball, Board board, SensorManager sensorManager, boolean vibrations, boolean music, boolean sound, GameRenderer gameRenderer) {
         this.ball = ball;
         this.context = context;
         this.board = board;
+        this.vibrations = vibrations;
+        this.music = music;
+        this.sound = sound;
+        this.gameRenderer = gameRenderer;
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -67,7 +80,10 @@ public class Updater implements SensorEventListener {
 
         for (Wall wall : board.walls)
             if (ball.CheckCollision(wall))
+            {
                 ball.ReactOnCollision(wall);
+                vibrate();
+            }
         if (mu < 0)
             for (Floor floor : board.floors)
                 if (ball.CheckCollision(floor))
@@ -75,13 +91,16 @@ public class Updater implements SensorEventListener {
 
         for (int i = 0; i < board.diamonds.size(); i++)
             if (ball.CheckCollision(board.diamonds.get(i))) {
-                board.diamonds.set(i, null);
+                //board.diamonds.set(i, null);
+                board.diamonds.remove(i--);
                 // i dodaj jakieś punkty
             }
 
         for (int i = 0; i < board.hourGlasses.size(); i++)
             if (ball.CheckCollision(board.hourGlasses.get(i))) {
-                board.hourGlasses.set(i, null);
+                //board.hourGlasses.set(i, null);
+                gameRenderer.addTime(board.hourGlasses.get(i).getValue());
+                board.hourGlasses.remove(i--);
                 // i dodaj jakiś czas
             }
         return UpdateResult.NONE;
@@ -184,5 +203,14 @@ public class Updater implements SensorEventListener {
     public void resume()
     {
         paused = false;
+    }
+
+    public void vibrate()
+    {
+        if (vibrations)
+        {
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(context.getResources().getInteger(R.integer.vibrations_click_time));
+        }
     }
 }
