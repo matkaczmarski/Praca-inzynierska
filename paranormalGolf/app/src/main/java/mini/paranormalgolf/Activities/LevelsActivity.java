@@ -36,6 +36,8 @@ public class LevelsActivity extends Activity
     private boolean sound;
     private boolean vibrations;
 
+    private boolean firstResume = true;
+
     private PowerManager.WakeLock mWakeLock;
 
     private MediaPlayer mp = new MediaPlayer();
@@ -106,7 +108,20 @@ public class LevelsActivity extends Activity
                 ((LevelsListAdapter) listView.getAdapter()).setSelectedIndex(position);
             }
         });
-        levelsListAdapter.setSelectedIndex(0);
+
+        changeSelectedBoard(levelsListAdapter, 0);
+    }
+
+    public void changeSelectedBoard(LevelsListAdapter levelsListAdapter, int nr)
+    {
+        boolean temp_vibrations = vibrations;
+        boolean temp_sound = sound;
+
+        vibrations = sound = false;
+        levelsListAdapter.setSelectedIndex(nr);
+
+        vibrations = temp_vibrations;
+        sound = temp_sound;
     }
 
 
@@ -238,5 +253,36 @@ public class LevelsActivity extends Activity
     {
         this.mWakeLock.release();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if (firstResume)
+        {
+            LevelsListAdapter levelsListAdapter = (LevelsListAdapter)(((ListView)findViewById(R.id.levels_list)).getAdapter());
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+            String[] boards_id = getResources().getStringArray(R.array.boards_id);
+            for (int i = 0; i < boards_id.length; i++)
+            {
+                String board_id = boards_id[i];
+                int result = sharedPreferences.getInt(board_id, 0);
+                if (result > 0)
+                {
+                    changeSelectedBoard(levelsListAdapter, (i + 1) == boards_id.length ? i : i + 1);
+                    break;
+                }
+            }
+            firstResume = false;
+            return;
+        }
+        int board_nr = Integer.parseInt(board_id.split("_")[1]);
+
+        String[] boards_id = getResources().getStringArray(R.array.boards_id);
+        int next_board = (board_nr + 1) > boards_id.length ? board_nr - 1 : board_nr;
+
+        LevelsListAdapter levelsListAdapter = (LevelsListAdapter)(((ListView)findViewById(R.id.levels_list)).getAdapter());
+        changeSelectedBoard(levelsListAdapter, next_board);
     }
 }

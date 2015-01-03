@@ -432,6 +432,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onOkClick(View view)
     {
+        onButtonClick();
         if (end_game_dialog != null)
         {
             end_game_dialog.dismiss();
