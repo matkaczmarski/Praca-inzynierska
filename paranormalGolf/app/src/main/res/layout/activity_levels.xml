@@ -81,6 +81,15 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/levels_select_best_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/activity_background"
+                    android:textSize="15dp"
+                    android:text="podsaf"
+                    android:gravity="center"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -89,7 +98,7 @@
 
                     <View
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"/>
 
                     <TextView
@@ -100,7 +109,7 @@
 
                     <View
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"/>
 
                     <TextView
@@ -111,7 +120,7 @@
 
                     <View
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"/>
 
                 </LinearLayout>
