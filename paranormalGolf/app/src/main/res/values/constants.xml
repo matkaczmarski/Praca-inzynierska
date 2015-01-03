@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="vibrations_click_time">100</integer>
+    <integer name="points_for_diamond">100</integer>
+    <integer name="points_for_second">50</integer>
 </resources>

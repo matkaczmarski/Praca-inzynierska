@@ -110,6 +110,11 @@ public class Updater implements SensorEventListener {
                 onHourGlassCollision();
                 // i dodaj jakiś czas
             }
+
+        //TODO zmienić warunki wygranej!!!!!!
+        if (getCollectedDiamondsCount() == max_diamonds_count)
+            return UpdateResult.WIN;
+
         return UpdateResult.NONE;
     }
 
@@ -254,5 +259,10 @@ public class Updater implements SensorEventListener {
         this.vibrations = vibrations;
         this.music = music;
         this.sound = sound;
+    }
+
+    public int getCollectedDiamondsCount()
+    {
+        return max_diamonds_count - last_diamonds_count;
     }
 }

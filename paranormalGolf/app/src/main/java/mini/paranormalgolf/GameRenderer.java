@@ -1,11 +1,15 @@
 package mini.paranormalgolf;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.hardware.SensorManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -155,11 +159,20 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             updateResult = UpdateResult.DEFEAT;
         if (updateResult != UpdateResult.NONE) {
             //dotarcie do mety?
-            if (updateResult == UpdateResult.DEFEAT){
-                context.finish();
+            if (updateResult == UpdateResult.DEFEAT || updateResult == UpdateResult.WIN)
+            {
+                pause();
+                ((GameActivity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((GameActivity) context).onWinDialog(updater.getCollectedDiamondsCount(), (int) Math.ceil(timeLeft / 1000));
+                    }
+                });
             }
             if (updateResult == UpdateResult.PAUSE)
                 return;
+            //if (updateResult == UpdateResult.WIN)
+            //    onWinDialog(updater.getCollectedDiamondsCount(), (int)Math.ceil(timeLeft / 1000));
         }
         updater.draw();
     }
