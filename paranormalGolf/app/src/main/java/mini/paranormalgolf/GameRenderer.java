@@ -183,4 +183,14 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         timeLeft += value * 1000;
     }
 
+    public void updatePreferences (boolean vibrations, boolean music, boolean sound)
+    {
+        this.vibrations = vibrations;
+        this.music = music;
+        this.sound = sound;
+
+        if(updater != null)
+            updater.updatePreferences(vibrations, music, sound);
+    }
+
 }

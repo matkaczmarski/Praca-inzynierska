@@ -176,6 +176,8 @@ public class GameActivity extends Activity implements Runnable {
         protected void onResume() {
             super.onResume();
 
+            checkSharedPreferences();
+            gameRenderer.updatePreferences(vibrations, music, sound);
             if (rendererSet) {
                 glSurfaceView.onResume();
             }
