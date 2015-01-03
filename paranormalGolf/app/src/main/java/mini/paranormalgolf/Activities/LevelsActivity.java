@@ -68,6 +68,9 @@ public class LevelsActivity extends Activity
 
         tv = (TextView)findViewById(R.id.select_level_start);
         tv.setTypeface(tf);
+
+        tv = (TextView)findViewById(R.id.levels_select_best_result);
+        tv.setTypeface(tf);
     }
 
     public void InitializeBoardList()
@@ -147,15 +150,20 @@ public class LevelsActivity extends Activity
             finish();
             return;
         }
-        if (boardInfo.isAccomplished())
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+        int bestResult = sharedPreferences.getInt(board_id, 0);
+
+        ((TextView)findViewById(R.id.levels_select_best_result)).setText(getString(R.string.best_result) + " " + bestResult + " " + getString(R.string.points));
+
+        if (bestResult > 0)
             ((ImageView) findViewById(R.id.level_select_first_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_full));
         else
             ((ImageView) findViewById(R.id.level_select_first_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
-        if (boardInfo.getTwo_stars() <= boardInfo.getBest_result())
+        if (boardInfo.getTwo_stars() <= bestResult)
             ((ImageView)findViewById(R.id.level_select_second_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_full));
         else
             ((ImageView)findViewById(R.id.level_select_second_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
-        if (boardInfo.getThree_stars() <= boardInfo.getBest_result())
+        if (boardInfo.getThree_stars() <= bestResult)
             ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_full));
         else
             ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));

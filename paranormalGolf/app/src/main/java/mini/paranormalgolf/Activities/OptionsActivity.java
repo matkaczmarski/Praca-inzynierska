@@ -106,6 +106,12 @@ public class OptionsActivity extends Activity
 
         tv = (TextView)findViewById(R.id.options_save_button);
         tv.setTypeface(tf);
+
+        CheckBox checkBox = (CheckBox)findViewById(R.id.options_pl);
+        checkBox.setTypeface(tf);
+
+        checkBox = (CheckBox)findViewById(R.id.options_en);
+        checkBox.setTypeface(tf);
     }
 
 

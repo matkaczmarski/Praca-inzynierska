@@ -28,4 +28,6 @@
     <string name="pause_menu">Menu</string>
     <string name="save">Zapisz</string>
     <string name="cancel">Anuluj</string>
+    <string name="best_result">Najlepszy wynik:</string>
+    <string name="points">pkt</string>
 </resources>

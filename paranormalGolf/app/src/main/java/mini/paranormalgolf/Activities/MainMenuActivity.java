@@ -48,6 +48,11 @@ public class MainMenuActivity extends Activity
             if (!language.equalsIgnoreCase("pl"))
                 language = "en";
             editor.putString(getString(R.string.options_language), language);
+
+            String[] boards_id = getResources().getStringArray(R.array.boards_id);
+            for (String board_id : boards_id)
+                editor.putInt(board_id, 0);
+
             editor.commit();
 
             music = sound = vibrations = true;

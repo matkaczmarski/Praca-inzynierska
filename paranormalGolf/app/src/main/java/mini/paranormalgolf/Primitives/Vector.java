@@ -11,14 +11,13 @@ public class Vector {
     public float y;
     public float z;
 
-    public Vector(float x,float y, float z)
-    {
-        this.x =x;
-        this.y =y;
-        this.z =z;
+    public Vector(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
-    public Vector(Point point){
+    public Vector(Point point) {
         x = point.x;
         y = point.y;
         z = point.z;
@@ -40,10 +39,14 @@ public class Vector {
     }
 
     public Vector scale(float f) {
-        return new Vector( x * f, y * f, z * f);
+        return new Vector(x * f, y * f, z * f);
     }
 
-    public Vector normalize(){
-        return scale(1f/length());
+    public Vector normalize() {
+        return scale(1f / length());
+    }
+
+    public float absSum() {
+        return Math.abs(x) + Math.abs(y) + Math.abs(z);
     }
 }

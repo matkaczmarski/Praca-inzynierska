@@ -38,4 +38,6 @@
     <string name="preferences">PREFERENCES</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="best_result">Best result:</string>
+    <string name="points">points</string>
 </resources>

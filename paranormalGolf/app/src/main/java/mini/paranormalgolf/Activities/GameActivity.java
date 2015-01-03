@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.R;
 
@@ -32,6 +35,10 @@ public class GameActivity extends Activity implements Runnable {
     private GameRenderer gameRenderer = null;
     private Dialog pause_dialog = null;
 
+    private boolean vibrations;
+    private boolean music;
+    private boolean sound;
+
     protected PowerManager.WakeLock mWakeLock;
 
     @Override
@@ -39,6 +46,7 @@ public class GameActivity extends Activity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         LoadFonts();
+        checkSharedPreferences();
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
         // Check if the system supports OpenGL ES 2.0.
@@ -68,7 +76,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound);
 
         if (supportsEs2) {
             // ...
@@ -173,6 +181,15 @@ public class GameActivity extends Activity implements Runnable {
         super.onDestroy();
     }
 
+    public void checkSharedPreferences()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
+
+        music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
+        sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
+        vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
+    }
+
     public void updatePanel(int time, int diamonds)
     {
         ((TextView)findViewById(R.id.game_activity_time)).setText(time + "");
@@ -275,7 +292,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id);
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(gameRenderer);
         rendererSet = true;

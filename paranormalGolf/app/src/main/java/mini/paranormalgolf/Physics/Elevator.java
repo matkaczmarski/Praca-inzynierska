@@ -22,10 +22,20 @@ public class Elevator extends MovableElement {
     public final float ELEVATOR_OPACITY = 1f;
     private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
-    public BoxSize measurements;
+    private BoxSize measurements;
     private Point patrolFrom;
     private Point patrolTo;
     private float mu;
+
+    public float getMu() {
+        return mu;
+    }
+
+    public BoxSize getMeasurements() {
+        return measurements;
+    }
+
+
 
     public Elevator(Point location, Vector velocity, BoxSize measure, Point from, Point to, float mu,Context context) {
         super(velocity, location);
