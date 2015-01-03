@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -35,12 +36,18 @@ public class LevelsActivity extends Activity
     private boolean sound;
     private boolean vibrations;
 
+    private PowerManager.WakeLock mWakeLock;
+
     private MediaPlayer mp = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_levels);
+
+        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
+        this.mWakeLock.acquire();
 
         LoadFonts();
         InitializeBoardList();
@@ -224,5 +231,12 @@ public class LevelsActivity extends Activity
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(getResources().getInteger(R.integer.vibrations_click_time));
         }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        this.mWakeLock.release();
+        super.onDestroy();
     }
 }

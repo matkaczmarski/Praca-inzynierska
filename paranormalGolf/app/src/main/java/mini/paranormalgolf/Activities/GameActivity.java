@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import mini.paranormalgolf.GameRenderer;
@@ -40,6 +44,8 @@ public class GameActivity extends Activity implements Runnable {
     private boolean sound;
 
     protected PowerManager.WakeLock mWakeLock;
+
+    private MediaPlayer mp = new MediaPlayer();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -230,6 +236,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onPauseClick(View view)
     {
+        onButtonClick();
         if (gameRenderer != null)
             gameRenderer.pause();
 
@@ -250,6 +257,7 @@ public class GameActivity extends Activity implements Runnable {
                 @Override
                 public void onClick(View view)
                 {
+                    onButtonClick();
                     restart();
                 }
             });
@@ -258,6 +266,7 @@ public class GameActivity extends Activity implements Runnable {
                 @Override
                 public void onClick(View view)
                 {
+                    onButtonClick();
                     pause_dialog.dismiss();
                     pause_dialog = null;
                     Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
@@ -270,6 +279,7 @@ public class GameActivity extends Activity implements Runnable {
                 @Override
                 public void onClick(View view)
                 {
+                    onButtonClick();
                     Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
                     startActivity(intent);
                 }
@@ -280,6 +290,44 @@ public class GameActivity extends Activity implements Runnable {
         {
             pause_dialog.dismiss();
             pause_dialog = null;
+        }
+    }
+
+    public void onButtonClick()
+    {
+        playSound("button.wav");
+        vibrate();
+    }
+
+    public void playSound(String sound)
+    {
+        if (this.sound)
+        {
+            if (mp.isPlaying())
+                mp.stop();
+            try
+            {
+                mp.reset();
+                AssetFileDescriptor afd = getAssets().openFd(sound);
+                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mp.prepare();
+                mp.start();
+            } catch (IllegalStateException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void vibrate()
+    {
+        if (vibrations)
+        {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(getResources().getInteger(R.integer.vibrations_click_time));
         }
     }
 
