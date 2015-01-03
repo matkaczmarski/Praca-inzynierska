@@ -92,8 +92,7 @@ public class GameActivity extends Activity implements Runnable {
              * This hides our app from those devices which don't support OpenGL
              * ES 2.0.
              */
-            Toast.makeText(this, "This device does not support OpenGL ES 2.0.",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "This device does not support OpenGL ES 2.0.", Toast.LENGTH_LONG).show();
             return;
         }
 

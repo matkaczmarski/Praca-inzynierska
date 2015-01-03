@@ -148,8 +148,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             updateResult = UpdateResult.DEFEAT;
         if (updateResult != UpdateResult.NONE) {
             //dotarcie do mety?
-            if (updateResult == UpdateResult.DEFEAT)
-            {
+            if (updateResult == UpdateResult.DEFEAT){
                 context.finish();
             }
             if (updateResult == UpdateResult.PAUSE)
