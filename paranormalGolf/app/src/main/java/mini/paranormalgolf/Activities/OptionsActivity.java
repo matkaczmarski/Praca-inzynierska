@@ -3,8 +3,10 @@ package mini.paranormalgolf.Activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import mini.paranormalgolf.R;
@@ -27,6 +30,8 @@ public class OptionsActivity extends Activity
     private boolean vibrations;
 
     private String language;
+
+    private MediaPlayer mp = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,13 +141,13 @@ public class OptionsActivity extends Activity
 
     public void onCancelClick(View view)
     {
-        vibrate();
+        onButtonClick();
         finish();
     }
 
     public void onSaveClick(View view)
     {
-        vibrate();
+        onButtonClick();
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(getString(R.string.options_music), ((CheckBox)findViewById(R.id.options_music)).isChecked());
@@ -162,7 +167,7 @@ public class OptionsActivity extends Activity
         setContentView(R.layout.activity_options);
         LoadFonts();
         updateControls();
-        vibrate();
+        onButtonClick();
     }
 
     public void onEnglishPick(View view)
@@ -173,25 +178,54 @@ public class OptionsActivity extends Activity
         setContentView(R.layout.activity_options);
         LoadFonts();
         updateControls();
-        vibrate();
+        onButtonClick();
     }
 
     public void onMusicClick (View view)
     {
         music = ((CheckBox)view).isChecked();
-        vibrate();
+        onButtonClick();
     }
 
     public void onSoundClick (View view)
     {
         sound = ((CheckBox)view).isChecked();
-        vibrate();
+        onButtonClick();
     }
 
     public void onVibrationsClick (View view)
     {
         vibrations = ((CheckBox)view).isChecked();
+        onButtonClick();
+    }
+
+    public void onButtonClick()
+    {
+        playSound("button.wav");
         vibrate();
+    }
+
+    public void playSound(String sound)
+    {
+        if (this.sound)
+        {
+            if (mp.isPlaying())
+                mp.stop();
+            try
+            {
+                mp.reset();
+                AssetFileDescriptor afd = getAssets().openFd(sound);
+                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mp.prepare();
+                mp.start();
+            } catch (IllegalStateException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void vibrate()

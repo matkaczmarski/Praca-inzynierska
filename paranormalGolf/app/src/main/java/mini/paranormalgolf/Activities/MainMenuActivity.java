@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import mini.paranormalgolf.R;
@@ -23,6 +26,8 @@ public class MainMenuActivity extends Activity
     private boolean music = false;
     private boolean sound = false;
     private boolean vibrations = false;
+
+    private MediaPlayer mp = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,27 +127,56 @@ public class MainMenuActivity extends Activity
 
     public void onStartClick(View view)
     {
-        vibrate();
+        onButtonClick();
         Intent intent = new Intent(this, LevelsActivity.class);
         startActivity(intent);
     }
 
     public void onOptionsClick(View view)
     {
-        vibrate();
+        onButtonClick();
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 
     public void onHelpClick(View view)
     {
-        vibrate();
+        onButtonClick();
     }
 
     public void onExitClick(View view)
     {
-        vibrate();
+        onButtonClick();
         finish();
+    }
+
+    public void onButtonClick()
+    {
+        playSound("button.wav");
+        vibrate();
+    }
+
+    public void playSound(String sound)
+    {
+        if (this.sound)
+        {
+            if (mp.isPlaying())
+                mp.stop();
+            try
+            {
+                mp.reset();
+                AssetFileDescriptor afd = getAssets().openFd(sound);
+                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mp.prepare();
+                mp.start();
+            } catch (IllegalStateException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void vibrate()

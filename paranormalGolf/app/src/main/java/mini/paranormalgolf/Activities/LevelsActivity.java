@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
@@ -18,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
@@ -31,6 +34,8 @@ public class LevelsActivity extends Activity
     private boolean music;
     private boolean sound;
     private boolean vibrations;
+
+    private MediaPlayer mp = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +124,13 @@ public class LevelsActivity extends Activity
 
     public void onBackClick (View view)
     {
-        vibrate();
+        onButtonClick();
         finish();
     }
 
     public void onStartClick (View view)
     {
-        vibrate();
+        onButtonClick();
         if (board_id != null)
         {
             Intent intent = new Intent(this, GameActivity.class);
@@ -136,7 +141,7 @@ public class LevelsActivity extends Activity
 
     public void selectedBoardChanged(String id, int result, int nr)
     {
-        vibrate();
+        onButtonClick();
         board_id = id;
         int picId = getResources().getIdentifier("board_" + nr, "drawable", getApplicationContext().getPackageName());
         ((ImageView)findViewById(R.id.board_image)).setImageDrawable(getResources().getDrawable(picId));
@@ -180,6 +185,35 @@ public class LevelsActivity extends Activity
         {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public void onButtonClick()
+    {
+        playSound("button.wav");
+        vibrate();
+    }
+
+    public void playSound(String sound)
+    {
+        if (this.sound)
+        {
+            if (mp.isPlaying())
+                mp.stop();
+            try
+            {
+                mp.reset();
+                AssetFileDescriptor afd = getAssets().openFd(sound);
+                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mp.prepare();
+                mp.start();
+            } catch (IllegalStateException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
