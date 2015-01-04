@@ -58,4 +58,13 @@
         <item name="android:layout_marginTop">10dp</item>
     </style>
 
+    <style name="EndGameButton">
+        <item name="android:textSize">@dimen/activity_main_menu_option</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/main_menu_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
 </resources>

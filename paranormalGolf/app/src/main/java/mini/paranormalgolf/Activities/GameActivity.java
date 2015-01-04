@@ -7,24 +7,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import mini.paranormalgolf.GameRenderer;
+import mini.paranormalgolf.Helpers.BoardInfo;
+import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.R;
 
 
@@ -34,12 +42,19 @@ public class GameActivity extends Activity implements Runnable {
     private boolean rendererSet = false;
     private GameRenderer gameRenderer = null;
     private Dialog pause_dialog = null;
+    private Dialog end_game_dialog = null;
 
     private boolean vibrations;
     private boolean music;
     private boolean sound;
 
     protected PowerManager.WakeLock mWakeLock;
+
+    private MediaPlayer mp = new MediaPlayer();
+
+    public static boolean game = false;
+
+    private String board_id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +89,7 @@ public class GameActivity extends Activity implements Runnable {
                         || Build.MODEL.contains("Android SDK built for x86")));
 
         Intent intent = getIntent();
-        String board_id = intent.getStringExtra("BOARD_ID");
+        board_id = intent.getStringExtra("BOARD_ID");
 
         gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound);
 
@@ -86,6 +101,7 @@ public class GameActivity extends Activity implements Runnable {
             // Assign our renderer.
             glSurfaceView.setRenderer(gameRenderer);
             rendererSet = true;
+            game = true;
         } else {
             /*
              * This is where you could create an OpenGL ES 1.x compatible
@@ -170,6 +186,8 @@ public class GameActivity extends Activity implements Runnable {
         protected void onResume() {
             super.onResume();
 
+            checkSharedPreferences();
+            gameRenderer.updatePreferences(vibrations, music, sound);
             if (rendererSet) {
                 glSurfaceView.onResume();
             }
@@ -230,6 +248,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onPauseClick(View view)
     {
+        onButtonClick();
         if (gameRenderer != null)
             gameRenderer.pause();
 
@@ -250,6 +269,7 @@ public class GameActivity extends Activity implements Runnable {
                 @Override
                 public void onClick(View view)
                 {
+                    onButtonClick();
                     restart();
                 }
             });
@@ -258,6 +278,7 @@ public class GameActivity extends Activity implements Runnable {
                 @Override
                 public void onClick(View view)
                 {
+                    onButtonClick();
                     pause_dialog.dismiss();
                     pause_dialog = null;
                     Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
@@ -270,6 +291,7 @@ public class GameActivity extends Activity implements Runnable {
                 @Override
                 public void onClick(View view)
                 {
+                    onButtonClick();
                     Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
                     startActivity(intent);
                 }
@@ -280,6 +302,44 @@ public class GameActivity extends Activity implements Runnable {
         {
             pause_dialog.dismiss();
             pause_dialog = null;
+        }
+    }
+
+    public void onButtonClick()
+    {
+        playSound("button.wav");
+        vibrate();
+    }
+
+    public void playSound(String sound)
+    {
+        if (this.sound)
+        {
+            if (mp.isPlaying())
+                mp.stop();
+            try
+            {
+                mp.reset();
+                AssetFileDescriptor afd = getAssets().openFd(sound);
+                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mp.prepare();
+                mp.start();
+            } catch (IllegalStateException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void vibrate()
+    {
+        if (vibrations)
+        {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(getResources().getInteger(R.integer.vibrations_click_time));
         }
     }
 
@@ -306,6 +366,78 @@ public class GameActivity extends Activity implements Runnable {
     @Override
     public void onBackPressed()
     {
-        onPauseClick(glSurfaceView);
+        if (game)
+            onPauseClick(glSurfaceView);
+    }
+
+
+
+    public void onWinDialog(int diamonds, int time)
+    {
+        GameActivity.game = false;
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.win_dialog);
+        loadFontsForDialog(dialog);
+        setDialogTitleAndResult(dialog, diamonds, time);
+        dialog.show();
+    }
+
+    public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time)
+    {
+        ((TextView)dialog.findViewById(R.id.end_game_title)).setText((time > 0) ? getString(R.string.win) : getString(R.string.defeat));
+        int result = (time > 0) ? time * getResources().getInteger(R.integer.points_for_second) + diamonds * getResources().getInteger(R.integer.points_for_diamond) : 0;
+        ((TextView)dialog.findViewById(R.id.end_game_result)).setText(getString(R.string.result) + " " + result + " " + getString(R.string.points));
+
+        BoardInfo boardInfo = (new XMLParser(this).getBoardInfo(board_id));
+        ((ImageView)dialog.findViewById(R.id.end_game_first_star)).setImageDrawable(getResources().getDrawable((time > 0) ? R.drawable.star_full : R.drawable.star_empty));
+        ((ImageView)dialog.findViewById(R.id.end_game_second_star)).setImageDrawable(getResources().getDrawable((result >= boardInfo.getTwo_stars()) ? R.drawable.star_full : R.drawable.star_empty));
+        ((ImageView)dialog.findViewById(R.id.end_game_third_star)).setImageDrawable(getResources().getDrawable((result >= boardInfo.getThree_stars()) ? R.drawable.star_full : R.drawable.star_empty));
+
+        updateBestResult(board_id, result);
+
+        ((TextView) dialog.findViewById(R.id.end_game_ok_button)).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onOkClick(view);
+            }
+        });
+    }
+
+    public void updateBestResult(String board_id, int result)
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+        if (result > sharedPreferences.getInt(board_id, 0))
+        {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(board_id);
+            editor.putInt(board_id, result);
+            editor.commit();
+        }
+    }
+
+    public void loadFontsForDialog(Dialog dialog)
+    {
+        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
+
+        TextView textView = (TextView)dialog.findViewById(R.id.end_game_title);
+        textView.setTypeface(tf);
+
+        textView = (TextView)dialog.findViewById(R.id.end_game_result);
+        textView.setTypeface(tf);
+    }
+
+
+
+    public void onOkClick(View view)
+    {
+        onButtonClick();
+        if (end_game_dialog != null)
+        {
+            end_game_dialog.dismiss();
+            end_game_dialog = null;
+        }
+        finish();
     }
 }

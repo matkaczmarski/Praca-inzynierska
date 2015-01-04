@@ -1,11 +1,15 @@
 package mini.paranormalgolf.Physics;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Vibrator;
+
+import java.io.IOException;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
@@ -42,6 +46,8 @@ public class Updater implements SensorEventListener {
     private boolean music;
 
     private GameRenderer gameRenderer;
+
+    private MediaPlayer mp = new MediaPlayer();
 
     public DrawManager getDrawManager(){return drawManager;}
 
@@ -101,8 +107,14 @@ public class Updater implements SensorEventListener {
                 //board.hourGlasses.set(i, null);
                 gameRenderer.addTime(board.hourGlasses.get(i).getValue());
                 board.hourGlasses.remove(i--);
+                onHourGlassCollision();
                 // i dodaj jakiś czas
             }
+
+        //TODO zmienić warunki wygranej!!!!!!
+        if (getCollectedDiamondsCount() == max_diamonds_count)
+            return UpdateResult.WIN;
+
         return UpdateResult.NONE;
     }
 
@@ -205,6 +217,34 @@ public class Updater implements SensorEventListener {
         paused = false;
     }
 
+    public void onHourGlassCollision()
+    {
+        playSound("button.wav");
+    }
+
+    public void playSound(String sound)
+    {
+        if (this.sound)
+        {
+            if (mp.isPlaying())
+                mp.stop();
+            try
+            {
+                mp.reset();
+                AssetFileDescriptor afd = context.getAssets().openFd(sound);
+                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mp.prepare();
+                mp.start();
+            } catch (IllegalStateException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void vibrate()
     {
         if (vibrations)
@@ -212,5 +252,17 @@ public class Updater implements SensorEventListener {
             Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(context.getResources().getInteger(R.integer.vibrations_click_time));
         }
+    }
+
+    public void updatePreferences (boolean vibrations, boolean music, boolean sound)
+    {
+        this.vibrations = vibrations;
+        this.music = music;
+        this.sound = sound;
+    }
+
+    public int getCollectedDiamondsCount()
+    {
+        return max_diamonds_count - last_diamonds_count;
     }
 }

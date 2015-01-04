@@ -12,4 +12,6 @@
     <dimen name="list_view_item_height">50dp</dimen>
 
     <dimen name="panel_height">50dp</dimen>
+
+    <dimen name="end_game_font">40dp</dimen>
 </resources>

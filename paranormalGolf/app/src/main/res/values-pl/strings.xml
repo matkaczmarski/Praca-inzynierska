@@ -30,4 +30,7 @@
     <string name="cancel">Anuluj</string>
     <string name="best_result">Najlepszy wynik:</string>
     <string name="points">pkt</string>
+    <string name="win">Wygrana</string>
+    <string name="defeat">Przegrana</string>
+    <string name="result">Wynik:</string>
 </resources>

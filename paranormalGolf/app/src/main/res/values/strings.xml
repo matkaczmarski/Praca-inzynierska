@@ -40,4 +40,7 @@
     <string name="cancel">Cancel</string>
     <string name="best_result">Best result:</string>
     <string name="points">points</string>
+    <string name="win">You won!</string>
+    <string name="defeat">Yoy lost!</string>
+    <string name="result">Result:</string>
 </resources>
