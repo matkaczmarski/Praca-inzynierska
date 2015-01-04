@@ -25,6 +25,8 @@ abstract public class ShaderProgram {
     protected static final String U_LIGHTAMB = "u_LightsAmbient";
     protected static final String U_LIGHTDIFF = "u_LightsDiffusion";
     protected static final String U_OPACITY = "u_Opacity";
+    protected  static final String U_SHADOW_PMATRIX = "u_ShadowProjMatrix";
+    protected  static final String U_SHADOW_TEXTURE = "u_ShadowTexture";
 
 
     // Attribute constants
