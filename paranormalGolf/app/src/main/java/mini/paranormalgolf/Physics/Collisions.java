@@ -91,7 +91,14 @@ public final class Collisions {
             if (Math.abs(normal.x) == 1) velocity.x = -velocity.x;
             else if (Math.abs(normal.z) == 1) velocity.z = -velocity.z;
             else // normal.y!=0
-                velocity.y = -velocity.y;
+            {   if(normal.y>0) {
+                halfLocation.y = collidedBox.center.y + collidedBox.size.y / 2 + ball.getRadius();
+                if (Math.abs(velocity.y) > 2)
+                    velocity.y = -0.1f * velocity.y;
+                else
+                    velocity.y = 0;
+            }
+            }
         } else {
             if (normal.absSum() == 3) normal.y = 0;
             normal = normal.normalize();
@@ -167,5 +174,149 @@ public final class Collisions {
         }
         d += (sphereCenter.x - cylinderCenter.x) * (sphereCenter.x - cylinderCenter.x) + (sphereCenter.z - cylinderCenter.z) * (sphereCenter.z - cylinderCenter.z);
         return d < (sphereRadius + cylinderRadius) * (sphereRadius + cylinderRadius) + USER_EXPERIENCE;
+    }
+
+    public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element) {
+        BoxSize boxSize;
+        if (element.getClass() == Elevator.class)
+            boxSize = ((Elevator) element).getMeasurements();
+        else
+            boxSize = ((Beam) element).getMeasurements();
+
+        //finding collision place and time
+        Point startBallLocation = new Point(ball.getLocation().x - ball.getLastMove().x, ball.getLocation().y - ball.getLastMove().y, ball.getLocation().z - ball.getLastMove().z);
+        Point endBallLocation = ball.getLocation();
+        Point halfBallLocation = new Point((startBallLocation.x + endBallLocation.x) / 2, (startBallLocation.y + endBallLocation.y) / 2, (startBallLocation.z + endBallLocation.z) / 2);
+
+        Point startMovableElementLocation = new Point(element.getLocation().x - element.getLastMove().x, element.getLocation().y - element.getLastMove().y, element.getLocation().z - element.getLastMove().z);
+        Point endMovableElementLocation = element.getLocation();
+        Point halfMovableElementLocation = new Point((startMovableElementLocation.x + endMovableElementLocation.x) / 2, (startMovableElementLocation.y + endMovableElementLocation.y) / 2, (startMovableElementLocation.z + endMovableElementLocation.z) / 2);
+
+        float startTime = 0, endTime = 1, halfTime = 0.5f;
+        for (int i = 0; i < 10; i++) {
+            if (Collisions.CheckSphereAABBCollsion(new Sphere(halfBallLocation, ball.getRadius()), new Box(halfMovableElementLocation, boxSize))) {
+                endTime = halfTime;
+                endBallLocation = halfBallLocation;
+                endMovableElementLocation = halfMovableElementLocation;
+            } else {
+                startTime = halfTime;
+                startBallLocation = halfBallLocation;
+                startMovableElementLocation = halfMovableElementLocation;
+            }
+            halfTime = (startTime + endTime) / 2;
+            halfBallLocation = new Point((startBallLocation.x + endBallLocation.x) / 2, (startBallLocation.y + endBallLocation.y) / 2, (startBallLocation.z + endBallLocation.z) / 2);
+            halfMovableElementLocation = new Point((startMovableElementLocation.x + endMovableElementLocation.x) / 2, (startMovableElementLocation.y + endMovableElementLocation.y) / 2, (startMovableElementLocation.z + endMovableElementLocation.z) / 2);
+        }
+
+        //finding normal vector in place of collision
+        Box collidedBox = new Box(halfMovableElementLocation, boxSize);
+        Vector normal = new Vector(0, 0, 0);
+        Point min = new Point(collidedBox.center.x - collidedBox.size.x / 2, collidedBox.center.y - collidedBox.size.y / 2, collidedBox.center.z - collidedBox.size.z / 2);
+        Point max = new Point(collidedBox.center.x + collidedBox.size.x / 2, collidedBox.center.y + collidedBox.size.y / 2, collidedBox.center.z + collidedBox.size.z / 2);
+
+        if (min.x - halfBallLocation.x > 0 && min.x - halfBallLocation.x <= ball.getRadius() + Collisions.USER_EXPERIENCE)
+            normal.x = -1;
+        else if (halfBallLocation.x - max.x > 0 && halfBallLocation.x - max.x <= ball.getRadius() + Collisions.USER_EXPERIENCE)
+            normal.x = 1;
+
+        if (min.y - halfBallLocation.y > 0 && min.y - halfBallLocation.y <= ball.getRadius() + Collisions.USER_EXPERIENCE)
+            normal.y = -1;
+        else if (halfBallLocation.y - max.y > 0 && halfBallLocation.y - max.y <= ball.getRadius() + Collisions.USER_EXPERIENCE)
+            normal.y = 1;
+
+        if (min.z - halfBallLocation.z > 0 && min.z - halfBallLocation.z <= ball.getRadius() + Collisions.USER_EXPERIENCE)
+            normal.z = -1;
+        else if (halfBallLocation.z - max.z > 0 && halfBallLocation.z - max.z <= ball.getRadius() + Collisions.USER_EXPERIENCE)
+            normal.z = 1;
+
+        //counting and setting new location and velocity after collision
+        Vector velocity = ball.getVelocity();
+        Vector normalVelocity;
+        Vector newNormalVelocity = new Vector(0, 0, 0);
+
+        if (normal.length() == 1) {
+            if (Math.abs(normal.x) == 1) {
+                if (element.getLastMove().x == 0)
+                    velocity.x = -velocity.x;
+                else if ((element.getLastMove().x > 0 && element.getLastMove().x > ball.getLastMove().x) ||
+                        element.getLastMove().x < 0 && element.getLastMove().x < ball.getLastMove().x)
+                    velocity.x = 6 * element.getVelocity().x;
+                else
+                    velocity.x = -velocity.x;
+            } else if (Math.abs(normal.z) == 1) {
+                if (element.getLastMove().z == 0)
+                    velocity.z = -velocity.z;
+                else if ((element.getLastMove().z > 0 && element.getLastMove().z > ball.getLastMove().z) ||
+                        element.getLastMove().z < 0 && element.getLastMove().z < ball.getLastMove().z)
+                    velocity.z = 6 * element.getVelocity().z;
+                else
+                    velocity.z = -velocity.z;
+            } else // normal.y!=0
+
+                if (normal.y == 1) {
+                    halfBallLocation.y = element.getLocation().y + boxSize.y / 2 + ball.getRadius();
+                    velocity.y = 0;
+                }
+            velocity.y = -velocity.y;
+
+        } else {
+            if (normal.absSum() == 3) normal.y = 0;
+            normal = normal.normalize();
+
+            if (normal.y == 0) {
+                normalVelocity = new Vector(-velocity.x, 0, -velocity.z).normalize();
+                if (Math.abs(normalVelocity.z * normal.x - normal.z * normalVelocity.x) < Collisions.USER_EXPERIENCE)
+                    velocity = new Vector(-velocity.x, velocity.y, -velocity.z);
+                else {
+                    float alfa = (float) Math.acos(normal.dotProduct(normalVelocity));
+
+                    newNormalVelocity.z =
+                            ((float) (normal.x * Math.cos(2 * alfa) - Math.cos(alfa) * normalVelocity.x)) /
+                                    (normalVelocity.z * normal.x - normal.z * normalVelocity.x);
+                    newNormalVelocity.x =
+                            ((float) Math.cos(alfa) - newNormalVelocity.z * normal.z) / (normal.x);
+                    float length = (float) Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+                    velocity = new Vector(length * newNormalVelocity.x, velocity.y, length * newNormalVelocity.z);
+                }
+            } else if (normal.x == 0) {
+                normalVelocity = new Vector(0, -velocity.y, -velocity.z).normalize();
+                if (Math.abs(normalVelocity.z * normal.y - normal.z * normalVelocity.y) < Collisions.USER_EXPERIENCE)
+                    velocity = new Vector(velocity.x, -velocity.y, -velocity.z);
+                else {
+                    float alfa = (float) Math.acos(normal.dotProduct(normalVelocity));
+
+                    newNormalVelocity.z =
+                            ((float) (normal.y * Math.cos(2 * alfa) - Math.cos(alfa) * normalVelocity.y)) /
+                                    (normalVelocity.z * normal.y - normal.z * normalVelocity.y);
+                    newNormalVelocity.y =
+                            ((float) Math.cos(alfa) - newNormalVelocity.z * normal.z) / (normal.y);
+                    // newNormalVelocity.x = normalVelocity.x;
+                    float length = (float) Math.sqrt(velocity.y * velocity.y + velocity.z * velocity.z);
+                    velocity = new Vector(velocity.x, length * newNormalVelocity.y, length * newNormalVelocity.z);
+                }
+            } else { //normal.z==0
+                normalVelocity = new Vector(-velocity.x, -velocity.y, 0).normalize();
+                if (Math.abs(normalVelocity.y * normal.x - normal.y * normalVelocity.x) < Collisions.USER_EXPERIENCE)
+                    velocity = new Vector(-velocity.x, -velocity.y, velocity.z);
+                else {
+                    float alfa = (float) Math.acos(normal.dotProduct(normalVelocity));
+
+                    newNormalVelocity.y =
+                            ((float) (normal.x * Math.cos(2 * alfa) - Math.cos(alfa) * normalVelocity.x)) /
+                                    (normalVelocity.y * normal.x - normal.y * normalVelocity.x);
+                    newNormalVelocity.x =
+                            ((float) Math.cos(alfa) - newNormalVelocity.y * normal.y) / (normal.x);
+                    // newNormalVelocity.z = normalVelocity.x;
+                    float length = (float) Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+                    velocity = new Vector(length * newNormalVelocity.x, length * newNormalVelocity.y, velocity.z);
+                }
+            }
+        }
+        if (element.getClass() == Elevator.class)
+            halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
+        ball.setLocation(new Point(halfBallLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
+                halfBallLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
+                halfBallLocation.z + velocity.z * (1 - halfTime) * Updater.INTERVAL_TIME));
+        ball.setVelocity(velocity);
     }
 }
