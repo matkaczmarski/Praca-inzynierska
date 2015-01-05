@@ -13,7 +13,9 @@ import java.io.IOException;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DITHER;
 import static android.opengl.GLES20.glClear;
+import static android.opengl.GLES20.glDisable;
 import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Activities.GameActivity;
@@ -159,33 +161,9 @@ public class Updater implements SensorEventListener {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawManager.preDraw(ball.getLocation());
-       // drawManager.drawShadow(board.walls.get(0), board.floors.get(0));
+        drawManager.drawShadow(board, ball);
         drawManager.drawSkybox();
-        for (Floor floor : board.floors) {
-            drawManager.drawFloor(floor);
-        }
-        for (Wall wall : board.walls) {
-            drawManager.drawWall(wall);
-        }
-        for (Beam beam : board.beams) {
-            drawManager.drawBeam(beam);
-        }
-        for (Elevator elevator : board.elevators) {
-            drawManager.drawElevator(elevator);
-        }
-        drawManager.drawBall(ball);
-        for (CheckPoint checkPoint : board.checkpoints) {
-            drawManager.drawCheckPoint(checkPoint);
-        }
-        drawManager.drawFinish(board.finish);
-        for (HourGlass hourGlass : board.hourGlasses) {
-            if (hourGlass != null)
-                drawManager.drawHourglass(hourGlass);
-        }
-        for (Diamond diamond : board.diamonds) {
-            if (diamond != null)
-                drawManager.drawDiamond(diamond);
-        }
+
         if (last_diamonds_count != board.diamonds.size()) {
             last_diamonds_count = board.diamonds.size();
             ((GameActivity) context).runOnUiThread(new Runnable() {

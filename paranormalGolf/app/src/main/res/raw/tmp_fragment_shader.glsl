@@ -11,9 +11,9 @@ varying float v_Light;
 varying vec4 v_ShadowCoord;
  varying vec3 v_modelViewVertex;
  varying vec3 v_modelViewNormal;
- varying vec3 v_LightPos;
+ //varying vec3 v_LightPos;
 
-
+uniform vec3 u_LightPos;
 
 float unpack (vec4 colour)
 {
@@ -29,7 +29,7 @@ float calcBias()
 {
 	float bias;
 
-	vec3 l = normalize( v_LightPos );
+	vec3 l = normalize( u_LightPos );
 
 	// Cosine of the angle between the normal and the light direction,
 	// clamped above 0
@@ -74,7 +74,7 @@ void main()
 
     		//scale 0.0-1.0 to 0.2-1.0
     		//otherways everything in shadow would be black
-    		shadow = (shadow * 0.8) + 0.2;
+    		shadow = (shadow * 0.6) + 0.4;
     	}
     gl_FragColor = vec4(vec3(texture2D(u_TextureUnit, v_TextureCoordinates)) * v_Light * shadow, u_Opacity);
     //gl_FragColor = vec4(vec3(1.0,0.0,0.0) * v_Light * shadow, u_Opacity);
