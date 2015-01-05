@@ -91,13 +91,14 @@ public final class Collisions {
             if (Math.abs(normal.x) == 1) velocity.x = -velocity.x;
             else if (Math.abs(normal.z) == 1) velocity.z = -velocity.z;
             else // normal.y!=0
-            {   if(normal.y>0) {
-                halfLocation.y = collidedBox.center.y + collidedBox.size.y / 2 + ball.getRadius();
-                if (Math.abs(velocity.y) > 2)
-                    velocity.y = -0.1f * velocity.y;
-                else
-                    velocity.y = 0;
-            }
+            {
+                if (normal.y > 0) {
+                    halfLocation.y = collidedBox.center.y + collidedBox.size.y / 2 + ball.getRadius();
+                    if (Math.abs(velocity.y) > 2)
+                        velocity.y = -0.1f * velocity.y;
+                    else
+                        velocity.y = 0;
+                }
             }
         } else {
             if (normal.absSum() == 3) normal.y = 0;
@@ -311,9 +312,16 @@ public final class Collisions {
                     velocity = new Vector(length * newNormalVelocity.x, length * newNormalVelocity.y, velocity.z);
                 }
             }
+            if (element.getLastMove().x != 0) {
+                velocity.x += Math.signum(element.getLastMove().x) * Math.abs(element.getVelocity().x);
+            }
+            if (element.getLastMove().z != 0) {
+                velocity.z += Math.signum(element.getLastMove().z) * Math.abs(element.getVelocity().z);
+            }
         }
         if (element.getClass() == Elevator.class)
             halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
+
         ball.setLocation(new Point(halfBallLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfBallLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfBallLocation.z + velocity.z * (1 - halfTime) * Updater.INTERVAL_TIME));
