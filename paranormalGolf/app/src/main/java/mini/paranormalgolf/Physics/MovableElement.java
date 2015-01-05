@@ -9,13 +9,20 @@ import mini.paranormalgolf.Primitives.Vector;
 public abstract class MovableElement extends Element {
 
     protected Vector velocity;
-
     public Vector getVelocity() {return velocity;}
     public void setVelocity(Vector velocity) {this.velocity = velocity;}
+
+
+    protected Vector lastMove;
+    public Vector getLastMove() {
+        return lastMove;
+    }
+
 
     protected MovableElement(Vector velocity, Point location) {
         super(location);
         this.velocity = velocity;
+        lastMove=new Vector(0,0,0);
     }
 
 }

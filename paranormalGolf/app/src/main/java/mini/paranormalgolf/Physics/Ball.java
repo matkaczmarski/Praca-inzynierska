@@ -51,14 +51,11 @@ public class Ball extends MovableElement {
     private final float mass;
     private final float area;
 
-    private Vector lastMove;
     private float[] rotation;
 
     public float getRadius(){
         return this.radius;
     }
-
-    public Vector getLastMove() {return this.lastMove;}
 
     public float[] getRotation() {return this.rotation;}
 
@@ -69,7 +66,6 @@ public class Ball extends MovableElement {
         mass=5;
         area=(float)Math.PI*radius*radius;
 
-        lastMove =new Vector(0,0,0);
         rotation=new float[16];
         setIdentityM(rotation,0);
 
@@ -227,21 +223,21 @@ public class Ball extends MovableElement {
     public boolean CheckCollision(Finish finish) {
         if (finish == null) return false;
         return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(finish.getLocation(),
-                Math.max(finish.conicalFrustum.getBottomRadius(), finish.conicalFrustum.getTopRadius()), finish.conicalFrustum.getHeight()));
+                Math.min(finish.conicalFrustum.getBottomRadius(), finish.conicalFrustum.getTopRadius()), finish.conicalFrustum.getHeight()));
     }
 
     public boolean CheckCollision(CheckPoint checkPoint) {
         if (checkPoint == null) return false;
         return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(checkPoint.getLocation(),
-                Math.max(checkPoint.conicalFrustum.getBottomRadius(), checkPoint.conicalFrustum.getTopRadius()), checkPoint.conicalFrustum.getHeight()));
+                Math.min(checkPoint.conicalFrustum.getBottomRadius(), checkPoint.conicalFrustum.getTopRadius()), checkPoint.conicalFrustum.getHeight()));
     }
 
-    public boolean CheckCollision(Beam beam){
-        return false;
+    public boolean CheckCollision(Beam element){
+        return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
     }
 
-    public boolean CheckCollision(Elevator elevator){
-        return false;
+    public boolean CheckCollision(Elevator element){
+        return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
     }
 
     public void ReactOnCollision(Wall element) {
@@ -351,10 +347,10 @@ public class Ball extends MovableElement {
     }
 
     public void ReactOnCollision(Beam beam) {
-
+        Collisions.ResponseBallMovingAABBCollisions(this, beam);
     }
 
     public void ReactOnCollision(Elevator elevator) {
-
+        Collisions.ResponseBallMovingAABBCollisions(this, elevator);
     }
 }

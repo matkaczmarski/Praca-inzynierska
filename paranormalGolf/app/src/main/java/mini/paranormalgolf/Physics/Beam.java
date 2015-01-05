@@ -25,18 +25,19 @@ public class Beam extends MovableElement {
     private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
     private BoxSize measurements;
+    public BoxSize getMeasurements() {
+        return measurements;
+    }
 
     //punkty oznaczjące do jakiego miejsca ma dochodzić środek elementu
     private Point patrolFrom;
     private Point patrolTo;
-  //  private float mu;
 
-    public Beam(Point location, Vector velocity, BoxSize measure, Point from, Point to/*, float mu*/, Context context) {
+    public Beam(Point location, Vector velocity, BoxSize measure, Point from, Point to, Context context) {
         super(velocity, location);
         this.measurements = measure;
         this.patrolFrom = from;
         this.patrolTo = to;
-        //  this.mu = mu;
 
         GraphicsData generatedData = ObjectGenerator.createBox(measure, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
@@ -59,12 +60,13 @@ public class Beam extends MovableElement {
 
     public void bindDepthMapData(ShaderProgram shaderProgram) {
         vertexData.setVertexAttribPointer(0, ((DepthMapShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-    }
+   }
 
     public void Update(float dt) {
         //zmniejszony update ze względu na to, że to jest bar
-        location.x = location.x + velocity.x * dt;
-        location.z = location.z + velocity.z * dt;
+        lastMove = new Vector(velocity.x * dt, 0, velocity.z * dt);
+        location.x = location.x + lastMove.x;
+        location.z = location.z + lastMove.z;
         if (location.x > patrolTo.x || location.x < patrolFrom.x ||
                 location.z > patrolTo.z || location.z < patrolFrom.z) {
             velocity.x = -velocity.x;

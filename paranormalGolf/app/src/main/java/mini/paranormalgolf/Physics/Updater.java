@@ -22,6 +22,7 @@ import mini.paranormalgolf.Activities.GameActivity;
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Helpers.UpdateResult;
+import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
@@ -71,7 +72,7 @@ public class Updater implements SensorEventListener {
         if (paused)
             return UpdateResult.PAUSE;
         float mu = getActualCoefficientFriction();
-
+        int index = getIndexOfElevatorBallOn();
         for (Beam beam : board.beams) {
             beam.Update(INTERVAL_TIME);
         }
@@ -79,7 +80,12 @@ public class Updater implements SensorEventListener {
         for (Elevator elevator : board.elevators) {
             elevator.Update(INTERVAL_TIME);
         }
-
+        if (index >= 0) {
+            Point lastLocation = ball.getLocation();
+            ball.setLocation(new Point(lastLocation.x + board.elevators.get(index).getLastMove().x,
+                    lastLocation.y + board.elevators.get(index).getLastMove().y,
+                    lastLocation.z + board.elevators.get(index).getLastMove().z));
+        }
         ball.Update(INTERVAL_TIME, accData, mu);
 
 
@@ -87,8 +93,7 @@ public class Updater implements SensorEventListener {
             return UpdateResult.DEFEAT;
 
         for (Wall wall : board.walls)
-            if (ball.CheckCollision(wall))
-            {
+            if (ball.CheckCollision(wall)) {
                 ball.ReactOnCollision(wall);
                 vibrate();
             }
@@ -112,6 +117,14 @@ public class Updater implements SensorEventListener {
                 onHourGlassCollision();
                 // i dodaj jakiś czas
             }
+        for (Elevator elevator : board.elevators)
+            if (ball.CheckCollision(elevator))
+                ball.ReactOnCollision(elevator);
+
+        for (Beam beam : board.beams)
+            if (ball.CheckCollision(beam))
+                ball.ReactOnCollision(beam);
+
 
         //TODO zmienić warunki wygranej!!!!!!
         if (getCollectedDiamondsCount() == max_diamonds_count)
@@ -153,11 +166,27 @@ public class Updater implements SensorEventListener {
         return mu;
     }
 
+    private int getIndexOfElevatorBallOn() {
+        int index = -1;
+        for (int i = 0; i < board.elevators.size(); i++) {
+            Elevator elevator = board.elevators.get(i);
+            if (elevator.location.x - elevator.getMeasurements().x / 2 <= ball.location.x && elevator.location.x + elevator.getMeasurements().x / 2 >= ball.location.x
+                    && elevator.location.z - elevator.getMeasurements().z / 2 <= ball.location.z && elevator.location.z + elevator.getMeasurements().z / 2 >= ball.location.z
+                    && Math.abs(ball.location.y - ball.getRadius() - (elevator.location.y + elevator.getMeasurements().y / 2)) < Collisions.USER_EXPERIENCE) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
     public void surfaceChange(int width, int height){
         drawManager.surfaceChange(width, height);
     }
 
     public void draw() {
+        if (paused)
+            return;
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawManager.preDraw(ball.getLocation());
@@ -196,8 +225,7 @@ public class Updater implements SensorEventListener {
         paused = false;
     }
 
-    public void onHourGlassCollision()
-    {
+    public void onHourGlassCollision() {
         playSound("button.wav");
     }
 
