@@ -12,7 +12,8 @@ attribute vec4 a_Position;
 varying vec4 v_Position;
 
 void main() {
-	vec4 modelViewPosition = u_MVMatrix * a_Position;
-	v_Position = u_MVPMatrix * modelViewPosition;
+	//vec4 modelViewPosition = u_MVMatrix * a_Position;
+	//v_Position = u_MVPMatrix * modelViewPosition;
+    v_Position = u_MVPMatrix * (u_MVMatrix * a_Position);
 	gl_Position = v_Position;
 }

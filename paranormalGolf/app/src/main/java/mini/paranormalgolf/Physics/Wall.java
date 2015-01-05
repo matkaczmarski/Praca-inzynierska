@@ -4,6 +4,7 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
+import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
@@ -43,4 +44,7 @@ public class Wall extends Element {
         vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((TextureShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
     }
 
+    public void bindDepthMapData(ShaderProgram shaderProgram) {
+        vertexData.setVertexAttribPointer(0, ((DepthMapShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+      }
 }

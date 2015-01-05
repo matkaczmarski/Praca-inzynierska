@@ -63,9 +63,9 @@ public class ObjectBuilder {
             float iRadian = -1f * (float)Math.PI/2 + (textureY1  * (float)Math.PI);
             float iiRadian = -1f * (float)Math.PI/2 + (textureY2 * (float)Math.PI);
 
-            for(int j=0; j<=numPoints; j++){
+            for(int j=numPoints; j>=0; j--){
 
-                float textureX = (float)j/numPoints;
+                float textureX = (float) j/numPoints;
                 float jRadian = textureX * 2f * (float)Math.PI;
 
                 vertexData[offset++] = sphere.center.x + sphere.radius * FloatMath.cos(iRadian) * FloatMath.cos(jRadian);
@@ -115,166 +115,334 @@ public class ObjectBuilder {
 
         switch (constantAxis){
             case xAxis:
-                vertexData[offset++] = rectangle.center.x;
-                vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
+                if(normalVectorDirection > 0) {
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
-                if(isTextured) {
+                    vertexData[offset++] = normalVectorDirection;
                     vertexData[offset++] = 0;
                     vertexData[offset++] = 0;
-                }
 
-                vertexData[offset++] = rectangle.center.x;
-                vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = 0;
+                    }
 
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
-                if(isTextured) {
-                    vertexData[offset++] = bTextureUnits;
+                    vertexData[offset++] = normalVectorDirection;
                     vertexData[offset++] = 0;
-                }
-
-                vertexData[offset++] = rectangle.center.x;
-                vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
-
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
-
-                if(isTextured) {
                     vertexData[offset++] = 0;
-                    vertexData[offset++] = aTextureUnits;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = aTextureUnits;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = bTextureUnits;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = bTextureUnits;
+                        vertexData[offset++] = aTextureUnits;
+                    }
                 }
+                else{
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
 
-                vertexData[offset++] = rectangle.center.x;
-                vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
 
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = 0;
+                    }
 
-                if(isTextured) {
-                    vertexData[offset++] = bTextureUnits;
-                    vertexData[offset++] = aTextureUnits;
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = bTextureUnits;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
+
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = aTextureUnits;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x;
+                    vertexData[offset++] = rectangle.center.y - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = bTextureUnits;
+                        vertexData[offset++] = aTextureUnits;
+                    }
                 }
-
                 break;
             case yAxis:
-                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y;
-                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+                if(normalVectorDirection < 0){
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
 
-                if(isTextured) {
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
+
                     vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
                     vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = bTextureUnits;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = bTextureUnits;
+                    }
+                }
+                else{
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = bTextureUnits;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y;
+                    vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = 0;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = bTextureUnits;
+                    }
                 }
 
-                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y;
-                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
-
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
-
-                if(isTextured) {
-                    vertexData[offset++] = 0;
-                    vertexData[offset++] = bTextureUnits;
-                }
-
-                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y;
-                vertexData[offset++] = rectangle.center.z - rectangle.b / 2;
-
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
-
-                if(isTextured) {
-                    vertexData[offset++] = aTextureUnits;
-                    vertexData[offset++] = 0;
-                }
-
-                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y;
-                vertexData[offset++] = rectangle.center.z + rectangle.b / 2;
-
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
-                vertexData[offset++] = 0;
-
-                if(isTextured) {
-                    vertexData[offset++] = aTextureUnits;
-                    vertexData[offset++] = bTextureUnits;
-                }
 
                 break;
             case zAxis:
-                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.z;
+                if(normalVectorDirection < 0){
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
-
-                if(isTextured) {
                     vertexData[offset++] = 0;
                     vertexData[offset++] = 0;
-                }
+                    vertexData[offset++] = normalVectorDirection;
 
-                vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.z;
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = 0;
+                    }
 
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
 
-                if(isTextured) {
                     vertexData[offset++] = 0;
-                    vertexData[offset++] = bTextureUnits;
-                }
-
-                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.z;
-
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
-
-                if(isTextured) {
-                    vertexData[offset++] = aTextureUnits;
                     vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = bTextureUnits;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = bTextureUnits;
+                        break;
+                    }
+                }
+                else{
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y + rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = 0;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+
+                    if(isTextured) {
+                        vertexData[offset++] = aTextureUnits;
+                        vertexData[offset++] = bTextureUnits;
+                    }
+
+                    vertexData[offset++] = rectangle.center.x - rectangle.a / 2;
+                    vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
+                    vertexData[offset++] = rectangle.center.z;
+
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = 0;
+                    vertexData[offset++] = normalVectorDirection;
+
+                    if(isTextured) {
+                        vertexData[offset++] = 0;
+                        vertexData[offset++] = bTextureUnits;
+                        break;
+                    }
                 }
 
-                vertexData[offset++] = rectangle.center.x + rectangle.a / 2;
-                vertexData[offset++] = rectangle.center.y - rectangle.b / 2;
-                vertexData[offset++] = rectangle.center.z;
-
-                vertexData[offset++] = 0;
-                vertexData[offset++] = 0;
-                vertexData[offset++] = normalVectorDirection;
-
-                if(isTextured) {
-                    vertexData[offset++] = aTextureUnits;
-                    vertexData[offset++] = bTextureUnits;
-                    break;
-                }
         }
 
         drawCommands.add(new DrawCommand() {
@@ -292,7 +460,8 @@ public class ObjectBuilder {
         int vertexStar = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
 
         for (int i = 0; i < pyramid.baseVerticesCount; i++) {
-            float alpha = ((float) i / pyramid.baseVerticesCount) * 2f * (float) Math.PI;
+            float ratio = direction > 0 ? ((float)( pyramid.baseVerticesCount - i) / pyramid.baseVerticesCount) : ( (float)i / pyramid.baseVerticesCount);
+            float alpha =  ratio * 2f * (float) Math.PI;
 
             vertexData[offset++] = location.x + pyramid.radius * FloatMath.cos(alpha);
             vertexData[offset++] = location.y;
@@ -352,7 +521,7 @@ public class ObjectBuilder {
         float aTextureUnits = basePerimeter / textureUnit;
         float bTextureUnits = height / textureUnit;
 
-        for (int i = 0; i <= numPoints; i++) {
+        for (int i = numPoints; i >= 0; i--) {
             float angleInRadians = ((float) i / numPoints) * ((float) Math.PI * 2f);
 
             vertexData[offset++] = topCenter.x + topRadius * FloatMath.cos(angleInRadians);
@@ -411,8 +580,8 @@ public class ObjectBuilder {
             vertexData[offset++] = 0.5f;
         }
 
-        for (int i = 0; i <= numPoints; i++) {
-            float alpha = ((float) i / numPoints) * ((float) Math.PI * 2f);
+        for (int i = numPoints; i >= 0; i--) {
+            float alpha = ((float)  i / numPoints) * ((float) Math.PI * 2f);
 
             vertexData[offset++] = center.x + radius * FloatMath.cos(alpha);
             vertexData[offset++] = center.y;

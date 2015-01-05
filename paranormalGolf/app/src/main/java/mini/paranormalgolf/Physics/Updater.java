@@ -159,6 +159,7 @@ public class Updater implements SensorEventListener {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawManager.preDraw(ball.getLocation());
+       // drawManager.drawShadow(board.walls.get(0), board.floors.get(0));
         drawManager.drawSkybox();
         for (Floor floor : board.floors) {
             drawManager.drawFloor(floor);

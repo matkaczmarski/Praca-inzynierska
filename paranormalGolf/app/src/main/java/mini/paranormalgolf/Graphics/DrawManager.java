@@ -1,10 +1,14 @@
 package mini.paranormalgolf.Graphics;
 
 import android.content.Context;
+import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.TmpShaderProgram;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Beam;
 import mini.paranormalgolf.Physics.Bonus;
@@ -19,12 +23,21 @@ import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
+import static android.opengl.GLES20.GL_BACK;
 import static android.opengl.GLES20.GL_BLEND;
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_CULL_FACE;
+import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_FRONT;
+import static android.opengl.GLES20.GL_FRONT_AND_BACK;
 import static android.opengl.GLES20.GL_LEQUAL;
 import static android.opengl.GLES20.GL_LESS;
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
+import static android.opengl.GLES20.glClear;
+import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glCullFace;
 import static android.opengl.GLES20.glDepthFunc;
 import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
@@ -50,7 +63,7 @@ public class DrawManager {
     private final float[] modelViewProjectionMatrix = new float[16];
     private final float[] normalsRotationMatrix = new float[16];
 
-    final LightData lightData = new LightData(new Point(0f, 10f, 0f), 0.5f, 0.6f);
+    final LightData lightData = new LightData(new Point(0f, 15f, 15f), 0.5f, 0.6f);
 
     private final float fieldOfViewDegree = 45;
     private final float near = 1f;
@@ -72,6 +85,9 @@ public class DrawManager {
         colorShaderProgram = new ColorShaderProgram(context);
         skyboxShaderProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox(context, new Point(0, 0, 0), Skybox.SkyboxTexture.dayClouds);
+
+        depthMapShaderProgram = new DepthMapShaderProgram(context);
+        tmpShaderProgram = new TmpShaderProgram(context);
     }
 
     public void surfaceChange(int width, int height) {
@@ -83,6 +99,63 @@ public class DrawManager {
     public void preDraw(Point ballLocation) {
         setLookAtM(viewMatrix, 0, ballLocation.x + cameraTranslation.x, ballLocation.y + cameraTranslation.y, ballLocation.z + cameraTranslation.z, ballLocation.x, ballLocation.y, ballLocation.z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
+        Matrix.setLookAtM(mLightViewMatrix, 0,
+                lightData.position.x, lightData.position.y, lightData.position.z,
+                0f,0f,0f,
+                0f,1f,0f);
+        multiplyMM(mLightMvpMatrix_staticShapes, 0, projectionMatrix, 0, mLightViewMatrix, 0);
+    }
+
+
+
+    DepthMapShaderProgram depthMapShaderProgram;
+    TmpShaderProgram tmpShaderProgram;
+
+    private int mDisplayWidth;
+    private int mDisplayHeight;
+    private int mShadowMapWidth;
+    private int mShadowMapHeight;
+
+    private final float[] mLightMvpMatrix_staticShapes = new float[16];
+    private final float[] mLightMvpMatrix_dynamicShapes = new float[16];
+    private final float[] mLightProjectionMatrix = new float[16];
+    private final float[] mLightViewMatrix = new float[16];
+
+    public void drawShadow(Wall wall, Floor floor) {
+
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+        //glEnable(GLES20.GL_CULL_FACE);
+        glCullFace(GL_FRONT);
+
+        depthMapShaderProgram.useProgram();
+
+        positionObjectInScene(floor.getBottomPart().getLocation());
+        depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
+        floor.getBottomPart().bindDepthMapData(depthMapShaderProgram);
+        floor.getBottomPart().draw();
+
+        for (FloorPart floorPart : floor.getSideParts()) {
+            positionObjectInScene(floorPart.getLocation());
+            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
+            floorPart.bindDepthMapData(depthMapShaderProgram);
+            floorPart.draw();
+        }
+
+        positionObjectInScene(floor.getTopPart().getLocation());
+        depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
+        floor.getTopPart().bindDepthMapData(depthMapShaderProgram);
+        floor.getTopPart().draw();
+
+        positionObjectInScene(wall.getLocation());
+        depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
+        wall.bindDepthMapData(depthMapShaderProgram);
+        wall.draw();
+        glCullFace(GL_BACK);
+        //glDisable(GLES20.GL_CULL_FACE);
+
     }
 
 
@@ -94,7 +167,6 @@ public class DrawManager {
         ball.draw();
     }
 
-
     public void drawDiamond(Diamond diamond) {
         textureShaderProgram.useProgram();
         positionBonusInScene(diamond);
@@ -102,7 +174,6 @@ public class DrawManager {
         diamond.bindData(textureShaderProgram);
         diamond.draw();
     }
-
 
     public void drawFloor(Floor floor) {
         textureShaderProgram.useProgram();
@@ -194,7 +265,6 @@ public class DrawManager {
         hourGlass.draw();
     }
 
-
     public void handleTouchDrag(float deltaX, float deltaY) {
         xRotation += deltaX / 16f;
         yRotation += deltaY / 16f;
@@ -225,7 +295,6 @@ public class DrawManager {
         glDepthFunc(GL_LESS);
     }
 
-
     private void positionBallInScene(Ball ball) {
         float[] tmp1 = new float[16];
         float[] tmp2 = new float[16];
@@ -255,12 +324,19 @@ public class DrawManager {
         transposeM(normalsRotationMatrix, 0, tmp2, 0);
     }
 
+    float[] modelViewMatrix = new float[16];
+
 
     private void positionObjectInScene(Point location) {
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, location.x, location.y, location.z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         setIdentityM(normalsRotationMatrix, 0); //bo gdy nie ma rotacji, to nie musimy nic robić z wektorami normalnymi
+
+        setIdentityM(modelViewMatrix, 0);
+        multiplyMM(modelViewMatrix, 0, viewMatrix, 0,  modelMatrix, 0);
+        multiplyMM(mLightMvpMatrix_dynamicShapes, 0, mLightMvpMatrix_staticShapes, 0, viewMatrix, 0);
+
     }
 
 }

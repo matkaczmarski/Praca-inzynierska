@@ -32,6 +32,7 @@ import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
+import static android.opengl.GLES20.GL_BACK;
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
@@ -87,6 +88,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GLES20.GL_CULL_FACE);
 
         //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.beach, context);
