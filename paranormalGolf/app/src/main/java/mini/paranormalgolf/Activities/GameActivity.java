@@ -372,25 +372,25 @@ public class GameActivity extends Activity implements Runnable {
 
 
 
-    public void onWinDialog(int diamonds, int time)
+    public void onWinDialog(int diamonds, int time, boolean win)
     {
         glSurfaceView.onPause();
         GameActivity.game = false;
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.win_dialog);
         loadFontsForDialog(dialog);
-        setDialogTitleAndResult(dialog, diamonds, time);
+        setDialogTitleAndResult(dialog, diamonds, time, win);
         dialog.show();
     }
 
-    public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time)
+    public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time, boolean win)
     {
-        ((TextView)dialog.findViewById(R.id.end_game_title)).setText((time > 0) ? getString(R.string.win) : getString(R.string.defeat));
-        int result = (time > 0) ? time * getResources().getInteger(R.integer.points_for_second) + diamonds * getResources().getInteger(R.integer.points_for_diamond) : 0;
+        ((TextView)dialog.findViewById(R.id.end_game_title)).setText(win ? getString(R.string.win) : getString(R.string.defeat));
+        int result = win ? time * getResources().getInteger(R.integer.points_for_second) + diamonds * getResources().getInteger(R.integer.points_for_diamond) : 0;
         ((TextView)dialog.findViewById(R.id.end_game_result)).setText(getString(R.string.result) + " " + result + " " + getString(R.string.points));
 
         BoardInfo boardInfo = (new XMLParser(this).getBoardInfo(board_id));
-        ((ImageView)dialog.findViewById(R.id.end_game_first_star)).setImageDrawable(getResources().getDrawable((time > 0) ? R.drawable.star_full : R.drawable.star_empty));
+        ((ImageView)dialog.findViewById(R.id.end_game_first_star)).setImageDrawable(getResources().getDrawable(win ? R.drawable.star_full : R.drawable.star_empty));
         ((ImageView)dialog.findViewById(R.id.end_game_second_star)).setImageDrawable(getResources().getDrawable((result >= boardInfo.getTwo_stars()) ? R.drawable.star_full : R.drawable.star_empty));
         ((ImageView)dialog.findViewById(R.id.end_game_third_star)).setImageDrawable(getResources().getDrawable((result >= boardInfo.getThree_stars()) ? R.drawable.star_full : R.drawable.star_empty));
 

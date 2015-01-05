@@ -158,16 +158,19 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         UpdateResult updateResult = updater.update();
         if (timeLeft <= 0)
+        {
             updateResult = UpdateResult.DEFEAT;
+        }
         if (updateResult != UpdateResult.NONE) {
             //dotarcie do mety?
             if (updateResult == UpdateResult.DEFEAT || updateResult == UpdateResult.WIN)
             {
                 //pause();
+                final boolean win = updateResult == UpdateResult.WIN;
                 ((GameActivity) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((GameActivity) context).onWinDialog(updater.getCollectedDiamondsCount(), (int) Math.ceil(timeLeft / 1000));
+                        ((GameActivity) context).onWinDialog(updater.getCollectedDiamondsCount(), (int) Math.ceil(timeLeft / 1000), win);
                     }
                 });
             }
