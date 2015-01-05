@@ -163,7 +163,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             //dotarcie do mety?
             if (updateResult == UpdateResult.DEFEAT || updateResult == UpdateResult.WIN)
             {
-                pause();
+                //pause();
                 ((GameActivity) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

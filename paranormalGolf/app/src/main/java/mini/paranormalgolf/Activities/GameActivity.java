@@ -251,7 +251,7 @@ public class GameActivity extends Activity implements Runnable {
         onButtonClick();
         if (gameRenderer != null)
             gameRenderer.pause();
-
+        //glSurfaceView.onPause();
         if (pause_dialog == null)
         {
             pause_dialog = new Dialog(this);
@@ -374,6 +374,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onWinDialog(int diamonds, int time)
     {
+        glSurfaceView.onPause();
         GameActivity.game = false;
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.win_dialog);

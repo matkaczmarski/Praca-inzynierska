@@ -183,6 +183,8 @@ public class Updater implements SensorEventListener {
     }
 
     public void draw() {
+        if (paused)
+            return;
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawManager.preDraw(ball.getLocation());
