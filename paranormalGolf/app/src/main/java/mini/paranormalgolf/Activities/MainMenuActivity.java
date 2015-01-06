@@ -142,6 +142,8 @@ public class MainMenuActivity extends Activity
     public void onHelpClick(View view)
     {
         onButtonClick();
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
     }
 
     public void onExitClick(View view)

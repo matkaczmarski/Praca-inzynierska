@@ -44,4 +44,16 @@
     <string name="defeat">Yoy lost!</string>
     <string name="result">Result:</string>
     <string name="pause">Pause</string>
+    <string name="help_activity_title">Help</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="help_next">Next</string>
+    <string name="help_menu">Menu</string>
+    <string name="help_page_0_text">Get the ball to finish by tilting the device</string>
+    <string name="help_page_1_text_1">Finish</string>
+    <string name="help_page_1_text_2">Green color - active</string>
+    <string name="help_page_1_text_3">Red color - inactive</string>
+    <string name="help_page_2_text_1">To activate finish you have to visit all the checkpoints</string>
+    <string name="help_page_3_text_1">Collect diamonds for extra points</string>
+    <string name="help_page_3_text_2">Collect hourglasses for time bonus</string>
+
 </resources>

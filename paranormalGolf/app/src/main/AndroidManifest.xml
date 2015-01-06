@@ -30,6 +30,11 @@
         <activity
             android:name=".Activities.LevelsActivity"
             android:label="@string/title_activity_levels"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".Activities.HelpActivity"
+            android:label="@string/title_activity_help"
             android:screenOrientation="landscape">
         </activity>
     </application>
