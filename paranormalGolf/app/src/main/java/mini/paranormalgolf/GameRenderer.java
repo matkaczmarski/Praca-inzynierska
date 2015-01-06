@@ -67,18 +67,20 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean vibrations;
     private boolean music;
     private boolean sound;
+    private boolean shadows;
 
     private FPSCounter fpsCounter;
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity context, SensorManager sensorManager, String board_id, boolean vibrations, boolean music, boolean sound) {
+    public GameRenderer(Activity context, SensorManager sensorManager, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows) {
         this.context = context;
         this.sensorManager = sensorManager;
         this.board_id = board_id;
         this.vibrations = vibrations;
         this.music = music;
         this.sound = sound;
+        this.shadows = shadows;
     }
 
     @Override
@@ -108,7 +110,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
 
-        updater = new Updater(context, ball, board, sensorManager, vibrations, music, sound, this);
+        updater = new Updater(context, ball, board, sensorManager, vibrations, music, sound, shadows, this);
 
         //String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
         //boolean bul = extensions.contains("OES_depth_texture");

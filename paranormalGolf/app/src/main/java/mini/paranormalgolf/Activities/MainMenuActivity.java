@@ -26,6 +26,7 @@ public class MainMenuActivity extends Activity
     private boolean music = false;
     private boolean sound = false;
     private boolean vibrations = false;
+    private boolean shadows;
 
     private MediaPlayer mp = new MediaPlayer();
 
@@ -49,6 +50,7 @@ public class MainMenuActivity extends Activity
             editor.putBoolean(getString(R.string.options_music), true);
             editor.putBoolean(getString(R.string.options_sound_effects), true);
             editor.putBoolean(getString(R.string.options_vibrations), true);
+            editor.putBoolean(getString(R.string.options_shadows), true);
             String language = Locale.getDefault().getLanguage();
             if (!language.equalsIgnoreCase("pl"))
                 language = "en";
@@ -67,6 +69,7 @@ public class MainMenuActivity extends Activity
             music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
             sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
             vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
+            shadows = sharedPreferences.getBoolean(getString(R.string.options_shadows), false);
 
             String language = sharedPreferences.getString(getString(R.string.options_language), "en");
             changeLanguage(language);

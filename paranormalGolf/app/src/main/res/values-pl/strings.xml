@@ -13,6 +13,7 @@
     <string name="options_activity_music">Muzyka</string>
     <string name="options_activity_sound">Dźwięki</string>
     <string name="options_activity_vibrations">Wibracje</string>
+    <string name="options_activity_shadows">Cienie</string>
     <string name="options_activity_language">Język</string>
     <string name="options_activity_appearance">Wygląd kulki</string>
     <string name="select_level_title">Wybierz poziom</string>

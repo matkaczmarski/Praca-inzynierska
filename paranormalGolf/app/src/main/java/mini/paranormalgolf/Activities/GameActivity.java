@@ -52,6 +52,7 @@ public class GameActivity extends Activity implements Runnable {
     private boolean vibrations;
     private boolean music;
     private boolean sound;
+    private boolean shadows;
 
     protected PowerManager.WakeLock mWakeLock;
 
@@ -96,7 +97,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound);
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound, shadows);
 
         if (supportsEs2) {
             // ...
@@ -211,6 +212,7 @@ public class GameActivity extends Activity implements Runnable {
         music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
         sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
         vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
+        shadows = sharedPreferences.getBoolean(getString(R.string.options_shadows), false);
     }
 
     public void updatePanel(int time, int diamonds)
@@ -380,7 +382,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound);
+        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound, shadows);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(gameRenderer);
         rendererSet = true;

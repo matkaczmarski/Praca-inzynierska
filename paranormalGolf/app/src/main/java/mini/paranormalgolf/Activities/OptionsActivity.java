@@ -28,6 +28,7 @@ public class OptionsActivity extends Activity
     private boolean music;
     private boolean sound;
     private boolean vibrations;
+    private boolean shadows;
 
     private String language;
 
@@ -54,6 +55,7 @@ public class OptionsActivity extends Activity
             music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
             sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
             vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
+            shadows = sharedPreferences.getBoolean(getString(R.string.options_shadows), false);
 
             language = sharedPreferences.getString(getString(R.string.options_language), "en");
             changeLanguage(language);
@@ -67,6 +69,7 @@ public class OptionsActivity extends Activity
         ((CheckBox)findViewById(R.id.options_music)).setChecked(music);
         ((CheckBox)findViewById(R.id.options_sounds)).setChecked(sound);
         ((CheckBox)findViewById(R.id.options_vibrations)).setChecked(vibrations);
+        ((CheckBox)findViewById(R.id.options_shadows)).setChecked(shadows);
 
         if (language.equalsIgnoreCase("pl"))
         {
@@ -117,6 +120,9 @@ public class OptionsActivity extends Activity
 
         checkBox = (CheckBox)findViewById(R.id.options_en);
         checkBox.setTypeface(tf);
+
+        checkBox = (CheckBox)findViewById(R.id.options_shadows);
+        checkBox.setTypeface(tf);
     }
 
 
@@ -153,6 +159,7 @@ public class OptionsActivity extends Activity
         editor.putBoolean(getString(R.string.options_music), ((CheckBox)findViewById(R.id.options_music)).isChecked());
         editor.putBoolean(getString(R.string.options_sound_effects), ((CheckBox)findViewById(R.id.options_sounds)).isChecked());
         editor.putBoolean(getString(R.string.options_vibrations), ((CheckBox)findViewById(R.id.options_vibrations)).isChecked());
+        editor.putBoolean(getString(R.string.options_shadows), ((CheckBox)findViewById(R.id.options_shadows)).isChecked());
         boolean polish = ((CheckBox)findViewById(R.id.options_pl)).isChecked();
         editor.putString(getString(R.string.options_language), polish ? "pl" : "en");
         editor.commit();
@@ -196,6 +203,12 @@ public class OptionsActivity extends Activity
     public void onVibrationsClick (View view)
     {
         vibrations = ((CheckBox)view).isChecked();
+        onButtonClick();
+    }
+
+    public void onShadowsClick (View view)
+    {
+        shadows = ((CheckBox)view).isChecked();
         onButtonClick();
     }
 

@@ -15,6 +15,7 @@
     <string name="options_activity_music">Music</string>
     <string name="options_activity_sound">Sound effects</string>
     <string name="options_activity_vibrations">Vibrations</string>
+    <string name="options_activity_shadows">Shadows</string>
     <string name="options_activity_language">Language</string>
     <string name="options_activity_appearance">Appearance</string>
     <string name="title_activity_levels">LevelsActivity</string>
@@ -33,6 +34,7 @@
     <string name="options_music">MUSIC</string>
     <string name="options_sound_effects">SOUND_EFFECTS</string>
     <string name="options_vibrations">VIBRATIONS</string>
+    <string name="options_shadows">SHADOWS</string>
     <string name="options_language">LANGUAGE</string>
     <string name="options_texture">TEXTURE</string>
     <string name="preferences">PREFERENCES</string>

@@ -45,6 +45,7 @@ public class Updater implements SensorEventListener {
     private boolean vibrations;
     private boolean sound;
     private boolean music;
+    private boolean shadows;
 
     private GameRenderer gameRenderer;
 
@@ -52,18 +53,19 @@ public class Updater implements SensorEventListener {
 
     public DrawManager getDrawManager(){return drawManager;}
 
-    public Updater(Context context, Ball ball, Board board, SensorManager sensorManager, boolean vibrations, boolean music, boolean sound, GameRenderer gameRenderer) {
+    public Updater(Context context, Ball ball, Board board, SensorManager sensorManager, boolean vibrations, boolean music, boolean sound, boolean shadows, GameRenderer gameRenderer) {
         this.ball = ball;
         this.context = context;
         this.board = board;
         this.vibrations = vibrations;
         this.music = music;
         this.sound = sound;
+        this.shadows = shadows;
         this.gameRenderer = gameRenderer;
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        drawManager = new DrawManager(context);
+        drawManager = new DrawManager(context, shadows);
     }
 
     public UpdateResult update() {

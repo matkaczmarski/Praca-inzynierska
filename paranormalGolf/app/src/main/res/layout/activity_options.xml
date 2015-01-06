@@ -82,6 +82,13 @@
                         android:text="en"
                         android:onClick="onEnglishPick"/>
                     </LinearLayout>
+                <CheckBox
+                    android:id="@+id/options_shadows"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/OptionsButton"
+                    android:text="@string/options_activity_shadows"
+                    android:onClick="onShadowsClick"/>
             </LinearLayout>
 
         </ScrollView>

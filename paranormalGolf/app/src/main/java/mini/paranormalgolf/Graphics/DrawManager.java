@@ -92,10 +92,10 @@ public class DrawManager {
     private final float[] lightsViewMatrix = new float[16];
 
 
-    private final boolean withShadow = false;
+    private final boolean withShadow;
 
 
-    public DrawManager(Context context) {
+    public DrawManager(Context context, boolean withShadow) {
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
         skyboxShaderProgram = new SkyboxShaderProgram(context);
@@ -103,6 +103,8 @@ public class DrawManager {
 
         depthMapShaderProgram = new DepthMapShaderProgram(context);
         tmpShaderProgram = new TmpShaderProgram(context);
+
+        this.withShadow = withShadow;
     }
 
     public void surfaceChange(int width, int height) {
