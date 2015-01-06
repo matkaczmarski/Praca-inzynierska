@@ -13,9 +13,7 @@ import java.io.IOException;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
-import static android.opengl.GLES20.GL_DITHER;
 import static android.opengl.GLES20.glClear;
-import static android.opengl.GLES20.glDisable;
 import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Activities.GameActivity;
@@ -187,10 +185,8 @@ public class Updater implements SensorEventListener {
     public void draw() {
         if (paused)
             return;
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         drawManager.preDraw(ball.getLocation());
-        drawManager.drawShadow(board, ball);
+        drawManager.drawBoard(board, ball);
         drawManager.drawSkybox();
 
         if (last_diamonds_count != board.diamonds.size()) {

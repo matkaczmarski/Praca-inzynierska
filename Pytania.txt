@@ -1,2 +1,11 @@
-1) dokumentacja techniczna - co to?
-2) czy na obronê pracy ka¿dy z grupy ma znaæ czêœci programu wykonane przez pozosta³e osoby z grupy?
+1) dokumentacja techniczna - co to? - DONE
+ ODP: Na potrzeby projektu zespo³owego i czêœci opisowej pracy in¿ynierskiej ograniczamy siê do dokumentacji technicznej bêd¹cej rozszerzeniem (uszczegó³owieniem) dok.architektonicznej.
+Powinny siê w niej znaleŸæ m.in.szczegó³y przyjêtych rozwi¹zañ - metod, algorytmów, diagramy klas itd. ale bez szczegó³owego opisu poszczególnych klas i metod (czyli bez dokumentacji kodu).
+
+W praktyce czêœci¹ dok.technicznej powinna byæ dokumentacja kodu, jednak ze wzglêdu na obszernoœæ dok.kodu wystarczy wygenerowaæ j¹ automatycznie w koñcowej wersji pracy in¿. i nagraæ na p³ytê CD (bez drukowania i do³¹czania do czêœci opisowej pracy in¿.)
+
+2) czy na obronê pracy ka¿dy z grupy ma znaæ czêœci programu wykonane przez pozosta³e osoby z grupy? - DONE
+ ODP: Powinniœcie wzajemnie znaæ swój zakres prac i zastosowane rozwi¹zania, ale jedynie z powodu chêci rozszerzenia swojej wiedzy. Nie ma formalnego wymogu znajomoœci szczegó³ów implementacji (architektury czy kodu) pozosta³ych osób. Na obronê ka¿dy przygotowuje fragment prezentacji (czyli ka¿da z osób musi coœ powiedzieæ) i naturalny podzia³ wynika zawsze z zakresu swoich prac. Plus jedna z osób powinna opowiedzieæ równie¿ ogólnie o projekcie (za³o¿enia + wnioski koñcowe).
+
+--------------
+3) czy w pracy in¿ynierskiej trzeba opisywaæ dok³adnie u¿yte funkcje i sposób rysowania w OpenGL ES 2.0?

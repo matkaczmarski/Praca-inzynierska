@@ -24,31 +24,21 @@ import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.HourGlass;
 import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.Point;
-import mini.paranormalgolf.Primitives.Vector;
 
 import static android.opengl.GLES20.GL_BACK;
-import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
-import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.GL_FRONT;
-import static android.opengl.GLES20.GL_FRONT_AND_BACK;
 import static android.opengl.GLES20.GL_LEQUAL;
 import static android.opengl.GLES20.GL_LESS;
-import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
-import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBindFramebuffer;
-import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glCullFace;
 import static android.opengl.GLES20.glDepthFunc;
-import static android.opengl.GLES20.glDisable;
-import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
-import static android.opengl.Matrix.orthoM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
@@ -84,6 +74,26 @@ public class DrawManager {
     float[] skyboxModelViewProjectionMatrix = new float[16];
     private float xRotation, yRotation;
 
+    DepthMapShaderProgram depthMapShaderProgram;
+    TmpShaderProgram tmpShaderProgram;
+
+    private int displayWidth;
+    private int displayHeight;
+    private int depthMapWidth;
+    private int depthMapHeight;
+
+    int[] fboId;
+    int[] depthTextureId;
+    int[] renderTextureId;
+
+    private final float[] lightsViewProjectionMatrix = new float[16];
+    private final float[] mLightMvpMatrix_dynamicShapes = new float[16];
+    private final float[] lightsProjectionMatrix = new float[16];
+    private final float[] lightsViewMatrix = new float[16];
+
+
+    private final boolean withShadow = false;
+
 
     public DrawManager(Context context) {
         textureShaderProgram = new TextureShaderProgram(context);
@@ -96,19 +106,19 @@ public class DrawManager {
     }
 
     public void surfaceChange(int width, int height) {
-        glViewport(0, 0, width, height);
-        MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / (float) height, near, far);
-        MatrixHelper.perspectiveM(mLightProjectionMatrix, 120f, (float) width / (float) height, near, far);
+        displayHeight = height;
+        displayWidth = width;
 
+        MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / (float) height, near, far);
         updateSkyboxMVPMatrix();
 
-        mDisplayHeight = height;
-        mDisplayWidth = width;
-        float ratio = 1.5f;
-        mShadowMapWidth = Math.round(mDisplayWidth * ratio);
-        mShadowMapHeight = Math.round(mDisplayHeight * ratio);
-
-        generateShadowFBO();
+        if(withShadow) {
+            float ratio = 1.5f;
+            depthMapWidth = Math.round(displayWidth * ratio);
+            depthMapHeight = Math.round(displayHeight * ratio);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix, 120f, (float) width / (float) height, near, far);
+            generateShadowFBO();
+        }
     }
 
     public void generateShadowFBO() {
@@ -123,7 +133,7 @@ public class DrawManager {
         // create render buffer and bind 16-bit depth buffer
         GLES20.glGenRenderbuffers(1, depthTextureId, 0);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthTextureId[0]);
-        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, mShadowMapWidth, mShadowMapHeight);
+        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
 
         // Try to use a texture depth component
         GLES20.glGenTextures(1, renderTextureId, 0);
@@ -139,7 +149,7 @@ public class DrawManager {
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId[0]);
 
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mShadowMapWidth, mShadowMapHeight, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, depthMapWidth, depthMapHeight, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
 
         // specify texture as color attachment
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, renderTextureId[0], 0);
@@ -160,40 +170,34 @@ public class DrawManager {
     }
 
     public void preDraw(Point ballLocation) {
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         setLookAtM(viewMatrix, 0, ballLocation.x + cameraTranslation.x, ballLocation.y + cameraTranslation.y, ballLocation.z + cameraTranslation.z, ballLocation.x, ballLocation.y, ballLocation.z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-        Matrix.setLookAtM(mLightViewMatrix, 0,
-                lightData.position.x, lightData.position.y, lightData.position.z,
-                0f,0f,0f,
-                0f,1f,0f);
-        multiplyMM(mLightMvpMatrix_staticShapes, 0, mLightProjectionMatrix, 0, mLightViewMatrix, 0);
+        if(withShadow) {
+            Matrix.setLookAtM(lightsViewMatrix, 0,
+                    lightData.position.x, lightData.position.y, lightData.position.z,
+                    0f, 0f, 0f,
+                    0f, 1f, 0f);
+            multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
+        }
     }
 
 
+    public void drawBoard(Board board, Ball ball) {
+        if (withShadow) {
+            renderSceneWithShadow(board, ball);
+        } else {
+            renderSceneWithoutShadow(board, ball);
+        }
+    }
 
-    DepthMapShaderProgram depthMapShaderProgram;
-    TmpShaderProgram tmpShaderProgram;
-
-    private int mDisplayWidth;
-    private int mDisplayHeight;
-    private int mShadowMapWidth;
-    private int mShadowMapHeight;
-
-    int[] fboId;
-    int[] depthTextureId;
-    int[] renderTextureId;
-
-    private final float[] mLightMvpMatrix_staticShapes = new float[16];
-    private final float[] mLightMvpMatrix_dynamicShapes = new float[16];
-    private final float[] mLightProjectionMatrix = new float[16];
-    private final float[] mLightViewMatrix = new float[16];
-
-    public void drawShadow(Board board, Ball ball) {
-
+    private void renderSceneWithShadow(Board board, Ball ball){
         glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId[0]);
 
-        glViewport(0, 0, mShadowMapWidth, mShadowMapHeight);
+        glViewport(0, 0, depthMapWidth, depthMapHeight);
 
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -201,92 +205,20 @@ public class DrawManager {
 
         renderDepthMap(board, ball);
 
-
-        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        glViewport(0, 0, mDisplayWidth, mDisplayHeight);
-
         glCullFace(GL_BACK);
 
-        renderScene(board, ball);
+        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, displayWidth, displayHeight);
+        glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+
+        renderSceneWithShadows(board, ball);
     }
 
-    private void renderDepthMap(Board board, Ball ball){
-        depthMapShaderProgram.useProgram();
+    private void renderSceneWithoutShadow(Board board, Ball ball){
+        glViewport(0, 0, displayWidth, displayHeight);
+        glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        for (Floor floor : board.floors) {
-            positionObjectInScene(floor.getBottomPart().getLocation());
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            floor.getBottomPart().bindDepthMapData(depthMapShaderProgram);
-            floor.getBottomPart().draw();
-
-            for (FloorPart floorPart : floor.getSideParts()) {
-                positionObjectInScene(floorPart.getLocation());
-                depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-                floorPart.bindDepthMapData(depthMapShaderProgram);
-                floorPart.draw();
-            }
-
-            positionObjectInScene(floor.getTopPart().getLocation());
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            floor.getTopPart().bindDepthMapData(depthMapShaderProgram);
-            floor.getTopPart().draw();
-        }
-
-        for (Wall wall : board.walls) {
-            positionObjectInScene(wall.getLocation());
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            wall.bindDepthMapData(depthMapShaderProgram);
-            wall.draw();
-        }
-
-        for (Beam beam : board.beams) {
-            positionObjectInScene(beam.getLocation());
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            beam.bindDepthMapData(depthMapShaderProgram);
-            beam.draw();
-        }
-
-        for (Elevator elevator : board.elevators) {
-            positionObjectInScene(elevator.getLocation());
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            elevator.bindDepthMapData(depthMapShaderProgram);
-            elevator.draw();
-        }
-
-        positionBallInScene(ball);
-        depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-        ball.bindDepthMapData(depthMapShaderProgram);
-        ball.draw();
-
-        for (Diamond diamond : board.diamonds) {
-            positionBonusInScene(diamond);
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            diamond.bindDepthMapData(depthMapShaderProgram);
-            diamond.draw();
-        }
-
-        for (HourGlass hourGlass : board.hourGlasses) {
-            positionBonusInScene(hourGlass);
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            hourGlass.getWoodenParts().bindDepthMapData(depthMapShaderProgram);
-            hourGlass.getWoodenParts().draw();
-        }
-
-        positionObjectInScene(board.finish.getLocation());
-        depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-        board.finish.bindDepthMapData(depthMapShaderProgram);
-        board.finish.draw();
-
-        for (CheckPoint checkPoint : board.checkpoints) {
-            positionObjectInScene(checkPoint.getLocation());
-            depthMapShaderProgram.setUniforms(mLightMvpMatrix_staticShapes, modelMatrix);
-            checkPoint.bindDepthMapData(depthMapShaderProgram);
-            checkPoint.draw();
-        }
-    }
-
-    private void renderScene(Board board, Ball ball){
         for (Floor floor : board.floors) {
             drawFloor(floor);
         }
@@ -318,72 +250,178 @@ public class DrawManager {
         drawFinish(board.finish);
     }
 
+    private void renderDepthMap(Board board, Ball ball){
+        depthMapShaderProgram.useProgram();
+
+        for (Floor floor : board.floors) {
+            positionObjectInScene(floor.getBottomPart().getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            floor.getBottomPart().bindDepthMapData(depthMapShaderProgram);
+            floor.getBottomPart().draw();
+
+            for (FloorPart floorPart : floor.getSideParts()) {
+                positionObjectInScene(floorPart.getLocation());
+                depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+                floorPart.bindDepthMapData(depthMapShaderProgram);
+                floorPart.draw();
+            }
+
+            positionObjectInScene(floor.getTopPart().getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            floor.getTopPart().bindDepthMapData(depthMapShaderProgram);
+            floor.getTopPart().draw();
+        }
+
+        for (Wall wall : board.walls) {
+            positionObjectInScene(wall.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            wall.bindDepthMapData(depthMapShaderProgram);
+            wall.draw();
+        }
+
+        for (Beam beam : board.beams) {
+            positionObjectInScene(beam.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            beam.bindDepthMapData(depthMapShaderProgram);
+            beam.draw();
+        }
+
+        for (Elevator elevator : board.elevators) {
+            positionObjectInScene(elevator.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            elevator.bindDepthMapData(depthMapShaderProgram);
+            elevator.draw();
+        }
+
+        positionBallInScene(ball);
+        depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+        ball.bindDepthMapData(depthMapShaderProgram);
+        ball.draw();
+
+        for (Diamond diamond : board.diamonds) {
+            positionBonusInScene(diamond);
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            diamond.bindDepthMapData(depthMapShaderProgram);
+            diamond.draw();
+        }
+
+        for (HourGlass hourGlass : board.hourGlasses) {
+            positionBonusInScene(hourGlass);
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            hourGlass.getWoodenParts().bindDepthMapData(depthMapShaderProgram);
+            hourGlass.getWoodenParts().draw();
+        }
+
+        positionObjectInScene(board.finish.getLocation());
+        depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+        board.finish.bindDepthMapData(depthMapShaderProgram);
+        board.finish.draw();
+
+        for (CheckPoint checkPoint : board.checkpoints) {
+            positionObjectInScene(checkPoint.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            checkPoint.bindDepthMapData(depthMapShaderProgram);
+            checkPoint.draw();
+        }
+    }
+
+    private void renderSceneWithShadows(Board board, Ball ball){
+        for (Floor floor : board.floors) {
+            drawFloorWithShadow(floor);
+        }
+
+        for (Wall wall : board.walls) {
+            drawWallWithShadow(wall);
+        }
+
+        for (Beam beam : board.beams) {
+            drawBeamWithShadow(beam);
+        }
+        for (Elevator elevator : board.elevators) {
+            drawElevatorWithShadow(elevator);
+        }
+
+        drawBallWithShadow(ball);
+
+        for (Diamond diamond : board.diamonds) {
+            drawDiamondWithShadow(diamond);
+        }
+
+        for (HourGlass hourGlass : board.hourGlasses) {
+            drawHourglassWithShadow(hourGlass);
+        }
+
+        for (CheckPoint checkPoint : board.checkpoints) {
+            drawCheckPointWithShadow(checkPoint);
+        }
+        drawFinishWithShadow(board.finish);
+    }
 
     private void drawBall(Ball ball) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionBallInScene(ball);
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, ball.getTexture(), ball.BALL_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        ball.bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, ball.getTexture(), ball.BALL_OPACITY);
+        ball.bindData(textureShaderProgram);
         ball.draw();
     }
 
     private void drawDiamond(Diamond diamond) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionBonusInScene(diamond);
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, diamond.getTexture(), diamond.DIAMOND_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        diamond.bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, diamond.getTexture(), diamond.DIAMOND_OPACITY);
+        diamond.bindData(textureShaderProgram);
         diamond.draw();
     }
 
     private void drawFloor(Floor floor) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionObjectInScene(floor.getBottomPart().getLocation());
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        floor.getBottomPart().bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
+        floor.getBottomPart().bindData(textureShaderProgram);
         floor.getBottomPart().draw();
 
         for (FloorPart floorPart : floor.getSideParts()) {
             positionObjectInScene(floorPart.getLocation());
-            tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getSideFloorTexture(), floor.FLOOR_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-            floorPart.bindData(tmpShaderProgram);
+            textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getSideFloorTexture(), floor.FLOOR_OPACITY);
+            floorPart.bindData(textureShaderProgram);
             floorPart.draw();
         }
 
         positionObjectInScene(floor.getTopPart().getLocation());
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getTopFloorTexture(), floor.FLOOR_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        floor.getTopPart().bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
+        floor.getTopPart().bindData(textureShaderProgram);
         floor.getTopPart().draw();
     }
 
     private void drawWall(Wall wall) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, wall.getTexture(), wall.WALL_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        wall.bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, wall.getTexture(), wall.WALL_OPACITY);
+        wall.bindData(textureShaderProgram);
         wall.draw();
     }
 
     private void drawBeam(Beam beam) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionObjectInScene(beam.getLocation());
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, beam.getTexture(), beam.BEAM_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        beam.bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, beam.getTexture(), beam.BEAM_OPACITY);
+        beam.bindData(textureShaderProgram);
         beam.draw();
     }
 
     private void drawElevator(Elevator elevator) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionObjectInScene(elevator.getLocation());
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, elevator.getTexture(), elevator.ELEVATOR_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        elevator.bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, elevator.getTexture(), elevator.ELEVATOR_OPACITY);
+        elevator.bindData(textureShaderProgram);
         elevator.draw();
     }
 
     private void drawFinish(Finish finish) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionObjectInScene(finish.getLocation());
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getTexture(), finish.FINISH_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        finish.bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getTexture(), finish.FINISH_OPACITY);
+        finish.bindData(textureShaderProgram);
         finish.draw();
 
         colorShaderProgram.useProgram();
@@ -394,10 +432,10 @@ public class DrawManager {
     }
 
     private void drawCheckPoint(CheckPoint checkPoint) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionObjectInScene(checkPoint.getLocation());
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        checkPoint.bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY);
+        checkPoint.bindData(textureShaderProgram);
         checkPoint.draw();
 
         if (!checkPoint.ifVisited()) {
@@ -410,10 +448,10 @@ public class DrawManager {
     }
 
     private void drawHourglass(HourGlass hourGlass) {
-        tmpShaderProgram.useProgram();
+        textureShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
-        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY, mLightMvpMatrix_staticShapes, renderTextureId[0]);
-        hourGlass.getWoodenParts().bindData(tmpShaderProgram);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
+        hourGlass.getWoodenParts().bindData(textureShaderProgram);
         hourGlass.getWoodenParts().draw();
 
         colorShaderProgram.useProgram();
@@ -422,6 +460,115 @@ public class DrawManager {
         hourGlass.bindData(colorShaderProgram);
         hourGlass.draw();
     }
+
+    ////////////////////////////////////////
+
+    private void drawBallWithShadow(Ball ball) {
+        tmpShaderProgram.useProgram();
+        positionBallInScene(ball);
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, ball.getTexture(), ball.BALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        ball.bindShadowData(tmpShaderProgram);
+        ball.draw();
+    }
+
+    private void drawDiamondWithShadow(Diamond diamond) {
+        tmpShaderProgram.useProgram();
+        positionBonusInScene(diamond);
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, diamond.getTexture(), diamond.DIAMOND_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        diamond.bindShadowData(tmpShaderProgram);
+        diamond.draw();
+    }
+
+    private void drawFloorWithShadow(Floor floor) {
+        tmpShaderProgram.useProgram();
+        positionObjectInScene(floor.getBottomPart().getLocation());
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        floor.getBottomPart().bindShadowData(tmpShaderProgram);
+        floor.getBottomPart().draw();
+
+        for (FloorPart floorPart : floor.getSideParts()) {
+            positionObjectInScene(floorPart.getLocation());
+            tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getSideFloorTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+            floorPart.bindShadowData(tmpShaderProgram);
+            floorPart.draw();
+        }
+
+        positionObjectInScene(floor.getTopPart().getLocation());
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, floor.getTopFloorTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        floor.getTopPart().bindShadowData(tmpShaderProgram);
+        floor.getTopPart().draw();
+    }
+
+    private void drawWallWithShadow(Wall wall) {
+        tmpShaderProgram.useProgram();
+        positionObjectInScene(wall.getLocation());
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, wall.getTexture(), wall.WALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        wall.bindShadowData(tmpShaderProgram);
+        wall.draw();
+    }
+
+    private void drawBeamWithShadow(Beam beam) {
+        tmpShaderProgram.useProgram();
+        positionObjectInScene(beam.getLocation());
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, beam.getTexture(), beam.BEAM_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        beam.bindShadowData(tmpShaderProgram);
+        beam.draw();
+    }
+
+    private void drawElevatorWithShadow(Elevator elevator) {
+        tmpShaderProgram.useProgram();
+        positionObjectInScene(elevator.getLocation());
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, elevator.getTexture(), elevator.ELEVATOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        elevator.bindShadowData(tmpShaderProgram);
+        elevator.draw();
+    }
+
+    private void drawFinishWithShadow(Finish finish) {
+        tmpShaderProgram.useProgram();
+        positionObjectInScene(finish.getLocation());
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getTexture(), finish.FINISH_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        finish.bindShadowData(tmpShaderProgram);
+        finish.draw();
+
+        colorShaderProgram.useProgram();
+        positionObjectInScene(finish.getGlow().getLocation());
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getGlow().getIfCanFinish() ? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
+        finish.getGlow().bindData(colorShaderProgram);
+        finish.getGlow().draw();
+    }
+
+    private void drawCheckPointWithShadow(CheckPoint checkPoint) {
+        tmpShaderProgram.useProgram();
+        positionObjectInScene(checkPoint.getLocation());
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        checkPoint.bindShadowData(tmpShaderProgram);
+        checkPoint.draw();
+
+        if (!checkPoint.ifVisited()) {
+            colorShaderProgram.useProgram();
+            positionObjectInScene(checkPoint.getGlow().getLocation());
+            colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().CAN_FINISH_COLOR);
+            checkPoint.getGlow().bindData(colorShaderProgram);
+            checkPoint.getGlow().draw();
+        }
+    }
+
+    private void drawHourglassWithShadow(HourGlass hourGlass) {
+        tmpShaderProgram.useProgram();
+        positionBonusInScene(hourGlass);
+        tmpShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        hourGlass.getWoodenParts().bindShadowData(tmpShaderProgram);
+        hourGlass.getWoodenParts().draw();
+
+        colorShaderProgram.useProgram();
+        positionBonusInScene(hourGlass);
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, hourGlass.GLASS_COLOR);
+        hourGlass.bindData(colorShaderProgram);
+        hourGlass.draw();
+    }
+
+
+    //////////////////
 
     public void handleTouchDrag(float deltaX, float deltaY) {
         xRotation += deltaX / 16f;
@@ -493,7 +640,7 @@ public class DrawManager {
 
         //setIdentityM(modelViewMatrix, 0);
        // multiplyMM(modelViewMatrix, 0, viewMatrix, 0,  modelMatrix, 0);
-        //multiplyMM(mLightMvpMatrix_dynamicShapes, 0, mLightMvpMatrix_staticShapes, 0, viewMatrix, 0);
+        //multiplyMM(mLightMvpMatrix_dynamicShapes, 0, lightsViewProjectionMatrix, 0, viewMatrix, 0);
 
     }
 

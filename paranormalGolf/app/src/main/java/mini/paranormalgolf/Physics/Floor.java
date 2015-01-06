@@ -94,6 +94,9 @@ public class Floor extends Element {
         sideParts = Arrays.asList(rightSidePart, leftSidePart, frontSidePart, backSidePart);
     }
 
+    public void bindShadowData(ShaderProgram shaderProgram) {
+    }
+
     public void bindData(ShaderProgram shaderProgram) {
     }
 

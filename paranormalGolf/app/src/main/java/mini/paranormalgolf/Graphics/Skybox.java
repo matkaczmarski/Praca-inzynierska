@@ -99,6 +99,9 @@ public class Skybox extends Element {
         vertexArray.setVertexAttribPointer(0, ((SkyboxShaderProgram)skyboxProgram).getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
     }
 
+    public void bindShadowData(ShaderProgram skyboxProgram) {
+    }
+
     public void draw() {
         glDrawElements(GL_TRIANGLES, INDICES_COUNT,  GL_UNSIGNED_BYTE, indexArray);
     }
