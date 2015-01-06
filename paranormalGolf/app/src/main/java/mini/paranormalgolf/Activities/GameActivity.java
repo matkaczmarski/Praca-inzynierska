@@ -23,12 +23,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ActionMenuView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Helpers.BoardInfo;
@@ -255,7 +260,9 @@ public class GameActivity extends Activity implements Runnable {
         if (pause_dialog == null)
         {
             pause_dialog = new Dialog(this);
+            pause_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             pause_dialog.setContentView(R.layout.pause_dialog);
+            setFontsForPauseDialog(pause_dialog);
             ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -297,12 +304,33 @@ public class GameActivity extends Activity implements Runnable {
                 }
             });
             pause_dialog.show();
+            pause_dialog.getWindow().setLayout(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
         }
         else
         {
             pause_dialog.dismiss();
             pause_dialog = null;
         }
+    }
+
+    public void setFontsForPauseDialog(Dialog dialog)
+    {
+        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
+
+        TextView textView = (TextView)dialog.findViewById(R.id.pause_resume);
+        textView.setTypeface(tf);
+
+        textView = (TextView)dialog.findViewById(R.id.pause_restart);
+        textView.setTypeface(tf);
+
+        textView = (TextView)dialog.findViewById(R.id.pause_options);
+        textView.setTypeface(tf);
+
+        textView = (TextView)dialog.findViewById(R.id.pause_menu);
+        textView.setTypeface(tf);
+
+        textView = (TextView)dialog.findViewById(R.id.pause_dialog_title);
+        textView.setTypeface(tf);
     }
 
     public void onButtonClick()

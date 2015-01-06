@@ -43,4 +43,5 @@
     <string name="win">You won!</string>
     <string name="defeat">Yoy lost!</string>
     <string name="result">Result:</string>
+    <string name="pause">Pause</string>
 </resources>
