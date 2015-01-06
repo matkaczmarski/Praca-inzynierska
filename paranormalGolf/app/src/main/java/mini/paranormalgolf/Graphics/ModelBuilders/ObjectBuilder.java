@@ -567,6 +567,8 @@ public class ObjectBuilder {
         final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = 1 + (numPoints + 1);
 
+        final boolean upper = direction > 0;
+
         vertexData[offset++] = center.x;
         vertexData[offset++] = center.y;
         vertexData[offset++] = center.z;
@@ -580,8 +582,9 @@ public class ObjectBuilder {
             vertexData[offset++] = 0.5f;
         }
 
-        for (int i = numPoints; i >= 0; i--) {
-            float alpha = ((float)  i / numPoints) * ((float) Math.PI * 2f);
+        for (int i = 0; i <= numPoints; i++) {
+            float ratio = upper ? (float)(numPoints - i)/numPoints : (float)i/numPoints;
+            float alpha = ratio * ((float) Math.PI * 2f);
 
             vertexData[offset++] = center.x + radius * FloatMath.cos(alpha);
             vertexData[offset++] = center.y;

@@ -187,7 +187,7 @@ public class Updater implements SensorEventListener {
             return;
         drawManager.preDraw(ball.getLocation());
         drawManager.drawBoard(board, ball);
-        drawManager.drawSkybox();
+
 
         if (last_diamonds_count != board.diamonds.size()) {
             last_diamonds_count = board.diamonds.size();

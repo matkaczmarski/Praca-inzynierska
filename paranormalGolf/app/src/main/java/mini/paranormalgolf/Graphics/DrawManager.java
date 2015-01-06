@@ -212,12 +212,14 @@ public class DrawManager {
         glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 
-        renderSceneWithShadows(board, ball);
+        renderBoardWithShadows(board, ball);
     }
 
     private void renderSceneWithoutShadow(Board board, Ball ball){
         glViewport(0, 0, displayWidth, displayHeight);
         glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        drawSkybox();
 
         for (Floor floor : board.floors) {
             drawFloor(floor);
@@ -325,7 +327,8 @@ public class DrawManager {
         }
     }
 
-    private void renderSceneWithShadows(Board board, Ball ball){
+    private void renderBoardWithShadows(Board board, Ball ball){
+        drawSkybox();
         for (Floor floor : board.floors) {
             drawFloorWithShadow(floor);
         }
@@ -591,7 +594,7 @@ public class DrawManager {
         multiplyMM(skyboxModelViewProjectionMatrix, 0, projectionMatrix, 0, tmp, 0);
     }
 
-    public void drawSkybox() {
+    private void drawSkybox() {
         glDepthFunc(GL_LEQUAL);
         skyboxShaderProgram.useProgram();
         skyboxShaderProgram.setUniforms(skyboxModelViewProjectionMatrix, skybox.getTexture());
