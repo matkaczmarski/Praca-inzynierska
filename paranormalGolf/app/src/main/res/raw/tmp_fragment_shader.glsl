@@ -11,9 +11,9 @@ varying float v_Light;
 varying vec4 v_ShadowCoord;
  varying vec3 v_modelViewVertex;
  varying vec3 v_modelViewNormal;
- //varying vec3 v_LightPos;
+ varying vec3 v_LightVector;
 
-uniform vec3 u_LightPos;
+
 
 float unpack (vec4 colour)
 {
@@ -29,7 +29,7 @@ float calcBias()
 {
 	float bias;
 
-	vec3 l = normalize( u_LightPos );
+	vec3 l = v_LightVector;
 
 	// Cosine of the angle between the normal and the light direction,
 	// clamped above 0

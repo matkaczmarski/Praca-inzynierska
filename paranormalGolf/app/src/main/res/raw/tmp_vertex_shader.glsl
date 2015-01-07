@@ -15,7 +15,7 @@ attribute vec2 a_TextureCoordinates;
 
 varying vec2 v_TextureCoordinates;
 varying float v_Light;
-//varying vec3 v_LightPos;
+varying vec3 v_LightVector;
 
 uniform mat4 u_ShadowProjMatrix;
 
@@ -27,11 +27,10 @@ varying vec4 v_ShadowCoord;
 void main()                    
 {
     v_modelViewVertex = vec3(u_MVMatrix * a_Position);
-    vec3 lightVector = normalize(u_LightPos - v_modelViewVertex);
+    v_LightVector = normalize(u_LightPos - v_modelViewVertex);
     v_modelViewNormal = vec3(normalize(u_itMVMatrix * vec4(a_Normal,0)));
-    //v_LightPos = u_LightPos;
 
-    float diffuseComponent = dot(v_modelViewNormal, lightVector);
+    float diffuseComponent = dot(v_modelViewNormal, v_LightVector);
     if(diffuseComponent < 0.0){
         diffuseComponent = 0.0;
     }
