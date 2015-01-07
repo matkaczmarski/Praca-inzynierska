@@ -187,9 +187,7 @@ public class Updater implements SensorEventListener {
     public void draw() {
         if (paused)
             return;
-        drawManager.preDraw(ball.getLocation());
         drawManager.drawBoard(board, ball);
-
 
         if (last_diamonds_count != board.diamonds.size()) {
             last_diamonds_count = board.diamonds.size();

@@ -7,10 +7,9 @@ import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TmpShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Box;
-import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Sphere;
@@ -42,7 +41,6 @@ public class Ball extends MovableElement {
     private final int MESH_DIMENSION = 32;
     public final float BALL_OPACITY = 1f;
     private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
-    //public final float[] rgba = new float[] {0.0f, 0.0f, 0.9f, 1f};
 
     private final float CD =0.4f;
     private final float DENSITY =1.225f;
@@ -69,15 +67,14 @@ public class Ball extends MovableElement {
         rotation=new float[16];
         setIdentityM(rotation,0);
 
-
         GraphicsData generatedData = ObjectGenerator.createBall(location, radius, MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
 
-        texture = textureLoader(ballTexture, context);
+        texture = loadTexture(ballTexture, context);
     }
 
-    private int textureLoader(BallTexture ballTextureType, Context context){
+    public int loadTexture(BallTexture ballTextureType, Context context){
         switch (ballTextureType){
             case golf:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_golf);
@@ -106,9 +103,9 @@ public class Ball extends MovableElement {
     }
 
     public void bindShadowData(ShaderProgram shaderProgram) {
-        vertexData.setVertexAttribPointer(0, ((TmpShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TmpShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((TmpShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(0, ((ShadowingShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
+        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
     }
 
     public void bindDepthMapData(ShaderProgram shaderProgram) {

@@ -6,13 +6,16 @@ uniform float u_Opacity;
 uniform sampler2D u_ShadowTexture;
 
 varying vec2 v_TextureCoordinates;
-varying float v_Light;
+//varying float v_Light;
 
 varying vec4 v_ShadowCoord;
  varying vec3 v_modelViewVertex;
  varying vec3 v_modelViewNormal;
  varying vec3 v_LightVector;
 
+
+uniform float u_LightsAmbient;
+uniform float u_LightsDiffusion;
 
 
 float unpack (vec4 colour)
@@ -29,14 +32,12 @@ float calcBias()
 {
 	float bias;
 
-	vec3 l = v_LightVector;
-
 	// Cosine of the angle between the normal and the light direction,
 	// clamped above 0
 	//  - light is at the vertical of the triangle -> 1
 	//  - light is perpendiular to the triangle -> 0
 	//  - light is behind the triangle -> 0
-	float cosTheta = clamp( dot( v_modelViewNormal,l ), 0.0, 1.0 );
+	float cosTheta = clamp( dot( v_modelViewNormal,v_LightVector ), 0.0, 1.0 );
 
  	bias = 0.0001*tan(acos(cosTheta));
 	bias = clamp(bias, 0.0, 0.01);
@@ -65,8 +66,15 @@ float shadowSimple()
 
 void main()
 {
-    	float shadow = 1.0;
 
+    float diffuseComponent = dot(v_modelViewNormal, v_LightVector);
+    if(diffuseComponent < 0.0){
+        diffuseComponent = 0.0;
+    }
+   float v_Light =  diffuseComponent * u_LightsDiffusion;
+    v_Light = v_Light + u_LightsAmbient;
+
+    	float shadow = 1.0;
     	//if the fragment is not behind light view frustum
     	if (v_ShadowCoord.w > 0.0) {
 
@@ -77,5 +85,4 @@ void main()
     		shadow = (shadow * 0.6) + 0.4;
     	}
     gl_FragColor = vec4(vec3(texture2D(u_TextureUnit, v_TextureCoordinates)) * v_Light * shadow, u_Opacity);
-    //gl_FragColor = vec4(vec3(1.0,0.0,0.0) * v_Light * shadow, u_Opacity);
 }

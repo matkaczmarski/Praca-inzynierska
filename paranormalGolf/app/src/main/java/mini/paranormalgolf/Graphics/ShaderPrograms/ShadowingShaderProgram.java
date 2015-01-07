@@ -21,7 +21,7 @@ import static android.opengl.GLES20.glUniformMatrix4fv;
 /**
  * Created by Mateusz on 2015-01-03.
  */
-public class TmpShaderProgram extends ShaderProgram {
+public class ShadowingShaderProgram extends ShaderProgram {
 
     private final int uMVPMatrixLocation;
     private final int uMVMatrixLocation;
@@ -39,8 +39,8 @@ public class TmpShaderProgram extends ShaderProgram {
     private final int aNormalLocation;
     private final int aTextureCoordinatesLocation;
 
-    public TmpShaderProgram(Context context) {
-        super(context, R.raw.tmp_vertex_shader, R.raw.tmp_fragment_shader);
+    public ShadowingShaderProgram(Context context) {
+        super(context, R.raw.shadowing_vertex_shader, R.raw.shadowing_fragment_shader);
 
         // Retrieve uniform locations for the shader program.
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
