@@ -115,10 +115,10 @@ public class DrawManager {
         updateSkyboxMVPMatrix();
 
         if(withShadow) {
-            float ratio = 1.5f;
+            float ratio = 2.0f;
             depthMapWidth = Math.round(displayWidth * ratio);
             depthMapHeight = Math.round(displayHeight * ratio);
-            MatrixHelper.perspectiveM(lightsProjectionMatrix, 120f, (float) width / (float) height, near, far);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix, 120f, (float) width / (float) height, 2f, far);
             generateShadowFBO();
         }
     }
@@ -186,7 +186,6 @@ public class DrawManager {
             multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
         }
     }
-
 
     public void drawBoard(Board board, Ball ball) {
         if (withShadow) {
