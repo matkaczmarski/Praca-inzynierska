@@ -3,5 +3,6 @@
     <string-array name="boards_id">
         <item>board_1</item>
         <item>board_2</item>
+        <item>board_3</item>
     </string-array>
 </resources>
