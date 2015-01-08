@@ -28,7 +28,8 @@ public class CheckPoint extends ControlPoint {
     private Glow glow;
 
     public Glow getGlow(){return glow;}
-    public boolean ifVisited(){return visited;}
+    public boolean isVisited(){return visited;}
+    public void visit(){visited = true;}
 
     public CheckPoint(Point location, ConicalFrustum conicalFrustum, boolean visited, Context context){
         super(location,conicalFrustum);

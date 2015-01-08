@@ -27,6 +27,11 @@ public class Finish extends ControlPoint {
     private boolean canFinish;
     private Glow glow;
 
+    public void enableFinishing() {
+        canFinish = true;
+        glow.enableFinishing();
+    }
+
     public Glow getGlow(){return glow;}
 
     public Finish(Point location, ConicalFrustum conicalFrustum, boolean canFinish, Context context) {

@@ -41,7 +41,6 @@ import static android.opengl.GLES20.glDepthFunc;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
-import static android.opengl.Matrix.orthoM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
@@ -61,7 +60,7 @@ public class DrawManager {
     private final float[] modelViewProjectionMatrix = new float[16];
     private final float[] normalsRotationMatrix = new float[16];
 
-    final LightData lightData = new LightData(new Point(1f, 25f, 1f), 0.5f, 0.6f);
+    private LightData lightData = new LightData(new Point(1f, 25f, 1f), 0.2f, 0.6f);
 
     private final float fieldOfViewDegree = 45;
     private final float near = 1f;
@@ -102,7 +101,7 @@ public class DrawManager {
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
         skyboxShaderProgram = new SkyboxShaderProgram(context);
-        skybox = new Skybox(context, new Point(0, 0, 0), Skybox.SkyboxTexture.dayClouds);
+        skybox = new Skybox(context, new Point(0, 0, 0), Skybox.SkyboxTexture.nightClouds);
 
         depthMapShaderProgram = new DepthMapShaderProgram(context);
         shadowingShaderProgram = new ShadowingShaderProgram(context);
@@ -118,19 +117,25 @@ public class DrawManager {
         updateSkyboxMVPMatrix();
 
         if(withShadow) {
-            float ratio = 2.0f;
+            float ratio = 1.5f;
             depthMapWidth = Math.round(displayWidth * ratio);
             depthMapHeight = Math.round(displayHeight * ratio);
-            MatrixHelper.perspectiveM(lightsProjectionMatrix, 120f, (float) width / height, 2f, far);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix, 70f, (float) width / height, 3.0f, far);
             //orthoM(lightsProjectionMatrix, 0, 0, 100f, 0, 100f, 2f, far);
-            Matrix.setLookAtM(lightsViewMatrix, 0,
-                    lightData.position.x, lightData.position.y, lightData.position.z,
-                    0f, 0f, 0f,
-                    0f, 1f, 0f);
-            multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
-
+           updateLightsViewMatrix();
             generateShadowFBO();
         }
+    }
+
+    private Point ballLocation = new Point(0,0,0);
+
+    private void updateLightsViewMatrix(){
+        Matrix.setLookAtM(lightsViewMatrix, 0,
+                lightData.position.x, lightData.position.y, lightData.position.z,
+                ballLocation.x, ballLocation.y, ballLocation.z,
+                0f, 1f, 0f);
+        multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
+
     }
 
     public void generateShadowFBO() {
@@ -188,18 +193,24 @@ public class DrawManager {
 
 
         float distance = cameraTranslation.length();
-        float camX = ball.getLocation().x + distance * -FloatMath.sin(xRotation*((float)Math.PI/180)) * FloatMath.cos((yRotation)*((float)Math.PI/180));
-        float camY = ball.getLocation().y + distance * -FloatMath.sin((yRotation)*((float)Math.PI/180));
-        float camZ = ball.getLocation().z + -distance * FloatMath.cos((xRotation)*((float)Math.PI/180)) * FloatMath.cos((yRotation)*((float)Math.PI/180));
+        float degreeToRadiusTmp = (float) Math.PI / 180;
+        float camX = ball.getLocation().x + distance * -FloatMath.sin(xRotation * degreeToRadiusTmp) * FloatMath.cos((yRotation) * degreeToRadiusTmp);
+        float camY = ball.getLocation().y + distance * -FloatMath.sin((yRotation) * degreeToRadiusTmp);
+        float camZ = ball.getLocation().z + -distance * FloatMath.cos((xRotation) * degreeToRadiusTmp) * FloatMath.cos((yRotation) * degreeToRadiusTmp);
         //float[] tmp = new float[16];
 
-        setLookAtM(viewMatrix, 0,camX, camY, camZ, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
+        setLookAtM(viewMatrix, 0, camX, camY, camZ, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
 
 
 //        float[] tmp = new float[16];
 //        setLookAtM(tmp, 0, ball.getLocation().x + cameraTranslation.x, ball.getLocation().y + cameraTranslation.y, ball.getLocation().z + cameraTranslation.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
 //        multiplyMM(viewMatrix, 0, tmp, 0, viewRotationMatrix, 0);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
+
+        ballLocation = ball.getLocation();
+        lightData.position = new Point(ballLocation.x, ballLocation.y + 20f, ballLocation.z + 20f);
+        updateLightsViewMatrix();
 
 
         if (withShadow) {
@@ -444,7 +455,7 @@ public class DrawManager {
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getGlow().getIfCanFinish() ? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getGlow().ifCanFinish() ? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
         finish.getGlow().bindData(colorShaderProgram);
         finish.getGlow().draw();
     }
@@ -456,7 +467,7 @@ public class DrawManager {
         checkPoint.bindData(textureShaderProgram);
         checkPoint.draw();
 
-        if (!checkPoint.ifVisited()) {
+        if (!checkPoint.isVisited()) {
             colorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
             colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().CAN_FINISH_COLOR);
@@ -549,7 +560,7 @@ public class DrawManager {
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getGlow().getIfCanFinish() ? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, finish.getGlow().ifCanFinish() ? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
         finish.getGlow().bindData(colorShaderProgram);
         finish.getGlow().draw();
     }
@@ -561,7 +572,7 @@ public class DrawManager {
         checkPoint.bindShadowData(shadowingShaderProgram);
         checkPoint.draw();
 
-        if (!checkPoint.ifVisited()) {
+        if (!checkPoint.isVisited()) {
             colorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
             colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().CAN_FINISH_COLOR);

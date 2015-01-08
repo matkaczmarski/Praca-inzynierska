@@ -30,7 +30,7 @@ void main()
     v_LightVector = normalize(u_LightPos - v_modelViewVertex);
     v_modelViewNormal = vec3(normalize(u_itMVMatrix * vec4(a_Normal,0)));
 
-    // diffuseComponent = dot(v_modelViewNormal, v_LightVector);
+    //float diffuseComponent = dot(v_modelViewNormal, v_LightVector);
     //if(diffuseComponent < 0.0){
     //    diffuseComponent = 0.0;
     //}

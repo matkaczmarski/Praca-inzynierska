@@ -11,9 +11,6 @@ import android.os.Vibrator;
 
 import java.io.IOException;
 
-import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
-import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
-import static android.opengl.GLES20.glClear;
 import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Activities.GameActivity;
@@ -125,12 +122,21 @@ public class Updater implements SensorEventListener {
                 // i dodaj jakiś czas
             }
 
-        for (int i = 0; i < board.checkpoints.size(); i++)
+        boolean areAllCheckpointVisited = true;
+        for (int i = 0; i < board.checkpoints.size(); i++) {
             if (ball.CheckCollision(board.checkpoints.get(i))) {
-                //usuń checkpoint i zrób co trzeba
+                board.checkpoints.get(i).visit();
+                continue;
             }
-        if(ball.CheckCollision(board.finish))
+            if(!board.checkpoints.get(i).isVisited())
+                areAllCheckpointVisited = false;
+        }
+        if(areAllCheckpointVisited){
+            board.finish.enableFinishing();
+        }
+        if(ball.CheckCollision(board.finish)) {
             //jakieś zakończenie, bądź wcześniej warunki czy można zakończyć
+        }
 
 
 
