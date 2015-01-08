@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Board id="2">
+<Board id="3">
     <Floor location_x="0" location_y="-1" location_z="0" boxsize_x="16" boxsize_y="2" boxsize_z="16" friction="0.05"/>
     <Floor location_x="18" location_y="-1" location_z="0" boxsize_x="20" boxsize_y="2" boxsize_z="8" friction="0.05"/>
     <Floor location_x="32" location_y="-1" location_z="4" boxsize_x="8" boxsize_y="2" boxsize_z="32" friction="0.05"/>
