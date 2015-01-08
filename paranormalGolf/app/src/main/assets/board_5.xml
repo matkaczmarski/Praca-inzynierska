@@ -64,5 +64,5 @@
     <Diamond location_x="20" location_y="1.4" location_z="-4.5" value="100" y_shift="0.7"/>
     <Diamond location_x="20" location_y="1.4" location_z="-7" value="100" y_shift="0.7"/>
 
-    <Finish location_x="-20" location_y="-1" location_z="-10" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="true"/>
+    <Finish location_x="-20" location_y="0" location_z="-10" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="true"/>
 </Board>
