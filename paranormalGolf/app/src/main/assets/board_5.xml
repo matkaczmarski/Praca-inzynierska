@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Board id="5">
+    <Floor location_x="0" location_y="-1" location_z="0" boxsize_x="46" boxsize_y="2" boxsize_z="46" friction="0.05"/>
+
+    <Wall location_x="0" location_y="1" location_z="-22.5" boxsize_x="46" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="0" location_y="1" location_z="22.5" boxsize_x="46" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="-22.5" location_y="1" location_z="0" boxsize_x="1" boxsize_y="2" boxsize_z="44"/>
+    <Wall location_x="22.5" location_y="1" location_z="0" boxsize_x="1" boxsize_y="2" boxsize_z="44"/>
+
+    <!--Wall location_x="0" location_y="1" location_z="0" boxsize_x="6" boxsize_y="2" boxsize_z="6"/-->
+
+    <Wall location_x="0" location_y="1" location_z="-7.5" boxsize_x="16" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="0" location_y="1" location_z="7.5" boxsize_x="16" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="-7.5" location_y="1" location_z="2" boxsize_x="1" boxsize_y="2" boxsize_z="10"/>
+    <Wall location_x="7.5" location_y="1" location_z="-4.5" boxsize_x="1" boxsize_y="2" boxsize_z="5"/>
+    <Wall location_x="7.5" location_y="1" location_z="4.5" boxsize_x="1" boxsize_y="2" boxsize_z="5"/>
+
+    <Wall location_x="7.5" location_y="1" location_z="-10" boxsize_x="1" boxsize_y="2" boxsize_z="4"/>
+
+    <Wall location_x="0" location_y="1" location_z="12.5" boxsize_x="26" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="-7.5" location_y="1" location_z="-12.5" boxsize_x="11" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="7.5" location_y="1" location_z="-12.5" boxsize_x="11" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="12.5" location_y="1" location_z="0" boxsize_x="1" boxsize_y="2" boxsize_z="24"/>
+    <Wall location_x="-12.5" location_y="1" location_z="-4.5" boxsize_x="1" boxsize_y="2" boxsize_z="15"/>
+    <Wall location_x="-12.5" location_y="1" location_z="9.5" boxsize_x="1" boxsize_y="2" boxsize_z="5"/>
+
+    <Wall location_x="-15" location_y="1" location_z="2.5" boxsize_x="4" boxsize_y="2" boxsize_z="1"/>
+
+    <Wall location_x="0" location_y="1" location_z="17.5" boxsize_x="36" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="2.5" location_y="1" location_z="-17.5" boxsize_x="31" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="-17.5" location_y="1" location_z="-0.5" boxsize_x="1" boxsize_y="2" boxsize_z="35"/>
+    <Wall location_x="17.5" location_y="1" location_z="-7" boxsize_x="1" boxsize_y="2" boxsize_z="20"/>
+    <Wall location_x="17.5" location_y="1" location_z="12" boxsize_x="1" boxsize_y="2" boxsize_z="10"/>
+
+    <Wall location_x="-20" location_y="1" location_z="-12.5" boxsize_x="4" boxsize_y="2" boxsize_z="1"/>
+    <Wall location_x="20" location_y="1" location_z="2.5" boxsize_x="4" boxsize_y="2" boxsize_z="1"/>
+
+    <Diamond location_x="5" location_y="1.4" location_z="0" value="100" y_shift="0.7"/>
+    <Diamond location_x="-5" location_y="1.4" location_z="0" value="100" y_shift="0.7"/>
+    <Diamond location_x="0" location_y="1.4" location_z="5" value="100" y_shift="0.7"/>
+    <Diamond location_x="0" location_y="1.4" location_z="-5" value="100" y_shift="0.7"/>
+
+    <Diamond location_x="-10" location_y="1.4" location_z="10" value="100" y_shift="0.7"/>
+    <Diamond location_x="10" location_y="1.4" location_z="10" value="100" y_shift="0.7"/>
+    <Diamond location_x="-10" location_y="1.4" location_z="-10" value="100" y_shift="0.7"/>
+    <Diamond location_x="10" location_y="1.4" location_z="-10" value="100" y_shift="0.7"/>
+    <Diamond location_x="10" location_y="1.4" location_z="-7.5" value="100" y_shift="0.7"/>
+    <Diamond location_x="10" location_y="1.4" location_z="-5" value="100" y_shift="0.7"/>
+
+    <Diamond location_x="15" location_y="1.4" location_z="-15" value="100" y_shift="0.7"/>
+    <Diamond location_x="15" location_y="1.4" location_z="15" value="100" y_shift="0.7"/>
+    <Diamond location_x="-15" location_y="1.4" location_z="15" value="100" y_shift="0.7"/>
+
+    <Diamond location_x="20" location_y="1.4" location_z="20" value="100" y_shift="0.7"/>
+    <Diamond location_x="0" location_y="1.4" location_z="20" value="100" y_shift="0.7"/>
+    <Diamond location_x="-20" location_y="1.4" location_z="20" value="100" y_shift="0.7"/>
+
+    <Diamond location_x="-20" location_y="1.4" location_z="-15" value="100" y_shift="0.7"/>
+    <Diamond location_x="-20" location_y="1.4" location_z="-17.5" value="100" y_shift="0.7"/>
+    <Diamond location_x="-20" location_y="1.4" location_z="-20" value="100" y_shift="0.7"/>
+
+    <Diamond location_x="20" location_y="1.4" location_z="-2" value="100" y_shift="0.7"/>
+    <Diamond location_x="20" location_y="1.4" location_z="-4.5" value="100" y_shift="0.7"/>
+    <Diamond location_x="20" location_y="1.4" location_z="-7" value="100" y_shift="0.7"/>
+
+    <Finish location_x="-20" location_y="-1" location_z="-10" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="true"/>
+</Board>
