@@ -88,9 +88,16 @@ public class Updater implements SensorEventListener {
         }
         ball.Update(INTERVAL_TIME, accData, mu);
 
-
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
+
+        for (Elevator elevator : board.elevators)
+            if (ball.CheckCollision(elevator))
+                ball.ReactOnCollision(elevator);
+
+        for (Beam beam : board.beams)
+            if (ball.CheckCollision(beam))
+                ball.ReactOnCollision(beam);
 
         for (Wall wall : board.walls)
             if (ball.CheckCollision(wall)) {
@@ -117,13 +124,14 @@ public class Updater implements SensorEventListener {
                 onHourGlassCollision();
                 // i dodaj jakiś czas
             }
-        for (Elevator elevator : board.elevators)
-            if (ball.CheckCollision(elevator))
-                ball.ReactOnCollision(elevator);
 
-        for (Beam beam : board.beams)
-            if (ball.CheckCollision(beam))
-                ball.ReactOnCollision(beam);
+        for (int i = 0; i < board.checkpoints.size(); i++)
+            if (ball.CheckCollision(board.checkpoints.get(i))) {
+                //usuń checkpoint i zrób co trzeba
+            }
+        if(ball.CheckCollision(board.finish))
+            //jakieś zakończenie, bądź wcześniej warunki czy można zakończyć
+
 
 
         //TODO zmienić warunki wygranej!!!!!!
