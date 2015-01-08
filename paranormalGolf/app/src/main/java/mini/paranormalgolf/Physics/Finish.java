@@ -61,4 +61,14 @@ public class Finish extends ControlPoint {
     public void bindDepthMapData(ShaderProgram shaderProgram) {
         vertexData.setVertexAttribPointer(0, ((DepthMapShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
     }
+
+    public boolean isCanFinish()
+    {
+        return canFinish;
+    }
+
+    public void setCanFinish(boolean canFinish)
+    {
+        this.canFinish = canFinish;
+    }
 }
