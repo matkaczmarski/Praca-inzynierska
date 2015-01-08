@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ActionMenuView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -412,8 +413,15 @@ public class GameActivity extends Activity implements Runnable {
         dialog.setContentView(R.layout.win_dialog);
         loadFontsForDialog(dialog);
         setDialogTitleAndResult(dialog, diamonds, time, win);
-        dialog.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
         dialog.show();
+
+        dialog.getWindow().setAttributes(lp);
     }
 
     public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time, boolean win)
