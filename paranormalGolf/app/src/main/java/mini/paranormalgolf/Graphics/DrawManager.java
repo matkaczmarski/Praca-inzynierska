@@ -3,6 +3,7 @@ package mini.paranormalgolf.Graphics;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.FloatMath;
 import android.util.Log;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
@@ -24,6 +25,7 @@ import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.HourGlass;
 import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Vector;
 
 import static android.opengl.GLES20.GL_BACK;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
@@ -65,7 +67,7 @@ public class DrawManager {
     private final float near = 1f;
     private final float far = 100f;
 
-    private final Point cameraTranslation = new Point(0f, 15f, 15f);
+    private final Vector cameraTranslation = new Vector(0f, 15f, 15f);
 
     private ColorShaderProgram colorShaderProgram;
     private TextureShaderProgram textureShaderProgram;
@@ -73,7 +75,7 @@ public class DrawManager {
     private Skybox skybox;
 
     float[] skyboxModelViewProjectionMatrix = new float[16];
-    private float xRotation, yRotation;
+    private float xRotation = 180f, yRotation = -45f;
 
     DepthMapShaderProgram depthMapShaderProgram;
     ShadowingShaderProgram shadowingShaderProgram;
@@ -124,7 +126,6 @@ public class DrawManager {
             Matrix.setLookAtM(lightsViewMatrix, 0,
                     lightData.position.x, lightData.position.y, lightData.position.z,
                     0f, 0f, 0f,
-                    
                     0f, 1f, 0f);
             multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
 
@@ -182,8 +183,24 @@ public class DrawManager {
 
 
     public void drawBoard(Board board, Ball ball) {
-        setLookAtM(viewMatrix, 0, ball.getLocation().x + cameraTranslation.x, ball.getLocation().y + cameraTranslation.y, ball.getLocation().z + cameraTranslation.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
+//        setLookAtM(viewMatrix, 0, ball.getLocation().x + cameraTranslation.x, ball.getLocation().y + cameraTranslation.y, ball.getLocation().z + cameraTranslation.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
+//        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
+
+        float distance = cameraTranslation.length();
+        float camX = ball.getLocation().x + distance * -FloatMath.sin(xRotation*((float)Math.PI/180)) * FloatMath.cos((yRotation)*((float)Math.PI/180));
+        float camY = ball.getLocation().y + distance * -FloatMath.sin((yRotation)*((float)Math.PI/180));
+        float camZ = ball.getLocation().z + -distance * FloatMath.cos((xRotation)*((float)Math.PI/180)) * FloatMath.cos((yRotation)*((float)Math.PI/180));
+        //float[] tmp = new float[16];
+
+        setLookAtM(viewMatrix, 0,camX, camY, camZ, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
+
+
+//        float[] tmp = new float[16];
+//        setLookAtM(tmp, 0, ball.getLocation().x + cameraTranslation.x, ball.getLocation().y + cameraTranslation.y, ball.getLocation().z + cameraTranslation.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
+//        multiplyMM(viewMatrix, 0, tmp, 0, viewRotationMatrix, 0);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
 
         if (withShadow) {
             renderSceneWithShadow(board, ball);
@@ -573,21 +590,24 @@ public class DrawManager {
         xRotation += deltaX / 16f;
         yRotation += deltaY / 16f;
 
+
         if (yRotation < -90) {
-            yRotation = -90;
+            yRotation = -89.9f;
         } else if (yRotation > 90) {
-            yRotation = 90;
+            yRotation = 89.9f;
         }
 
         updateSkyboxMVPMatrix();
     }
 
+    float[] viewRotationMatrix = new float[16];
+
     private void updateSkyboxMVPMatrix() {
-        float[] tmp = new float[16];
-        setIdentityM(tmp, 0);
-        rotateM(tmp, 0, -yRotation, 1f, 0f, 0f);
-        rotateM(tmp, 0, -xRotation, 0f, 1f, 0f);
-        multiplyMM(skyboxModelViewProjectionMatrix, 0, projectionMatrix, 0, tmp, 0);
+        //float[] tmp = new float[16];
+        setIdentityM(viewRotationMatrix, 0);
+        rotateM(viewRotationMatrix, 0, -yRotation, 1f, 0f, 0f);
+        rotateM(viewRotationMatrix, 0, -xRotation, 0f, 1f, 0f);
+        multiplyMM(skyboxModelViewProjectionMatrix, 0, projectionMatrix, 0, viewRotationMatrix, 0);
     }
 
     private void drawSkybox() {
