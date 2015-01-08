@@ -198,6 +198,7 @@ public class XMLParser
             return null;
         }
 
+        finish.setCanFinish(checkPoints.size() == 0);
         Board board = new Board(Integer.valueOf(board_id.split("_")[1]), floors, walls, diamonds, beams, elevators, checkPoints, hourGlasses, finish);
         return board;
     }

@@ -135,14 +135,9 @@ public class Updater implements SensorEventListener {
             board.finish.enableFinishing();
         }
         if(ball.CheckCollision(board.finish)) {
-            //jakieś zakończenie, bądź wcześniej warunki czy można zakończyć
+            if (board.finish.isCanFinish())
+                return UpdateResult.WIN;
         }
-
-
-
-        //TODO zmienić warunki wygranej!!!!!!
-        if (getCollectedDiamondsCount() == max_diamonds_count)
-            return UpdateResult.WIN;
 
         return UpdateResult.NONE;
     }

@@ -412,6 +412,7 @@ public class GameActivity extends Activity implements Runnable {
         dialog.setContentView(R.layout.win_dialog);
         loadFontsForDialog(dialog);
         setDialogTitleAndResult(dialog, diamonds, time, win);
+        //dialog.getWindow().setLayout();
         dialog.show();
     }
 
