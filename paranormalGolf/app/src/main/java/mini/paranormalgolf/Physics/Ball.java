@@ -2,6 +2,7 @@ package mini.paranormalgolf.Physics;
 
 
 import android.content.Context;
+import android.opengl.GLES20;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
@@ -239,104 +240,6 @@ public class Ball extends MovableElement {
 
     public void ReactOnCollision(Wall element) {
         Collisions.ResponseBallAABBCollisions(this,new Box(element.getLocation(),element.getMeasurements()));
-        //find time collision
-//        Point startLocation = new Point(location.x - lastMove.x, location.y - lastMove.y, location.z - lastMove.z);
-//        Point endLocation = new Point(location.x, location.y, location.z);
-//        Point halfLocation = new Point((startLocation.x + endLocation.x) / 2, (startLocation.y + endLocation.y) / 2, (startLocation.z + endLocation.z) / 2);
-//        float startTime = 0, endTime = 1, halfTime = 0.5f;
-//        Box collidedWall = new Box(element.getLocation(), element.getMeasurements());
-//        for (int i = 0; i < 10; i++) {
-//            if (Collisions.CheckSphereAABBCollsion(new Sphere(halfLocation, radius), collidedWall)) {
-//                endTime = halfTime;
-//                endLocation = halfLocation;
-//            } else {
-//                startTime = halfTime;
-//                startLocation = halfLocation;
-//            }
-//            halfTime = (startTime + endTime) / 2;
-//            halfLocation = new Point((startLocation.x + endLocation.x) / 2, (startLocation.y + endLocation.y) / 2, (startLocation.z + endLocation.z) / 2);
-//        }
-//        Point wallLocation = element.getLocation();
-//        BoxSize wallSize = element.getMeasurements();
-//        Vector normal = new Vector(0, 0, 0);
-//        Point min = new Point(wallLocation.x - wallSize.x / 2, wallLocation.y - wallSize.y / 2, wallLocation.z - wallSize.z / 2);
-//        Point max = new Point(wallLocation.x + wallSize.x / 2, wallLocation.y + wallSize.y / 2, wallLocation.z + wallSize.z / 2);
-//
-//        if (min.x - halfLocation.x > 0 && min.x - halfLocation.x <= radius + Collisions.USER_EXPERIENCE)
-//            normal.x = -1;
-//        else if (halfLocation.x - max.x > 0 && halfLocation.x - max.x <= radius + Collisions.USER_EXPERIENCE)
-//            normal.x = 1;
-//
-//        if (min.y - halfLocation.y > 0 && min.y - halfLocation.y <= radius + Collisions.USER_EXPERIENCE)
-//            normal.y = -1;
-//        else if (halfLocation.y - max.y > 0 && halfLocation.y - max.y <= radius + Collisions.USER_EXPERIENCE)
-//            normal.y = 1;
-//
-//        if (min.z - halfLocation.z > 0 && min.z - halfLocation.z <= radius + Collisions.USER_EXPERIENCE)
-//            normal.z = -1;
-//        else if (halfLocation.z - max.z > 0 && halfLocation.z - max.z <= radius + Collisions.USER_EXPERIENCE)
-//            normal.z = 1;
-//
-//        if (normal.length() == 1) {
-//            if (Math.abs(normal.x) == 1) velocity.x = -velocity.x;
-//            else if (Math.abs(normal.z) == 1) velocity.z = -velocity.z;
-//        } else {
-//            if (Math.abs(normal.length() - Math.sqrt(3)) < Collisions.USER_EXPERIENCE) normal.y = 0;
-//            normal = normal.normalize();
-//            Vector normalVelocity = velocity.normalize();
-//            normalVelocity = new Vector(-normalVelocity.x, -normalVelocity.y, -normalVelocity.z);
-//            Vector newNormalVelocity = new Vector(0, 0, 0);
-//
-//            //odtąd jest założenie zerowego y
-//            if (normal.y == 0) {
-//                if (Math.abs(normalVelocity.z * normal.x - normal.z * normalVelocity.x) < 0.0001)
-//                    velocity = new Vector(-velocity.x, velocity.y, -velocity.z);
-//                else {
-//                    float alfa = (float) Math.acos(normal.dotProduct(normalVelocity));
-//                    newNormalVelocity.z =
-//                            ((float) (normal.x * Math.cos(2 * alfa) - normal.x * normalVelocity.y * normalVelocity.y - Math.cos(alfa) * normalVelocity.x)) /
-//                                    (normalVelocity.z * normal.x - normal.z * normalVelocity.x);
-//                    newNormalVelocity.x =
-//                            ((float) Math.cos(alfa) - newNormalVelocity.z * normal.z) / (normal.x);
-//                    newNormalVelocity.y = normalVelocity.y;
-//                    float length = velocity.length();
-//                    velocity = new Vector(length * newNormalVelocity.x, length * newNormalVelocity.y, length * newNormalVelocity.z);
-//                }
-//            } else if (normal.x == 0) {
-//                if (Math.abs(normalVelocity.z * normal.y - normal.z * normalVelocity.y) < 0.0001)
-//                    velocity = new Vector(velocity.x, -velocity.y, -velocity.z);
-//                else {
-//                    float alfa = (float) Math.acos(normal.dotProduct(normalVelocity));
-//
-//                    newNormalVelocity.z =
-//                            ((float) (normal.y * Math.cos(2 * alfa) - normal.y * normalVelocity.x * normalVelocity.x - Math.cos(alfa) * normalVelocity.y)) /
-//                                    (normalVelocity.z * normal.y - normal.z * normalVelocity.y);
-//                    newNormalVelocity.y =
-//                            ((float) Math.cos(alfa) - newNormalVelocity.z * normal.z) / (normal.y);
-//                    newNormalVelocity.x = normalVelocity.x;
-//                    float length = velocity.length();
-//                    velocity = new Vector(length * newNormalVelocity.x, length * newNormalVelocity.y, length * newNormalVelocity.z);
-//                }
-//            } else { //normal.z==0
-//                if (Math.abs(normalVelocity.y * normal.x - normal.y * normalVelocity.x) < 0.0001)
-//                    velocity = new Vector(-velocity.x, -velocity.y, velocity.z);
-//                else {
-//                    float alfa = (float) Math.acos(normal.dotProduct(normalVelocity));
-//                    newNormalVelocity.y =
-//                            ((float) (normal.x * Math.cos(2 * alfa) - normal.x * normalVelocity.z * normalVelocity.z - Math.cos(alfa) * normalVelocity.x)) /
-//                                    (normalVelocity.y * normal.x - normal.y * normalVelocity.x);
-//                    newNormalVelocity.x =
-//                            ((float) Math.cos(alfa) - newNormalVelocity.y * normal.y) / (normal.x);
-//                    newNormalVelocity.z = normalVelocity.z;
-//                    float length = velocity.length();
-//                    velocity = new Vector(length * newNormalVelocity.x, length * newNormalVelocity.y, length * newNormalVelocity.z);
-//                }
-//            }
-//        }
-//
-//        location = new Point(halfLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
-//                halfLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
-//                halfLocation.z + velocity.z * (1 - halfTime) * Updater.INTERVAL_TIME);
     }
 
     public void ReactOnCollision(Floor element) {
