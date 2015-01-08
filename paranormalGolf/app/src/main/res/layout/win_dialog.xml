@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/end_game_font"
-        android:textColor="#fff"/>
+        android:textColor="#fff"
+        android:singleLine="true"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:textColor="#fff"/>
+        android:textColor="#fff"
+        android:singleLine="true"/>
     <TextView
         android:id="@+id/end_game_ok_button"
         android:layout_width="wrap_content"
