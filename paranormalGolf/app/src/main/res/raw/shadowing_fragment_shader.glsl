@@ -24,7 +24,8 @@ float unpack (vec4 colour)
                                 1.0 / (256.0 * 256.0),
                                 1.0 / 256.0,
                                 1);
-    return dot(colour , bitShifts);
+    float res = dot(colour , bitShifts);
+    return res;
 }
 
 //Calculate variable bias - from http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping
@@ -61,7 +62,8 @@ float shadowSimple()
 
 	//1.0 = not in shadow (fragmant is closer to light than the value stored in shadow map)
 	//0.0 = in shadow
-	return float(distanceFromLight > shadowMapPosition.z - bias);
+	float res = float(distanceFromLight > shadowMapPosition.z - bias);
+	return res;
 }
 
 void main()
@@ -75,7 +77,7 @@ void main()
 
     		shadow = shadowSimple();
 
-    		//scale 0.0-1.0 to 0.2-1.0
+    		//scale 0.0-1.0 to 0.4-1.0
     		//otherways everything in shadow would be black
     		shadow = (shadow * 0.6) + 0.4;
     	}

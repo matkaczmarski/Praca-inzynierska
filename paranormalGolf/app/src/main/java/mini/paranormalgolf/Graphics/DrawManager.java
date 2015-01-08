@@ -122,14 +122,12 @@ public class DrawManager {
             depthMapHeight = Math.round(displayHeight * ratio);
             MatrixHelper.perspectiveM(lightsProjectionMatrix, 70f, (float) width / height, 3.0f, far);
             //orthoM(lightsProjectionMatrix, 0, 0, 100f, 0, 100f, 2f, far);
-           updateLightsViewMatrix();
             generateShadowFBO();
         }
     }
 
-    private Point ballLocation = new Point(0,0,0);
 
-    private void updateLightsViewMatrix(){
+    private void updateLightsViewMatrix(Point ballLocation){
         Matrix.setLookAtM(lightsViewMatrix, 0,
                 lightData.position.x, lightData.position.y, lightData.position.z,
                 ballLocation.x, ballLocation.y, ballLocation.z,
@@ -207,10 +205,8 @@ public class DrawManager {
 //        multiplyMM(viewMatrix, 0, tmp, 0, viewRotationMatrix, 0);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-
-        ballLocation = ball.getLocation();
-        lightData.position = new Point(ballLocation.x, ballLocation.y + 20f, ballLocation.z + 20f);
-        updateLightsViewMatrix();
+        lightData.position = new Point(ball.getLocation().x, ball.getLocation().y + 20f, ball.getLocation().z + 20f);
+        updateLightsViewMatrix(ball.getLocation());
 
 
         if (withShadow) {
