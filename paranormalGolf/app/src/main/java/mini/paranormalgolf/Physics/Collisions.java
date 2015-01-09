@@ -2,6 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.BoxSize;
+import mini.paranormalgolf.Primitives.Circle;
 import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Sphere;
@@ -222,6 +223,10 @@ public final class Collisions {
         }
         d += (sphereCenter.x - cylinderCenter.x) * (sphereCenter.x - cylinderCenter.x) + (sphereCenter.z - cylinderCenter.z) * (sphereCenter.z - cylinderCenter.z);
         return d < (sphereRadius + cylinderRadius) * (sphereRadius + cylinderRadius) + USER_EXPERIENCE;
+    }
+
+    public static boolean CheckSphereCircleCollision(Sphere sphere,Circle circle) {
+        return (sphere.center.x - circle.center.x) * (sphere.center.x - circle.center.x) + (sphere.center.z - circle.center.z) * (sphere.center.z - circle.center.z) <= circle.radius * circle.radius;
     }
 
     public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element) {
