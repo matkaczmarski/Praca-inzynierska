@@ -83,8 +83,8 @@ public class HourGlass extends Bonus {
         GraphicsData generatedData = ObjectGenerator.createHourglassGlassPart(lowerCone, upperCone, HOURGLASS_MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        float woodenBaseHeight = (lowerCone.getHeight() + upperCone.getHeight()) * WOODEN_BASE_HEIGHT_RATIO;
-        woodenParts = new HourGlassWoodenParts(location, new Cylinder(new Point(0f, -lowerCone.getHeight() + woodenBaseHeight /2,0f),lowerCone.getBottomRadius(), woodenBaseHeight), new Cylinder(new Point(0f, upperCone.getHeight() - woodenBaseHeight /2,0f),upperCone.getTopRadius(), woodenBaseHeight), context);
+        float woodenBaseHeight = (lowerCone.height + upperCone.height) * WOODEN_BASE_HEIGHT_RATIO;
+        woodenParts = new HourGlassWoodenParts(location, new Cylinder(new Point(0f, -lowerCone.height + woodenBaseHeight /2,0f),lowerCone.bottomRadius, woodenBaseHeight), new Cylinder(new Point(0f, upperCone.height - woodenBaseHeight /2,0f),upperCone.topRadius, woodenBaseHeight), context);
         ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         UP_DOWN_SPEED = HOURGLASS_UP_DOWN_SPEED;
     }

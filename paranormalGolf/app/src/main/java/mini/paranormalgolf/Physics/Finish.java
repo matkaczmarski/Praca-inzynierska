@@ -38,7 +38,7 @@ public class Finish extends ControlPoint {
         super(location, conicalFrustum);
         this.canFinish = canFinish;
 
-        GraphicsData generatedData = ObjectGenerator.createControlPointPlatform(conicalFrustum.getBottomRadius(), FINISH_PLATFORM_DIMENSION, FINISH_PLATFORM_SHIFT);
+        GraphicsData generatedData = ObjectGenerator.createControlPointPlatform(conicalFrustum.bottomRadius, FINISH_PLATFORM_DIMENSION, FINISH_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);

@@ -35,7 +35,7 @@ public class CheckPoint extends ControlPoint {
         super(location,conicalFrustum);
         this.visited=visited;
 
-        GraphicsData generatedData = ObjectGenerator.createControlPointPlatform(conicalFrustum.getBottomRadius(), CHECKPOINT_PLATFORM_DIMENSION, CHECKPOINT_PLATFORM_SHIFT);
+        GraphicsData generatedData = ObjectGenerator.createControlPointPlatform(conicalFrustum.bottomRadius, CHECKPOINT_PLATFORM_DIMENSION, CHECKPOINT_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = ResourceHelper.loadTexture(context, R.drawable.checkpoint_texture);

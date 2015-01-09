@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -90,6 +93,11 @@ public class MainMenuActivity extends Activity
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
         TextView tv = (TextView) findViewById(R.id.main_menu_title);
         tv.setTypeface(tf);
+
+        Shader textShader=new LinearGradient(0, 0, 0, 20,
+                new int[]{Color.GREEN,Color.BLUE},
+                new float[]{0, 1}, Shader.TileMode.CLAMP);
+        tv.getPaint().setShader(textShader);
 
         tv = (TextView)findViewById(R.id.main_menu_start);
         tv.setTypeface(tf);
