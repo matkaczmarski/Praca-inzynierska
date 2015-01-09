@@ -25,7 +25,6 @@ import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.HourGlass;
 import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.Point;
-import mini.paranormalgolf.Primitives.Vector;
 
 import static android.opengl.GLES20.GL_BACK;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
@@ -41,7 +40,6 @@ import static android.opengl.GLES20.glDepthFunc;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
-import static android.opengl.Matrix.orthoM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
@@ -67,7 +65,6 @@ public class DrawManager {
     private final float near = 1f;
     private final float far = 100f;
 
-    private final Vector cameraTranslation = new Vector(0f, 15f, 15f);
 
     private ColorShaderProgram colorShaderProgram;
     private TextureShaderProgram textureShaderProgram;
@@ -123,8 +120,7 @@ public class DrawManager {
             float ratio = 1.5f;
             depthMapWidth = Math.round(displayWidth * ratio);
             depthMapHeight = Math.round(displayHeight * ratio);
-            MatrixHelper.perspectiveM(lightsProjectionMatrix,90f, (float) width / height, 1.0f, far);
-            //orthoM(lightsProjectionMatrix, 0, 0, 100f, 0, 100f, 2f, far);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix, 60f, (float) width / height, 2.0f, far);
             generateShadowFBO();
         }
     }
@@ -188,30 +184,28 @@ public class DrawManager {
     }
 
 
+    private final float CAMERA_ORBIT_RADIUS = 20f;
+    private final float LIGHT_ORBIT_RADIUS = 30f;
+    private final float LIGHT_SHIFT_DEGREE_X = 20f;
+    private final float LIGHT_SHIFT_DEGREE_Y = -15f;
+
     public void drawBoard(Board board, Ball ball) {
 //        setLookAtM(viewMatrix, 0, ball.getLocation().x + cameraTranslation.x, ball.getLocation().y + cameraTranslation.y, ball.getLocation().z + cameraTranslation.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
 //        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-
-        float distance = cameraTranslation.length();
-        float degreeToRadiusTmp = (float) Math.PI / 180;
-        float camX = ball.getLocation().x + distance * -FloatMath.sin(xRotation * degreeToRadiusTmp) * FloatMath.cos((yRotation) * degreeToRadiusTmp);
-        float camY = ball.getLocation().y + distance * -FloatMath.sin((yRotation) * degreeToRadiusTmp);
-        float camZ = ball.getLocation().z + -distance * FloatMath.cos((xRotation) * degreeToRadiusTmp) * FloatMath.cos((yRotation) * degreeToRadiusTmp);
-        //float[] tmp = new float[16];
+        float degreeToRadiusConverter = (float) Math.PI / 180;
+        float camX = ball.getLocation().x - CAMERA_ORBIT_RADIUS * FloatMath.sin(xRotation * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
+        float camY = ball.getLocation().y - CAMERA_ORBIT_RADIUS * FloatMath.sin(yRotation * degreeToRadiusConverter);
+        float camZ = ball.getLocation().z - CAMERA_ORBIT_RADIUS * FloatMath.cos(xRotation * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
 
         setLookAtM(viewMatrix, 0, camX, camY, camZ, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
-
-
-//        float[] tmp = new float[16];
-//        setLookAtM(tmp, 0, ball.getLocation().x + cameraTranslation.x, ball.getLocation().y + cameraTranslation.y, ball.getLocation().z + cameraTranslation.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
-//        multiplyMM(viewMatrix, 0, tmp, 0, viewRotationMatrix, 0);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-        //lightData.position = new Point(ball.getLocation().x, ball.getLocation().y + 20f, ball.getLocation().z + 20f);
-        lightData.position = new Point(camX + 5f, camY+5f, camZ);
-        updateLightsViewMatrix(new Point(ball.getLocation().x + 5f, ball.getLocation().y + 5f, ball.getLocation().z));
-
+        float lightX = ball.getLocation().x - LIGHT_ORBIT_RADIUS * FloatMath.sin((xRotation + LIGHT_SHIFT_DEGREE_X) * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
+        float lightY = ball.getLocation().y - LIGHT_ORBIT_RADIUS * FloatMath.sin((yRotation + LIGHT_SHIFT_DEGREE_Y) * degreeToRadiusConverter);
+        float lightZ = ball.getLocation().z - LIGHT_ORBIT_RADIUS * FloatMath.cos((xRotation + LIGHT_SHIFT_DEGREE_X) * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
+        lightData.position = new Point(lightX, lightY, lightZ);
+        updateLightsViewMatrix(ball.getLocation());
 
         if (withShadow) {
             renderSceneWithShadow(board, ball);
@@ -597,29 +591,12 @@ public class DrawManager {
 
     //////////////////
 
-    public void handleTouchDrag(float deltaX, float deltaY) {
-        xRotation += deltaX / 16f;
-        yRotation += deltaY / 16f;
+    private final float ROTATION_FACTOR = 16f;
+    private final float RIGHT_ANGLE = 90f;
+    private final float RIGHT_ANGLE_BIAS = 0.01f;
 
-
-        if (yRotation < -90) {
-            yRotation = -89.9f;
-        } else if (yRotation > 90) {
-            yRotation = 89.9f;
-        }
-
-        updateSkyboxMVPMatrix();
-    }
-
-    float[] viewRotationMatrix = new float[16];
-
-    private void updateSkyboxMVPMatrix() {
-        //float[] tmp = new float[16];
-        setIdentityM(viewRotationMatrix, 0);
-        rotateM(viewRotationMatrix, 0, -yRotation, 1f, 0f, 0f);
-        rotateM(viewRotationMatrix, 0, -xRotation, 0f, 1f, 0f);
-        multiplyMM(skyboxModelViewProjectionMatrix, 0, projectionMatrix, 0, viewRotationMatrix, 0);
-    }
+    private final float SKYBOX_ANGLE_SHIFT_X = 30f;
+    private final float SKYBOX_ANGLE_SHIFT_Y = 180f;
 
     private void drawSkybox() {
         glDepthFunc(GL_LEQUAL);
@@ -628,6 +605,28 @@ public class DrawManager {
         skybox.bindData(skyboxShaderProgram);
         skybox.draw();
         glDepthFunc(GL_LESS);
+    }
+
+    public void handleTouchDrag(float deltaX, float deltaY) {
+        xRotation += deltaX / ROTATION_FACTOR;
+        yRotation += deltaY / ROTATION_FACTOR;
+
+
+        if (yRotation < -RIGHT_ANGLE) {
+            yRotation = -RIGHT_ANGLE + RIGHT_ANGLE_BIAS;
+        } else if (yRotation > 0){
+            yRotation = 0f;
+        }
+
+        updateSkyboxMVPMatrix();
+    }
+
+    private void updateSkyboxMVPMatrix() {
+        float[] viewRotationMatrix = new float[16];
+        setIdentityM(viewRotationMatrix, 0);
+        rotateM(viewRotationMatrix, 0, -(yRotation + SKYBOX_ANGLE_SHIFT_X), 1f, 0f, 0f);
+        rotateM(viewRotationMatrix, 0, -(xRotation + SKYBOX_ANGLE_SHIFT_Y), 0f, 1f, 0f);
+        multiplyMM(skyboxModelViewProjectionMatrix, 0, projectionMatrix, 0, viewRotationMatrix, 0);
     }
 
     private void positionBallInScene(Ball ball) {
@@ -659,19 +658,11 @@ public class DrawManager {
         transposeM(normalsRotationMatrix, 0, tmp2, 0);
     }
 
-    //float[] modelViewMatrix = new float[16];
-
-
     private void positionObjectInScene(Point location) {
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, location.x, location.y, location.z);
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
         setIdentityM(normalsRotationMatrix, 0); //bo gdy nie ma rotacji, to nie musimy nic robić z wektorami normalnymi
-
-        //setIdentityM(modelViewMatrix, 0);
-       // multiplyMM(modelViewMatrix, 0, viewMatrix, 0,  modelMatrix, 0);
-        //multiplyMM(mLightMvpMatrix_dynamicShapes, 0, lightsViewProjectionMatrix, 0, viewMatrix, 0);
-
     }
 
 }
