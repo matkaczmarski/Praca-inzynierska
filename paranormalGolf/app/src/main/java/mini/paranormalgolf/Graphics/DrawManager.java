@@ -86,7 +86,7 @@ public class DrawManager {
     private int depthMapHeight;
 
     int[] fboId;
-    //int[] depthTextureId;
+    int[] depthTextureId;
     int[] renderTextureId;
 
     private final float[] lightsViewProjectionMatrix = new float[16];
@@ -123,7 +123,7 @@ public class DrawManager {
             float ratio = 1.5f;
             depthMapWidth = Math.round(displayWidth * ratio);
             depthMapHeight = Math.round(displayHeight * ratio);
-            MatrixHelper.perspectiveM(lightsProjectionMatrix, 70f, (float) width / height, 3.0f, far);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix,90f, (float) width / height, 1.0f, far);
             //orthoM(lightsProjectionMatrix, 0, 0, 100f, 0, 100f, 2f, far);
             generateShadowFBO();
         }
@@ -142,16 +142,16 @@ public class DrawManager {
     public void generateShadowFBO() {
 
         fboId = new int[1];
-        //depthTextureId = new int[1];
+        depthTextureId = new int[1];
         renderTextureId = new int[1];
 
         // create a framebuffer object
         GLES20.glGenFramebuffers(1, fboId, 0);
 
         // create render buffer and bind 16-bit depth buffer
-        //GLES20.glGenRenderbuffers(1, depthTextureId, 0);
-        //GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthTextureId[0]);
-        //GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
+        GLES20.glGenRenderbuffers(1, depthTextureId, 0);
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthTextureId[0]);
+        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
 
         // Try to use a texture depth component
         GLES20.glGenTextures(1, renderTextureId, 0);
@@ -174,7 +174,7 @@ public class DrawManager {
 
         // attach the texture to FBO depth attachment point
         // (not supported with gl_texture_2d)
-      //  GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT, GLES20.GL_RENDERBUFFER, depthTextureId[0]);
+        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT, GLES20.GL_RENDERBUFFER, depthTextureId[0]);
 
 
         // check FBO status
@@ -208,8 +208,9 @@ public class DrawManager {
 //        multiplyMM(viewMatrix, 0, tmp, 0, viewRotationMatrix, 0);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-        lightData.position = new Point(ball.getLocation().x, ball.getLocation().y + 20f, ball.getLocation().z + 20f);
-        updateLightsViewMatrix(ball.getLocation());
+        //lightData.position = new Point(ball.getLocation().x, ball.getLocation().y + 20f, ball.getLocation().z + 20f);
+        lightData.position = new Point(camX + 5f, camY+5f, camZ);
+        updateLightsViewMatrix(new Point(ball.getLocation().x + 5f, ball.getLocation().y + 5f, ball.getLocation().z));
 
 
         if (withShadow) {

@@ -73,7 +73,7 @@ void main()
 
     	float shadow = 1.0;
     	//if the fragment is not behind light view frustum
-    	if (v_ShadowCoord.w > 0.0 && diffuseComponent > 0.0) {
+    	if (v_ShadowCoord.w > 0.0){//} || diffuseComponent < 0.0) {
 
     		shadow = shadowSimple();
 
