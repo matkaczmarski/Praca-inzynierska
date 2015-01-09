@@ -1,37 +1,34 @@
 package mini.paranormalgolf.Helpers;
 
 import android.content.Context;
-import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.widget.CheckBox;
 import android.widget.TextView;
-
-import mini.paranormalgolf.R;
 
 /**
  * Created by Kuba on 2015-01-09.
  */
-public class ItemTextView extends TextView
+public class OptionCheckBox extends CheckBox
 {
     private final int duration = 500;
     private final int offset = 100;
 
-    public ItemTextView(Context context)
+    public OptionCheckBox(Context context)
     {
         super(context);
     }
 
-    public ItemTextView(Context context, AttributeSet attrs)
+    public OptionCheckBox(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
 
-    public ItemTextView(Context context, AttributeSet attrs, int defStyleAttr)
+    public OptionCheckBox(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
     }
@@ -48,13 +45,13 @@ public class ItemTextView extends TextView
                     Shader.TileMode.REPEAT
             ));
             Animation animation = new TranslateAnimation(
-                    Animation.RELATIVE_TO_SELF, //fromXType
-                    -1.5f,                       //fromXValue
-                    Animation.RELATIVE_TO_SELF, //toXType
+                    Animation.RELATIVE_TO_PARENT, //fromXType
+                    -1.0f,                       //fromXValue
+                    Animation.RELATIVE_TO_PARENT, //toXType
                     0.0f,                      //toXValue
-                    Animation.RELATIVE_TO_SELF, //fromYType
+                    Animation.RELATIVE_TO_PARENT, //fromYType
                     0.0f,                       //fromYValue
-                    Animation.RELATIVE_TO_SELF, //toYType
+                    Animation.RELATIVE_TO_PARENT, //toYType
                     0.0f);                      //toYValue
             animation.setDuration(duration);
             int nr = 0;

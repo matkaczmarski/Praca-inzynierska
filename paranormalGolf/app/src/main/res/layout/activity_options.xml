@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <mini.paranormalgolf.Helpers.TitleTextView
             android:id="@+id/options_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,58 +37,64 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center">
-                <CheckBox
+                <mini.paranormalgolf.Helpers.OptionCheckBox
                     android:id="@+id/options_music"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/OptionsButton"
                     android:text="@string/options_activity_music"
-                    android:onClick="onMusicClick"/>
-                <CheckBox
+                    android:onClick="onMusicClick"
+                    android:tag="0"/>
+                <mini.paranormalgolf.Helpers.OptionCheckBox
                     android:id="@+id/options_sounds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/OptionsButton"
                     android:text="@string/options_activity_sound"
-                    android:onClick="onSoundClick"/>
-                <CheckBox
+                    android:onClick="onSoundClick"
+                    android:tag="1"/>
+                <mini.paranormalgolf.Helpers.OptionCheckBox
                     android:id="@+id/options_vibrations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/OptionsButton"
                     android:text="@string/options_activity_vibrations"
-                    android:onClick="onVibrationsClick"/>
+                    android:onClick="onVibrationsClick"
+                    android:tag="2"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:layout_marginTop="10dp">
-                    <CheckBox
+                    <mini.paranormalgolf.Helpers.OptionCheckBox
                         android:id="@+id/options_pl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/OptionsButtonLanguage"
                         android:text="pl"
-                        android:onClick="onPolishPick"/>
+                        android:onClick="onPolishPick"
+                        android:tag="3"/>
                     <View
                         android:layout_width="20dp"
                         android:layout_height="wrap_content"/>
-                    <CheckBox
+                    <mini.paranormalgolf.Helpers.OptionCheckBox
                         android:id="@+id/options_en"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/OptionsButtonLanguage"
                         android:text="en"
-                        android:onClick="onEnglishPick"/>
+                        android:onClick="onEnglishPick"
+                        android:tag="3"/>
                     </LinearLayout>
-                <CheckBox
+                <mini.paranormalgolf.Helpers.OptionCheckBox
                     android:id="@+id/options_shadows"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/OptionsButton"
                     android:text="@string/options_activity_shadows"
-                    android:onClick="onShadowsClick"/>
+                    android:onClick="onShadowsClick"
+                    android:tag="4"/>
             </LinearLayout>
 
         </ScrollView>
@@ -105,9 +111,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
-                <TextView
+                <mini.paranormalgolf.Helpers.TitleTextView
                     android:id="@+id/options_cancel_button"
-                    android:layout_width="150dp"
+                    android:layout_width="160dp"
                     android:layout_height="match_parent"
                     style="@style/OptionsButtonSaveCancel"
                     android:text="@string/cancel"
@@ -119,9 +125,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="right">
-                <TextView
+                <mini.paranormalgolf.Helpers.TitleTextView
                     android:id="@+id/options_save_button"
-                    android:layout_width="150dp"
+                    android:layout_width="160dp"
                     android:layout_height="match_parent"
                     style="@style/OptionsButtonSaveCancel"
                     android:text="@string/save"
