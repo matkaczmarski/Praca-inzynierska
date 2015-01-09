@@ -55,7 +55,7 @@ public class ObjectBuilder {
 
         final int verticesCount = (numPoints + 1) * 2;
 
-        for(int i=0; i<=numPoints; i++){
+        for(int i=0; i<numPoints; i++){
 
             final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
             float textureY1 = (float)i/numPoints;

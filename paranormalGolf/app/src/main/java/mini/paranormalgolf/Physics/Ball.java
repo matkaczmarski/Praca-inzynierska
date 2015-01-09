@@ -37,6 +37,11 @@ public class Ball extends MovableElement {
         cat,
         noise,
         beach,
+        lava,
+        sun,
+        jelly,
+        marble,
+        frozen
     }
 
     private final int MESH_DIMENSION = 32;
@@ -93,6 +98,16 @@ public class Ball extends MovableElement {
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_noise);
             case beach:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_beachball);
+            case lava:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_lava);
+            case sun:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_sun);
+            case jelly:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_jelly);
+            case marble:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_marble);
+            case frozen:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_frozen);
         }
         return -1;
     }

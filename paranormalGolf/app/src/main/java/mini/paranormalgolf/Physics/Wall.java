@@ -36,7 +36,8 @@ public class Wall extends Element {
         GraphicsData generatedData = ObjectGenerator.createBox(measure, WALL_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+        //texture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+        texture = ResourceHelper.loadTexture(context, R.drawable.new_wall_texture3);
     }
 
     public void bindData(ShaderProgram shaderProgram) {

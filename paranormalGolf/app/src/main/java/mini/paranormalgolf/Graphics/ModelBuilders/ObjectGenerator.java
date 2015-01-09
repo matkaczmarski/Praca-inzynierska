@@ -22,7 +22,7 @@ public class ObjectGenerator {
     private static final Point CENTER_POINT = new Point(0f, 0f, 0f);
 
     public static GraphicsData createBall(Point center, float radius, int numPoints) {
-        int size = 2 * (numPoints + 1) * (numPoints + 1);
+        int size = 2 * numPoints * (numPoints + 1);
 
         ObjectBuilder builder = new ObjectBuilder(size, true);
         builder.appendSphere(new Sphere(CENTER_POINT, radius), numPoints);
