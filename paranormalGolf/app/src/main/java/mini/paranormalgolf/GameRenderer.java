@@ -116,6 +116,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //boolean bul = extensions.contains("OES_depth_texture");
 
         fpsCounter = new FPSCounter();
+        lastTime = System.currentTimeMillis();
+        lastTimeUpdated = true;
     }
 
     @Override
