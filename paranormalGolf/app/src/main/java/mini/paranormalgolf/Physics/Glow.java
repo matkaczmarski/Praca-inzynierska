@@ -21,6 +21,7 @@ public class Glow extends ControlPoint {
 
     public final float[] CAN_FINISH_COLOR = new float[] {0.678431f, 1.0f, 0.184314f, GLOW_OPACITY};
     public final float[] CANNOT_FINISH_COLOR = new float[] {1f, 0.388235f, 0.278431f, GLOW_OPACITY};
+    public final float[] ACTIVE_COLOR = new float[] {1f, 1f, 0f, GLOW_OPACITY};
 
     public boolean ifCanFinish() {return canFinish;}
     public void enableFinishing(){canFinish = true;}
@@ -34,9 +35,9 @@ public class Glow extends ControlPoint {
         drawCommands = generatedData.drawCommands;
     }
 
-    @Override
-    public void bindData(ShaderProgram shaderProgram) {
-        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ColorShaderProgram) shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-    }
+//    @Override
+//    public void bindData(ShaderProgram shaderProgram) {
+//        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
+//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ColorShaderProgram) shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
+//    }
 }

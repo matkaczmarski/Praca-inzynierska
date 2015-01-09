@@ -15,6 +15,14 @@ import mini.paranormalgolf.Helpers.ResourceHelper;
  */
 abstract public class ShaderProgram {
 
+    public enum ShaderProgramType{
+        color,
+        depthMap,
+        withShadowing,
+        withoutShadowing
+
+    }
+
     // Uniform constants
     protected static final String U_MVPMATRIX = "u_MVPMatrix";
     protected static final String U_MVMATRIX = "u_MVMatrix";

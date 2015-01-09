@@ -76,10 +76,7 @@ public class Floor extends Element {
         createFloor(measures, location);
 
         //ZMIENCIE TO, numer od 0 do 9
-        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture9);
-
-
-
+        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
 
 //        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_top);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
@@ -98,12 +95,6 @@ public class Floor extends Element {
         FloorPart backSidePart = new FloorPart(new Rectangle(new Point(location.x, location.y, location.z - measures.z / 2), measures.x, measures.y), ObjectBuilder.Axis.zAxis, -1);
 
         sideParts = Arrays.asList(rightSidePart, leftSidePart, frontSidePart, backSidePart);
-    }
-
-    public void bindShadowData(ShaderProgram shaderProgram) {
-    }
-
-    public void bindData(ShaderProgram shaderProgram) {
     }
 
 }
