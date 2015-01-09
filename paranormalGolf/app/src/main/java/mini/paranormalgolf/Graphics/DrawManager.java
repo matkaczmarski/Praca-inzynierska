@@ -41,6 +41,7 @@ import static android.opengl.GLES20.glDepthFunc;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
+import static android.opengl.Matrix.orthoM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
@@ -113,7 +114,9 @@ public class DrawManager {
         displayHeight = height;
         displayWidth = width;
 
-        MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / height, near, far);
+       MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / height, near, far);
+//        float rat = (float) width / height;
+//        orthoM(projectionMatrix, 0, -10 * rat, 10 * rat, -10f, 10f, near, far );
         updateSkyboxMVPMatrix();
 
         if(withShadow) {
