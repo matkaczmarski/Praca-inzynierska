@@ -1,4 +1,4 @@
-package mini.paranormalgolf.Helpers;
+package mini.paranormalgolf.Controls;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

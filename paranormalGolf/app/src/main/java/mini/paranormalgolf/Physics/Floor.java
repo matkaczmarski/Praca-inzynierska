@@ -76,7 +76,7 @@ public class Floor extends Element {
         createFloor(measures, location);
 
         //ZMIENCIE TO, numer od 0 do 9
-        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture9);
+        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture2);
 
 
 

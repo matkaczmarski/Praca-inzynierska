@@ -20,6 +20,7 @@ public class LevelsListAdapter extends BaseAdapter
     int[] best_results;
     Context context;
     int selectedIndex = 0;
+    boolean first = true;
 
     public LevelsListAdapter(Context context, String[] board_id, int[] best_results)
     {
@@ -70,6 +71,12 @@ public class LevelsListAdapter extends BaseAdapter
         rowView.setTag(tagInfo);
         TextView textView = (TextView)rowView.findViewById(R.id.list_view_item_text);
         textView.setText(context.getString(R.string.level) + " #" + (i + 1));
+        if (first)
+            textView.setTag(i + "");
+        else
+            textView.setTag(-1);
+        if (first && (i == getCount() - 1))
+            first = false;
         if (i == selectedIndex)
             textView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.selected_item));
         else
