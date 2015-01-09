@@ -11,6 +11,7 @@ import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Box;
+import mini.paranormalgolf.Primitives.Circle;
 import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Sphere;
@@ -220,14 +221,16 @@ public class Ball extends MovableElement {
 
     public boolean CheckCollision(Finish finish) {
         if (finish == null) return false;
-        return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(finish.getLocation(),
-                Math.min(finish.conicalFrustum.bottomRadius, finish.conicalFrustum.topRadius), finish.conicalFrustum.height));
+        return Collisions.CheckSphereCircleCollision(new Sphere(location, radius),new Circle(finish.getLocation(),finish.conicalFrustum.bottomRadius));
+   //     return Collisions.CheckSphereCylinderCollsion(, new Cylinder(finish.getLocation(),
+   //             Math.min(finish.conicalFrustum.bottomRadius, finish.conicalFrustum.topRadius), finish.conicalFrustum.height));
     }
 
     public boolean CheckCollision(CheckPoint checkPoint) {
         if (checkPoint == null) return false;
-        return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(checkPoint.getLocation(),
-                Math.min(checkPoint.conicalFrustum.bottomRadius, checkPoint.conicalFrustum.topRadius), checkPoint.conicalFrustum.height));
+        return Collisions.CheckSphereCircleCollision(new Sphere(location, radius), new Circle(checkPoint.getLocation(), checkPoint.conicalFrustum.bottomRadius));
+        //    return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(checkPoint.getLocation(),
+        //           Math.min(checkPoint.conicalFrustum.bottomRadius, checkPoint.conicalFrustum.topRadius), checkPoint.conicalFrustum.height));
     }
 
     public boolean CheckCollision(Beam element){
