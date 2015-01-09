@@ -388,6 +388,36 @@ public class GameActivity extends Activity implements Runnable {
         gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound, shadows);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(gameRenderer);
+        glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            float previousX, previousY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event != null) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        previousX = event.getX();
+                        previousY = event.getY();
+                    } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        final float deltaX = event.getX() - previousX;
+                        final float deltaY = event.getY() - previousY;
+
+                        previousX = event.getX();
+                        previousY = event.getY();
+
+                        glSurfaceView.queueEvent(new Runnable() {
+                            @Override
+                            public void run() {
+                                gameRenderer.getUpdater().getDrawManager().handleTouchDrag(deltaX, deltaY);
+                            }
+                        });
+                    }
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
         rendererSet = true;
         if (pause_dialog != null)
         {
