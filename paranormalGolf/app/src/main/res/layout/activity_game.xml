@@ -26,7 +26,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/abc_primary_text_material_dark"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:text="@string/time"
                 android:gravity="center"/>
             <TextView
@@ -35,7 +35,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textColor="@color/abc_search_url_text_normal"/>
             </LinearLayout>
 
@@ -50,7 +50,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/abc_primary_text_material_dark"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:text="@string/diamonds"
                 android:gravity="center"/>
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textColor="@color/abc_search_url_text_normal"/>
             </LinearLayout>
 

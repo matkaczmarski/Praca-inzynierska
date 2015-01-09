@@ -86,7 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/activity_background"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:text="podsaf"
                     android:gravity="center"/>
 

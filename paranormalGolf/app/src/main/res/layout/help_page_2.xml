@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/activity_background"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:text="@string/help_page_2_text_1"
             android:gravity="center"/>
 
