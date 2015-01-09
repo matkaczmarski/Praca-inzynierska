@@ -9,3 +9,5 @@ W praktyce czêœci¹ dok.technicznej powinna byæ dokumentacja kodu, jednak ze wzgl
 
 --------------
 3) czy w pracy in¿ynierskiej trzeba opisywaæ dok³adnie u¿yte funkcje i sposób rysowania w OpenGL ES 2.0?
+
+4) czy mogli byœmy zobaczyæ pracê in¿yniersk¹ ludzi z poprzedniego roku (ten sam temat tylko na windows phone)

@@ -16,12 +16,12 @@ import static android.opengl.GLES20.glUniformMatrix4fv;
 /**
  * Created by Mateusz on 2014-12-14.
  */
-public class SkyboxShaderProgram extends ShaderProgram {
+public class SkyBoxShaderProgram extends ShaderProgram {
     private final int uMatrixLocation;
     private final int uTextureUnitLocation;
     private final int aPositionLocation;
 
-    public SkyboxShaderProgram(Context context) {
+    public SkyBoxShaderProgram(Context context) {
         super(context, R.raw.skybox_vertex_shader,
                 R.raw.skybox_fragment_shader);
 

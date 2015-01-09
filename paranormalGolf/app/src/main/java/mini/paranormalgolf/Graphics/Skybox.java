@@ -9,7 +9,7 @@ import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.glDrawElements;
 
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.SkyBoxShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Physics.Element;
 import mini.paranormalgolf.Primitives.Point;
@@ -19,22 +19,23 @@ import mini.paranormalgolf.R;
  * Created by Mateusz on 2014-12-14.
  */
 
-public class Skybox extends Element {
+public class SkyBox extends Element {
 
-    public enum SkyboxTexture{
+    public enum SkyBoxTexture {
         nightClouds,
         dayClouds,
         stars
     }
     private static final int POSITION_COMPONENT_COUNT = 3;
     private static final int INDICES_COUNT = 36;
+    private static final Point CENTER_POINT = new Point(0f,0f,0f);
 
     private final VertexArray vertexArray;
     private final ByteBuffer indexArray;
 
-    public Skybox(Context context, Point location, SkyboxTexture skyboxTexture) {
-        super(location);
-        texture = textureLoader(skyboxTexture, context);
+    public SkyBox(Context context, SkyBoxTexture skyBoxTexture) {
+        super(CENTER_POINT);
+        texture = textureLoader(skyBoxTexture, context);
 
         vertexArray = new VertexArray(new float[] {
                 -1,  1,  1,
@@ -76,9 +77,9 @@ public class Skybox extends Element {
         indexArray.position(0);
     }
 
-    private int textureLoader(SkyboxTexture skyboxTextureType, Context context) {
+    private int textureLoader(SkyBoxTexture skyBoxTextureType, Context context) {
         int skyboxTexture = -1;
-        switch (skyboxTextureType) {
+        switch (skyBoxTextureType) {
             case dayClouds:
                 skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_dayclouds_left, R.drawable.skybox_texture_dayclouds_right, R.drawable.skybox_texture_dayclouds_bottom, R.drawable.skybox_texture_dayclouds_top, R.drawable.skybox_texture_dayclouds_front, R.drawable.skybox_texture_dayclouds_back});
                 break;
@@ -96,7 +97,7 @@ public class Skybox extends Element {
     }
 
     public void bindData(ShaderProgram skyboxProgram) {
-        vertexArray.setVertexAttribPointer(0, ((SkyboxShaderProgram)skyboxProgram).getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
+        vertexArray.setVertexAttribPointer(0, ((SkyBoxShaderProgram)skyboxProgram).getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
     }
 
     public void bindShadowData(ShaderProgram skyboxProgram) {

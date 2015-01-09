@@ -69,11 +69,16 @@ float shadowSimple()
 void main()
 {
 
-    float diffuseComponent = dot(v_modelViewNormal, v_LightVector);
+        float diffuseComponent = dot(v_modelViewNormal, v_LightVector);
+    	if(diffuseComponent < 0.0){
+             diffuseComponent = 0.0;
+        }
+        float lightFactor =  diffuseComponent * u_LightsDiffusion;
+        lightFactor = lightFactor + u_LightsAmbient;
 
     	float shadow = 1.0;
     	//if the fragment is not behind light view frustum
-    	if (v_ShadowCoord.w > 0.0){//} || diffuseComponent < 0.0) {
+    	if (v_ShadowCoord.w > 0.0){
 
     		shadow = shadowSimple();
 
@@ -82,11 +87,7 @@ void main()
     		shadow = (shadow * 0.6) + 0.4;
     	}
 
-    	    if(diffuseComponent < 0.0){
-                diffuseComponent = 0.0;
-            }
-           float v_Light =  diffuseComponent * u_LightsDiffusion;
-            v_Light = v_Light + u_LightsAmbient;
 
-    gl_FragColor = vec4(vec3(texture2D(u_TextureUnit, v_TextureCoordinates)) * v_Light * shadow, u_Opacity);
+
+    gl_FragColor = vec4(vec3(texture2D(u_TextureUnit, v_TextureCoordinates)) * lightFactor * shadow, u_Opacity);
 }

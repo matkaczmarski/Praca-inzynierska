@@ -9,7 +9,7 @@ import android.util.Log;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.SkyboxShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.SkyBoxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.LoggerConfig;
 import mini.paranormalgolf.Physics.Ball;
@@ -51,86 +51,84 @@ import static android.opengl.Matrix.transposeM;
  */
 public class DrawManager {
 
-    private final float[] projectionMatrix = new float[16];
-    private final float[] modelMatrix = new float[16];
-    private final float[] viewMatrix = new float[16];
-    private final float[] viewProjectionMatrix = new float[16];
-    // private final float[] modelViewMatrix = new float[16];
-    private final float[] modelViewProjectionMatrix = new float[16];
-    private final float[] normalsRotationMatrix = new float[16];
-
-    private LightData lightData = new LightData(new Point(1f, 25f, 1f), 0.2f, 0.6f);
-
-    private final float fieldOfViewDegree = 45;
-    private final float near = 1f;
-    private final float far = 100f;
-
-
-    private ColorShaderProgram colorShaderProgram;
-    private TextureShaderProgram textureShaderProgram;
-    private SkyboxShaderProgram skyboxShaderProgram;
-    private Skybox skybox;
-
-    float[] skyboxModelViewProjectionMatrix = new float[16];
-    private float xRotation = 180f, yRotation = -45f;
-
-    DepthMapShaderProgram depthMapShaderProgram;
-    ShadowingShaderProgram shadowingShaderProgram;
-
+    //Wymiary ekranu i depthMapy
     private int displayWidth;
     private int displayHeight;
     private int depthMapWidth;
     private int depthMapHeight;
 
-    int[] fboId;
-    int[] depthTextureId;
-    int[] renderTextureId;
+    //Macierze:
+    private final float[] modelMatrix = new float[16];
+    private final float[] projectionMatrix = new float[16];
+    private final float[] viewMatrix = new float[16];
+    private final float[] viewProjectionMatrix = new float[16];
+    private final float[] modelViewProjectionMatrix = new float[16];
+
+    private final float[] normalsRotationMatrix = new float[16];
 
     private final float[] lightsViewProjectionMatrix = new float[16];
-    private final float[] mLightMvpMatrix_dynamicShapes = new float[16];
     private final float[] lightsProjectionMatrix = new float[16];
     private final float[] lightsViewMatrix = new float[16];
 
+    private final float[] skyBoxModelViewProjectionMatrix = new float[16];
 
-    private final boolean withShadow;
+    //Programy
+    private ColorShaderProgram colorShaderProgram;
+    private TextureShaderProgram textureShaderProgram;
+    private SkyBoxShaderProgram skyBoxShaderProgram;
+    private DepthMapShaderProgram depthMapShaderProgram;
+    private ShadowingShaderProgram shadowingShaderProgram;
+
+    private int[] frameBufferObjectId;
+    private int[] depthTextureId;
+    private int[] renderTextureId;
+
+    private boolean withShadow;
+    private float xRotation, yRotation;
+    private SkyBox skyBox;
+    private LightData lightData = new LightData(0.2f, 0.6f);
 
 
     public DrawManager(Context context, boolean withShadow) {
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
-        skyboxShaderProgram = new SkyboxShaderProgram(context);
-        skybox = new Skybox(context, new Point(0, 0, 0), Skybox.SkyboxTexture.nightClouds);
-
+        skyBoxShaderProgram = new SkyBoxShaderProgram(context);
         depthMapShaderProgram = new DepthMapShaderProgram(context);
         shadowingShaderProgram = new ShadowingShaderProgram(context);
 
+        skyBox = new SkyBox(context, SkyBox.SkyBoxTexture.nightClouds);
         this.withShadow = withShadow;
+        resetDrawManager();
+    }
+
+    public void resetDrawManager(){
+        xRotation = INITIAL_ROTATION_X;
+        yRotation = INITIAL_ROTATION_Y;
     }
 
     public void surfaceChange(int width, int height) {
         displayHeight = height;
         displayWidth = width;
 
-        MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / height, near, far);
-        updateSkyboxMVPMatrix();
+        MatrixHelper.perspectiveM(projectionMatrix, VIEW_FIELD_OF_VIEW_DEGREES, (float) width / height, VIEW_NEAR, VIEW_FAR);
+        updateSkyBoxMVPMatrix();
 
         if (withShadow) {
-            float ratio = 1.5f;
-            depthMapWidth = Math.round(displayWidth * ratio);
-            depthMapHeight = Math.round(displayHeight * ratio);
-            MatrixHelper.perspectiveM(lightsProjectionMatrix, fieldOfViewDegree, (float) width / height, 2.0f, far);
+            depthMapWidth = Math.round(displayWidth * DEPTH_MAP_PRECISION);
+            depthMapHeight = Math.round(displayHeight * DEPTH_MAP_PRECISION);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix, LIGHT_FIELD_OF_VIEW_DEGREES, (float) width / height, LIGHT_NEAR, LIGHT_FAR);
             generateShadowFBO();
         }
     }
 
     public void generateShadowFBO() {
 
-        fboId = new int[1];
+        frameBufferObjectId = new int[1];
         depthTextureId = new int[1];
         renderTextureId = new int[1];
 
         // create a framebuffer object
-        GLES20.glGenFramebuffers(1, fboId, 0);
+        GLES20.glGenFramebuffers(1, frameBufferObjectId, 0);
 
         // create render buffer and bind 16-bit depth buffer
         GLES20.glGenRenderbuffers(1, depthTextureId, 0);
@@ -149,7 +147,7 @@ public class DrawManager {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId[0]);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferObjectId[0]);
 
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, depthMapWidth, depthMapHeight, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
 
@@ -171,30 +169,8 @@ public class DrawManager {
         }
     }
 
-
-    private final float CAMERA_ORBIT_RADIUS = 20f;
-    private final float LIGHT_ORBIT_RADIUS = 30f;
-    private final float LIGHT_SHIFT_DEGREE_X = 20f;
-    private final float LIGHT_SHIFT_DEGREE_Y = -15f;
-    private final float DEGREE_TO_RAD_CONVERSION = (float) Math.PI / 180;
-
     public void drawBoard(Board board, Ball ball) {
-       
-        float camX = ball.getLocation().x - CAMERA_ORBIT_RADIUS * FloatMath.sin(xRotation * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
-        float camY = ball.getLocation().y - CAMERA_ORBIT_RADIUS * FloatMath.sin(yRotation * DEGREE_TO_RAD_CONVERSION);
-        float camZ = ball.getLocation().z - CAMERA_ORBIT_RADIUS * FloatMath.cos(xRotation * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
-
-        setLookAtM(viewMatrix, 0, camX, camY, camZ, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
-        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
-
-        float lightX = ball.getLocation().x - LIGHT_ORBIT_RADIUS * FloatMath.sin((xRotation + LIGHT_SHIFT_DEGREE_X) * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
-        float lightY = ball.getLocation().y - LIGHT_ORBIT_RADIUS * FloatMath.sin((yRotation + LIGHT_SHIFT_DEGREE_Y) * DEGREE_TO_RAD_CONVERSION);
-        float lightZ = ball.getLocation().z - LIGHT_ORBIT_RADIUS * FloatMath.cos((xRotation + LIGHT_SHIFT_DEGREE_X) * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
-        lightData.position = new Point(lightX, lightY, lightZ);
-
-        Matrix.setLookAtM(lightsViewMatrix, 0,lightData.position.x, lightData.position.y, lightData.position.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
-        multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
-
+        positionViewAndLightFrustums(ball.getLocation());
         if (withShadow) {
             renderSceneWithShadow(board, ball);
         } else {
@@ -202,27 +178,13 @@ public class DrawManager {
         }
     }
 
-    private void renderSceneWithShadow(Board board, Ball ball){
-        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId[0]);
-        glViewport(0, 0, depthMapWidth, depthMapHeight);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        glCullFace(GL_FRONT);
-        renderDepthMap(board, ball);
-        glCullFace(GL_BACK);
-
-        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, displayWidth, displayHeight);
-        glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
-        renderBoardWithShadows(board, ball);
-    }
+    //////////////////////////// BEZ CIENI: ////////////////////////////
 
     private void renderSceneWithoutShadow(Board board, Ball ball){
         glViewport(0, 0, displayWidth, displayHeight);
         glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        drawSkybox();
+        drawSkyBox();
         for (Floor floor : board.floors) {
             drawFloor(floor);
         }
@@ -247,118 +209,6 @@ public class DrawManager {
         }
         drawFinish(board.finish);
     }
-
-    private void renderDepthMap(Board board, Ball ball){
-        depthMapShaderProgram.useProgram();
-
-        for (Floor floor : board.floors) {
-            positionObjectInScene(floor.getBottomPart().getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            floor.getBottomPart().bindDepthMapData(depthMapShaderProgram);
-            floor.getBottomPart().draw();
-
-            for (FloorPart floorPart : floor.getSideParts()) {
-                positionObjectInScene(floorPart.getLocation());
-                depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-                floorPart.bindDepthMapData(depthMapShaderProgram);
-                floorPart.draw();
-            }
-
-            positionObjectInScene(floor.getTopPart().getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            floor.getTopPart().bindDepthMapData(depthMapShaderProgram);
-            floor.getTopPart().draw();
-        }
-
-        for (Wall wall : board.walls) {
-            positionObjectInScene(wall.getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            wall.bindDepthMapData(depthMapShaderProgram);
-            wall.draw();
-        }
-
-        for (Beam beam : board.beams) {
-            positionObjectInScene(beam.getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            beam.bindDepthMapData(depthMapShaderProgram);
-            beam.draw();
-        }
-
-        for (Elevator elevator : board.elevators) {
-            positionObjectInScene(elevator.getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            elevator.bindDepthMapData(depthMapShaderProgram);
-            elevator.draw();
-        }
-
-        positionBallInScene(ball);
-        depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-        ball.bindDepthMapData(depthMapShaderProgram);
-        ball.draw();
-
-        for (Diamond diamond : board.diamonds) {
-            positionBonusInScene(diamond);
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            diamond.bindDepthMapData(depthMapShaderProgram);
-            diamond.draw();
-        }
-
-        for (HourGlass hourGlass : board.hourGlasses) {
-            positionBonusInScene(hourGlass);
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            hourGlass.getWoodenParts().bindDepthMapData(depthMapShaderProgram);
-            hourGlass.getWoodenParts().draw();
-        }
-
-        positionObjectInScene(board.finish.getLocation());
-        depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-        board.finish.bindDepthMapData(depthMapShaderProgram);
-        board.finish.draw();
-
-        for (CheckPoint checkPoint : board.checkpoints) {
-            positionObjectInScene(checkPoint.getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
-            checkPoint.bindDepthMapData(depthMapShaderProgram);
-            checkPoint.draw();
-        }
-    }
-
-    private void renderBoardWithShadows(Board board, Ball ball){
-        drawSkybox();
-        for (Floor floor : board.floors) {
-            drawFloorWithShadow(floor);
-        }
-
-        for (Wall wall : board.walls) {
-            drawWallWithShadow(wall);
-        }
-
-        for (Beam beam : board.beams) {
-            drawBeamWithShadow(beam);
-        }
-        for (Elevator elevator : board.elevators) {
-            drawElevatorWithShadow(elevator);
-        }
-
-        drawBallWithShadow(ball);
-
-        for (Diamond diamond : board.diamonds) {
-            drawDiamondWithShadow(diamond);
-        }
-
-        for (HourGlass hourGlass : board.hourGlasses) {
-            drawHourglassWithShadow(hourGlass);
-        }
-
-        for (CheckPoint checkPoint : board.checkpoints) {
-            drawCheckPointWithShadow(checkPoint);
-        }
-        drawFinishWithShadow(board.finish);
-    }
-
-
-    ////////////////////////////
-
 
     private void drawBall(Ball ball) {
         textureShaderProgram.useProgram();
@@ -463,7 +313,131 @@ public class DrawManager {
         hourGlass.draw();
     }
 
-    ////////////////////////////////////////
+    //////////////////////////// Z CIENIAMI: ////////////////////////////
+
+    private void renderSceneWithShadow(Board board, Ball ball){
+        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferObjectId[0]);
+        glViewport(0, 0, depthMapWidth, depthMapHeight);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glCullFace(GL_FRONT);
+        renderDepthMap(board, ball);
+        glCullFace(GL_BACK);
+
+        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, displayWidth, displayHeight);
+        glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        renderBoardWithShadows(board, ball);
+    }
+
+    private void renderDepthMap(Board board, Ball ball){
+        depthMapShaderProgram.useProgram();
+
+        for (Floor floor : board.floors) {
+            positionObjectInScene(floor.getBottomPart().getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            floor.getBottomPart().bindDepthMapData(depthMapShaderProgram);
+            floor.getBottomPart().draw();
+
+            for (FloorPart floorPart : floor.getSideParts()) {
+                positionObjectInScene(floorPart.getLocation());
+                depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+                floorPart.bindDepthMapData(depthMapShaderProgram);
+                floorPart.draw();
+            }
+
+            positionObjectInScene(floor.getTopPart().getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            floor.getTopPart().bindDepthMapData(depthMapShaderProgram);
+            floor.getTopPart().draw();
+        }
+
+        for (Wall wall : board.walls) {
+            positionObjectInScene(wall.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            wall.bindDepthMapData(depthMapShaderProgram);
+            wall.draw();
+        }
+
+        for (Beam beam : board.beams) {
+            positionObjectInScene(beam.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            beam.bindDepthMapData(depthMapShaderProgram);
+            beam.draw();
+        }
+
+        for (Elevator elevator : board.elevators) {
+            positionObjectInScene(elevator.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            elevator.bindDepthMapData(depthMapShaderProgram);
+            elevator.draw();
+        }
+
+        positionBallInScene(ball);
+        depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+        ball.bindDepthMapData(depthMapShaderProgram);
+        ball.draw();
+
+        for (Diamond diamond : board.diamonds) {
+            positionBonusInScene(diamond);
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            diamond.bindDepthMapData(depthMapShaderProgram);
+            diamond.draw();
+        }
+
+        for (HourGlass hourGlass : board.hourGlasses) {
+            positionBonusInScene(hourGlass);
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            hourGlass.getWoodenParts().bindDepthMapData(depthMapShaderProgram);
+            hourGlass.getWoodenParts().draw();
+        }
+
+        positionObjectInScene(board.finish.getLocation());
+        depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+        board.finish.bindDepthMapData(depthMapShaderProgram);
+        board.finish.draw();
+
+        for (CheckPoint checkPoint : board.checkpoints) {
+            positionObjectInScene(checkPoint.getLocation());
+            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelMatrix);
+            checkPoint.bindDepthMapData(depthMapShaderProgram);
+            checkPoint.draw();
+        }
+    }
+
+    private void renderBoardWithShadows(Board board, Ball ball){
+        drawSkyBox();
+        for (Floor floor : board.floors) {
+            drawFloorWithShadow(floor);
+        }
+
+        for (Wall wall : board.walls) {
+            drawWallWithShadow(wall);
+        }
+
+        for (Beam beam : board.beams) {
+            drawBeamWithShadow(beam);
+        }
+        for (Elevator elevator : board.elevators) {
+            drawElevatorWithShadow(elevator);
+        }
+
+        drawBallWithShadow(ball);
+
+        for (Diamond diamond : board.diamonds) {
+            drawDiamondWithShadow(diamond);
+        }
+
+        for (HourGlass hourGlass : board.hourGlasses) {
+            drawHourglassWithShadow(hourGlass);
+        }
+
+        for (CheckPoint checkPoint : board.checkpoints) {
+            drawCheckPointWithShadow(checkPoint);
+        }
+        drawFinishWithShadow(board.finish);
+    }
 
     private void drawBallWithShadow(Ball ball) {
         shadowingShaderProgram.useProgram();
@@ -571,28 +545,20 @@ public class DrawManager {
 
    ///////////////////////////
 
-    private void drawSkybox() {
+    private void drawSkyBox() {
         glDepthFunc(GL_LEQUAL);
-        skyboxShaderProgram.useProgram();
-        skyboxShaderProgram.setUniforms(skyboxModelViewProjectionMatrix, skybox.getTexture());
-        skybox.bindData(skyboxShaderProgram);
-        skybox.draw();
+        skyBoxShaderProgram.useProgram();
+        skyBoxShaderProgram.setUniforms(skyBoxModelViewProjectionMatrix, skyBox.getTexture());
+        skyBox.bindData(skyBoxShaderProgram);
+        skyBox.draw();
         glDepthFunc(GL_LESS);
     }
 
-    //////////////////
-
-    private final float ROTATION_FACTOR = 16f;
-    private final float RIGHT_ANGLE = 90f;
-    private final float RIGHT_ANGLE_BIAS = 0.01f;
-
-    private final float SKYBOX_ANGLE_SHIFT_X = 30f;
-    private final float SKYBOX_ANGLE_SHIFT_Y = 180f;
+    ///////////////////////////
 
     public void handleTouchDrag(float deltaX, float deltaY) {
         xRotation += deltaX / ROTATION_FACTOR;
         yRotation += deltaY / ROTATION_FACTOR;
-
 
         if (yRotation < -RIGHT_ANGLE) {
             yRotation = -RIGHT_ANGLE + RIGHT_ANGLE_BIAS;
@@ -600,15 +566,15 @@ public class DrawManager {
             yRotation = 0f;
         }
 
-        updateSkyboxMVPMatrix();
+        updateSkyBoxMVPMatrix();
     }
 
-    private void updateSkyboxMVPMatrix() {
-        float[] viewRotationMatrix = new float[16];
-        setIdentityM(viewRotationMatrix, 0);
-        rotateM(viewRotationMatrix, 0, -(yRotation + SKYBOX_ANGLE_SHIFT_X), 1f, 0f, 0f);
-        rotateM(viewRotationMatrix, 0, -(xRotation + SKYBOX_ANGLE_SHIFT_Y), 0f, 1f, 0f);
-        multiplyMM(skyboxModelViewProjectionMatrix, 0, projectionMatrix, 0, viewRotationMatrix, 0);
+    private void updateSkyBoxMVPMatrix() {
+        float[] skyBoxViewRotationMatrix = new float[16];
+        setIdentityM(skyBoxViewRotationMatrix, 0);
+        rotateM(skyBoxViewRotationMatrix, 0, -(yRotation + SKYBOX_ANGLE_SHIFT_X), 1f, 0f, 0f);
+        rotateM(skyBoxViewRotationMatrix, 0, -(xRotation + SKYBOX_ANGLE_SHIFT_Y), 0f, 1f, 0f);
+        multiplyMM(skyBoxModelViewProjectionMatrix, 0, projectionMatrix, 0, skyBoxViewRotationMatrix, 0);
     }
 
     private void positionBallInScene(Ball ball) {
@@ -647,4 +613,53 @@ public class DrawManager {
         setIdentityM(normalsRotationMatrix, 0); //bo gdy nie ma rotacji, to nie musimy nic robić z wektorami normalnymi
     }
 
+    private void positionViewAndLightFrustums(Point ballLocation){
+        float cameraX = ballLocation.x - CAMERA_ORBIT_RADIUS * FloatMath.sin(xRotation * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
+        float cameraY = ballLocation.y - CAMERA_ORBIT_RADIUS * FloatMath.sin(yRotation * DEGREE_TO_RAD_CONVERSION);
+        float cameraZ = ballLocation.z - CAMERA_ORBIT_RADIUS * FloatMath.cos(xRotation * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
+
+        setLookAtM(viewMatrix, 0, cameraX, cameraY, cameraZ, ballLocation.x, ballLocation.y, ballLocation.z, 0f, 1f, 0f);
+        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
+        float lightX = ballLocation.x - LIGHT_ORBIT_RADIUS * FloatMath.sin((xRotation + LIGHT_SHIFT_DEGREE_X) * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
+        float lightY = ballLocation.y - LIGHT_ORBIT_RADIUS * FloatMath.sin((yRotation + LIGHT_SHIFT_DEGREE_Y) * DEGREE_TO_RAD_CONVERSION);
+        float lightZ = ballLocation.z - LIGHT_ORBIT_RADIUS * FloatMath.cos((xRotation + LIGHT_SHIFT_DEGREE_X) * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
+        lightData.position = new Point(lightX, lightY, lightZ);
+
+        Matrix.setLookAtM(lightsViewMatrix, 0,lightData.position.x, lightData.position.y, lightData.position.z, ballLocation.x, ballLocation.y, ballLocation.z, 0f, 1f, 0f);
+        multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
+    }
+
+
+    //STAŁE:
+
+    //Dla orbit kamery i światła
+    private final float CAMERA_ORBIT_RADIUS = 20f;
+    private final float LIGHT_ORBIT_RADIUS = 30f;
+    private final float LIGHT_SHIFT_DEGREE_X = 20f;
+    private final float LIGHT_SHIFT_DEGREE_Y = -15f;
+    private final float DEGREE_TO_RAD_CONVERSION = (float) Math.PI / 180;
+
+    //Dla obrotów:
+    private final float INITIAL_ROTATION_X = 180f;
+    private final float INITIAL_ROTATION_Y = -45f;
+
+    private final float ROTATION_FACTOR = 16f;
+    private final float RIGHT_ANGLE = 90f;
+    private final float RIGHT_ANGLE_BIAS = 0.01f;
+
+    private final float SKYBOX_ANGLE_SHIFT_X = 30f;
+    private final float SKYBOX_ANGLE_SHIFT_Y = 180f;
+
+    //Dla frustum widoku
+    private final float VIEW_FIELD_OF_VIEW_DEGREES = 45;
+    private final float VIEW_NEAR = 1f;
+    private final float VIEW_FAR = 100f;
+
+    //Dla frustum światła
+    private final float LIGHT_FIELD_OF_VIEW_DEGREES = 45;
+    private final float LIGHT_NEAR = 2f;
+    private final float LIGHT_FAR = 100f;
+
+    private final float DEPTH_MAP_PRECISION = 1.5f;
 }

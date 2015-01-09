@@ -10,8 +10,8 @@ public class LightData{
     public float ambient;
     public float diffusion;
 
-    public LightData(Point position, float ambient, float diffusion){
-        this.position = position;
+    public LightData( float ambient, float diffusion){
+        this.position = new Point(0f,0f,0f);
         this.ambient = ambient;
         this.diffusion = diffusion;
     }
