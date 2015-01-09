@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import mini.paranormalgolf.R;
@@ -21,12 +22,15 @@ public class LevelsListAdapter extends BaseAdapter
     Context context;
     int selectedIndex = 0;
     boolean first = true;
+    ListView listView;
+    int lastCount = -1;
 
-    public LevelsListAdapter(Context context, String[] board_id, int[] best_results)
+    public LevelsListAdapter(Context context, String[] board_id, int[] best_results, ListView listView)
     {
         super();
         this.board_id = board_id;
         this.best_results = best_results;
+        this.listView = listView;
         this.context = context;
     }
 
@@ -75,8 +79,10 @@ public class LevelsListAdapter extends BaseAdapter
             textView.setTag(i + "");
         else
             textView.setTag(-1);
-        if (first && (i == getCount() - 1))
+        if (first && (i < lastCount))
             first = false;
+        else
+            lastCount = listView.getLastVisiblePosition();
         if (i == selectedIndex)
             textView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.selected_item));
         else

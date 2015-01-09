@@ -97,8 +97,8 @@ public class LevelsActivity extends Activity
             //TODO wczytanie najlepszych wyników
             results[i] = 0;
         }
-        LevelsListAdapter levelsListAdapter = new LevelsListAdapter(this, board_id, results);
         final ListView listView = (ListView)findViewById(R.id.levels_list);
+        LevelsListAdapter levelsListAdapter = new LevelsListAdapter(this, board_id, results, listView);
         listView.setAdapter(levelsListAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
