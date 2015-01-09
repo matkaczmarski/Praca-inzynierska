@@ -84,26 +84,26 @@ public class ObjectGenerator {
 
     public static GraphicsData createControlPointGlow(ConicalFrustum conicalFrustum, int numPoints) {
         ObjectBuilder builder = new ObjectBuilder(2 * (numPoints + 1),false);
-        builder.appendCylindersCurvedSurface(new Point(0, 0, 0f), conicalFrustum.getBottomRadius(),new Point(0, conicalFrustum.getHeight(), 0f), conicalFrustum.getTopRadius(), numPoints, 0f );
+        builder.appendCylindersCurvedSurface(new Point(0, 0, 0f), conicalFrustum.bottomRadius,new Point(0, conicalFrustum.height, 0f), conicalFrustum.topRadius, numPoints, 0f );
         return builder.build();
     }
 
     public static GraphicsData createHourglassGlassPart(ConicalFrustum lowerCone, ConicalFrustum upperCone, int numPoints) {
         ObjectBuilder builder = new ObjectBuilder(2 * 2 * (numPoints + 1),false);
-        builder.appendCylindersCurvedSurface(new Point(0f, 0f, 0f), upperCone.getBottomRadius(),new Point(0,upperCone.getHeight(), 0f), upperCone.getTopRadius(), numPoints, 0f );
-        builder.appendCylindersCurvedSurface(new Point(0f, -lowerCone.getHeight(), 0f), lowerCone.getBottomRadius(),new Point(0, 0f, 0f), lowerCone.getTopRadius(), numPoints, 0f );
+        builder.appendCylindersCurvedSurface(new Point(0f, 0f, 0f), upperCone.bottomRadius,new Point(0,upperCone.height, 0f), upperCone.topRadius, numPoints, 0f );
+        builder.appendCylindersCurvedSurface(new Point(0f, -lowerCone.height, 0f), lowerCone.bottomRadius,new Point(0, 0f, 0f), lowerCone.topRadius, numPoints, 0f );
         return builder.build();
     }
 
     public static GraphicsData createHourglassWoodenParts(Cylinder upperCylinder, Cylinder lowerCylinder, int numPoints, float textureUnit) {
         ObjectBuilder builder = new ObjectBuilder(2*(2 * (1 + (numPoints + 1)) + 2 * (numPoints + 1)),true);
-        builder.appendCircle(new Point(0f, upperCylinder.getCenter().y + upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(), 1, numPoints);
-        builder.appendCircle(new Point(0f, upperCylinder.getCenter().y - upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(), -1, numPoints);
-        builder.appendCylindersCurvedSurface(new Point(0f, upperCylinder.getCenter().y - upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(), new Point(0f, upperCylinder.getCenter().y + upperCylinder.getHeight()/2, 0f), upperCylinder.getRadius(),numPoints, textureUnit );
+        builder.appendCircle(new Point(0f, upperCylinder.center.y + upperCylinder.height/2, 0f), upperCylinder.radius, 1, numPoints);
+        builder.appendCircle(new Point(0f, upperCylinder.center.y - upperCylinder.height/2, 0f), upperCylinder.radius, -1, numPoints);
+        builder.appendCylindersCurvedSurface(new Point(0f, upperCylinder.center.y - upperCylinder.height/2, 0f), upperCylinder.radius, new Point(0f, upperCylinder.center.y + upperCylinder.height/2, 0f), upperCylinder.radius,numPoints, textureUnit );
 
-        builder.appendCircle(new Point(0f, lowerCylinder.getCenter().y + lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(), 1, numPoints);
-        builder.appendCircle(new Point(0f, lowerCylinder.getCenter().y - lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(), -1, numPoints);
-        builder.appendCylindersCurvedSurface(new Point(0f, lowerCylinder.getCenter().y - lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(), new Point(0f, lowerCylinder.getCenter().y + lowerCylinder.getHeight()/2, 0f), lowerCylinder.getRadius(),numPoints, textureUnit );
+        builder.appendCircle(new Point(0f, lowerCylinder.center.y + lowerCylinder.height/2, 0f), lowerCylinder.radius, 1, numPoints);
+        builder.appendCircle(new Point(0f, lowerCylinder.center.y - lowerCylinder.height/2, 0f), lowerCylinder.radius, -1, numPoints);
+        builder.appendCylindersCurvedSurface(new Point(0f, lowerCylinder.center.y - lowerCylinder.height/2, 0f), lowerCylinder.radius, new Point(0f, lowerCylinder.center.y + lowerCylinder.height/2, 0f), lowerCylinder.radius,numPoints, textureUnit );
 
         return builder.build();
     }

@@ -208,10 +208,10 @@ public final class Collisions {
     }
 
     public static boolean CheckSphereCylinderCollsion(Sphere sphere, Cylinder cylinder) {
-        Point cylinderCenter = cylinder.getCenter();
-        float cylinderRadius = cylinder.getRadius();
-        float cylinderMinY = cylinderCenter.y - cylinder.getHeight() / 2;
-        float cylinderMaxY = cylinderCenter.y + cylinder.getHeight() / 2;
+        Point cylinderCenter = cylinder.center;
+        float cylinderRadius = cylinder.radius;
+        float cylinderMinY = cylinderCenter.y - cylinder.height/ 2;
+        float cylinderMaxY = cylinderCenter.y + cylinder.height / 2;
         Point sphereCenter = sphere.center;
         float sphereRadius = sphere.radius;
         float d = 0;
