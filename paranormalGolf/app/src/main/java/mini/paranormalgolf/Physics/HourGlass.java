@@ -27,7 +27,6 @@ public class HourGlass extends Bonus {
     public final float HOURGLASS_OPACITY = 0.75f;
     private final int HOURGLASS_MESH_DIMENSION = 32;
     private final float WOODEN_BASE_HEIGHT_RATIO = 0.1f;
-    private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
     public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
 
     public ConicalFrustum getLowerCone() {
@@ -42,8 +41,6 @@ public class HourGlass extends Bonus {
         public final float HOURGLASS_WOODEN_PART_OPACITY = 1f;
         private final int HOURGLASS_MESH_DIMENSION = 32;
         private final float TEXTURE_UNIT = 5f;
-        private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
-
 
         public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder, Context context) {
             super(location, 0, 0);
@@ -54,23 +51,6 @@ public class HourGlass extends Bonus {
             texture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
             ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         }
-
-//        @Override
-//        public void bindData(ShaderProgram shaderProgram) {
-//            vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//            vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//            vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((TextureShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-//        }
-//
-//        public void bindShadowData(ShaderProgram shaderProgram) {
-//            vertexData.setVertexAttribPointer(0, ((ShadowingShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//            vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//            vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-//        }
-//
-//        public void bindDepthMapData(ShaderProgram shaderProgram) {
-//            vertexData.setVertexAttribPointer(0, ((DepthMapShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        }
     }
 
 
@@ -88,11 +68,4 @@ public class HourGlass extends Bonus {
         ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         UP_DOWN_SPEED = HOURGLASS_UP_DOWN_SPEED;
     }
-
-//    @Override
-//    public void bindData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ColorShaderProgram) shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//    }
-
 }

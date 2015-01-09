@@ -5,6 +5,7 @@ import java.util.List;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
+import mini.paranormalgolf.Graphics.ShaderPrograms.SkyBoxShaderProgram;
 import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Primitives.Point;
@@ -59,6 +60,9 @@ public abstract class Element {
                     vertexData.setVertexAttribPointer(0, textureShaderProgram.getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE_WITH_TEXTURE);
                     vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, textureShaderProgram.getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE_WITH_TEXTURE);
                     vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, textureShaderProgram.getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE_WITH_TEXTURE);
+                    break;
+                case skyBox:
+                    vertexData.setVertexAttribPointer(0, ((SkyBoxShaderProgram)shaderProgram).getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
                     break;
             }
     }

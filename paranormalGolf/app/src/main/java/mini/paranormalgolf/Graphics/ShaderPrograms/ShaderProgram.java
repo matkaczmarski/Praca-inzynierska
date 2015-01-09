@@ -19,7 +19,8 @@ abstract public class ShaderProgram {
         color,
         depthMap,
         withShadowing,
-        withoutShadowing
+        withoutShadowing,
+        skyBox
 
     }
 

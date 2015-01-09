@@ -2,13 +2,9 @@ package mini.paranormalgolf.Physics;
 
 
 import android.content.Context;
-import android.opengl.GLES20;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.Circle;
@@ -16,7 +12,6 @@ import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Sphere;
 import mini.paranormalgolf.Primitives.Vector;
-import  mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.R;
 
@@ -30,11 +25,8 @@ import static android.opengl.Matrix.setRotateM;
 public class Ball extends MovableElement {
 
     public enum BallTexture{
-        golf,
-        wooden,
         tennis,
-        billard,
-        red_white,
+        redAndWhite,
         cat,
         noise,
         beach,
@@ -42,12 +34,15 @@ public class Ball extends MovableElement {
         sun,
         jelly,
         marble,
-        frozen
+        frozen,
+        tiger,
+        wooden1,
+        wooden2,
+        orangeSkin
     }
 
     private final int MESH_DIMENSION = 32;
     public final float BALL_OPACITY = 1f;
-    private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT) * 4;
 
     private final float CD =0.4f;
     private final float DENSITY =1.225f;
@@ -81,17 +76,11 @@ public class Ball extends MovableElement {
         texture = loadTexture(ballTexture, context);
     }
 
-    public int loadTexture(BallTexture ballTextureType, Context context){
+    private int loadTexture(BallTexture ballTextureType, Context context){
         switch (ballTextureType){
-            case golf:
-                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_golf);
-            case wooden:
-                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_wooden);
-            case billard:
-                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_billard);
             case tennis:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_tennis);
-            case red_white:
+            case redAndWhite:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_red_white_dots);
             case cat:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_cat);
@@ -109,25 +98,17 @@ public class Ball extends MovableElement {
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_marble);
             case frozen:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_frozen);
+            case tiger:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_tiger);
+            case orangeSkin:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_orange_skin);
+            case wooden1:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_wooden1);
+            case wooden2:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_wooden2);
         }
         return -1;
     }
-
-//    public void bindData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((TextureShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-//    }
-//
-//    public void bindShadowData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((ShadowingShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-//    }
-//
-//    public void bindDepthMapData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((DepthMapShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//    }
 
     public void Update(float dt,Vector accelerometrData,float mu) {
         //Update związany z poruszeniem się elementu

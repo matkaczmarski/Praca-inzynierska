@@ -15,7 +15,6 @@ public class Glow extends ControlPoint {
 
     public final float GLOW_OPACITY = 0.65f;
     private final int GLOW_MESH_DIMENSION = 32;
-    private final int STRIDE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
     private boolean canFinish;
 
@@ -34,10 +33,4 @@ public class Glow extends ControlPoint {
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }
-
-//    @Override
-//    public void bindData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((ColorShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ColorShaderProgram) shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//    }
 }

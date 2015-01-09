@@ -86,21 +86,12 @@ public class SkyBox extends Element {
             case nightClouds:
                 skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_nightclouds_left, R.drawable.skybox_texture_nightclouds_right, R.drawable.skybox_texture_nightclouds_bottom, R.drawable.skybox_texture_nightclouds_top, R.drawable.skybox_texture_nightclouds_back, R.drawable.skybox_texture_nightclouds_front});
                 break;
-//            case stars:
-//                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_stars_left, R.drawable.skybox_texture_stars_right, R.drawable.skybox_texture_stars_bottom, R.drawable.skybox_texture_stars_top, R.drawable.skybox_texture_stars_back, R.drawable.skybox_texture_stars_front});
-//                break;
-            case stars:
-                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky, R.drawable.skybox_texture_stars_wholesky});
-                break;
         }
         return skyboxTexture;
     }
 
     public void bindData(ShaderProgram skyboxProgram) {
         vertexArray.setVertexAttribPointer(0, ((SkyBoxShaderProgram)skyboxProgram).getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
-    }
-
-    public void bindShadowData(ShaderProgram skyboxProgram) {
     }
 
     public void draw() {

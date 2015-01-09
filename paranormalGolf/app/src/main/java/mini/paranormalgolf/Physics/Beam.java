@@ -22,7 +22,6 @@ public class Beam extends MovableElement {
 
     private static final float BEAM_TEXTURE_UNIT = 5f;
     public final float BEAM_OPACITY = 1f;
-    private final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
     private BoxSize measurements;
     public BoxSize getMeasurements() {
@@ -44,23 +43,6 @@ public class Beam extends MovableElement {
         drawCommands = generatedData.drawCommands;
         texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
     }
-
-//    @Override
-//    public void bindData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((TextureShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((TextureShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((TextureShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-//    }
-//
-//    public void bindShadowData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((ShadowingShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, STRIDE);
-//        vertexData.setVertexAttribPointer(POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT, ((ShadowingShaderProgram)shaderProgram).getTextureCoordinatesAttributeLocation(), TEXTURE_COMPONENT_COUNT, STRIDE);
-//    }
-//
-//    public void bindDepthMapData(ShaderProgram shaderProgram) {
-//        vertexData.setVertexAttribPointer(0, ((DepthMapShaderProgram)shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE);
-//   }
 
     public void Update(float dt) {
         //zmniejszony update ze względu na to, że to jest bar
