@@ -111,28 +111,16 @@ public class DrawManager {
         displayHeight = height;
         displayWidth = width;
 
-       MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / height, near, far);
-//        float rat = (float) width / height;
-//        orthoM(projectionMatrix, 0, -10 * rat, 10 * rat, -10f, 10f, near, far );
+        MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegree, (float) width / height, near, far);
         updateSkyboxMVPMatrix();
 
-        if(withShadow) {
+        if (withShadow) {
             float ratio = 1.5f;
             depthMapWidth = Math.round(displayWidth * ratio);
             depthMapHeight = Math.round(displayHeight * ratio);
-            MatrixHelper.perspectiveM(lightsProjectionMatrix, 60f, (float) width / height, 2.0f, far);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix, fieldOfViewDegree, (float) width / height, 2.0f, far);
             generateShadowFBO();
         }
-    }
-
-
-    private void updateLightsViewMatrix(Point ballLocation){
-        Matrix.setLookAtM(lightsViewMatrix, 0,
-                lightData.position.x, lightData.position.y, lightData.position.z,
-                ballLocation.x, ballLocation.y, ballLocation.z,
-                0f, 1f, 0f);
-        multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
-
     }
 
     public void generateShadowFBO() {
@@ -188,24 +176,24 @@ public class DrawManager {
     private final float LIGHT_ORBIT_RADIUS = 30f;
     private final float LIGHT_SHIFT_DEGREE_X = 20f;
     private final float LIGHT_SHIFT_DEGREE_Y = -15f;
+    private final float DEGREE_TO_RAD_CONVERSION = (float) Math.PI / 180;
 
     public void drawBoard(Board board, Ball ball) {
-//        setLookAtM(viewMatrix, 0, ball.getLocation().x + cameraTranslation.x, ball.getLocation().y + cameraTranslation.y, ball.getLocation().z + cameraTranslation.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
-//        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
-
-        float degreeToRadiusConverter = (float) Math.PI / 180;
-        float camX = ball.getLocation().x - CAMERA_ORBIT_RADIUS * FloatMath.sin(xRotation * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
-        float camY = ball.getLocation().y - CAMERA_ORBIT_RADIUS * FloatMath.sin(yRotation * degreeToRadiusConverter);
-        float camZ = ball.getLocation().z - CAMERA_ORBIT_RADIUS * FloatMath.cos(xRotation * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
+       
+        float camX = ball.getLocation().x - CAMERA_ORBIT_RADIUS * FloatMath.sin(xRotation * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
+        float camY = ball.getLocation().y - CAMERA_ORBIT_RADIUS * FloatMath.sin(yRotation * DEGREE_TO_RAD_CONVERSION);
+        float camZ = ball.getLocation().z - CAMERA_ORBIT_RADIUS * FloatMath.cos(xRotation * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
 
         setLookAtM(viewMatrix, 0, camX, camY, camZ, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-        float lightX = ball.getLocation().x - LIGHT_ORBIT_RADIUS * FloatMath.sin((xRotation + LIGHT_SHIFT_DEGREE_X) * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
-        float lightY = ball.getLocation().y - LIGHT_ORBIT_RADIUS * FloatMath.sin((yRotation + LIGHT_SHIFT_DEGREE_Y) * degreeToRadiusConverter);
-        float lightZ = ball.getLocation().z - LIGHT_ORBIT_RADIUS * FloatMath.cos((xRotation + LIGHT_SHIFT_DEGREE_X) * degreeToRadiusConverter) * FloatMath.cos(yRotation * degreeToRadiusConverter);
+        float lightX = ball.getLocation().x - LIGHT_ORBIT_RADIUS * FloatMath.sin((xRotation + LIGHT_SHIFT_DEGREE_X) * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
+        float lightY = ball.getLocation().y - LIGHT_ORBIT_RADIUS * FloatMath.sin((yRotation + LIGHT_SHIFT_DEGREE_Y) * DEGREE_TO_RAD_CONVERSION);
+        float lightZ = ball.getLocation().z - LIGHT_ORBIT_RADIUS * FloatMath.cos((xRotation + LIGHT_SHIFT_DEGREE_X) * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
         lightData.position = new Point(lightX, lightY, lightZ);
-        updateLightsViewMatrix(ball.getLocation());
+
+        Matrix.setLookAtM(lightsViewMatrix, 0,lightData.position.x, lightData.position.y, lightData.position.z, ball.getLocation().x, ball.getLocation().y, ball.getLocation().z, 0f, 1f, 0f);
+        multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
 
         if (withShadow) {
             renderSceneWithShadow(board, ball);
@@ -216,21 +204,16 @@ public class DrawManager {
 
     private void renderSceneWithShadow(Board board, Ball ball){
         glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId[0]);
-
         glViewport(0, 0, depthMapWidth, depthMapHeight);
-
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         glCullFace(GL_FRONT);
-
         renderDepthMap(board, ball);
-
         glCullFace(GL_BACK);
 
         glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         glViewport(0, 0, displayWidth, displayHeight);
         glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
 
         renderBoardWithShadows(board, ball);
     }
@@ -240,32 +223,25 @@ public class DrawManager {
         glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         drawSkybox();
-
         for (Floor floor : board.floors) {
             drawFloor(floor);
         }
-
         for (Wall wall : board.walls) {
             drawWall(wall);
         }
-
         for (Beam beam : board.beams) {
             drawBeam(beam);
         }
         for (Elevator elevator : board.elevators) {
             drawElevator(elevator);
         }
-
         drawBall(ball);
-
         for (Diamond diamond : board.diamonds) {
             drawDiamond(diamond);
         }
-
         for (HourGlass hourGlass : board.hourGlasses) {
             drawHourglass(hourGlass);
         }
-
         for (CheckPoint checkPoint : board.checkpoints) {
             drawCheckPoint(checkPoint);
         }
@@ -379,6 +355,10 @@ public class DrawManager {
         }
         drawFinishWithShadow(board.finish);
     }
+
+
+    ////////////////////////////
+
 
     private void drawBall(Ball ball) {
         textureShaderProgram.useProgram();
@@ -589,14 +569,7 @@ public class DrawManager {
     }
 
 
-    //////////////////
-
-    private final float ROTATION_FACTOR = 16f;
-    private final float RIGHT_ANGLE = 90f;
-    private final float RIGHT_ANGLE_BIAS = 0.01f;
-
-    private final float SKYBOX_ANGLE_SHIFT_X = 30f;
-    private final float SKYBOX_ANGLE_SHIFT_Y = 180f;
+   ///////////////////////////
 
     private void drawSkybox() {
         glDepthFunc(GL_LEQUAL);
@@ -606,6 +579,15 @@ public class DrawManager {
         skybox.draw();
         glDepthFunc(GL_LESS);
     }
+
+    //////////////////
+
+    private final float ROTATION_FACTOR = 16f;
+    private final float RIGHT_ANGLE = 90f;
+    private final float RIGHT_ANGLE_BIAS = 0.01f;
+
+    private final float SKYBOX_ANGLE_SHIFT_X = 30f;
+    private final float SKYBOX_ANGLE_SHIFT_Y = 180f;
 
     public void handleTouchDrag(float deltaX, float deltaY) {
         xRotation += deltaX / ROTATION_FACTOR;
