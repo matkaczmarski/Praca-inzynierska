@@ -6,7 +6,7 @@
               android:layout_height="@dimen/list_view_item_height"
               android:gravity="center"
               android:background="@android:color/transparent">
-    <TextView
+    <mini.paranormalgolf.Controls.LevelsListTextView
         android:id="@+id/list_view_item_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

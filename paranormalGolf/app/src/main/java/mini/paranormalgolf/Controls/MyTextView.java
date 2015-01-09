@@ -1,4 +1,4 @@
-package mini.paranormalgolf.Activities;
+package mini.paranormalgolf.Controls;
 
 import android.content.Context;
 import android.graphics.Typeface;
