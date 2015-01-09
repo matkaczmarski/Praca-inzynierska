@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <mini.paranormalgolf.Helpers.TitleTextView
             android:id="@+id/main_menu_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,29 +36,33 @@
             android:layout_weight="6"
             android:orientation="vertical">
 
-            <TextView
+            <mini.paranormalgolf.Helpers.ItemTextView
                 android:id="@+id/main_menu_start"
                 android:text="@string/main_menu_activity_start"
                 style="@style/MenuButton"
-                android:onClick="onStartClick"/>
+                android:onClick="onStartClick"
+                android:tag="0"/>
 
-            <TextView
+            <mini.paranormalgolf.Helpers.ItemTextView
                 android:id="@+id/main_menu_options"
                 android:text="@string/main_menu_activity_options"
                 style="@style/MenuButton"
-                android:onClick="onOptionsClick"/>
+                android:onClick="onOptionsClick"
+                android:tag="1"/>
 
-            <TextView
+            <mini.paranormalgolf.Helpers.ItemTextView
                 android:id="@+id/main_menu_help"
                 android:text="@string/main_menu_activity_help"
                 style="@style/MenuButton"
-                android:onClick="onHelpClick"/>
+                android:onClick="onHelpClick"
+                android:tag="2"/>
 
-            <TextView
+            <mini.paranormalgolf.Helpers.ItemTextView
                 android:id="@+id/main_menu_exit"
                 android:text="@string/main_menu_activity_exit"
                 style="@style/MenuButton"
-                android:onClick="onExitClick"/>
+                android:onClick="onExitClick"
+                android:tag="3"/>
 
             </LinearLayout>
 
