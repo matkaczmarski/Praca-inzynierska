@@ -134,10 +134,10 @@ public class Updater implements SensorEventListener {
         if(areAllCheckpointVisited){
             board.finish.enableFinishing();
         }
-        if(ball.CheckCollision(board.finish)) {
-            if (board.finish.isCanFinish())
+        if (board.finish.isCanFinish())
+            if(ball.CheckCollision(board.finish))
                 return UpdateResult.WIN;
-        }
+
 
         return UpdateResult.NONE;
     }

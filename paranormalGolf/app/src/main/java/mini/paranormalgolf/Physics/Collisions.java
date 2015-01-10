@@ -226,7 +226,8 @@ public final class Collisions {
     }
 
     public static boolean CheckSphereCircleCollision(Sphere sphere,Circle circle) {
-        return (sphere.center.x - circle.center.x) * (sphere.center.x - circle.center.x) + (sphere.center.z - circle.center.z) * (sphere.center.z - circle.center.z) <= circle.radius * circle.radius;
+        return (sphere.center.x - circle.center.x) * (sphere.center.x - circle.center.x) + (sphere.center.z - circle.center.z) * (sphere.center.z - circle.center.z) <= circle.radius * circle.radius
+                && (sphere.center.y - circle.center.y - sphere.radius) < USER_EXPERIENCE;
     }
 
     public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element) {
