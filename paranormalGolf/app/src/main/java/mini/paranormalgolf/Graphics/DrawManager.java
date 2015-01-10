@@ -97,7 +97,7 @@ public class DrawManager {
         depthMapShaderProgram = new DepthMapShaderProgram(context);
         shadowingShaderProgram = new ShadowingShaderProgram(context);
 
-        skyBox = new SkyBox(context, SkyBox.SkyBoxTexture.nightClouds);
+        skyBox = new SkyBox(context, SkyBox.SkyBoxTexture.stars);
         this.withShadow = withShadow;
         resetDrawManager();
     }
@@ -654,7 +654,7 @@ public class DrawManager {
     private final float RIGHT_ANGLE = 90f;
     private final float RIGHT_ANGLE_BIAS = 0.01f;
 
-    private final float SKYBOX_ANGLE_SHIFT_X = 30f;
+    private final float SKYBOX_ANGLE_SHIFT_X = 15f;
     private final float SKYBOX_ANGLE_SHIFT_Y = 180f;
 
     //Dla frustum widoku

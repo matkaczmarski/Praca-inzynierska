@@ -86,6 +86,9 @@ public class SkyBox extends Element {
             case nightClouds:
                 skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_nightclouds_left, R.drawable.skybox_texture_nightclouds_right, R.drawable.skybox_texture_nightclouds_bottom, R.drawable.skybox_texture_nightclouds_top, R.drawable.skybox_texture_nightclouds_back, R.drawable.skybox_texture_nightclouds_front});
                 break;
+            case stars:
+                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_space_left, R.drawable.skybox_texture_space_right, R.drawable.skybox_texture_space_bottom, R.drawable.skybox_texture_space_top, R.drawable.skybox_texture_space_back, R.drawable.skybox_texture_space_front});
+                break;
         }
         return skyboxTexture;
     }
