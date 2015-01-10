@@ -11,9 +11,9 @@
 
     <dimen name="pause_dialog_title">40sp</dimen>
 
-    <dimen name="list_view_item_height">50sp</dimen>
+    <dimen name="list_view_item_height">50dp</dimen>
 
-    <dimen name="panel_height">50sp</dimen>
+    <dimen name="panel_height">50dp</dimen>
 
     <dimen name="end_game_font">40sp</dimen>
 </resources>
