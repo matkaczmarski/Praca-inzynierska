@@ -12,13 +12,13 @@
     <Floor location_x="10" location_y="-21" location_z="-10" boxsize_x="10" boxsize_y="1" boxsize_z="10" friction="0.05"/>
     <Floor location_x="10" location_y="-21" location_z="10" boxsize_x="10" boxsize_y="1" boxsize_z="10" friction="0.05"/>
 
-    <Elevator location_x="0" location_y="-0.5" location_z="-10" vector_x="0" vector_y="2.5" vector_z="0" boxsize_x="10" boxsize_y="1" boxsize_z="10" from_x="0" from_y="-23" from_z="-10" to_x="0" to_y="22" to_z="-10" friction="0.05"/>
-    <Elevator location_x="0" location_y="-0.5" location_z="10" vector_x="0" vector_y="-2.5" vector_z="0" boxsize_x="10" boxsize_y="1" boxsize_z="10" from_x="0" from_y="-23" from_z="10" to_x="0" to_y="22" to_z="10" friction="0.05"/>
+    <Elevator location_x="0" location_y="-0.5" location_z="-10" vector_x="0" vector_y="2.5" vector_z="0" boxsize_x="10" boxsize_y="1" boxsize_z="10" from_x="0" from_y="-23" from_z="-10" to_x="0" to_y="23" to_z="-10" friction="0.05"/>
+    <Elevator location_x="0" location_y="-0.5" location_z="10" vector_x="0" vector_y="-2.5" vector_z="0" boxsize_x="10" boxsize_y="1" boxsize_z="10" from_x="0" from_y="-23" from_z="10" to_x="0" to_y="23" to_z="10" friction="0.05"/>
 
-    <Finish location_x="0" location_y="0" location_z="-20" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="false"/>
+    <Finish location_x="0" location_y="-0.5" location_z="-20" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="false"/>
 
-    <Checkpoint location_x="-7.5" location_y="21" location_z="-10" frustum_x="15" frustum_y="2" frustum_z="3" visited="false"/>
-    <Checkpoint location_x="7.5" location_y="21" location_z="10" frustum_x="15" frustum_y="2" frustum_z="3" visited="false"/>
+    <Checkpoint location_x="-7.5" location_y="20.5" location_z="-10" frustum_x="15" frustum_y="2" frustum_z="3" visited="false"/>
+    <Checkpoint location_x="7.5" location_y="20.5" location_z="10" frustum_x="15" frustum_y="2" frustum_z="3" visited="false"/>
 
     <HourGlass location_x="0" location_y="1" location_z="20" value="5" y_shift="0.5"/>
     <HourGlass location_x="10" location_y="-19" location_z="10" value="5" y_shift="0.5"/>
