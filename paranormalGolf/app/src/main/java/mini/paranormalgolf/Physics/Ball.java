@@ -198,28 +198,28 @@ public class Ball extends MovableElement {
 
 
     public boolean CheckCollision(Wall element){
-        return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
+        return Collisions.CheckSphereAABBCollision(new Sphere(location, radius), new Box(element.getLocation(), element.getMeasurements()));
     }
 
     public boolean CheckCollision(Floor element){
-        return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
+        return Collisions.CheckSphereAABBCollision(new Sphere(location, radius), new Box(element.getLocation(), element.getMeasurements()));
     }
 
     public boolean CheckCollision(Diamond diamond) {
         if (diamond == null) return false;
-        return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(diamond.location, diamond.getPyramid().radius, 2 * diamond.getPyramid().height));
+        return Collisions.CheckSphereCylinderCollision(new Sphere(location, radius), new Cylinder(diamond.location, diamond.getPyramid().radius, 2 * diamond.getPyramid().height));
     }
 
     public boolean CheckCollision(HourGlass hourGlass) {
         if (hourGlass == null) return false;
-        return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(hourGlass.location, hourGlass.getLowerCone().bottomRadius, 2 * hourGlass.getLowerCone().height));
+        return Collisions.CheckSphereCylinderCollision(new Sphere(location, radius), new Cylinder(hourGlass.location, hourGlass.getLowerCone().bottomRadius, 2 * hourGlass.getLowerCone().height));
     }
 
     public boolean CheckCollision(Finish finish) {
         if (finish == null) return false;
         return Collisions.CheckSphereCircleCollision(new Sphere(location, radius),
         new Circle(finish.getLocation(),finish.conicalFrustum.bottomRadius));
-   //     return Collisions.CheckSphereCylinderCollsion(, new Cylinder(finish.getLocation(),
+   //     return Collisions.CheckSphereCylinderCollision(, new Cylinder(finish.getLocation(),
    //             Math.min(finish.conicalFrustum.bottomRadius, finish.conicalFrustum.topRadius), finish.conicalFrustum.height));
     }
 
@@ -227,16 +227,16 @@ public class Ball extends MovableElement {
         if (checkPoint == null) return false;
         return Collisions.CheckSphereCircleCollision(new Sphere(location, radius),
                 new Circle(checkPoint.getLocation(),checkPoint.conicalFrustum.bottomRadius));
-        //    return Collisions.CheckSphereCylinderCollsion(new Sphere(location, radius), new Cylinder(checkPoint.getLocation(),
+        //    return Collisions.CheckSphereCylinderCollision(new Sphere(location, radius), new Cylinder(checkPoint.getLocation(),
         //           Math.min(checkPoint.conicalFrustum.bottomRadius, checkPoint.conicalFrustum.topRadius), checkPoint.conicalFrustum.height));
     }
 
     public boolean CheckCollision(Beam element){
-        return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
+        return Collisions.CheckSphereAABBCollision(new Sphere(location, radius), new Box(element.getLocation(), element.getMeasurements()));
     }
 
     public boolean CheckCollision(Elevator element){
-        return Collisions.CheckSphereAABBCollsion(new Sphere(location,radius),new Box(element.getLocation(),element.getMeasurements()));
+        return Collisions.CheckSphereAABBCollision(new Sphere(location, radius), new Box(element.getLocation(), element.getMeasurements()));
     }
 
     public void ReactOnCollision(Wall element) {
