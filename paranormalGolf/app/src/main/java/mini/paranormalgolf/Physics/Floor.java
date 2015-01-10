@@ -77,7 +77,6 @@ public class Floor extends Element {
         topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
-
     }
 
     private void createFloor(BoxSize measures, Point location) {
