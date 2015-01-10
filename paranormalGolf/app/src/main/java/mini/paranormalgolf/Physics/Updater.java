@@ -212,7 +212,11 @@ public class Updater implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        accData = new Vector(event.values[1], -event.values[2], event.values[0]);
+        if (drawManager != null) {
+            float angle = ((float)(2* Math.PI*(drawManager.getxRotation() - 180)))/360;
+
+            accData = new Vector((float) (event.values[1] * Math.cos(angle) + event.values[0] * Math.sin(angle)), -event.values[2], (float) (event.values[0] * Math.cos(angle) - event.values[1] * Math.sin(angle)));
+        }
     }
 
     @Override

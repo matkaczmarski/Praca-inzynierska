@@ -85,7 +85,12 @@ public class DrawManager {
     private int[] renderTextureId;
 
     private boolean withShadow;
-    private float xRotation, yRotation;
+
+    public float getxRotation() {
+        return xRotation;
+    }
+
+    private float xRotation=180, yRotation;
     private SkyBox skyBox;
     private LightData lightData = new LightData(0.2f, 0.6f);
 
