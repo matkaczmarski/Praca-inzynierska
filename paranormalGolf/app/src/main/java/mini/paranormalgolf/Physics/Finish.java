@@ -21,7 +21,7 @@ public class Finish extends ControlPoint {
 
     public final float FINISH_OPACITY = 1f;
     private final int FINISH_PLATFORM_DIMENSION = 32;
-    private  final float FINISH_PLATFORM_SHIFT = 0.01f;
+    private  final float FINISH_PLATFORM_SHIFT = 0.0001f;
 
     private boolean canFinish;
     private Glow glow;

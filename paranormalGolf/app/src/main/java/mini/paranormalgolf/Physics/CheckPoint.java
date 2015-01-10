@@ -21,7 +21,7 @@ public class CheckPoint extends ControlPoint {
 
     public final float CHECKPOINT_OPACITY = 1f;
     private final int CHECKPOINT_PLATFORM_DIMENSION = 32;
-    private  final float CHECKPOINT_PLATFORM_SHIFT = 0.01f;
+    private  final float CHECKPOINT_PLATFORM_SHIFT = 0.0001f;
 
     private boolean visited;
     private Glow glow;

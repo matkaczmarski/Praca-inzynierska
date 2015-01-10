@@ -112,12 +112,12 @@ public class DrawManager {
         displayWidth = width;
 
         MatrixHelper.perspectiveM(projectionMatrix, VIEW_FIELD_OF_VIEW_DEGREES, (float) width / height, VIEW_NEAR, VIEW_FAR);
-        MatrixHelper.perspectiveM(lightsProjectionMatrix, LIGHT_FIELD_OF_VIEW_DEGREES, (float) width / height, LIGHT_NEAR, LIGHT_FAR);
         updateSkyBoxMVPMatrix();
 
         if (withShadow) {
             depthMapWidth = Math.round(displayWidth * DEPTH_MAP_PRECISION);
             depthMapHeight = Math.round(displayHeight * DEPTH_MAP_PRECISION);
+            MatrixHelper.perspectiveM(lightsProjectionMatrix, LIGHT_FIELD_OF_VIEW_DEGREES, (float) width / height, LIGHT_NEAR, LIGHT_FAR);
             generateShadowFBO();
         }
     }
@@ -563,8 +563,11 @@ public class DrawManager {
 
         if (yRotation < -RIGHT_ANGLE) {
             yRotation = -RIGHT_ANGLE + RIGHT_ANGLE_BIAS;
-        } else if (yRotation > 0){
-            yRotation = 0f;
+//        } else if (yRotation > 0){
+//            yRotation = 0f;
+//        }
+        } else if (yRotation > RIGHT_ANGLE){
+            yRotation = RIGHT_ANGLE - RIGHT_ANGLE_BIAS;
         }
 
         updateSkyBoxMVPMatrix();
@@ -627,8 +630,10 @@ public class DrawManager {
         float lightZ = ballLocation.z - LIGHT_ORBIT_RADIUS * FloatMath.cos((xRotation + LIGHT_SHIFT_DEGREE_X) * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
         lightData.position = new Point(lightX, lightY, lightZ);
 
-        Matrix.setLookAtM(lightsViewMatrix, 0,lightData.position.x, lightData.position.y, lightData.position.z, ballLocation.x, ballLocation.y, ballLocation.z, 0f, 1f, 0f);
-        multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
+        if(withShadow) {
+            Matrix.setLookAtM(lightsViewMatrix, 0, lightData.position.x, lightData.position.y, lightData.position.z, ballLocation.x, ballLocation.y, ballLocation.z, 0f, 1f, 0f);
+            multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
+        }
     }
 
 

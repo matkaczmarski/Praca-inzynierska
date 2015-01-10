@@ -63,7 +63,6 @@ public class Floor extends Element {
         return bottomFloorTexture;
     }
 
-
     public float getFloorTop() {
         return this.location.y + this.measures.y / 2;
     }
@@ -75,11 +74,10 @@ public class Floor extends Element {
         createFloor(measures, location);
 
         //ZMIENCIE TO, numer od 0 do 9
-        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture2);
+        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
 
 //        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_top);
         sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
-        //sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_side);
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
 
     }
