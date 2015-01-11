@@ -63,7 +63,7 @@
     <mini.paranormalgolf.Controls.ItemTextView
         android:id="@+id/end_game_ok_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         style="@style/EndGameButton"
         android:text="OK"/>
 
