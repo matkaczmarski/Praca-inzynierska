@@ -443,13 +443,13 @@ public class GameActivity extends Activity implements Runnable {
         glSurfaceView.onPause();
         this.win = win;
         GameActivity.game = false;
-        Dialog dialog = new Dialog(this, R.style.EndGameDialogTheme);
-        dialog.setContentView(R.layout.win_dialog);
-        loadFontsForDialog(dialog);
-        setDialogTitleAndResult(dialog, diamonds, time, win);
+        end_game_dialog = new Dialog(this, R.style.EndGameDialogTheme);
+        end_game_dialog.setContentView(R.layout.win_dialog);
+        loadFontsForDialog(end_game_dialog);
+        setDialogTitleAndResult(end_game_dialog, diamonds, time, win);
 
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.show();
+        end_game_dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        end_game_dialog.show();
     }
 
     public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time, boolean win)
