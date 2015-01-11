@@ -36,6 +36,8 @@ public class LevelsActivity extends Activity
     private boolean sound;
     private boolean vibrations;
 
+    private boolean last_game_win = false;
+
     private boolean firstResume = true;
 
     private PowerManager.WakeLock mWakeLock;
@@ -164,7 +166,18 @@ public class LevelsActivity extends Activity
         {
             Intent intent = new Intent(this, GameActivity.class);
             intent.putExtra("BOARD_ID", board_id);
-            startActivity(intent);
+            startActivityForResult(intent, 0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 0)
+        {
+            last_game_win = data.getBooleanExtra("WIN", false);
         }
     }
 
@@ -265,29 +278,29 @@ public class LevelsActivity extends Activity
         super.onResume();
         if (firstResume)
         {
-            LevelsListAdapter levelsListAdapter = (LevelsListAdapter)(((ListView)findViewById(R.id.levels_list)).getAdapter());
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
-            String[] boards_id = getResources().getStringArray(R.array.boards_id);
-            for (int i = 0; i < boards_id.length; i++)
-            {
-                String board_id = boards_id[i];
-                int result = sharedPreferences.getInt(board_id, 0);
-                if (result > 0)
-                {
-                    changeSelectedBoard(levelsListAdapter, (i + 1) == boards_id.length ? i : i + 1);
-                    break;
-                }
-            }
+            chooseFirstAvailableLevel();
             firstResume = false;
             return;
         }
+
         InitializeBoardList();
-        int board_nr = Integer.parseInt(board_id.split("_")[1]);
+        chooseFirstAvailableLevel();
+    }
 
-        String[] boards_id = getResources().getStringArray(R.array.boards_id);
-        int next_board = (board_nr + 1) > boards_id.length ? board_nr - 1 : board_nr;
-
+    private void chooseFirstAvailableLevel()
+    {
         LevelsListAdapter levelsListAdapter = (LevelsListAdapter)(((ListView)findViewById(R.id.levels_list)).getAdapter());
-        changeSelectedBoard(levelsListAdapter, next_board);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+        String[] boards_id = getResources().getStringArray(R.array.boards_id);
+        for (int i = 0; i < boards_id.length; i++)
+        {
+            String board_id = boards_id[i];
+            int result = sharedPreferences.getInt(board_id, 0);
+            if (result == 0)
+            {
+                changeSelectedBoard(levelsListAdapter, i);
+                break;
+            }
+        }
     }
 }

@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ActionMenuView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,6 +56,8 @@ public class GameActivity extends Activity implements Runnable {
     private boolean music;
     private boolean sound;
     private boolean shadows;
+
+    private boolean win = false;
 
     protected PowerManager.WakeLock mWakeLock;
 
@@ -438,6 +441,7 @@ public class GameActivity extends Activity implements Runnable {
     public void onWinDialog(int diamonds, int time, boolean win)
     {
         glSurfaceView.onPause();
+        this.win = win;
         GameActivity.game = false;
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.win_dialog);
@@ -510,6 +514,10 @@ public class GameActivity extends Activity implements Runnable {
             end_game_dialog.dismiss();
             end_game_dialog = null;
         }
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("WIN", this.win);
+        setResult(RESULT_OK, returnIntent);
         finish();
     }
 }

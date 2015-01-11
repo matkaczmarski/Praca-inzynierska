@@ -61,10 +61,7 @@ public class LevelsListAdapter extends BaseAdapter
             tv.setTypeface(tf);
 
             dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
             dialog.show();
-
-
             return;
 
         }
