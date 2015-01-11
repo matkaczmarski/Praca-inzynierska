@@ -93,6 +93,12 @@ public class LevelsListAdapter extends BaseAdapter
     {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_view_item, viewGroup, false);
+
+        if (first && (i < lastCount))
+            first = false;
+        else
+            lastCount = listView.getLastVisiblePosition();
+
         if (locked[i])
         {
             rowView.findViewById(R.id.list_view_item_text).setVisibility(View.INVISIBLE);
@@ -125,11 +131,6 @@ public class LevelsListAdapter extends BaseAdapter
             Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
             textView.setTypeface(tf);
         }
-
-        if (first && (i < lastCount))
-            first = false;
-        else
-            lastCount = listView.getLastVisiblePosition();
 
         return rowView;
     }

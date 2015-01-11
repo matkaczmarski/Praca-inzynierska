@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +21,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Locale;
 
 import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.Helpers.XMLParser;
@@ -127,6 +124,7 @@ public class LevelsActivity extends Activity
         boolean temp_sound = sound;
 
         vibrations = sound = false;
+        ((ListView)findViewById(R.id.levels_list)).setSelection(nr);
         levelsListAdapter.setSelectedIndex(nr);
 
         vibrations = temp_vibrations;
@@ -278,16 +276,16 @@ public class LevelsActivity extends Activity
         super.onResume();
         if (firstResume)
         {
-            chooseFirstAvailableLevel();
+            chooseLastAvailableLevel();
             firstResume = false;
             return;
         }
 
         InitializeBoardList();
-        chooseFirstAvailableLevel();
+        chooseLastAvailableLevel();
     }
 
-    private void chooseFirstAvailableLevel()
+    private void chooseLastAvailableLevel()
     {
         LevelsListAdapter levelsListAdapter = (LevelsListAdapter)(((ListView)findViewById(R.id.levels_list)).getAdapter());
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
@@ -299,8 +297,9 @@ public class LevelsActivity extends Activity
             if (result == 0)
             {
                 changeSelectedBoard(levelsListAdapter, i);
-                break;
+                return;
             }
         }
+        changeSelectedBoard(levelsListAdapter, boards_id.length - 1);
     }
 }
