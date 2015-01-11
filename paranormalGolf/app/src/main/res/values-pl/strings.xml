@@ -45,4 +45,5 @@
     <string name="help_page_2_text_1">Meta staje się aktywna po odwiedzeniu wszystkich punktów kontrolnych</string>
     <string name="help_page_3_text_1">Zbieraj diamenty aby uzyskać więcej punktów</string>
     <string name="help_page_3_text_2">Zbieraj klepsydry aby zwiększyć limit czasu</string>
+    <string name="level_locked">Aby odblokować poziom, ukończ poprzednie!</string>
 </resources>

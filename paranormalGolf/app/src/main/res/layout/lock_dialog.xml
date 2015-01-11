@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="300dp"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:background="@android:color/transparent">
+    <View
+        android:layout_width="20dp"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/level_locked"
+            android:singleLine="false"
+            android:textSize="20dp"
+            android:textColor="@android:color/white"
+            android:gravity="center"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+        <mini.paranormalgolf.Controls.ItemTextView
+            android:id="@+id/lock_dialog_ok"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            style="@style/LockDialogButton"
+            android:text="@string/ok"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="20dp"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>

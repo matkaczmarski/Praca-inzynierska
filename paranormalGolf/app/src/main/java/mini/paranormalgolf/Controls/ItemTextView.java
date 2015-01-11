@@ -64,7 +64,7 @@ public class ItemTextView extends TextView
             }
             catch(Exception ex)
             {
-                nr = 0;
+                return;
             }
             animation.setStartOffset(nr * offset);
             startAnimation(animation);

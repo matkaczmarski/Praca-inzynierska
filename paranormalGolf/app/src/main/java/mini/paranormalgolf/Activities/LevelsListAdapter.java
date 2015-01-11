@@ -1,15 +1,23 @@
 package mini.paranormalgolf.Activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.R;
 
 /**
@@ -17,39 +25,58 @@ import mini.paranormalgolf.R;
  */
 public class LevelsListAdapter extends BaseAdapter
 {
-    String[] board_id;
-    int[] best_results;
+    BoardInfo[] boardInfos;
+    boolean[] locked;
     Context context;
     int selectedIndex = 0;
     boolean first = true;
     ListView listView;
     int lastCount = -1;
 
-    public LevelsListAdapter(Context context, String[] board_id, int[] best_results, ListView listView)
+    public LevelsListAdapter(Context context, BoardInfo[] boardInfos, ListView listView, boolean[] locked)
     {
         super();
-        this.board_id = board_id;
-        this.best_results = best_results;
+        this.boardInfos = boardInfos;
+        this.locked = locked;
         this.listView = listView;
         this.context = context;
     }
 
-    public int getSelectedIndex()
-    {
-        return selectedIndex;
-    }
-
     public void setSelectedIndex(int selectedIndex)
     {
+        if (locked[selectedIndex])
+        {
+            final Dialog dialog = new Dialog(context, R.style.LockDialogTheme);
+            dialog.setContentView(R.layout.lock_dialog);
+            ((TextView)dialog.findViewById(R.id.lock_dialog_ok)).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    dialog.dismiss();
+                }
+            });
+            Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
+            TextView tv = (TextView) dialog.findViewById(R.id.lock_dialog_ok);
+            tv.setTypeface(tf);
+
+            dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            dialog.show();
+
+
+            return;
+
+        }
         this.selectedIndex = selectedIndex;
-        ((LevelsActivity)context).selectedBoardChanged(board_id[selectedIndex], best_results[selectedIndex], selectedIndex + 1);
+        ((LevelsActivity)context).selectedBoardChanged(boardInfos[selectedIndex], selectedIndex + 1);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount()
     {
-        return board_id.length;
+        return boardInfos.length;
     }
 
     @Override
@@ -69,50 +96,37 @@ public class LevelsListAdapter extends BaseAdapter
     {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_view_item, viewGroup, false);
-        TagInfo tagInfo = new TagInfo();
-        tagInfo.setId(board_id[i]);
-        tagInfo.setResult(best_results[i]);
-        rowView.setTag(tagInfo);
-        TextView textView = (TextView)rowView.findViewById(R.id.list_view_item_text);
-        textView.setText(context.getString(R.string.level) + " #" + (i + 1));
-        if (first)
-            textView.setTag(i + "");
-        else
-            textView.setTag(-1);
-        if (first && (i < lastCount))
-            first = false;
-        else
-            lastCount = listView.getLastVisiblePosition();
-        if (i == selectedIndex)
-            textView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.selected_item));
+        if (locked[i])
+        {
+            rowView.findViewById(R.id.list_view_item_text).setVisibility(View.INVISIBLE);
+            rowView.findViewById(R.id.list_view_item_image).setVisibility(View.VISIBLE);
+        }
         else
         {
-            textView.setBackgroundDrawable(null);
-            textView.setBackgroundColor(Color.TRANSPARENT);
+            rowView.findViewById(R.id.list_view_item_image).setVisibility(View.INVISIBLE);
+            rowView.findViewById(R.id.list_view_item_text).setVisibility(View.VISIBLE);
+
+            TextView textView = (TextView) rowView.findViewById(R.id.list_view_item_text);
+            textView.setText(context.getString(R.string.level) + " #" + (i + 1));
+            if (first)
+                textView.setTag(i + "");
+            else
+                textView.setTag(-1);
+            if (first && (i < lastCount))
+                first = false;
+            else
+                lastCount = listView.getLastVisiblePosition();
+            if (i == selectedIndex)
+                textView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.selected_item));
+            else
+            {
+                textView.setBackgroundDrawable(null);
+                textView.setBackgroundColor(Color.TRANSPARENT);
+            }
+            Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
+            textView.setTypeface(tf);
         }
-        Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
-        textView.setTypeface(tf);
 
         return rowView;
-    }
-
-    public void addItem(String id, int best_result)
-    {
-        String[] new_board_id = new String[board_id.length + 1];
-        int[] new_best_results = new int[best_results.length + 1];
-
-        for (int i = 0; i < board_id.length; i++)
-        {
-            new_board_id[i] = board_id[i];
-            new_best_results[i] = best_results[i];
-        }
-
-        new_board_id[board_id.length] = id;
-        new_best_results[board_id.length] = best_result;
-
-        board_id = new_board_id;
-        best_results = new_best_results;
-
-        notifyDataSetChanged();
     }
 }

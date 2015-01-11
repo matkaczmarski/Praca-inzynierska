@@ -3,4 +3,5 @@
     <color name="activity_background">#000</color>
     <color name="activity_main_menu_title">#000</color>
     <color name="activity_main_menu_option">#8b4513</color>
+    <color name="transparent_black">#C5000000</color>
 </resources>
