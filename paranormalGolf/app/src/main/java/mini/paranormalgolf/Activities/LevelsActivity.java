@@ -90,15 +90,22 @@ public class LevelsActivity extends Activity
     public void InitializeBoardList()
     {
         String[] board_id = getResources().getStringArray(R.array.boards_id);
-        int[] results = new int[board_id.length];
+        BoardInfo[] boardInfos = new BoardInfo[board_id.length];
+        boolean[] board_locked = new boolean[board_id.length];
+        XMLParser xmlParser = new XMLParser(this);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
+        boolean locked = false;
         for (int i = 0; i < board_id.length; i++)
         {
-            String id = board_id[i];
-            //TODO wczytanie najlepszych wyników
-            results[i] = 0;
+            BoardInfo boardInfo = xmlParser.getBoardInfo(board_id[i]);
+            boardInfos[i] = boardInfo;
+            board_locked[i] = locked;
+            if (!locked)
+                if (sharedPreferences.getInt(board_id[i], 0) == 0)
+                    locked = true;
         }
         final ListView listView = (ListView)findViewById(R.id.levels_list);
-        LevelsListAdapter levelsListAdapter = new LevelsListAdapter(this, board_id, results, listView);
+        LevelsListAdapter levelsListAdapter = new LevelsListAdapter(this, boardInfos, listView, board_locked);
         listView.setAdapter(levelsListAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -161,15 +168,12 @@ public class LevelsActivity extends Activity
         }
     }
 
-    public void selectedBoardChanged(String id, int result, int nr)
+    public void selectedBoardChanged(BoardInfo boardInfo, int nr)
     {
         onButtonClick();
-        board_id = id;
+        board_id = boardInfo.getBoard_id();
         int picId = getResources().getIdentifier("board_" + nr, "drawable", getApplicationContext().getPackageName());
         ((ImageView)findViewById(R.id.board_image)).setImageDrawable(getResources().getDrawable(picId));
-
-        XMLParser xmlParser = new XMLParser(this);
-        BoardInfo boardInfo = xmlParser.getBoardInfo(id);
 
         if (boardInfo == null)
         {
@@ -277,6 +281,7 @@ public class LevelsActivity extends Activity
             firstResume = false;
             return;
         }
+        InitializeBoardList();
         int board_nr = Integer.parseInt(board_id.split("_")[1]);
 
         String[] boards_id = getResources().getStringArray(R.array.boards_id);

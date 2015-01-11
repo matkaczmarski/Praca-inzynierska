@@ -46,6 +46,14 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="LockDialogButton">
+        <item name="android:textSize">25dp</item>
+        <item name="android:textColor">@color/activity_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/options_button_cancel_save_selector</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="LevelSelectButton">
         <item name="android:textSize">@dimen/activity_select_level_font</item>
         <item name="android:textColor">@color/activity_main_menu_option</item>
@@ -90,6 +98,14 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/activity_background</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="LockDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/transparent_black</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 </resources>

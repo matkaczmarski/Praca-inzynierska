@@ -57,5 +57,6 @@
     <string name="help_page_2_text_1">To activate finish you have to visit all the checkpoints</string>
     <string name="help_page_3_text_1">Collect diamonds for extra points</string>
     <string name="help_page_3_text_2">Collect hourglasses for time bonus</string>
-
+    <string name="level_locked">To unlock this level you have to complete the previous ones!</string>
+    <string name="ok">OK</string>
 </resources>
