@@ -46,10 +46,6 @@ public class Vector {
         return scale(1f / length());
     }
 
-    public float absSum() {
-        return Math.abs(x) + Math.abs(y) + Math.abs(z);
-    }
-
     public boolean IsParallelToAxis() {
         return (x == 0 & y == 0) || (x == 0 & z == 0) || (y == 0 & z == 0);
     }
