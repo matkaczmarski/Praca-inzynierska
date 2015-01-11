@@ -19,6 +19,7 @@ import mini.paranormalgolf.R;
 public class Floor extends Element {
 
     public final float FLOOR_OPACITY = 1f;
+    private final float THRESHOLD_MU_FACTOR = 0.05f;
 
     public BoxSize getMeasurements() {
         return measures;
@@ -73,9 +74,14 @@ public class Floor extends Element {
         this.mu = mu;
         createFloor(measures, location);
 
-        //ZMIENCIE TO, numer od 0 do 9
-        topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
-        sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
+        if(mu > THRESHOLD_MU_FACTOR){
+            topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
+            sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
+        }else {
+            topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
+            sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
+        }
+
         bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
     }
 

@@ -9,9 +9,9 @@
     <Floor location_x="44" location_y="-1" location_z="26" boxsize_x="4" boxsize_y="2" boxsize_z="12" friction="0.05"/>
     <Floor location_x="44" location_y="-1" location_z="14" boxsize_x="12" boxsize_y="2" boxsize_z="12" friction="0.05"/>
 
-    <Floor location_x="0" location_y="4" location_z="40" boxsize_x="4" boxsize_y="2" boxsize_z="4" friction="0.05"/>
-    <Floor location_x="44" location_y="4" location_z="41" boxsize_x="4" boxsize_y="2" boxsize_z="2" friction="0.05"/>
-    <Floor location_x="22" location_y="4" location_z="44" boxsize_x="48" boxsize_y="2" boxsize_z="4" friction="0.05"/>
+    <Floor location_x="0" location_y="4" location_z="40" boxsize_x="4" boxsize_y="2" boxsize_z="4" friction="0.5"/>
+    <Floor location_x="44" location_y="4" location_z="41" boxsize_x="4" boxsize_y="2" boxsize_z="2" friction="0.5"/>
+    <Floor location_x="22" location_y="4" location_z="44" boxsize_x="48" boxsize_y="2" boxsize_z="4" friction="0.5"/>
 
     <Diamond location_x="-4" location_y="1.4" location_z="4" value="100" y_shift="0.7"/>
     <Diamond location_x="-4" location_y="1.4" location_z="-4" value="100" y_shift="0.7"/>
