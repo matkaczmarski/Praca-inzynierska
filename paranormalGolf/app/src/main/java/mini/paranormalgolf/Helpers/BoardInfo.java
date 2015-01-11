@@ -6,19 +6,15 @@ package mini.paranormalgolf.Helpers;
 public class BoardInfo
 {
     private String board_id;
-    private int best_result;
     private int two_stars;
     private int three_stars;
-    private boolean accomplished;
     private int time;
 
-    public BoardInfo(String board_id, int best_result, int two_stars, int three_stars, boolean accomplished, int time)
+    public BoardInfo(String board_id, int two_stars, int three_stars, int time)
     {
         this.board_id = board_id;
-        this.best_result = best_result;
         this.two_stars = two_stars;
         this.three_stars = three_stars;
-        this.accomplished = accomplished;
         this.time = time;
     }
 
@@ -30,16 +26,6 @@ public class BoardInfo
     public void setBoard_id(String board_id)
     {
         this.board_id = board_id;
-    }
-
-    public int getBest_result()
-    {
-        return best_result;
-    }
-
-    public void setBest_result(int best_result)
-    {
-        this.best_result = best_result;
     }
 
     public int getTwo_stars()
@@ -60,16 +46,6 @@ public class BoardInfo
     public void setThree_stars(int three_stars)
     {
         this.three_stars = three_stars;
-    }
-
-    public boolean isAccomplished()
-    {
-        return accomplished;
-    }
-
-    public void setAccomplished(boolean accomplished)
-    {
-        this.accomplished = accomplished;
     }
 
     public int getTime()

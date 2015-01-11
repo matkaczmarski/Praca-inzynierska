@@ -8,21 +8,21 @@ import android.widget.TextView;
 /**
  * Created by Kuba on 2015-01-06.
  */
-public class MyTextView extends TextView
+public class FontTextView extends TextView
 {
-    public MyTextView(Context context)
+    public FontTextView(Context context)
     {
         super(context);
         init();
     }
 
-    public MyTextView(Context context, AttributeSet attrs)
+    public FontTextView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         init();
     }
 
-    public MyTextView(Context context, AttributeSet attrs, int defStyleAttr)
+    public FontTextView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init();

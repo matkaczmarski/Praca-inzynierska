@@ -224,13 +224,11 @@ public class XMLParser
                     {
                         if (board_id.equalsIgnoreCase(String.valueOf(xpp.getAttributeValue(null, "id"))))
                         {
-                            int best_result = Integer.parseInt(xpp.getAttributeValue(null, "best_result"));
                             int two_stars = Integer.parseInt(xpp.getAttributeValue(null, "two_stars"));
                             int three_stars = Integer.parseInt(xpp.getAttributeValue(null, "three_stars"));
                             int time = Integer.parseInt(xpp.getAttributeValue(null, "time"));
-                            boolean accomplished = Boolean.parseBoolean(xpp.getAttributeValue(null, "accomplished"));
 
-                            return new BoardInfo(board_id, best_result, two_stars, three_stars, accomplished, time);
+                            return new BoardInfo(board_id, two_stars, three_stars, time);
                         }
                     }
                 }

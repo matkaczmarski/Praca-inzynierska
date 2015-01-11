@@ -10,7 +10,7 @@
         android:background="@android:color/transparent"
         android:gravity="center">
 
-        <mini.paranormalgolf.Controls.MyTextView
+        <mini.paranormalgolf.Controls.FontTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/activity_background"
