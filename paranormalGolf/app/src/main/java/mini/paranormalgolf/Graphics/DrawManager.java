@@ -28,16 +28,42 @@ import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.Point;
 
 import static android.opengl.GLES20.GL_BACK;
+import static android.opengl.GLES20.GL_CLAMP_TO_EDGE;
+import static android.opengl.GLES20.GL_COLOR_ATTACHMENT0;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_ATTACHMENT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_COMPONENT16;
+import static android.opengl.GLES20.GL_FRAMEBUFFER;
+import static android.opengl.GLES20.GL_FRAMEBUFFER_COMPLETE;
 import static android.opengl.GLES20.GL_FRONT;
 import static android.opengl.GLES20.GL_LEQUAL;
 import static android.opengl.GLES20.GL_LESS;
+import static android.opengl.GLES20.GL_NEAREST;
+import static android.opengl.GLES20.GL_RENDERBUFFER;
+import static android.opengl.GLES20.GL_RGBA;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_S;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_T;
+import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.glBindFramebuffer;
+import static android.opengl.GLES20.glBindRenderbuffer;
+import static android.opengl.GLES20.glBindTexture;
+import static android.opengl.GLES20.glCheckFramebufferStatus;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glCullFace;
 import static android.opengl.GLES20.glDepthFunc;
+import static android.opengl.GLES20.glFramebufferRenderbuffer;
+import static android.opengl.GLES20.glFramebufferTexture2D;
+import static android.opengl.GLES20.glGenFramebuffers;
+import static android.opengl.GLES20.glGenRenderbuffers;
+import static android.opengl.GLES20.glGenTextures;
+import static android.opengl.GLES20.glRenderbufferStorage;
+import static android.opengl.GLES20.glTexImage2D;
+import static android.opengl.GLES20.glTexParameteri;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
@@ -60,18 +86,18 @@ public class DrawManager {
 
     //Macierze:
     private final float[] modelMatrix = new float[16];
-    private final float[] projectionMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
+    private final float[] projectionMatrix = new float[16];
     private final float[] viewProjectionMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
 
     private final float[] normalsRotationMatrix = new float[16];
 
-    private final float[] lightsViewProjectionMatrix = new float[16];
-    private final float[] lightsProjectionMatrix = new float[16];
     private final float[] lightsViewMatrix = new float[16];
+    private final float[] lightsProjectionMatrix = new float[16];
+    private final float[] lightsViewProjectionMatrix = new float[16];
 
-    private final float[] skyBoxModelViewProjectionMatrix = new float[16];
+    private final float[] skyBoxViewProjectionMatrix = new float[16];
 
     //Programy
     private ColorShaderProgram colorShaderProgram;
@@ -86,14 +112,14 @@ public class DrawManager {
 
     private boolean withShadow;
 
-    public float getxRotation() {
-        return xRotation;
-    }
-
     private float xRotation, yRotation;
     private SkyBox skyBox;
     private LightData lightData = new LightData(0.2f, 0.6f);
 
+
+    public float getxRotation() {
+        return xRotation;
+    }
 
     public DrawManager(Context context, boolean withShadow) {
         textureShaderProgram = new TextureShaderProgram(context);
@@ -127,48 +153,48 @@ public class DrawManager {
         }
     }
 
-    public void generateShadowFBO() {
+    private void generateShadowFBO() {
 
         frameBufferObjectId = new int[1];
         depthTextureId = new int[1];
         renderTextureId = new int[1];
 
         // create a framebuffer object
-        GLES20.glGenFramebuffers(1, frameBufferObjectId, 0);
+        glGenFramebuffers(1, frameBufferObjectId, 0);
 
         // create render buffer and bind 16-bit depth buffer
-        GLES20.glGenRenderbuffers(1, depthTextureId, 0);
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthTextureId[0]);
-        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
+        glGenRenderbuffers(1, depthTextureId, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, depthTextureId[0]);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
 
         // Try to use a texture depth component
-        GLES20.glGenTextures(1, renderTextureId, 0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, renderTextureId[0]);
+        glGenTextures(1, renderTextureId, 0);
+        glBindTexture(GL_TEXTURE_2D, renderTextureId[0]);
 
         // GL_LINEAR does not make sense for depth texture. However, next tutorial shows usage of GL_LINEAR and PCF. Using GL_NEAREST
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         // Remove artifact on the edges of the shadowmap
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferObjectId[0]);
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObjectId[0]);
 
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, depthMapWidth, depthMapHeight, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, depthMapWidth, depthMapHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
 
         // specify texture as color attachment
-        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, renderTextureId[0], 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTextureId[0], 0);
 
         // attach the texture to FBO depth attachment point
         // (not supported with gl_texture_2d)
-        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT, GLES20.GL_RENDERBUFFER, depthTextureId[0]);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthTextureId[0]);
 
 
         // check FBO status
-        int FBOstatus = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
-        if (FBOstatus != GLES20.GL_FRAMEBUFFER_COMPLETE) {
-            if(LoggerConfig.ON) {
+        int FBOstatus = glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
+        if (FBOstatus != GL_FRAMEBUFFER_COMPLETE) {
+            if (LoggerConfig.ON) {
                 Log.e("FBO", "GL_FRAMEBUFFER_COMPLETE failed, CANNOT use FBO");
             }
             throw new RuntimeException("GL_FRAMEBUFFER_COMPLETE failed, CANNOT use FBO");
@@ -554,7 +580,7 @@ public class DrawManager {
     private void drawSkyBox() {
         glDepthFunc(GL_LEQUAL);
         skyBoxShaderProgram.useProgram();
-        skyBoxShaderProgram.setUniforms(skyBoxModelViewProjectionMatrix, skyBox.getTexture());
+        skyBoxShaderProgram.setUniforms(skyBoxViewProjectionMatrix, skyBox.getTexture());
         skyBox.bindData(skyBoxShaderProgram);
         skyBox.draw();
         glDepthFunc(GL_LESS);
@@ -583,7 +609,7 @@ public class DrawManager {
         setIdentityM(skyBoxViewRotationMatrix, 0);
         rotateM(skyBoxViewRotationMatrix, 0, -(yRotation + SKYBOX_ANGLE_SHIFT_X), 1f, 0f, 0f);
         rotateM(skyBoxViewRotationMatrix, 0, -(xRotation + SKYBOX_ANGLE_SHIFT_Y), 0f, 1f, 0f);
-        multiplyMM(skyBoxModelViewProjectionMatrix, 0, projectionMatrix, 0, skyBoxViewRotationMatrix, 0);
+        multiplyMM(skyBoxViewProjectionMatrix, 0, projectionMatrix, 0, skyBoxViewRotationMatrix, 0);
     }
 
     private void positionBallInScene(Ball ball) {
