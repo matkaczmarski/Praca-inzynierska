@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
-        <ImageView
+        <mini.paranormalgolf.Controls.LockDialogImageView
             android:id="@+id/list_view_item_image"
             android:layout_width="@dimen/list_view_item_height"
             android:layout_height="@dimen/list_view_item_height"

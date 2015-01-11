@@ -100,6 +100,12 @@ public class LevelsListAdapter extends BaseAdapter
         {
             rowView.findViewById(R.id.list_view_item_text).setVisibility(View.INVISIBLE);
             rowView.findViewById(R.id.list_view_item_image).setVisibility(View.VISIBLE);
+
+            ImageView imageView = (ImageView) rowView.findViewById(R.id.list_view_item_image);
+            if (first)
+                imageView.setTag(i + "");
+            else
+                imageView.setTag(-1);
         }
         else
         {
@@ -112,10 +118,6 @@ public class LevelsListAdapter extends BaseAdapter
                 textView.setTag(i + "");
             else
                 textView.setTag(-1);
-            if (first && (i < lastCount))
-                first = false;
-            else
-                lastCount = listView.getLastVisiblePosition();
             if (i == selectedIndex)
                 textView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.selected_item));
             else
@@ -126,6 +128,11 @@ public class LevelsListAdapter extends BaseAdapter
             Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
             textView.setTypeface(tf);
         }
+
+        if (first && (i < lastCount))
+            first = false;
+        else
+            lastCount = listView.getLastVisiblePosition();
 
         return rowView;
     }

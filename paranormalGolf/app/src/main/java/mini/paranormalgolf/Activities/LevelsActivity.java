@@ -281,6 +281,7 @@ public class LevelsActivity extends Activity
             firstResume = false;
             return;
         }
+        InitializeBoardList();
         int board_nr = Integer.parseInt(board_id.split("_")[1]);
 
         String[] boards_id = getResources().getStringArray(R.array.boards_id);
