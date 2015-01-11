@@ -2,7 +2,7 @@
 
 <Board id="4">
     <Floor location_x="0" location_y="-1" location_z="0" boxsize_x="12" boxsize_y="2" boxsize_z="12" friction="0.05"/>
-    <Floor location_x="0" location_y="-1" location_z="14" boxsize_x="4" boxsize_y="2" boxsize_z="32" friction="0.05"/>
+    <Floor location_x="0" location_y="-1" location_z="15" boxsize_x="4" boxsize_y="2" boxsize_z="30" friction="0.05"/>
     <Floor location_x="12" location_y="-1" location_z="34" boxsize_x="16" boxsize_y="2" boxsize_z="4" friction="0.05"/>
     <Floor location_x="18" location_y="-1" location_z="30" boxsize_x="4" boxsize_y="2" boxsize_z="4" friction="0.05"/>
     <Floor location_x="29" location_y="-1" location_z="26" boxsize_x="26" boxsize_y="2" boxsize_z="4" friction="0.05"/>

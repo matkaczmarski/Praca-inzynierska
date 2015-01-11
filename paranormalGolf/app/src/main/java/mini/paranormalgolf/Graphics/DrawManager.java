@@ -90,7 +90,7 @@ public class DrawManager {
         return xRotation;
     }
 
-    private float xRotation=180, yRotation;
+    private float xRotation, yRotation;
     private SkyBox skyBox;
     private LightData lightData = new LightData(0.2f, 0.6f);
 
