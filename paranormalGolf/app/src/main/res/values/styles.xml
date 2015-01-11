@@ -108,4 +108,12 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="EndGameDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/transparent_black</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>

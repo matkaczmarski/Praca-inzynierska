@@ -4,9 +4,10 @@
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:gravity="center">
+              android:gravity="center"
+              android:background="@android:color/transparent">
 
-    <TextView
+    <mini.paranormalgolf.Controls.TitleTextView
         android:id="@+id/end_game_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,25 +16,41 @@
         android:singleLine="true"
         android:gravity="center"/>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@android:color/transparent">
 
-        <ImageView
+        <View
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"/>
+        <mini.paranormalgolf.Controls.LevelsImageView
             android:id="@+id/end_game_first_star"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@android:color/transparent"/>
-        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@android:color/transparent"
+            android:tag="0"/>
+        <mini.paranormalgolf.Controls.LevelsImageView
             android:id="@+id/end_game_second_star"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@android:color/transparent"/>
-        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@android:color/transparent"
+            android:tag="1"/>
+        <mini.paranormalgolf.Controls.LevelsImageView
             android:id="@+id/end_game_third_star"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@android:color/transparent"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@android:color/transparent"
+            android:tag="2"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"/>
 
         </LinearLayout>
     <TextView
@@ -43,7 +60,7 @@
         android:textSize="20sp"
         android:textColor="#fff"
         android:singleLine="true"/>
-    <TextView
+    <mini.paranormalgolf.Controls.ItemTextView
         android:id="@+id/end_game_ok_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

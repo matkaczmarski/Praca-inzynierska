@@ -443,19 +443,13 @@ public class GameActivity extends Activity implements Runnable {
         glSurfaceView.onPause();
         this.win = win;
         GameActivity.game = false;
-        Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(this, R.style.EndGameDialogTheme);
         dialog.setContentView(R.layout.win_dialog);
         loadFontsForDialog(dialog);
         setDialogTitleAndResult(dialog, diamonds, time, win);
 
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.show();
-
-        dialog.getWindow().setAttributes(lp);
     }
 
     public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time, boolean win)
@@ -465,9 +459,15 @@ public class GameActivity extends Activity implements Runnable {
         ((TextView)dialog.findViewById(R.id.end_game_result)).setText(getString(R.string.result) + " " + result + " " + getString(R.string.points));
 
         BoardInfo boardInfo = (new XMLParser(this).getBoardInfo(board_id));
-        ((ImageView)dialog.findViewById(R.id.end_game_first_star)).setImageDrawable(getResources().getDrawable(win ? R.drawable.star_full : R.drawable.star_empty));
-        ((ImageView)dialog.findViewById(R.id.end_game_second_star)).setImageDrawable(getResources().getDrawable((result >= boardInfo.getTwo_stars()) ? R.drawable.star_full : R.drawable.star_empty));
-        ((ImageView)dialog.findViewById(R.id.end_game_third_star)).setImageDrawable(getResources().getDrawable((result >= boardInfo.getThree_stars()) ? R.drawable.star_full : R.drawable.star_empty));
+        ImageView imageView = (ImageView)dialog.findViewById(R.id.end_game_first_star);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setImageDrawable(getResources().getDrawable(win ? R.drawable.star_full : R.drawable.star_empty_white));
+        imageView = (ImageView)dialog.findViewById(R.id.end_game_second_star);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setImageDrawable(getResources().getDrawable((result >= boardInfo.getTwo_stars()) ? R.drawable.star_full : R.drawable.star_empty_white));
+        imageView = (ImageView)dialog.findViewById(R.id.end_game_third_star);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setImageDrawable(getResources().getDrawable((result >= boardInfo.getThree_stars()) ? R.drawable.star_full : R.drawable.star_empty_white));
 
         updateBestResult(board_id, result);
 
@@ -501,6 +501,9 @@ public class GameActivity extends Activity implements Runnable {
         textView.setTypeface(tf);
 
         textView = (TextView)dialog.findViewById(R.id.end_game_result);
+        textView.setTypeface(tf);
+
+        textView = (TextView)dialog.findViewById(R.id.end_game_ok_button);
         textView.setTypeface(tf);
     }
 
