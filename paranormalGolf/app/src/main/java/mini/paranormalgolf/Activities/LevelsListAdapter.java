@@ -50,6 +50,7 @@ public class LevelsListAdapter extends BaseAdapter
         {
             final Dialog dialog = new Dialog(context, R.style.LockDialogTheme);
             dialog.setContentView(R.layout.lock_dialog);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             ((TextView)dialog.findViewById(R.id.lock_dialog_ok)).setOnClickListener(new View.OnClickListener()
             {
                 @Override

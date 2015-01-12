@@ -282,6 +282,7 @@ public class GameActivity extends Activity implements Runnable {
             //glSurfaceView.onPause();
             pause_dialog = new Dialog(this, R.style.PauseDialogTheme);
             pause_dialog.setContentView(R.layout.pause_dialog);
+            pause_dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             setFontsForPauseDialog(pause_dialog);
             ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
             {
