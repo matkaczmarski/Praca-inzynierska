@@ -147,6 +147,7 @@ public class MainMenuActivity extends Activity
     {
         onButtonClick();
         Intent intent = new Intent(this, OptionsActivity.class);
+        intent.putExtra("ON_PAUSE", false);
         startActivity(intent);
     }
 

@@ -39,6 +39,15 @@ public class OptionsActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
+        Bundle extras = getIntent().getExtras();
+        boolean onPause = extras.getBoolean("ON_PAUSE");
+        if (onPause)
+        {
+            findViewById(R.id.options_pl).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_en).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_shadows).setVisibility(View.INVISIBLE);
+        }
+
         LoadFonts();
         checkSharedPreferences();
     }

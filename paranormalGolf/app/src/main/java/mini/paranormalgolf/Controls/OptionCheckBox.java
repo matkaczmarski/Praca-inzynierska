@@ -37,34 +37,39 @@ public class OptionCheckBox extends CheckBox
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
         super.onLayout(changed, left, top, right, bottom);
-        if (changed)
+        if (changed && (getVisibility() == VISIBLE))
         {
-            getPaint().setShader(new LinearGradient(
-                    0, 0, 0, getHeight(),
-                    Color.WHITE, Color.GRAY,
-                    Shader.TileMode.REPEAT
-            ));
-            Animation animation = new TranslateAnimation(
-                    Animation.RELATIVE_TO_PARENT, //fromXType
-                    -1.0f,                       //fromXValue
-                    Animation.RELATIVE_TO_PARENT, //toXType
-                    0.0f,                      //toXValue
-                    Animation.RELATIVE_TO_PARENT, //fromYType
-                    0.0f,                       //fromYValue
-                    Animation.RELATIVE_TO_PARENT, //toYType
-                    0.0f);                      //toYValue
-            animation.setDuration(duration);
-            int nr = 0;
-            try
-            {
-                nr = Integer.parseInt(getTag().toString());
-            }
-            catch(Exception ex)
-            {
-                nr = 0;
-            }
-            animation.setStartOffset(nr * offset);
-            startAnimation(animation);
+            myAnimate();
         }
+    }
+
+    private void myAnimate()
+    {
+        getPaint().setShader(new LinearGradient(
+                0, 0, 0, getHeight(),
+                Color.WHITE, Color.GRAY,
+                Shader.TileMode.REPEAT
+        ));
+        Animation animation = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, //fromXType
+                -1.0f,                       //fromXValue
+                Animation.RELATIVE_TO_PARENT, //toXType
+                0.0f,                      //toXValue
+                Animation.RELATIVE_TO_PARENT, //fromYType
+                0.0f,                       //fromYValue
+                Animation.RELATIVE_TO_PARENT, //toYType
+                0.0f);                      //toYValue
+        animation.setDuration(duration);
+        int nr = 0;
+        try
+        {
+            nr = Integer.parseInt(getTag().toString());
+        }
+        catch(Exception ex)
+        {
+            nr = 0;
+        }
+        animation.setStartOffset(nr * offset);
+        startAnimation(animation);
     }
 }
