@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Board_Information>
-    <Board id="board_1" best_result="0" two_stars="100" three_stars="200" accomplished="false" time="100"/>
-    <Board id="board_2" best_result="0" two_stars="810" three_stars="870" accomplished="false" time="100"/>
-    <Board id="board_3" best_result="0" two_stars="750" three_stars="810" accomplished="false" time="100"/>
-    <Board id="board_4" best_result="0" two_stars="100" three_stars="200" accomplished="false" time="100"/>
-    <Board id="board_5" best_result="0" two_stars="100" three_stars="200" accomplished="false" time="100"/>
-    <Board id="board_6" best_result="0" two_stars="100" three_stars="200" accomplished="false" time="100"/>
+    <Board id="board_1" two_stars="100" three_stars="200" time="100"/>
+    <Board id="board_2" two_stars="810" three_stars="870" time="100"/>
+    <Board id="board_3" two_stars="750" three_stars="810" time="100"/>
+    <Board id="board_4" two_stars="100" three_stars="200" time="100"/>
+    <Board id="board_5" two_stars="760" three_stars="840" time="100"/>
+    <Board id="board_6" two_stars="100" three_stars="200" time="100"/>
 </Board_Information>

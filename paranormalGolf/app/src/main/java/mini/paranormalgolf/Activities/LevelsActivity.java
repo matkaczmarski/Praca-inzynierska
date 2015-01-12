@@ -114,7 +114,6 @@ public class LevelsActivity extends Activity
                 ((LevelsListAdapter) listView.getAdapter()).setSelectedIndex(position);
             }
         });
-        //changeSelectedBoard(levelsListAdapter, 0);
     }
 
     public void changeSelectedBoard(LevelsListAdapter levelsListAdapter, int nr)
@@ -267,7 +266,22 @@ public class LevelsActivity extends Activity
         }
 
         InitializeBoardList();
-        chooseLastAvailableLevel();
+        if (board_id == null)
+            chooseLastAvailableLevel();
+        else
+        {
+            int nr = Integer.parseInt(board_id.split("_")[1]) - 1;
+            LevelsListAdapter levelsListAdapter = (LevelsListAdapter)(((ListView)findViewById(R.id.levels_list)).getAdapter());
+            if (last_game_win)
+            {
+                String[] boards_id = getResources().getStringArray(R.array.boards_id);
+                if (nr + 1 != boards_id.length)
+                    changeSelectedBoard(levelsListAdapter, nr + 1);
+                else
+                    changeSelectedBoard(levelsListAdapter, nr);
+            }
+            else changeSelectedBoard(levelsListAdapter, nr);
+        }
     }
 
     private void chooseLastAvailableLevel()
