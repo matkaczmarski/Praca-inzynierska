@@ -21,7 +21,7 @@ public class ColorShaderProgram extends ShaderProgram {
     // Uniform locations
     private final int uMVPMatrixLocation;
     private final int uMVMatrixLocation;
-    private  final int uItMVMatrixLocation;
+    private final int uItMVMatrixLocation;
     private final int uColorLocation;
     private final int uLightPosLocation;
     private final int uLightAmbLocation;
@@ -36,7 +36,7 @@ public class ColorShaderProgram extends ShaderProgram {
 
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
         uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
-        uItMVMatrixLocation = glGetUniformLocation(program,U_ITMVMATRIX);
+        uItMVMatrixLocation = glGetUniformLocation(program, U_ITMVMATRIX);
         uColorLocation = glGetUniformLocation(program, U_COLOR);
         uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
         uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMB);
@@ -46,7 +46,7 @@ public class ColorShaderProgram extends ShaderProgram {
         aNormalLocation = glGetAttribLocation(program, A_NORMAL);
     }
 
-    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, float[] itMvMatrix, LightData light, float[]rgba) {
+    public void setUniforms(float[] mvpMatrix, float[] mvMatrix, float[] itMvMatrix, LightData light, float[] rgba) {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
         glUniformMatrix4fv(uItMVMatrixLocation, 1, false, itMvMatrix, 0);

@@ -47,27 +47,6 @@ public class ObjectGenerator {
         return builder.build();
     }
 
-    public static GraphicsData createElevator(BoxSize boxSize, Point from, Point to, float textureUnit) {
-        ObjectBuilder builder = new ObjectBuilder(2 * 6 * VERTEX_PER_RECTANGLE, true);
-
-        builder.appendRectangle(new Rectangle(new Point(0f, to.y, 0f), boxSize.x/5, boxSize.z/5), Axis.yAxis, 1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(0f, from.y, 0f), boxSize.x/5, boxSize.z/5), Axis.yAxis, -1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(boxSize.x / 10, 0f, 0f), boxSize.y/5, boxSize.z/5), Axis.xAxis, 1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(-boxSize.x / 10, 0f, 0f), boxSize.y/5, boxSize.z/5), Axis.xAxis, -1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(0f, 0f, boxSize.z / 10), boxSize.x/5, boxSize.y/5), Axis.zAxis, 1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(0f, 0f, -boxSize.z / 10), boxSize.x/5, boxSize.y/5), Axis.zAxis, -1, textureUnit);
-
-
-        builder.appendRectangle(new Rectangle(new Point(0f, boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, 1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(0f, -boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, -1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(boxSize.x / 2, 0f, 0f), boxSize.y, boxSize.z), Axis.xAxis, 1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(-boxSize.x / 2, 0f, 0f), boxSize.y, boxSize.z), Axis.xAxis, -1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(0f, 0f, boxSize.z / 2), boxSize.x, boxSize.y), Axis.zAxis, 1, textureUnit);
-        builder.appendRectangle(new Rectangle(new Point(0f, 0f, -boxSize.z / 2), boxSize.x, boxSize.y), Axis.zAxis, -1, textureUnit);
-        return builder.build();
-    }
-
-
     public static GraphicsData createDiamond(Pyramid pyramid) {
 
         ObjectBuilder builder = new ObjectBuilder(2 * (pyramid.baseVerticesCount + 1),true);
