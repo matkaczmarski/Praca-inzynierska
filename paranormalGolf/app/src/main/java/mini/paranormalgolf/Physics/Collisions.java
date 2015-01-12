@@ -41,10 +41,10 @@ public final class Collisions {
         } else if (sphereCenter.z > max.z) {
             d += (sphereCenter.z - max.z) * (sphereCenter.z - max.z);
         }
-        return d <= sphereRadius * sphereRadius;// + USER_EXPERIENCE;
+        return d <= sphereRadius * sphereRadius;
     }
 
-    public static Vector FindNormalVectorInCollision(Sphere sphere, Box collidedBox) {
+    private static Vector FindNormalVectorInCollision(Sphere sphere, Box collidedBox) {
         Vector normal = new Vector(0, 0, 0);
         Point min = new Point(collidedBox.center.x - collidedBox.size.x / 2, collidedBox.center.y - collidedBox.size.y / 2, collidedBox.center.z - collidedBox.size.z / 2);
         Point max = new Point(collidedBox.center.x + collidedBox.size.x / 2, collidedBox.center.y + collidedBox.size.y / 2, collidedBox.center.z + collidedBox.size.z / 2);
@@ -199,8 +199,8 @@ public final class Collisions {
                 distance.z = newBallLocation.z - min.z;
             else if (newBallLocation.z - max.z > 0 && newBallLocation.z - max.z <= ball.getRadius() + Collisions.USER_EXPERIENCE)
                 distance.z = newBallLocation.z - max.z;
-            distance.x = Math.signum(normal.x) * ball.getRadius();
-            distance.z = Math.signum(normal.z) * ball.getRadius();
+            //distance.x = Math.signum(distance.x) * ball.getRadius();
+            //distance.z = Math.signum(distance.z) * ball.getRadius();
             newBallLocation.x += distance.x;
             newBallLocation.z += distance.z;
             for (int i = 0; i < 10; i++) {

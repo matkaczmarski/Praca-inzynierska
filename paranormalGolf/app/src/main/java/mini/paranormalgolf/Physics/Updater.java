@@ -117,7 +117,6 @@ public class Updater implements SensorEventListener {
         ball.Update(INTERVAL_TIME, accData, mu);
         if (index >= 0) setBallOnElevator(index);
 
-
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
 
@@ -264,7 +263,7 @@ public class Updater implements SensorEventListener {
 
     }
 
-    /*public void pause()
+    public void pause()
     {
         paused = true;
     }
@@ -272,7 +271,7 @@ public class Updater implements SensorEventListener {
     public void resume()
     {
         paused = false;
-    }*/
+    }
 
     public void onHourGlassCollision() {
         playSound("button.wav");

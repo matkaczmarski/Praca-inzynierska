@@ -84,7 +84,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         this.sound = sound;
         this.shadows = shadows;
 
-        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.marble, context);
+        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.homeWorld, context);
 
         XMLParser xmlParser = new XMLParser(context);
         Board board = xmlParser.getBoard(board_id);
@@ -195,14 +195,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     {
         if (paused)
         {
-            //updater.resume();
             lastTimeUpdated = false;
             paused = false;
         }
         else
         {
             paused = true;
-            //updater.pause();
         }
     }
 

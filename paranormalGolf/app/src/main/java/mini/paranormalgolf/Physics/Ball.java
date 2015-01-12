@@ -25,9 +25,7 @@ import static android.opengl.Matrix.setRotateM;
 public class Ball extends MovableElement {
 
     public enum BallTexture{
-        tennis,
         redAndWhite,
-        cat,
         noise,
         beach,
         lava,
@@ -36,9 +34,19 @@ public class Ball extends MovableElement {
         marble,
         frozen,
         tiger,
-        wooden1,
-        wooden2,
-        orangeSkin
+        orangeSkin,
+        amethystAlcove,
+        drizzledPaint,
+        dyedStonework,
+        eyeOfTheSunGod,
+        girlsBestFriend,
+        homeWorld,
+        jupiter,
+        liquidCrystal,
+        methaneLakes,
+        spottedBianco,
+        toxicByproduct,
+        verdeJaspe
     }
 
     private final int MESH_DIMENSION = 32;
@@ -82,12 +90,8 @@ public class Ball extends MovableElement {
 
     private int loadTexture(BallTexture ballTextureType, Context context){
         switch (ballTextureType){
-            case tennis:
-                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_tennis);
             case redAndWhite:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_red_white_dots);
-            case cat:
-                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_cat);
             case noise:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_noise);
             case beach:
@@ -106,10 +110,31 @@ public class Ball extends MovableElement {
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_tiger);
             case orangeSkin:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_orange_skin);
-            case wooden1:
-                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_wooden1);
-            case wooden2:
-                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_wooden2);
+            case amethystAlcove:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_amethyst_alcove);
+            case drizzledPaint:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_drizzled_paint);
+            case eyeOfTheSunGod:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_eye_of_the_sun_god);
+            case girlsBestFriend:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_girls_best_friend);
+            case homeWorld:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_home_world);
+            case jupiter:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_jupiter);
+            case liquidCrystal:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_liquid_crystal);
+            case methaneLakes:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_methane_lakes);
+            case spottedBianco:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_spotted_bianco);
+            case toxicByproduct:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_toxic_byproduct);
+            case verdeJaspe:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_verde_jaspe);
+            case dyedStonework:
+                return ResourceHelper.loadTexture(context, R.drawable.ball_texture_dyed_stonework);
+
         }
         return -1;
     }
