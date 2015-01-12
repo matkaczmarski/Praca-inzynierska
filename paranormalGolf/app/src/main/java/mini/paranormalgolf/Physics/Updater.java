@@ -29,25 +29,25 @@ import mini.paranormalgolf.R;
  */
 public class Updater implements SensorEventListener {
 
-    public final static float INTERVAL_TIME=0.035f;
+    public static float INTERVAL_TIME=0f;
 
     private Context context;
     private DrawManager drawManager;
 
-    private int max_diamonds_count;
-    private int last_diamonds_count;
-    private boolean paused = false;
-
     private Ball ball;
     private Board board;
     private Vector accData=new Vector(0,0,0);
+    private boolean landscape;
+
+    private int max_diamonds_count;
+    private int last_diamonds_count;
+    private boolean paused = false;
 
     private boolean vibrations;
     private boolean sound;
     private boolean music;
     private boolean shadows;
 
-    private boolean landscape;
 
     private GameRenderer gameRenderer;
 
@@ -55,7 +55,7 @@ public class Updater implements SensorEventListener {
 
     public DrawManager getDrawManager(){return drawManager;}
 
-    public Updater(Context context, Ball ball, Board board, SensorManager sensorManager, boolean vibrations, boolean music, boolean sound, boolean shadows, GameRenderer gameRenderer) {
+    public Updater(Context context, Ball ball, Board board, boolean vibrations, boolean music, boolean sound, boolean shadows, GameRenderer gameRenderer) {
         this.ball = ball;
         this.context = context;
         this.board = board;
@@ -65,13 +65,12 @@ public class Updater implements SensorEventListener {
         this.shadows = shadows;
         this.gameRenderer = gameRenderer;
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
-        Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        RegisterAccelerometer();
         landscape = getDeviceDefaultOrientation();
         drawManager = new DrawManager(context, shadows);
     }
 
-    public boolean getDeviceDefaultOrientation() {
+    private boolean getDeviceDefaultOrientation() {
 
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -85,25 +84,30 @@ public class Updater implements SensorEventListener {
                 config.orientation == Configuration.ORIENTATION_PORTRAIT);
     }
 
-    public UpdateResult update() {
+    private void RegisterAccelerometer() {
+        SensorManager sensorManager = (android.hardware.SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    public UpdateResult update(float interval) {
+        INTERVAL_TIME = interval;
+
         if (paused)
             return UpdateResult.PAUSE;
         float mu = getActualCoefficientFriction();
         int index = getIndexOfElevatorBallOn();
+
         for (Beam beam : board.beams) {
-            beam.Update(INTERVAL_TIME);
+            beam.Update(interval);
         }
 
         for (Elevator elevator : board.elevators) {
-            elevator.Update(INTERVAL_TIME);
+            elevator.Update(interval);
         }
-        if (index >= 0) {
-            Point lastLocation = ball.getLocation();
-            ball.setLocation(new Point(lastLocation.x + board.elevators.get(index).getLastMove().x,
-                    lastLocation.y + board.elevators.get(index).getLastMove().y,
-                    lastLocation.z + board.elevators.get(index).getLastMove().z));
-        }
-        ball.Update(INTERVAL_TIME, accData, mu);
+        if (index >= 0) setBallOnElevator(index);
+
+        ball.Update(interval, accData, mu);
 
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
@@ -207,6 +211,13 @@ public class Updater implements SensorEventListener {
             }
         }
         return index;
+    }
+
+    private void setBallOnElevator(int index) {
+        Point lastLocation = ball.getLocation();
+        ball.setLocation(new Point(lastLocation.x + board.elevators.get(index).getLastMove().x,
+                lastLocation.y + board.elevators.get(index).getLastMove().y,
+                lastLocation.z + board.elevators.get(index).getLastMove().z));
     }
 
     public void surfaceChange(int width, int height){

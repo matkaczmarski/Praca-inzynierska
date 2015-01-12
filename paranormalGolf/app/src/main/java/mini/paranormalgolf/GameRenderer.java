@@ -57,7 +57,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     private final Activity context;
     private Updater updater;
-    private SensorManager sensorManager;
     private String board_id;
     private BoardInfo boardInfo;
     private long lastTime;
@@ -74,9 +73,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity context, SensorManager sensorManager, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows) {
+    public GameRenderer(Activity context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows) {
         this.context = context;
-        this.sensorManager = sensorManager;
         this.board_id = board_id;
         this.vibrations = vibrations;
         this.music = music;
@@ -110,7 +108,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
                 ((GameActivity)context).updatePanel(boardInfo.getTime(), 0);
             }
         });
-        updater = new Updater(context, ball, board, sensorManager, vibrations, music, sound, shadows, this);
+        updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
 
         //String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
         //boolean bul = extensions.contains("OES_depth_texture");
@@ -129,6 +127,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
+        float interval = 0;
         if(LoggerConfig.ON) {
             fpsCounter.logFrame();
         }
@@ -140,6 +139,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         if (!paused)
         {
             long actual_time = System.currentTimeMillis();
+            interval = actual_time - lastTime;
             timeLeft -= actual_time - lastTime;
             lastTime = actual_time;
         }
@@ -160,7 +160,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
 
-        UpdateResult updateResult = updater.update();
+        UpdateResult updateResult = updater.update((float)(interval / 1000f));
         if (timeLeft <= 0)
         {
             updateResult = UpdateResult.DEFEAT;
