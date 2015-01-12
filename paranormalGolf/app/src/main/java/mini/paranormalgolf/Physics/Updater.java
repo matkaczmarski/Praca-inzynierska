@@ -124,12 +124,15 @@ public class Updater implements SensorEventListener {
 
         for (Beam beam : board.beams)
             if (ball.CheckCollision(beam))
+            {
                 ball.ReactOnCollision(beam);
+                onBeamCollision();
+            }
 
         for (Wall wall : board.walls)
             if (ball.CheckCollision(wall)) {
                 ball.ReactOnCollision(wall);
-                vibrate();
+                onWallCollision();
             }
         if (mu < 0)
             for (Floor floor : board.floors)
@@ -173,6 +176,17 @@ public class Updater implements SensorEventListener {
         return UpdateResult.NONE;
     }
 
+    private void onWallCollision()
+    {
+        playSound(ResourceHelper.SOUND_WALL);
+        vibrate();
+    }
+
+    private void onBeamCollision()
+    {
+        playSound(ResourceHelper.SOUND_BEAM);
+        vibrate();
+    }
 
     private boolean isUnderFloors() {
         float value = ball.location.y + ball.getRadius();
@@ -287,14 +301,6 @@ public class Updater implements SensorEventListener {
         if (this.sound)
         {
             ResourceHelper.playSound(context, sound);
-        }
-    }
-
-    public void playMusic(int music)
-    {
-        if (this.music)
-        {
-            ResourceHelper.playSound(context, music);
         }
     }
 

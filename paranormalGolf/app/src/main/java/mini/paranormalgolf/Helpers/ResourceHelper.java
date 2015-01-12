@@ -45,6 +45,8 @@ public class ResourceHelper {
     public static final int SOUND_WIN = 3;
     public static final int SOUND_LOSE = 4;
     public static final int SOUND_BUTTON = 5;
+    public static final int SOUND_WALL = 6;
+    public static final int SOUND_BEAM = 7;
 
     private static SoundPool soundPool;
     private static HashMap<Integer, Integer> soundPoolMap;
@@ -60,6 +62,8 @@ public class ResourceHelper {
         soundPoolMap.put(SOUND_WIN, soundPool.load(context, R.raw.win_new, 1));
         soundPoolMap.put(SOUND_LOSE, soundPool.load(context, R.raw.lost_new, 1));
         soundPoolMap.put(SOUND_BUTTON, soundPool.load(context, R.raw.button, 1));
+        soundPoolMap.put(SOUND_WALL, soundPool.load(context, R.raw.wall, 1));
+        soundPoolMap.put(SOUND_BEAM, soundPool.load(context, R.raw.wall_2, 1));
     }
 
     public static void playSound(Context context, int sound)
