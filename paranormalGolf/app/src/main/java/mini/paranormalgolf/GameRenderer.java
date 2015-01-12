@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,7 +110,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
                 ((GameActivity)context).updatePanel(boardInfo.getTime(), 0);
             }
         });
-
         updater = new Updater(context, ball, board, sensorManager, vibrations, music, sound, shadows, this);
 
         //String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
