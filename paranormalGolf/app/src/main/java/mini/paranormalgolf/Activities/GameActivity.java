@@ -103,7 +103,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound, shadows);
+        gameRenderer = new GameRenderer(this, board_id, vibrations, music, sound, shadows);
 
         if (supportsEs2) {
             // ...
@@ -388,7 +388,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this,(android.hardware.SensorManager)getSystemService(Context.SENSOR_SERVICE), board_id, vibrations, music, sound, shadows);
+        gameRenderer = new GameRenderer(this, board_id, vibrations, music, sound, shadows);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(gameRenderer);
         glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
