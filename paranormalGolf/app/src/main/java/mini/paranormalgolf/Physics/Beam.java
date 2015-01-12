@@ -45,7 +45,6 @@ public class Beam extends MovableElement {
     }
 
     public void Update(float dt) {
-        //zmniejszony update ze względu na to, że to jest bar
         lastMove = new Vector(velocity.x * dt, 0, velocity.z * dt);
         location.x = location.x + lastMove.x;
         location.z = location.z + lastMove.z;

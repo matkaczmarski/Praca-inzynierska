@@ -24,6 +24,8 @@ public class Elevator extends MovableElement {
     public final float ELEVATOR_OPACITY = 1f;
 
     private BoxSize measurements;
+
+    //punkty oznaczjące do jakiego miejsca ma dochodzić środek elementu
     private Point patrolFrom;
     private Point patrolTo;
     private float mu;
