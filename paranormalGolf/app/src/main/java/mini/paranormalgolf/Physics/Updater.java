@@ -51,7 +51,6 @@ public class Updater implements SensorEventListener {
     private boolean music;
     private boolean shadows;
 
-
     private GameRenderer gameRenderer;
 
     public DrawManager getDrawManager(){return drawManager;}
@@ -288,6 +287,14 @@ public class Updater implements SensorEventListener {
         if (this.sound)
         {
             ResourceHelper.playSound(context, sound);
+        }
+    }
+
+    public void playMusic(int music)
+    {
+        if (this.music)
+        {
+            ResourceHelper.playSound(context, music);
         }
     }
 

@@ -18,6 +18,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Xml;
@@ -69,6 +70,8 @@ public class GameActivity extends Activity implements Runnable {
     public static boolean game = false;
 
     private String board_id;
+
+    private MediaPlayer backgroundMusic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,37 +138,50 @@ public class GameActivity extends Activity implements Runnable {
             return;
         }
 
-        glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
-            float previousX, previousY;
+        glSurfaceView.setOnTouchListener(new View.OnTouchListener()
+        {
+            float previousX
+                    ,
+                    previousY;
 
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event != null) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                if (event != null)
+                {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN)
+                    {
                         previousX = event.getX();
                         previousY = event.getY();
-                    } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    } else if (event.getAction() == MotionEvent.ACTION_MOVE)
+                    {
                         final float deltaX = event.getX() - previousX;
                         final float deltaY = event.getY() - previousY;
 
                         previousX = event.getX();
                         previousY = event.getY();
 
-                        glSurfaceView.queueEvent(new Runnable() {
+                        glSurfaceView.queueEvent(new Runnable()
+                        {
                             @Override
-                            public void run() {
+                            public void run()
+                            {
                                 gameRenderer.getUpdater().getDrawManager().handleTouchDrag(deltaX, deltaY);
                             }
                         });
                     }
 
                     return true;
-                } else {
+                } else
+                {
                     return false;
                 }
             }
         });
-        //setContentView(glSurfaceView);
+        backgroundMusic = MediaPlayer.create(this, R.raw.motyw);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(10.0f, 3.0f);
+        backgroundMusic.start();
     }
 
 /*

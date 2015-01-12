@@ -53,7 +53,7 @@ public class ResourceHelper {
 
     public static void initSounds(Context context)
     {
-        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+        soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
         soundPoolMap = new HashMap<Integer, Integer>();
         soundPoolMap.put(SOUND_DIAMOND, soundPool.load(context, R.raw.diamond_new, 1));
         soundPoolMap.put(SOUND_HOURGLASS, soundPool.load(context, R.raw.hourglass_new, 1));
