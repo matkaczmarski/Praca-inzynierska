@@ -114,8 +114,7 @@ public class LevelsActivity extends Activity
                 ((LevelsListAdapter) listView.getAdapter()).setSelectedIndex(position);
             }
         });
-
-        changeSelectedBoard(levelsListAdapter, 0);
+        //changeSelectedBoard(levelsListAdapter, 0);
     }
 
     public void changeSelectedBoard(LevelsListAdapter levelsListAdapter, int nr)
@@ -209,20 +208,6 @@ public class LevelsActivity extends Activity
             ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_full));
         else
             ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
-    }
-
-    public static int getResId(String variableName, Class<?> c) {
-
-        try
-        {
-            Field idField = c.getDeclaredField(variableName);
-            return idField.getInt(idField);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return -1;
-        }
     }
 
     public void onButtonClick()

@@ -38,36 +38,41 @@ public class LevelsListTextView extends TextView
         super.onLayout(changed, left, top, right, bottom);
         if (changed)
         {
-            getPaint().setShader(new LinearGradient(
-                    0, 0, 0, getHeight(),
-                    Color.WHITE, Color.GRAY,
-                    Shader.TileMode.REPEAT
-            ));
-
-            int nr = 0;
-            try
-            {
-                nr = Integer.parseInt(getTag().toString());
-            }
-            catch(Exception ex)
-            {
-                nr = 0;
-            }
-            if (nr == -1)
-                return;
-            Animation animation = new TranslateAnimation(
-                    Animation.RELATIVE_TO_PARENT, //fromXType
-                    -1.5f,                       //fromXValue
-                    Animation.RELATIVE_TO_PARENT, //toXType
-                    0.0f,                      //toXValue
-                    Animation.RELATIVE_TO_SELF, //fromYType
-                    0.0f,                       //fromYValue
-                    Animation.RELATIVE_TO_SELF, //toYType
-                    0.0f);                      //toYValue
-            animation.setDuration(duration);
-
-            animation.setStartOffset(nr * offset);
-            startAnimation(animation);
+            myAnimate();
         }
+    }
+
+    private void myAnimate()
+    {
+        getPaint().setShader(new LinearGradient(
+                0, 0, 0, getHeight(),
+                Color.WHITE, Color.GRAY,
+                Shader.TileMode.REPEAT
+        ));
+
+        int nr = 0;
+        try
+        {
+            nr = Integer.parseInt(getTag().toString());
+        }
+        catch(Exception ex)
+        {
+            nr = 0;
+        }
+        if (nr == -1)
+            return;
+        Animation animation = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, //fromXType
+                -1.5f,                       //fromXValue
+                Animation.RELATIVE_TO_PARENT, //toXType
+                0.0f,                      //toXValue
+                Animation.RELATIVE_TO_SELF, //fromYType
+                0.0f,                       //fromYValue
+                Animation.RELATIVE_TO_SELF, //toYType
+                0.0f);                      //toYValue
+        animation.setDuration(duration);
+
+        animation.setStartOffset(nr * offset);
+        startAnimation(animation);
     }
 }

@@ -31,7 +31,9 @@ public class LevelsListAdapter extends BaseAdapter
     int selectedIndex = 0;
     boolean first = true;
     ListView listView;
-    int lastCount = -1;
+    int lastCount = 0;
+    static int maxCount = 0;
+    static boolean maxCountSet = false;
 
     public LevelsListAdapter(Context context, BoardInfo[] boardInfos, ListView listView, boolean[] locked)
     {
@@ -94,11 +96,28 @@ public class LevelsListAdapter extends BaseAdapter
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_view_item, viewGroup, false);
 
-        if (first && (i < lastCount))
-            first = false;
-        else
-            lastCount = listView.getLastVisiblePosition();
+        int first_position = listView.getFirstVisiblePosition();
+        int last_position = listView.getLastVisiblePosition();
 
+        if (first && first_position != -1 && last_position != -1)
+        {
+            int count = last_position - first_position + 1;
+            if (!maxCountSet)
+            {
+                if (count == lastCount)
+                {
+                    first = false;
+                    if (!maxCountSet)
+                    {
+                        maxCount = count;
+                        maxCountSet = true;
+                    }
+                } else
+                    lastCount = count;
+            }
+            else if (count == maxCount)
+                first = false;
+        }
         if (locked[i])
         {
             rowView.findViewById(R.id.list_view_item_text).setVisibility(View.INVISIBLE);
