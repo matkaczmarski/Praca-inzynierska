@@ -280,8 +280,7 @@ public class GameActivity extends Activity implements Runnable {
             };
             runnable.run();
             //glSurfaceView.onPause();
-            pause_dialog = new Dialog(this);
-            pause_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            pause_dialog = new Dialog(this, R.style.PauseDialogTheme);
             pause_dialog.setContentView(R.layout.pause_dialog);
             setFontsForPauseDialog(pause_dialog);
             ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
@@ -321,6 +320,7 @@ public class GameActivity extends Activity implements Runnable {
                 {
                     onButtonClick();
                     Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                    intent.putExtra("ON_PAUSE", true);
                     startActivity(intent);
                 }
             });
@@ -332,8 +332,8 @@ public class GameActivity extends Activity implements Runnable {
                    onPauseClick(null);
                 }
             });
+            pause_dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
             pause_dialog.show();
-            pause_dialog.getWindow().setLayout(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
         }
         else
         {
