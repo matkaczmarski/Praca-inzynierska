@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
@@ -22,14 +21,10 @@ public class Floor extends Element {
     private final float THRESHOLD_MU_FACTOR = 0.05f;
 
     public BoxSize getMeasurements() {
-        return measures;
+        return measurements;
     }
 
-    public void setMeasures(BoxSize measures) {
-        this.measures = measures;
-    }
-
-    public BoxSize measures;
+    public BoxSize measurements;
     public float mu;
 
     private FloorPart topPart;
@@ -37,7 +32,7 @@ public class Floor extends Element {
     private List<FloorPart> sideParts;
 
     private final int topFloorTexture;
-    private final  int sideFloorTexture;
+    private final int sideFloorTexture;
     private final int bottomFloorTexture;
 
     public FloorPart getTopPart() {
@@ -64,13 +59,13 @@ public class Floor extends Element {
         return bottomFloorTexture;
     }
 
-    public float getFloorTop() {
-        return this.location.y + this.measures.y / 2;
-    }
+//    public float getFloorTop() {
+//        return this.location.y + this.measurements.y / 2;
+//    }
 
     public Floor(BoxSize measures, float mu, Point location, Context context) {
         super(location);
-        this.measures = measures;
+        this.measurements = measures;
         this.mu = mu;
         createFloor(measures, location);
 

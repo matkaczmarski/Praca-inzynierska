@@ -150,7 +150,7 @@ public class Updater implements SensorEventListener {
     private boolean isUnderFloors() {
         float value = ball.location.y + ball.getRadius();
         for (Floor floor : board.floors)
-            if (floor.location.y - floor.measures.y / 2 <= value)
+            if (floor.location.y - floor.measurements.y / 2 <= value)
                 return false;
         for (Elevator elevator : board.elevators)
             if (elevator.location.y - elevator.getMeasurements().y / 2 <= value)
@@ -161,9 +161,9 @@ public class Updater implements SensorEventListener {
     private float getActualCoefficientFriction() {
         float mu = -1;
         for (Floor floor : board.floors) {
-            if (floor.location.x - floor.measures.x / 2 <= ball.location.x && floor.location.x + floor.measures.x / 2 >= ball.location.x
-                    && floor.location.z - floor.measures.z / 2 <= ball.location.z && floor.location.z + floor.measures.z / 2 >= ball.location.z
-                    && Math.abs(ball.location.y - ball.getRadius() - (floor.location.y + floor.measures.y / 2)) < Collisions.USER_EXPERIENCE) {
+            if (floor.location.x - floor.measurements.x / 2 <= ball.location.x && floor.location.x + floor.measurements.x / 2 >= ball.location.x
+                    && floor.location.z - floor.measurements.z / 2 <= ball.location.z && floor.location.z + floor.measurements.z / 2 >= ball.location.z
+                    && Math.abs(ball.location.y - ball.getRadius() - (floor.location.y + floor.measurements.y / 2)) < Collisions.USER_EXPERIENCE) {
                 mu = floor.mu;
                 break;
             }
