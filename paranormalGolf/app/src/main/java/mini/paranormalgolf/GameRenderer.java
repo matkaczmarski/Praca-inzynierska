@@ -91,7 +91,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GLES20.GL_CULL_FACE);
 
-        //TODO zmienić miejsce tworzenie updatera?
         Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.marble, context);
 
         XMLParser xmlParser = new XMLParser(context);
@@ -114,8 +113,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //boolean bul = extensions.contains("OES_depth_texture");
 
         fpsCounter = new FPSCounter();
-        lastTime = System.currentTimeMillis();
-        lastTimeUpdated = true;
+        //lastTime = System.currentTimeMillis();
+        //lastTimeUpdated = true;
     }
 
     @Override
@@ -190,13 +189,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     {
         if (paused)
         {
-            updater.resume();
+            //updater.resume();
             paused = false;
         }
         else
         {
             paused = true;
-            updater.pause();
+            //updater.pause();
         }
     }
 

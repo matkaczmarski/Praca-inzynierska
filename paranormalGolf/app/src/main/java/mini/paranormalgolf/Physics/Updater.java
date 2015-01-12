@@ -30,6 +30,7 @@ import mini.paranormalgolf.R;
 public class Updater implements SensorEventListener {
 
     public static float INTERVAL_TIME=0f;
+    public static final float INTERVAL_FACTOR = 1.5f;
 
     private Context context;
     private DrawManager drawManager;
@@ -91,7 +92,9 @@ public class Updater implements SensorEventListener {
     }
 
     public UpdateResult update(float interval) {
-        INTERVAL_TIME = interval;
+        INTERVAL_TIME = interval * INTERVAL_FACTOR;
+        //if (paused)
+        //    return UpdateResult.PAUSE;
 
         if (paused)
             return UpdateResult.PAUSE;
@@ -99,15 +102,21 @@ public class Updater implements SensorEventListener {
         int index = getIndexOfElevatorBallOn();
 
         for (Beam beam : board.beams) {
-            beam.Update(interval);
+            beam.Update(INTERVAL_TIME);
         }
 
         for (Elevator elevator : board.elevators) {
-            elevator.Update(interval);
+            elevator.Update(INTERVAL_TIME);
         }
+        if (index >= 0) {
+            Point lastLocation = ball.getLocation();
+            ball.setLocation(new Point(lastLocation.x + board.elevators.get(index).getLastMove().x,
+                    lastLocation.y + board.elevators.get(index).getLastMove().y,
+                    lastLocation.z + board.elevators.get(index).getLastMove().z));
+        }
+        ball.Update(INTERVAL_TIME, accData, mu);
         if (index >= 0) setBallOnElevator(index);
 
-        ball.Update(interval, accData, mu);
 
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
@@ -225,8 +234,8 @@ public class Updater implements SensorEventListener {
     }
 
     public void draw() {
-        if (paused)
-            return;
+        //if (paused)
+        //    return;
         drawManager.drawBoard(board, ball);
 
         if (last_diamonds_count != board.diamonds.size()) {
@@ -255,7 +264,7 @@ public class Updater implements SensorEventListener {
 
     }
 
-    public void pause()
+    /*public void pause()
     {
         paused = true;
     }
@@ -263,7 +272,7 @@ public class Updater implements SensorEventListener {
     public void resume()
     {
         paused = false;
-    }
+    }*/
 
     public void onHourGlassCollision() {
         playSound("button.wav");
