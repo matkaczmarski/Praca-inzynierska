@@ -2,6 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -44,6 +45,8 @@ public class Updater implements SensorEventListener {
     private boolean music;
     private boolean shadows;
 
+    private boolean landscape;
+
     private GameRenderer gameRenderer;
 
     private MediaPlayer mp = new MediaPlayer();
@@ -62,6 +65,7 @@ public class Updater implements SensorEventListener {
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        landscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         drawManager = new DrawManager(context, shadows);
     }
 
@@ -213,7 +217,7 @@ public class Updater implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (drawManager != null) {
-            float angle = ((float)(2* Math.PI*(drawManager.getxRotation() - 180)))/360;
+            float angle = landscape ? ((float)(2* Math.PI*(drawManager.getxRotation() - 270)))/360 : ((float)(2* Math.PI*(drawManager.getxRotation() - 180)))/360;
 
             accData = new Vector((float) (event.values[1] * Math.cos(angle) + event.values[0] * Math.sin(angle)), -event.values[2], (float) (event.values[0] * Math.cos(angle) - event.values[1] * Math.sin(angle)));
         }
