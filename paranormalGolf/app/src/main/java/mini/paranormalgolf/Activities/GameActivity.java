@@ -42,6 +42,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Helpers.BoardInfo;
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.R;
 
@@ -375,39 +376,15 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onButtonClick()
     {
-        playSound("button.wav");
+        playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
-    public void playSound(final String sound_name)
+    public void playSound(int sound)
     {
         if (this.sound)
         {
-            final String sound_string = sound_name;
-            Runnable runnable = new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                        if (mp.isPlaying())
-                            mp.stop();
-                        try
-                        {
-                            mp.reset();
-                            AssetFileDescriptor afd = getAssets().openFd(sound_name);
-                            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                            mp.prepare();
-                            mp.start();
-                        } catch (IllegalStateException e)
-                        {
-                            e.printStackTrace();
-                        } catch (IOException e)
-                        {
-                            e.printStackTrace();
-                        }
-                }
-            };
-            runnable.run();
+            ResourceHelper.playSound(this, sound);
         }
     }
 
@@ -496,7 +473,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void playEndGameSound(boolean win)
     {
-        playSound(win ? "win_new.mp3" : "lost_new.mp3");
+        playSound(win ? ResourceHelper.SOUND_WIN : ResourceHelper.SOUND_LOSE);
     }
 
     public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time, boolean win)

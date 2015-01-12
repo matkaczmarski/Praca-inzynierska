@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 import static android.opengl.GLES20.GL_LINEAR;
 import static android.opengl.GLES20.GL_LINEAR_MIPMAP_LINEAR;
@@ -30,13 +33,44 @@ import static android.opengl.GLES20.glGenerateMipmap;
 import static android.opengl.GLES20.glTexParameteri;
 import static android.opengl.GLUtils.texImage2D;
 import mini.paranormalgolf.LoggerConfig;
+import mini.paranormalgolf.R;
 
 /**
  * Created by Mateusz on 2014-12-05.
  */
 public class ResourceHelper {
 
+    public static final int SOUND_DIAMOND = 1;
+    public static final int SOUND_HOURGLASS = 2;
+    public static final int SOUND_WIN = 3;
+    public static final int SOUND_LOSE = 4;
+    public static final int SOUND_BUTTON = 5;
+
+    private static SoundPool soundPool;
+    private static HashMap<Integer, Integer> soundPoolMap;
+
     private static final String TAG = "TextureHelper";
+
+    public static void initSounds(Context context)
+    {
+        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+        soundPoolMap = new HashMap<Integer, Integer>();
+        soundPoolMap.put(SOUND_DIAMOND, soundPool.load(context, R.raw.diamond_new, 1));
+        soundPoolMap.put(SOUND_HOURGLASS, soundPool.load(context, R.raw.hourglass_new, 1));
+        soundPoolMap.put(SOUND_WIN, soundPool.load(context, R.raw.win_new, 1));
+        soundPoolMap.put(SOUND_LOSE, soundPool.load(context, R.raw.lost_new, 1));
+        soundPoolMap.put(SOUND_BUTTON, soundPool.load(context, R.raw.button, 1));
+    }
+
+    public static void playSound(Context context, int sound)
+    {
+        /*AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+        float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        float volume = streamVolumeCurrent / streamVolumeMax;*/
+
+        soundPool.play(soundPoolMap.get(sound), 1, 1, 1, 0, 1f);
+    }
 
     //Metoda zwracająca tekst Z pliku
     public static String readTextFileFromResource(Context context, int resourceId) {

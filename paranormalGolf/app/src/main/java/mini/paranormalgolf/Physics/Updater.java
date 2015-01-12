@@ -54,8 +54,6 @@ public class Updater implements SensorEventListener {
 
     private GameRenderer gameRenderer;
 
-    private MediaPlayer mp = new MediaPlayer();
-
     public DrawManager getDrawManager(){return drawManager;}
 
     public Updater(Context context, Ball ball, Board board, boolean vibrations, boolean music, boolean sound, boolean shadows, GameRenderer gameRenderer) {
@@ -70,6 +68,7 @@ public class Updater implements SensorEventListener {
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         RegisterAccelerometer();
         landscape = getDeviceDefaultOrientation();
+        ResourceHelper.initSounds(context);
         drawManager = new DrawManager(context, shadows);
     }
 
@@ -276,34 +275,19 @@ public class Updater implements SensorEventListener {
 
     public void onHourGlassCollision()
     {
-        playSound("hourglass_new.mp3");
+        playSound(ResourceHelper.SOUND_HOURGLASS);
     }
 
     public void onDiamondCollision()
     {
-        playSound("diamond_new.mp3");
+        playSound(ResourceHelper.SOUND_DIAMOND);
     }
 
-    public void playSound(String sound)
+    public void playSound(int sound)
     {
         if (this.sound)
         {
-            if (mp.isPlaying())
-                mp.stop();
-            try
-            {
-                mp.reset();
-                AssetFileDescriptor afd = context.getAssets().openFd(sound);
-                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mp.prepare();
-                mp.start();
-            } catch (IllegalStateException e)
-            {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            ResourceHelper.playSound(context, sound);
         }
     }
 
@@ -333,6 +317,7 @@ public class Updater implements SensorEventListener {
         this.context = context;
         reloadTextures(context);
         drawManager = new DrawManager(context, shadows);
+        ResourceHelper.initSounds(context);
     }
 
     public void reloadTextures(Context context)
