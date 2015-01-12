@@ -64,11 +64,6 @@ public class ResourceHelper {
 
     public static void playSound(Context context, int sound)
     {
-        /*AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float volume = streamVolumeCurrent / streamVolumeMax;*/
-
         soundPool.play(soundPoolMap.get(sound), 1, 1, 1, 0, 1f);
     }
 
