@@ -129,6 +129,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
+        float interval = 0;
         if(LoggerConfig.ON) {
             fpsCounter.logFrame();
         }
@@ -140,6 +141,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         if (!paused)
         {
             long actual_time = System.currentTimeMillis();
+            interval = actual_time - lastTime;
             timeLeft -= actual_time - lastTime;
             lastTime = actual_time;
         }
@@ -160,7 +162,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
 
-        UpdateResult updateResult = updater.update();
+        UpdateResult updateResult = updater.update((float)(interval / 1000f));
         if (timeLeft <= 0)
         {
             updateResult = UpdateResult.DEFEAT;
