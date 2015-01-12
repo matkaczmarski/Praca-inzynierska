@@ -31,9 +31,9 @@ public class Floor extends Element {
     private FloorPart bottomPart;
     private List<FloorPart> sideParts;
 
-    private final int topFloorTexture;
-    private final int sideFloorTexture;
-    private final int bottomFloorTexture;
+    private int topFloorTexture;
+    private int sideFloorTexture;
+    private int bottomFloorTexture;
 
     public FloorPart getTopPart() {
         return topPart;
@@ -59,7 +59,27 @@ public class Floor extends Element {
         return bottomFloorTexture;
     }
 
-//    public float getFloorTop() {
+    public void setTopFloorTexture(int topFloorTexture)
+    {
+        this.topFloorTexture = topFloorTexture;
+    }
+
+    public void setSideFloorTexture(int sideFloorTexture)
+    {
+        this.sideFloorTexture = sideFloorTexture;
+    }
+
+    public void setBottomFloorTexture(int bottomFloorTexture)
+    {
+        this.bottomFloorTexture = bottomFloorTexture;
+    }
+
+    public float getTHRESHOLD_MU_FACTOR()
+    {
+        return THRESHOLD_MU_FACTOR;
+    }
+
+    //    public float getFloorTop() {
 //        return this.location.y + this.measurements.y / 2;
 //    }
 

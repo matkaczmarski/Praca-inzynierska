@@ -53,6 +53,8 @@ public class Ball extends MovableElement {
 
     private float[] rotation;
 
+    private BallTexture ballTexture;
+
     public float getRadius(){
         return this.radius;
     }
@@ -61,6 +63,8 @@ public class Ball extends MovableElement {
 
     public Ball(Point location, float radius, Vector velocity, BallTexture ballTexture, Context context) {
         super(velocity, location);
+
+        this.ballTexture = ballTexture;
 
         this.radius = radius;
         mass=5;
@@ -253,5 +257,10 @@ public class Ball extends MovableElement {
 
     public void ReactOnCollision(Elevator elevator) {
         Collisions.ResponseBallMovingAABBCollisions(this, elevator);
+    }
+
+    public void changeContext(Context context)
+    {
+        texture = loadTexture(ballTexture, context);
     }
 }

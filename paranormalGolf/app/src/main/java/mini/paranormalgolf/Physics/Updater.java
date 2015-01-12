@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ import static android.opengl.Matrix.translateM;
 import mini.paranormalgolf.Activities.GameActivity;
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Graphics.DrawManager;
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
@@ -96,8 +98,6 @@ public class Updater implements SensorEventListener {
         //if (paused)
         //    return UpdateResult.PAUSE;
 
-        if (paused)
-            return UpdateResult.PAUSE;
         float mu = getActualCoefficientFriction();
         int index = getIndexOfElevatorBallOn();
 
@@ -320,5 +320,45 @@ public class Updater implements SensorEventListener {
     public int getCollectedDiamondsCount()
     {
         return max_diamonds_count - last_diamonds_count;
+    }
+
+    public void setContext(Context context)
+    {
+        this.context = context;
+        reloadTextures(context);
+        drawManager = new DrawManager(context, shadows);
+    }
+
+    public void reloadTextures(Context context)
+    {
+        ball.changeContext(context);
+        for (Beam beam : board.beams)
+            beam.texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
+        for (CheckPoint checkPoint : board.checkpoints)
+            checkPoint.texture = ResourceHelper.loadTexture(context, R.drawable.checkpoint_texture);
+        for (Elevator elevator : board.elevators)
+            elevator.texture = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
+        for (Diamond diamond : board.diamonds)
+            diamond.texture = ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
+        for (Floor floor : board.floors)
+        {
+            floor.setBottomFloorTexture(ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom));
+            if (floor.mu > floor.getTHRESHOLD_MU_FACTOR())
+            {
+                floor.setTopFloorTexture(ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5));
+                floor.setSideFloorTexture(ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts));
+            }
+            else
+            {
+                floor.setTopFloorTexture(ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3));
+                floor.setSideFloorTexture(ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart));
+            }
+        }
+        for (HourGlass hourGlass : board.hourGlasses)
+            hourGlass.texture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
+        for (Wall wall : board.walls)
+            wall.texture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+        board.finish.texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
+
     }
 }

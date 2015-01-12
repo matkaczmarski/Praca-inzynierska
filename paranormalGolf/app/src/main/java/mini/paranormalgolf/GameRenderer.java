@@ -69,27 +69,20 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean sound;
     private boolean shadows;
 
+    private boolean started = false;
+
     private FPSCounter fpsCounter;
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows) {
+    public GameRenderer(Activity context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows)
+    {
         this.context = context;
         this.board_id = board_id;
         this.vibrations = vibrations;
         this.music = music;
         this.sound = sound;
         this.shadows = shadows;
-    }
-
-    @Override
-    public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
-
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GLES20.GL_CULL_FACE);
 
         Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.marble, context);
 
@@ -99,22 +92,32 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         timeLeft = boardInfo.getTime() * 1000;
 
+        final Context contextForUiThread = context;
+
         ((GameActivity)context).runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
-                ((GameActivity)context).updatePanel(boardInfo.getTime(), 0);
+                ((GameActivity)contextForUiThread).updatePanel(boardInfo.getTime(), 0);
             }
         });
+        started = false;
         updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
-
-        //String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
-        //boolean bul = extensions.contains("OES_depth_texture");
-
         fpsCounter = new FPSCounter();
-        //lastTime = System.currentTimeMillis();
-        //lastTimeUpdated = true;
+    }
+
+    @Override
+    public void onSurfaceCreated(GL10 glUnused, EGLConfig config)
+    {
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GLES20.GL_CULL_FACE);
+
+        updater.setContext(context);
+        started = true;
     }
 
     @Override
@@ -126,6 +129,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
+        if (!started)
+            return;
         float interval = 0;
         if(LoggerConfig.ON) {
             fpsCounter.logFrame();
@@ -148,6 +153,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         {
             lastTimeUpdated = false;
             boardInfo.setTime((int)seconds_left);
+            //interval = 0;
             return;
         }
         ((GameActivity)context).runOnUiThread(new Runnable()
@@ -190,6 +196,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         if (paused)
         {
             //updater.resume();
+            lastTimeUpdated = false;
             paused = false;
         }
         else

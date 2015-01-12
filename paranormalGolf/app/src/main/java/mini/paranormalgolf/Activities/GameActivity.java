@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
@@ -20,6 +21,7 @@ import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Xml;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -262,11 +264,22 @@ public class GameActivity extends Activity implements Runnable {
     public void onPauseClick(View view)
     {
         onButtonClick();
-        if (gameRenderer != null)
-            gameRenderer.pause();
+        //if (gameRenderer != null)
+        //    gameRenderer.pause();
         //glSurfaceView.onPause();
         if (pause_dialog == null)
         {
+            Runnable runnable = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    glSurfaceView.onPause();
+                    gameRenderer.pause();
+                }
+            };
+            runnable.run();
+            //glSurfaceView.onPause();
             pause_dialog = new Dialog(this);
             pause_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             pause_dialog.setContentView(R.layout.pause_dialog);
@@ -311,6 +324,14 @@ public class GameActivity extends Activity implements Runnable {
                     startActivity(intent);
                 }
             });
+            pause_dialog.setOnCancelListener(new DialogInterface.OnCancelListener()
+            {
+                @Override
+                public void onCancel(DialogInterface dialogInterface)
+                {
+                   onPauseClick(null);
+                }
+            });
             pause_dialog.show();
             pause_dialog.getWindow().setLayout(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
         }
@@ -318,6 +339,16 @@ public class GameActivity extends Activity implements Runnable {
         {
             pause_dialog.dismiss();
             pause_dialog = null;
+            Runnable runnable = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    glSurfaceView.onResume();
+                    gameRenderer.pause();
+                }
+            };
+            runnable.run();
         }
     }
 
