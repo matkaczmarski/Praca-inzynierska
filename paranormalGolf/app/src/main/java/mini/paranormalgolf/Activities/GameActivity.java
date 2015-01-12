@@ -178,10 +178,6 @@ public class GameActivity extends Activity implements Runnable {
                 }
             }
         });
-        backgroundMusic = MediaPlayer.create(this, R.raw.motyw);
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(10.0f, 3.0f);
-        backgroundMusic.start();
     }
 
     @Override
@@ -216,6 +212,8 @@ public class GameActivity extends Activity implements Runnable {
         protected void onPause() {
             super.onPause();
 
+            if(backgroundMusic != null)
+                backgroundMusic.stop();
             if (rendererSet) {
                 glSurfaceView.onPause();
             }
@@ -233,7 +231,10 @@ public class GameActivity extends Activity implements Runnable {
         }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
+        if (backgroundMusic != null)
+            backgroundMusic.stop();
         this.mWakeLock.release();
         super.onDestroy();
     }
@@ -246,6 +247,14 @@ public class GameActivity extends Activity implements Runnable {
         sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
         vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
         shadows = sharedPreferences.getBoolean(getString(R.string.options_shadows), false);
+
+        if (music)
+        {
+            backgroundMusic = MediaPlayer.create(this, R.raw.motyw);
+            backgroundMusic.setLooping(true);
+            backgroundMusic.setVolume(10.0f, 3.0f);
+            backgroundMusic.start();
+        }
     }
 
     public void updatePanel(int time, int diamonds)
