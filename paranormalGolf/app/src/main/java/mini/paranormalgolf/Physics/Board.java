@@ -17,7 +17,6 @@ public class Board {
     public List<Wall> walls;
     public List<Elevator> elevators;
     public List<Beam> beams;
-    public List<Bonus> bonuses;
     public List<Diamond> diamonds;
     public List<HourGlass> hourGlasses;
 
