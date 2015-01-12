@@ -282,6 +282,7 @@ public class GameActivity extends Activity implements Runnable {
             //glSurfaceView.onPause();
             pause_dialog = new Dialog(this, R.style.PauseDialogTheme);
             pause_dialog.setContentView(R.layout.pause_dialog);
+            pause_dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             setFontsForPauseDialog(pause_dialog);
             ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
             {
@@ -329,7 +330,7 @@ public class GameActivity extends Activity implements Runnable {
                 @Override
                 public void onCancel(DialogInterface dialogInterface)
                 {
-                   onPauseClick(null);
+                    onPauseClick(null);
                 }
             });
             pause_dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -378,26 +379,35 @@ public class GameActivity extends Activity implements Runnable {
         vibrate();
     }
 
-    public void playSound(String sound)
+    public void playSound(final String sound_name)
     {
         if (this.sound)
         {
-            if (mp.isPlaying())
-                mp.stop();
-            try
+            final String sound_string = sound_name;
+            Runnable runnable = new Runnable()
             {
-                mp.reset();
-                AssetFileDescriptor afd = getAssets().openFd(sound);
-                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mp.prepare();
-                mp.start();
-            } catch (IllegalStateException e)
-            {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+                @Override
+                public void run()
+                {
+                        if (mp.isPlaying())
+                            mp.stop();
+                        try
+                        {
+                            mp.reset();
+                            AssetFileDescriptor afd = getAssets().openFd(sound_name);
+                            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                            mp.prepare();
+                            mp.start();
+                        } catch (IllegalStateException e)
+                        {
+                            e.printStackTrace();
+                        } catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                }
+            };
+            runnable.run();
         }
     }
 
@@ -471,6 +481,7 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onWinDialog(int diamonds, int time, boolean win)
     {
+        playEndGameSound(win);
         glSurfaceView.onPause();
         this.win = win;
         GameActivity.game = false;
@@ -481,6 +492,11 @@ public class GameActivity extends Activity implements Runnable {
 
         end_game_dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         end_game_dialog.show();
+    }
+
+    public void playEndGameSound(boolean win)
+    {
+        playSound(win ? "win_new.mp3" : "lost_new.mp3");
     }
 
     public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time, boolean win)
