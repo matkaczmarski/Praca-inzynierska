@@ -73,20 +73,16 @@ public class Updater implements SensorEventListener {
 
     public boolean getDeviceDefaultOrientation() {
 
-        WindowManager windowManager =  (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         Configuration config = context.getResources().getConfiguration();
 
         int rotation = windowManager.getDefaultDisplay().getRotation();
 
-        if ( ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) &&
+        return ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) &&
                 config.orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) &&
-                config.orientation == Configuration.ORIENTATION_PORTRAIT)) {
-            return true;
-        } else {
-            return false;
-        }
+                config.orientation == Configuration.ORIENTATION_PORTRAIT);
     }
 
     public UpdateResult update() {
