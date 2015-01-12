@@ -184,26 +184,34 @@ public class GameActivity extends Activity implements Runnable {
         backgroundMusic.start();
     }
 
-/*
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.test, menu);
-        return true;
+    protected void onStop()
+    {
+        if (backgroundMusic != null)
+            backgroundMusic.stop();
+        super.onStop();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
+    /*
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.test, menu);
             return true;
         }
-        return super.onOptionsItemSelected(item);
-    }
-*/
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
+            if (id == R.id.action_settings) {
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    */
         @Override
         protected void onPause() {
             super.onPause();
@@ -474,6 +482,8 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onWinDialog(int diamonds, int time, boolean win)
     {
+        if (backgroundMusic != null)
+            backgroundMusic.stop();
         playEndGameSound(win);
         glSurfaceView.onPause();
         this.win = win;
