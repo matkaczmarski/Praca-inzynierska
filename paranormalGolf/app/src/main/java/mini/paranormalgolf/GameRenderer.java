@@ -189,13 +189,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     {
         if (paused)
         {
-            //updater.resume();
+            updater.resume();
             paused = false;
         }
         else
         {
             paused = true;
-            //updater.pause();
+            updater.pause();
         }
     }
 

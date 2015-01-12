@@ -41,7 +41,7 @@ public final class Collisions {
         } else if (sphereCenter.z > max.z) {
             d += (sphereCenter.z - max.z) * (sphereCenter.z - max.z);
         }
-        return d <= sphereRadius * sphereRadius;// + USER_EXPERIENCE;
+        return d <= sphereRadius * sphereRadius;
     }
 
     public static Vector FindNormalVectorInCollision(Sphere sphere, Box collidedBox) {
