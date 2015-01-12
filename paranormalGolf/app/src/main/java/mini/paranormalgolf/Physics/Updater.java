@@ -29,7 +29,7 @@ import mini.paranormalgolf.R;
  */
 public class Updater implements SensorEventListener {
 
-    public final static float INTERVAL_TIME=0.035f;
+    public static float INTERVAL_TIME=0f;
 
     private Context context;
     private DrawManager drawManager;
@@ -90,22 +90,24 @@ public class Updater implements SensorEventListener {
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public UpdateResult update() {
+    public UpdateResult update(float interval) {
+        INTERVAL_TIME = interval;
+
         if (paused)
             return UpdateResult.PAUSE;
         float mu = getActualCoefficientFriction();
         int index = getIndexOfElevatorBallOn();
 
         for (Beam beam : board.beams) {
-            beam.Update(INTERVAL_TIME);
+            beam.Update(interval);
         }
 
         for (Elevator elevator : board.elevators) {
-            elevator.Update(INTERVAL_TIME);
+            elevator.Update(interval);
         }
         if (index >= 0) setBallOnElevator(index);
 
-        ball.Update(INTERVAL_TIME, accData, mu);
+        ball.Update(interval, accData, mu);
 
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
