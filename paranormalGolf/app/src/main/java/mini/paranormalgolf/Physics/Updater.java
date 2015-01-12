@@ -142,6 +142,7 @@ public class Updater implements SensorEventListener {
             if (ball.CheckCollision(board.diamonds.get(i))) {
                 //board.diamonds.set(i, null);
                 board.diamonds.remove(i--);
+                onDiamondCollision();
                 // i dodaj jakieś punkty
             }
 
@@ -273,8 +274,14 @@ public class Updater implements SensorEventListener {
         paused = false;
     }
 
-    public void onHourGlassCollision() {
-        playSound("button.wav");
+    public void onHourGlassCollision()
+    {
+        playSound("hourglass_new.mp3");
+    }
+
+    public void onDiamondCollision()
+    {
+        playSound("diamond_new.mp3");
     }
 
     public void playSound(String sound)
