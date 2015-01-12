@@ -91,7 +91,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GLES20.GL_CULL_FACE);
 
-        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.marble, context);
+        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.homeWorld, context);
 
         XMLParser xmlParser = new XMLParser(context);
         Board board = xmlParser.getBoard(board_id);

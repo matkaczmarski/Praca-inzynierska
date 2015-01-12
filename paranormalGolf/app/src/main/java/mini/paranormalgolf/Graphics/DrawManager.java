@@ -128,7 +128,7 @@ public class DrawManager {
         depthMapShaderProgram = new DepthMapShaderProgram(context);
         shadowingShaderProgram = new ShadowingShaderProgram(context);
 
-        skyBox = new SkyBox(context, SkyBox.SkyBoxTexture.stars);
+        skyBox = new SkyBox(context);
         this.withShadow = withShadow;
         resetDrawManager();
     }
@@ -581,7 +581,7 @@ public class DrawManager {
         glDepthFunc(GL_LEQUAL);
         skyBoxShaderProgram.useProgram();
         skyBoxShaderProgram.setUniforms(skyBoxViewProjectionMatrix, skyBox.getTexture());
-        skyBox.bindData(skyBoxShaderProgram);
+        skyBox.bindData(skyBoxShaderProgram, ShaderProgram.ShaderProgramType.skyBox);
         skyBox.draw();
         glDepthFunc(GL_LESS);
     }

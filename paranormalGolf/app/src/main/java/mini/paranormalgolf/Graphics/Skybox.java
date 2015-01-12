@@ -30,14 +30,15 @@ public class SkyBox extends Element {
     private static final int INDICES_COUNT = 36;
     private static final Point CENTER_POINT = new Point(0f,0f,0f);
 
-    private final VertexArray vertexArray;
+    //private final VertexArray vertexArray;
     private final ByteBuffer indexArray;
 
-    public SkyBox(Context context, SkyBoxTexture skyBoxTexture) {
+    public SkyBox(Context context) {
         super(CENTER_POINT);
-        texture = textureLoader(skyBoxTexture, context);
+        texture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_space_left, R.drawable.skybox_texture_space_right, R.drawable.skybox_texture_space_bottom, R.drawable.skybox_texture_space_top, R.drawable.skybox_texture_space_back, R.drawable.skybox_texture_space_front});
 
-        vertexArray = new VertexArray(new float[] {
+
+        vertexData = new VertexArray(new float[] {
                 -1,  1,  1,
                 1,  1,  1,
                 -1, -1,  1,
@@ -77,25 +78,6 @@ public class SkyBox extends Element {
         indexArray.position(0);
     }
 
-    private int textureLoader(SkyBoxTexture skyBoxTextureType, Context context) {
-        int skyboxTexture = -1;
-        switch (skyBoxTextureType) {
-            case dayClouds:
-                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_dayclouds_left, R.drawable.skybox_texture_dayclouds_right, R.drawable.skybox_texture_dayclouds_bottom, R.drawable.skybox_texture_dayclouds_top, R.drawable.skybox_texture_dayclouds_front, R.drawable.skybox_texture_dayclouds_back});
-                break;
-            case nightClouds:
-                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_nightclouds_left, R.drawable.skybox_texture_nightclouds_right, R.drawable.skybox_texture_nightclouds_bottom, R.drawable.skybox_texture_nightclouds_top, R.drawable.skybox_texture_nightclouds_back, R.drawable.skybox_texture_nightclouds_front});
-                break;
-            case stars:
-                skyboxTexture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_space_left, R.drawable.skybox_texture_space_right, R.drawable.skybox_texture_space_bottom, R.drawable.skybox_texture_space_top, R.drawable.skybox_texture_space_back, R.drawable.skybox_texture_space_front});
-                break;
-        }
-        return skyboxTexture;
-    }
-
-    public void bindData(ShaderProgram skyboxProgram) {
-        vertexArray.setVertexAttribPointer(0, ((SkyBoxShaderProgram)skyboxProgram).getPositionAttributeLocation(),POSITION_COMPONENT_COUNT, 0);
-    }
 
     public void draw() {
         glDrawElements(GL_TRIANGLES, INDICES_COUNT,  GL_UNSIGNED_BYTE, indexArray);
