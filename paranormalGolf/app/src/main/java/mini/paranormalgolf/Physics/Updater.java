@@ -67,20 +67,26 @@ public class Updater implements SensorEventListener {
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        landscape = getDeviceDefaultOrientation();
+        drawManager = new DrawManager(context, shadows);
+    }
+
+    public boolean getDeviceDefaultOrientation() {
+
+        WindowManager windowManager =  (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         Configuration config = context.getResources().getConfiguration();
-        int rotation = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+
+        int rotation = windowManager.getDefaultDisplay().getRotation();
 
         if ( ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) &&
                 config.orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) &&
                 config.orientation == Configuration.ORIENTATION_PORTRAIT)) {
-            landscape=true;
+            return true;
         } else {
-            landscape=false;
+            return false;
         }
-     //   landscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        drawManager = new DrawManager(context, shadows);
     }
 
     public UpdateResult update() {
