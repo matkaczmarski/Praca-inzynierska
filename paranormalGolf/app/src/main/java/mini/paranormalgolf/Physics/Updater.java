@@ -328,7 +328,10 @@ public class Updater implements SensorEventListener {
     public void setContext(Context context)
     {
         this.context = context;
-        drawManager = new DrawManager(context, shadows);
+        if (drawManager != null)
+            drawManager = new DrawManager(context, shadows, drawManager.getxRotation(), drawManager.getyRotation());
+        else
+            drawManager = new DrawManager(context, shadows);
         reloadTextures(context);
         ResourceHelper.initSounds(context);
     }
@@ -359,7 +362,7 @@ public class Updater implements SensorEventListener {
             }
         }
         for (HourGlass hourGlass : board.hourGlasses)
-            hourGlass.texture = HourGlass.getHourGlassTexture();
+            hourGlass.getWoodenParts().texture = HourGlass.getHourGlassTexture();
         for (Wall wall : board.walls)
             wall.texture = Wall.getWallTexture();
         board.finish.texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
