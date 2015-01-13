@@ -57,7 +57,7 @@ public class Beam extends MovableElement {
         lastMove = new Vector(velocity.x * dt, 0, velocity.z * dt);
         location.x = location.x + lastMove.x;
         location.z = location.z + lastMove.z;
-        if ((moveToPatrolTo && (location.x > patrolTo.x || location.z > patrolTo.x)) || (!moveToPatrolTo && (location.x < patrolFrom.x || location.z < patrolFrom.z)))
+        if ((moveToPatrolTo && (location.x > patrolTo.x || location.z > patrolTo.z)) || (!moveToPatrolTo && (location.x < patrolFrom.x || location.z < patrolFrom.z)))
         {
             velocity.x = -velocity.x;
             velocity.z = -velocity.z;
