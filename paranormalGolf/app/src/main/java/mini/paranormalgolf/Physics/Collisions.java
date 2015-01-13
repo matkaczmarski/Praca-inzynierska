@@ -413,8 +413,8 @@ public final class Collisions {
 //                velocity.z += Math.signum(element.getLastMove().z) * Math.abs(element.getVelocity().z);
 //            }
         }
-        if (element.getClass() == Elevator.class)
-            halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
+   //     if (element.getClass() == Elevator.class)
+   //         halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
 
         ball.setLocation(new Point(halfBallLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfBallLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,

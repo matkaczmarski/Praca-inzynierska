@@ -55,7 +55,9 @@ import static android.opengl.GLES20.glFinish;
  */
 public class GameRenderer implements GLSurfaceView.Renderer {
 
-    private final Activity context;
+    private final Context context;
+    private static Activity activity;
+
     private Updater updater;
     private String board_id;
     private BoardInfo boardInfo;
@@ -75,9 +77,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows)
+    public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows)
     {
         this.context = context;
+        this.activity = activity;
         this.board_id = board_id;
         this.vibrations = vibrations;
         this.music = music;
@@ -86,15 +89,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.homeWorld, context);
 
-        XMLParser xmlParser = new XMLParser(context);
-        Board board = xmlParser.getBoard(board_id);
-        boardInfo = xmlParser.getBoardInfo(board_id);
 
+        boardInfo = loadBoardInfo(board_id);
         timeLeft = boardInfo.getTime() * 1000;
 
-        final Context contextForUiThread = context;
+        final Context contextForUiThread = activity;
 
-        ((GameActivity)context).runOnUiThread(new Runnable()
+        ((GameActivity)activity).runOnUiThread(new Runnable()
         {
             @Override
             public void run()
@@ -103,8 +104,26 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
         started = false;
-        updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
+        updater = new Updater(context, ball, loadBoard(board_id), vibrations, music, sound, shadows, this);
         fpsCounter = new FPSCounter();
+    }
+
+    public void changeBoard(String board_id)
+    {
+        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.homeWorld, context);
+        updater.changeBoardAndBall(loadBoard(board_id), ball);
+    }
+
+    public Board loadBoard(String board_id)
+    {
+        XMLParser xmlParser = new XMLParser(context);
+        return xmlParser.getBoard(board_id);
+    }
+
+    public BoardInfo loadBoardInfo (String board_id)
+    {
+        XMLParser xmlParser = new XMLParser(context);
+        return xmlParser.getBoardInfo(board_id);
     }
 
     @Override
@@ -116,7 +135,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GLES20.GL_CULL_FACE);
 
-        updater.setContext(context);
+        updater.setContext(activity);
         started = true;
     }
 
@@ -156,12 +175,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             //interval = 0;
             return;
         }
-        ((GameActivity)context).runOnUiThread(new Runnable()
+        ((GameActivity)activity).runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
-                ((TextView)context.findViewById(R.id.game_activity_time)).setText(seconds_left + "");
+                ((TextView)(activity.findViewById(R.id.game_activity_time))).setText(seconds_left + "");
             }
         });
 
@@ -174,19 +193,16 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             //dotarcie do mety?
             if (updateResult == UpdateResult.DEFEAT || updateResult == UpdateResult.WIN)
             {
-                //pause();
                 final boolean win = updateResult == UpdateResult.WIN;
-                ((GameActivity) context).runOnUiThread(new Runnable() {
+                ((GameActivity) activity).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((GameActivity) context).onWinDialog(updater.getCollectedDiamondsCount(), (int) Math.ceil(timeLeft / 1000), win);
+                        ((GameActivity) activity).onWinDialog(updater.getCollectedDiamondsCount(), (int) Math.ceil(timeLeft / 1000), win);
                     }
                 });
             }
             if (updateResult == UpdateResult.PAUSE)
                 return;
-            //if (updateResult == UpdateResult.WIN)
-            //    onWinDialog(updater.getCollectedDiamondsCount(), (int)Math.ceil(timeLeft / 1000));
         }
         updater.draw();
     }
@@ -218,6 +234,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         if(updater != null)
             updater.updatePreferences(vibrations, music, sound);
+    }
+
+    public void changeActivity(Activity activity)
+    {
+        this.activity = activity;
     }
 
 }
