@@ -40,7 +40,6 @@ public class OptionsActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
-
         Bundle extras = getIntent().getExtras();
         boolean onPause = extras.getBoolean("ON_PAUSE");
         if (onPause)
@@ -300,7 +299,7 @@ public class OptionsActivity extends Activity
     {
         if (this.sound)
         {
-            ResourceHelper.playSound(this, sound);
+            ResourceHelper.playSound(sound);
         }
     }
 

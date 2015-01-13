@@ -3,6 +3,7 @@ package mini.paranormalgolf.Activities;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -76,6 +77,9 @@ public class GameActivity extends Activity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         LoadFonts();
+
+        ProgressDialog dialog = ProgressDialog.show(this, "Loading", "Please wait...", true);
+
         checkSharedPreferences();
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
@@ -107,7 +111,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this, board_id, vibrations, music, sound, shadows);
+        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows);
 
         if (supportsEs2) {
             // ...
@@ -176,6 +180,7 @@ public class GameActivity extends Activity implements Runnable {
                 }
             }
         });
+        dialog.dismiss();
     }
 
     @Override
@@ -183,8 +188,6 @@ public class GameActivity extends Activity implements Runnable {
     {
         if (backgroundMusic != null)
         {
-            //if (backgroundMusic.isPlaying())
-            //    backgroundMusic.stop();
             backgroundMusic.release();
         }
         super.onStop();
@@ -216,8 +219,6 @@ public class GameActivity extends Activity implements Runnable {
 
             if(backgroundMusic != null)
             {
-                //if (backgroundMusic.isPlaying())
-                //    backgroundMusic.stop();
                 backgroundMusic.release();
             }
             if (rendererSet) {
@@ -241,8 +242,6 @@ public class GameActivity extends Activity implements Runnable {
     {
         if (backgroundMusic != null)
         {
-            //if (backgroundMusic.isPlaying())
-            //    backgroundMusic.stop();
             backgroundMusic.release();
         }
         this.mWakeLock.release();
@@ -307,6 +306,8 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onPauseClick(View view)
     {
+        if (!game)
+            return;
         onButtonClick();
         //if (gameRenderer != null)
         //    gameRenderer.pause();
@@ -427,7 +428,7 @@ public class GameActivity extends Activity implements Runnable {
     {
         if (this.sound)
         {
-            ResourceHelper.playSound(this, sound);
+            ResourceHelper.playSound(sound);
         }
     }
 
@@ -444,12 +445,13 @@ public class GameActivity extends Activity implements Runnable {
     {
         setContentView(R.layout.activity_game);
         LoadFonts();
+        ProgressDialog dialog = ProgressDialog.show(this, "Loading", "Please wait...", true);
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this, board_id, vibrations, music, sound, shadows);
+        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(gameRenderer);
         glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
@@ -488,6 +490,7 @@ public class GameActivity extends Activity implements Runnable {
             pause_dialog.dismiss();
             pause_dialog = null;
         }
+        dialog.dismiss();
     }
 
     @Override
@@ -509,6 +512,7 @@ public class GameActivity extends Activity implements Runnable {
         GameActivity.game = false;
         end_game_dialog = new Dialog(this, R.style.EndGameDialogTheme);
         end_game_dialog.setContentView(R.layout.win_dialog);
+        end_game_dialog.setCanceledOnTouchOutside(false);
         loadFontsForDialog(end_game_dialog);
         setDialogTitleAndResult(end_game_dialog, diamonds, time, win);
 

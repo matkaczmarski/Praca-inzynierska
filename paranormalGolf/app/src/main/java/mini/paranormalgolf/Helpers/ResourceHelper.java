@@ -68,7 +68,7 @@ public class ResourceHelper {
         soundPoolMap.put(SOUND_BEAM, soundPool.load(context, R.raw.wall_2, 1));
     }
 
-    public static void playSound(Context context, int sound)
+    public static void playSound(int sound)
     {
         soundPool.play(soundPoolMap.get(sound), 1, 1, 1, 0, 1f);
     }

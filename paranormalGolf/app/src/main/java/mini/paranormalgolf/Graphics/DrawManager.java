@@ -131,6 +131,20 @@ public class DrawManager {
     }
 
     public DrawManager(Context context, boolean withShadow){
+        initTextures(context);
+
+        this.withShadow = withShadow;
+        resetDrawManager();
+    }
+
+    public DrawManager(Context context, boolean withShadow, float xRotation, float yRotation){
+        this(context, withShadow);
+        this.xRotation = xRotation;
+        this.yRotation = yRotation;
+    }
+
+    public void initTextures(Context context)
+    {
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
         skyBoxShaderProgram = new SkyBoxShaderProgram(context);
@@ -146,16 +160,7 @@ public class DrawManager {
         Wall.initTextures(context);
 
         skyBox = new SkyBox(context);
-        this.withShadow = withShadow;
-        resetDrawManager();
     }
-
-    public DrawManager(Context context, boolean withShadow, float xRotation, float yRotation){
-        this(context, withShadow);
-        this.xRotation = xRotation;
-        this.yRotation = yRotation;
-    }
-
 
     public void resetDrawManager(){
         xRotation = INITIAL_ROTATION_X;

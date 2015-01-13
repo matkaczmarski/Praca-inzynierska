@@ -67,7 +67,6 @@ public class Updater implements SensorEventListener {
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         RegisterAccelerometer();
         landscape = getDeviceDefaultOrientation();
-        ResourceHelper.initSounds(context);
         drawManager = new DrawManager(context, shadows);
     }
 
@@ -83,6 +82,12 @@ public class Updater implements SensorEventListener {
                 config.orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) &&
                 config.orientation == Configuration.ORIENTATION_PORTRAIT);
+    }
+
+    public void changeBoardAndBall(Board board, Ball ball)
+    {
+        this.ball = ball;
+        this.board = board;
     }
 
     private void RegisterAccelerometer() {
@@ -271,16 +276,6 @@ public class Updater implements SensorEventListener {
 
     }
 
-    /*public void pause()
-    {
-        paused = true;
-    }
-
-    public void resume()
-    {
-        paused = false;
-    }*/
-
     public void onHourGlassCollision()
     {
         playSound(ResourceHelper.SOUND_HOURGLASS);
@@ -295,7 +290,7 @@ public class Updater implements SensorEventListener {
     {
         if (this.sound)
         {
-            ResourceHelper.playSound(context, sound);
+            ResourceHelper.playSound(sound);
         }
     }
 
@@ -326,12 +321,11 @@ public class Updater implements SensorEventListener {
         if (drawManager != null)
         {
             drawManager.releaseResources();
-            drawManager = new DrawManager(context, shadows, drawManager.getxRotation(), drawManager.getyRotation());
+            drawManager.initTextures(context);
         }
         else
             drawManager = new DrawManager(context, shadows);
         reloadTextures(context);
-        ResourceHelper.initSounds(context);
     }
 
     public void reloadTextures(Context context){
@@ -346,7 +340,6 @@ public class Updater implements SensorEventListener {
             diamond.texture = Diamond.getDiamondTexture();
         for (Floor floor : board.floors)
         {
-
             if (floor.mu > floor.THRESHOLD_MU_FACTOR)
             {
                 floor.setTopFloorTexture(Floor.getTopFloorTextureSticky());
