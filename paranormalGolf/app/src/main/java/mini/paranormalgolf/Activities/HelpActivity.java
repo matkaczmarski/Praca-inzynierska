@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.zip.Inflater;
 
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.R;
 
 public class HelpActivity extends Activity
@@ -31,8 +32,6 @@ public class HelpActivity extends Activity
     private boolean vibrations;
 
     private PowerManager.WakeLock mWakeLock;
-
-    private MediaPlayer mp = new MediaPlayer();
 
     private int page = -1;
     private int page_max = 1;
@@ -44,6 +43,7 @@ public class HelpActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
+        //ResourceHelper.initSounds(this);
         final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
         this.mWakeLock.acquire();
@@ -111,30 +111,15 @@ public class HelpActivity extends Activity
 
     private void onButtonClick()
     {
-        playSound("button.wav");
+        playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
-    private void playSound(String sound)
+    public void playSound(int sound)
     {
         if (this.sound)
         {
-            if (mp.isPlaying())
-                mp.stop();
-            try
-            {
-                mp.reset();
-                AssetFileDescriptor afd = getAssets().openFd(sound);
-                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mp.prepare();
-                mp.start();
-            } catch (IllegalStateException e)
-            {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            ResourceHelper.playSound(sound);
         }
     }
 

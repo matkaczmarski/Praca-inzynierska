@@ -67,7 +67,6 @@ public class Updater implements SensorEventListener {
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         RegisterAccelerometer();
         landscape = getDeviceDefaultOrientation();
-        ResourceHelper.initSounds(context);
         drawManager = new DrawManager(context, shadows);
     }
 
@@ -300,7 +299,7 @@ public class Updater implements SensorEventListener {
     {
         if (this.sound)
         {
-            ResourceHelper.playSound(context, sound);
+            ResourceHelper.playSound(sound);
         }
     }
 
@@ -336,7 +335,7 @@ public class Updater implements SensorEventListener {
         else
             drawManager = new DrawManager(context, shadows);
         reloadTextures(context);
-        ResourceHelper.initSounds(context);
+        //ResourceHelper.initSounds(context);
     }
 
     public void reloadTextures(Context context){

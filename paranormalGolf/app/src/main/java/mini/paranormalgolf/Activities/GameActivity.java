@@ -75,6 +75,7 @@ public class GameActivity extends Activity implements Runnable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        //ResourceHelper.initSounds(this);
         LoadFonts();
         checkSharedPreferences();
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
@@ -183,8 +184,6 @@ public class GameActivity extends Activity implements Runnable {
     {
         if (backgroundMusic != null)
         {
-            //if (backgroundMusic.isPlaying())
-            //    backgroundMusic.stop();
             backgroundMusic.release();
         }
         super.onStop();
@@ -216,8 +215,6 @@ public class GameActivity extends Activity implements Runnable {
 
             if(backgroundMusic != null)
             {
-                //if (backgroundMusic.isPlaying())
-                //    backgroundMusic.stop();
                 backgroundMusic.release();
             }
             if (rendererSet) {
@@ -427,7 +424,7 @@ public class GameActivity extends Activity implements Runnable {
     {
         if (this.sound)
         {
-            ResourceHelper.playSound(this, sound);
+            ResourceHelper.playSound(sound);
         }
     }
 

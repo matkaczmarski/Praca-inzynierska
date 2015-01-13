@@ -32,12 +32,11 @@ public class MainMenuActivity extends Activity
     private boolean vibrations = false;
     private boolean shadows;
 
-    private MediaPlayer mp = new MediaPlayer();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ResourceHelper.initSounds(getApplicationContext());
         checkSharedPreferences();
 
         setContentView(R.layout.activity_main_menu);
@@ -140,14 +139,14 @@ public class MainMenuActivity extends Activity
     public void onStartClick(View view)
     {
         onButtonClick();
-        Intent intent = new Intent(this, LevelsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LevelsActivity.class);
         startActivity(intent);
     }
 
     public void onOptionsClick(View view)
     {
         onButtonClick();
-        Intent intent = new Intent(this, OptionsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
         intent.putExtra("ON_PAUSE", false);
         startActivity(intent);
     }
@@ -155,7 +154,7 @@ public class MainMenuActivity extends Activity
     public void onHelpClick(View view)
     {
         onButtonClick();
-        Intent intent = new Intent(this, HelpActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
         startActivity(intent);
     }
 
@@ -167,30 +166,15 @@ public class MainMenuActivity extends Activity
 
     public void onButtonClick()
     {
-        playSound("button.wav");
+        playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
-    public void playSound(String sound)
+    public void playSound(int sound)
     {
         if (this.sound)
         {
-            if (mp.isPlaying())
-                mp.stop();
-            try
-            {
-                mp.reset();
-                AssetFileDescriptor afd = getAssets().openFd(sound);
-                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mp.prepare();
-                mp.start();
-            } catch (IllegalStateException e)
-            {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            ResourceHelper.playSound(sound);
         }
     }
 
@@ -215,14 +199,14 @@ public class MainMenuActivity extends Activity
     @Override
     protected void onStop()
     {
-        ResourceHelper.releaseSounds();
+        //ResourceHelper.releaseSounds();
         super.onStop();
     }
 
     @Override
     protected void onDestroy()
     {
-        ResourceHelper.releaseSounds();
+        //ResourceHelper.releaseSounds();
         super.onDestroy();
     }
 }

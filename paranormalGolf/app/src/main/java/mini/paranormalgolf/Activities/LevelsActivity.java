@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import mini.paranormalgolf.Helpers.BoardInfo;
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.R;
 
@@ -39,13 +40,12 @@ public class LevelsActivity extends Activity
 
     private PowerManager.WakeLock mWakeLock;
 
-    private MediaPlayer mp = new MediaPlayer();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_levels);
 
+        //ResourceHelper.initSounds(this);
         final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
         this.mWakeLock.acquire();
@@ -209,32 +209,17 @@ public class LevelsActivity extends Activity
             ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
     }
 
-    public void onButtonClick()
+    private void onButtonClick()
     {
-        playSound("button.wav");
+        playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
-    public void playSound(String sound)
+    public void playSound(int sound)
     {
         if (this.sound)
         {
-            if (mp.isPlaying())
-                mp.stop();
-            try
-            {
-                mp.reset();
-                AssetFileDescriptor afd = getAssets().openFd(sound);
-                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mp.prepare();
-                mp.start();
-            } catch (IllegalStateException e)
-            {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            ResourceHelper.playSound(sound);
         }
     }
 
