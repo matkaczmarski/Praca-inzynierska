@@ -106,14 +106,9 @@ public class Updater implements SensorEventListener {
         for (Elevator elevator : board.elevators) {
             elevator.Update(INTERVAL_TIME);
         }
-        if (index >= 0) {
-            Point lastLocation = ball.getLocation();
-            ball.setLocation(new Point(lastLocation.x + board.elevators.get(index).getLastMove().x,
-                    lastLocation.y + board.elevators.get(index).getLastMove().y,
-                    lastLocation.z + board.elevators.get(index).getLastMove().z));
-        }
-        ball.Update(INTERVAL_TIME, accData, mu);
         if (index >= 0) setBallOnElevator(index);
+        ball.Update(INTERVAL_TIME, accData, mu);
+
 
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
