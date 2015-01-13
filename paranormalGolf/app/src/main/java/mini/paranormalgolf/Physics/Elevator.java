@@ -30,6 +30,8 @@ public class Elevator extends MovableElement {
     private Point patrolTo;
     private float mu;
 
+    private boolean moveToPatrolTo;
+
     public float getMu() {
         return mu;
     }
@@ -45,17 +47,59 @@ public class Elevator extends MovableElement {
         this.patrolTo = to;
         this.mu = mu;
 
+        moveToPatrolTo = findMovementDirection(from, to, velocity);
+
         GraphicsData generatedData = ObjectGenerator.createBox(measure, ELEVATOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
     }
 
-    public void Update(float dt) {
+    public void Update(float dt)
+    {
         lastMove.y=velocity.y*dt;
         location.y = location.y + lastMove.y;
-        if (location.y > patrolTo.y || location.y < patrolFrom.y)
+        if ((moveToPatrolTo && (location.y > patrolTo.y)) || (!moveToPatrolTo && (location.y < patrolFrom.y)))
+        {
             velocity.y = -velocity.y;
+            moveToPatrolTo = !moveToPatrolTo;
+        }
+    }
+
+    private boolean findMovementDirection(Point from, Point to, Vector velocity)
+    {
+        if (velocity.x != 0)
+        {
+            if (from.x > to.x)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.x > 0;
+        }
+        else if (velocity.y != 0)
+        {
+            if (from.y > to.y)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.y > 0;
+        }
+        else if (velocity.z != 0)
+        {
+            if (from.z > to.z)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.z > 0;
+        }
+
+        return true;
     }
 
 }

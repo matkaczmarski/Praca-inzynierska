@@ -24,6 +24,9 @@ public class Beam extends MovableElement {
     public final float BEAM_OPACITY = 1f;
 
     private BoxSize measurements;
+
+    private boolean moveToPatrolTo;
+
     public BoxSize getMeasurements() {
         return measurements;
     }
@@ -32,11 +35,14 @@ public class Beam extends MovableElement {
     private Point patrolFrom;
     private Point patrolTo;
 
-    public Beam(Point location, Vector velocity, BoxSize measure, Point from, Point to, Context context) {
+    public Beam(Point location, Vector velocity, BoxSize measure, Point from, Point to, Context context)
+    {
         super(velocity, location);
         this.measurements = measure;
         this.patrolFrom = from;
         this.patrolTo = to;
+
+        moveToPatrolTo = findMovementDirection(from, to, velocity);
 
         GraphicsData generatedData = ObjectGenerator.createBox(measure, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
@@ -44,14 +50,53 @@ public class Beam extends MovableElement {
         texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
     }
 
-    public void Update(float dt) {
+    public void Update(float dt)
+    {
         lastMove = new Vector(velocity.x * dt, 0, velocity.z * dt);
         location.x = location.x + lastMove.x;
         location.z = location.z + lastMove.z;
-        if (location.x > patrolTo.x || location.x < patrolFrom.x ||
-                location.z > patrolTo.z || location.z < patrolFrom.z) {
+        if ((moveToPatrolTo && (location.x > patrolTo.x || location.z > patrolTo.x)) || (!moveToPatrolTo && (location.x < patrolFrom.x || location.z < patrolFrom.z)))
+        {
             velocity.x = -velocity.x;
             velocity.z = -velocity.z;
+
+            moveToPatrolTo = !moveToPatrolTo;
         }
+    }
+
+    private boolean findMovementDirection(Point from, Point to, Vector velocity)
+    {
+        if (velocity.x != 0)
+        {
+            if (from.x > to.x)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.x > 0;
+        }
+        else if (velocity.y != 0)
+        {
+            if (from.y > to.y)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.y > 0;
+        }
+        else if (velocity.z != 0)
+        {
+            if (from.z > to.z)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.z > 0;
+        }
+
+        return true;
     }
 }
