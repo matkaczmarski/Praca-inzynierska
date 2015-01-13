@@ -13,6 +13,7 @@ import static android.opengl.GLES20.glCreateProgram;
 import static android.opengl.GLES20.glCreateShader;
 import static android.opengl.GLES20.glDeleteProgram;
 import static android.opengl.GLES20.glDeleteShader;
+import static android.opengl.GLES20.glDetachShader;
 import static android.opengl.GLES20.glGetProgramInfoLog;
 import static android.opengl.GLES20.glGetProgramiv;
 import static android.opengl.GLES20.glGetShaderInfoLog;
@@ -116,6 +117,8 @@ public class ShaderHelper {
             Log.v( TAG, "Results of linking program:\n" + glGetProgramInfoLog(programObjectId));
         }
 
+        glDetachShader(programObjectId, vertexShaderId);
+        glDetachShader(programObjectId, fragmentShaderId);
         glDeleteShader(vertexShaderId);
         glDeleteShader(fragmentShaderId);
 
