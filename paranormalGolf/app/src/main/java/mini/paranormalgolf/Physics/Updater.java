@@ -84,6 +84,12 @@ public class Updater implements SensorEventListener {
                 config.orientation == Configuration.ORIENTATION_PORTRAIT);
     }
 
+    public void changeBoardAndBall(Board board, Ball ball)
+    {
+        this.ball = ball;
+        this.board = board;
+    }
+
     private void RegisterAccelerometer() {
         SensorManager sensorManager = (android.hardware.SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -275,16 +281,6 @@ public class Updater implements SensorEventListener {
 
     }
 
-    /*public void pause()
-    {
-        paused = true;
-    }
-
-    public void resume()
-    {
-        paused = false;
-    }*/
-
     public void onHourGlassCollision()
     {
         playSound(ResourceHelper.SOUND_HOURGLASS);
@@ -330,12 +326,11 @@ public class Updater implements SensorEventListener {
         if (drawManager != null)
         {
             drawManager.releaseResources();
-            drawManager = new DrawManager(context, shadows, drawManager.getxRotation(), drawManager.getyRotation());
+            drawManager.initTextures(context);
         }
         else
             drawManager = new DrawManager(context, shadows);
         reloadTextures(context);
-        //ResourceHelper.initSounds(context);
     }
 
     public void reloadTextures(Context context){
@@ -350,7 +345,6 @@ public class Updater implements SensorEventListener {
             diamond.texture = Diamond.getDiamondTexture();
         for (Floor floor : board.floors)
         {
-
             if (floor.mu > floor.THRESHOLD_MU_FACTOR)
             {
                 floor.setTopFloorTexture(Floor.getTopFloorTextureSticky());

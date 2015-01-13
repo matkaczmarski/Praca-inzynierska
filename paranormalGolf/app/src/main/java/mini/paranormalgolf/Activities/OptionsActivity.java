@@ -40,8 +40,6 @@ public class OptionsActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
-
-        //ResourceHelper.initSounds(this);
         Bundle extras = getIntent().getExtras();
         boolean onPause = extras.getBoolean("ON_PAUSE");
         if (onPause)
