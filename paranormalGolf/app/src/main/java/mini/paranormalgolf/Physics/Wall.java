@@ -21,6 +21,8 @@ public class Wall extends Element {
 
     private BoxSize measurements;
 
+    private static int wallTexture;
+
     private static final float WALL_TEXTURE_UNIT = 5f;
     public final float WALL_OPACITY = 1f;
 
@@ -31,7 +33,16 @@ public class Wall extends Element {
         GraphicsData generatedData = ObjectGenerator.createBox(measure, WALL_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+        texture = wallTexture;//ResourceHelper.loadTexture(context, R.drawable.wall_texture);
     }
 
+    public static void initTextures(Context context)
+    {
+        wallTexture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+    }
+
+    public static int getWallTexture()
+    {
+        return wallTexture;
+    }
 }

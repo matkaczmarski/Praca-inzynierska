@@ -31,6 +31,14 @@ public class Floor extends Element {
     private FloorPart bottomPart;
     private List<FloorPart> sideParts;
 
+    private static int topFloorTextureNormal;
+    private static int sideFloorTextureNormal;
+    private static int bottomFloorTextureNormal;
+
+    private static int topFloorTextureSticky;
+    private static int sideFloorTextureSticky;
+    private static int bottomFloorTextureSticky;
+
     private int topFloorTexture;
     private int sideFloorTexture;
     private int bottomFloorTexture;
@@ -90,14 +98,14 @@ public class Floor extends Element {
         createFloor(measures, location);
 
         if(mu > THRESHOLD_MU_FACTOR){
-            topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
-            sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
+            topFloorTexture = topFloorTextureSticky;//ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
+            sideFloorTexture = sideFloorTextureSticky;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
         }else {
-            topFloorTexture = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
-            sideFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
+            topFloorTexture = topFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
+            sideFloorTexture = sideFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
         }
 
-        bottomFloorTexture = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
+        bottomFloorTexture = bottomFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
     }
 
     private void createFloor(BoxSize measures, Point location) {
@@ -112,4 +120,44 @@ public class Floor extends Element {
         sideParts = Arrays.asList(rightSidePart, leftSidePart, frontSidePart, backSidePart);
     }
 
+    public static void initTextures(Context context)
+    {
+        topFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
+        sideFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
+        bottomFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
+
+        topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
+        sideFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
+        bottomFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
+    }
+
+    public static int getTopFloorTextureNormal()
+    {
+        return topFloorTextureNormal;
+    }
+
+    public static int getSideFloorTextureNormal()
+    {
+        return sideFloorTextureNormal;
+    }
+
+    public static int getBottomFloorTextureNormal()
+    {
+        return bottomFloorTextureNormal;
+    }
+
+    public static int getTopFloorTextureSticky()
+    {
+        return topFloorTextureSticky;
+    }
+
+    public static int getSideFloorTextureSticky()
+    {
+        return sideFloorTextureSticky;
+    }
+
+    public static int getBottomFloorTextureSticky()
+    {
+        return bottomFloorTextureSticky;
+    }
 }

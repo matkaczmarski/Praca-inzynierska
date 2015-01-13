@@ -21,6 +21,8 @@ public class Diamond extends Bonus {
 
     public final float DIAMOND_OPACITY = 0.9f;
 
+    private static int diamondTexture;
+
     public Pyramid getPyramid() {
         return pyramid;
     }
@@ -32,6 +34,16 @@ public class Diamond extends Bonus {
         GraphicsData generatedData = ObjectGenerator.createDiamond(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
+        texture = diamondTexture;//ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
+    }
+
+    public static void initTextures(Context context)
+    {
+        diamondTexture = ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
+    }
+
+    public static int getDiamondTexture()
+    {
+        return diamondTexture;
     }
 }

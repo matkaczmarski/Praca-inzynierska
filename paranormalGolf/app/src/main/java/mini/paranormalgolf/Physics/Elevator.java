@@ -32,6 +32,8 @@ public class Elevator extends MovableElement {
 
     private boolean moveToPatrolTo;
 
+    private static int elevatorTexture;
+
     public float getMu() {
         return mu;
     }
@@ -52,7 +54,7 @@ public class Elevator extends MovableElement {
         GraphicsData generatedData = ObjectGenerator.createBox(measure, ELEVATOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
+        texture = elevatorTexture;//ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
     }
 
     public void Update(float dt)
@@ -102,4 +104,13 @@ public class Elevator extends MovableElement {
         return true;
     }
 
+    public static void initTextures(Context context)
+    {
+        elevatorTexture = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
+    }
+
+    public static int getElevatorTexture()
+    {
+        return elevatorTexture;
+    }
 }

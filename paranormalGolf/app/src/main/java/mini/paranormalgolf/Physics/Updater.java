@@ -328,8 +328,8 @@ public class Updater implements SensorEventListener {
     public void setContext(Context context)
     {
         this.context = context;
-        reloadTextures(context);
         drawManager = new DrawManager(context, shadows);
+        reloadTextures(context);
         ResourceHelper.initSounds(context);
     }
 
@@ -337,31 +337,31 @@ public class Updater implements SensorEventListener {
     {
         ball.changeContext(context);
         for (Beam beam : board.beams)
-            beam.texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
+            beam.texture = Beam.getBeamTexture();
         for (CheckPoint checkPoint : board.checkpoints)
-            checkPoint.texture = ResourceHelper.loadTexture(context, R.drawable.checkpoint_texture);
+            checkPoint.texture = CheckPoint.getCheckPointTexture();
         for (Elevator elevator : board.elevators)
-            elevator.texture = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
+            elevator.texture = Elevator.getElevatorTexture();
         for (Diamond diamond : board.diamonds)
-            diamond.texture = ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
+            diamond.texture = Diamond.getDiamondTexture();
         for (Floor floor : board.floors)
         {
-            floor.setBottomFloorTexture(ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom));
+            floor.setBottomFloorTexture(Floor.getBottomFloorTextureNormal());
             if (floor.mu > floor.getTHRESHOLD_MU_FACTOR())
             {
-                floor.setTopFloorTexture(ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5));
-                floor.setSideFloorTexture(ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts));
+                floor.setTopFloorTexture(Floor.getTopFloorTextureSticky());
+                floor.setSideFloorTexture(Floor.getSideFloorTextureSticky());
             }
             else
             {
-                floor.setTopFloorTexture(ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3));
-                floor.setSideFloorTexture(ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart));
+                floor.setTopFloorTexture(Floor.getTopFloorTextureNormal());
+                floor.setSideFloorTexture(Floor.getSideFloorTextureNormal());
             }
         }
         for (HourGlass hourGlass : board.hourGlasses)
-            hourGlass.texture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
+            hourGlass.texture = HourGlass.getHourGlassTexture();
         for (Wall wall : board.walls)
-            wall.texture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+            wall.texture = Wall.getWallTexture();
         board.finish.texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
 
     }

@@ -27,6 +27,8 @@ public class Beam extends MovableElement {
 
     private boolean moveToPatrolTo;
 
+    private static int beamTexture;
+
     public BoxSize getMeasurements() {
         return measurements;
     }
@@ -47,7 +49,7 @@ public class Beam extends MovableElement {
         GraphicsData generatedData = ObjectGenerator.createBox(measure, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
+        texture = beamTexture;//ResourceHelper.loadTexture(context, R.drawable.beam_texture);
     }
 
     public void Update(float dt)
@@ -98,5 +100,15 @@ public class Beam extends MovableElement {
         }
 
         return true;
+    }
+
+    public static void initTextures(Context context)
+    {
+        beamTexture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
+    }
+
+    public static int getBeamTexture()
+    {
+        return beamTexture;
     }
 }

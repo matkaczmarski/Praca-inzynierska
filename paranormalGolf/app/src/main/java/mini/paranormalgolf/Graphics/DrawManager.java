@@ -121,12 +121,21 @@ public class DrawManager {
         return xRotation;
     }
 
-    public DrawManager(Context context, boolean withShadow) {
+    public DrawManager(Context context, boolean withShadow)
+    {
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
         skyBoxShaderProgram = new SkyBoxShaderProgram(context);
         depthMapShaderProgram = new DepthMapShaderProgram(context);
         shadowingShaderProgram = new ShadowingShaderProgram(context);
+
+        Floor.initTextures(context);
+        Beam.initTextures(context);
+        CheckPoint.initTextures(context);
+        Elevator.initTextures(context);
+        Diamond.initTextures(context);
+        HourGlass.initTextures(context);
+        Wall.initTextures(context);
 
         skyBox = new SkyBox(context);
         this.withShadow = withShadow;

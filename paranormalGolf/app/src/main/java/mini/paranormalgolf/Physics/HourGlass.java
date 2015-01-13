@@ -29,6 +29,8 @@ public class HourGlass extends Bonus {
     private final float WOODEN_BASE_HEIGHT_RATIO = 0.1f;
     public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
 
+    private static int hourGlassTexture;
+
     public ConicalFrustum getLowerCone() {
         return lowerCone;
     }
@@ -48,7 +50,7 @@ public class HourGlass extends Bonus {
             GraphicsData generatedData = ObjectGenerator.createHourglassWoodenParts(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION,TEXTURE_UNIT );
             vertexData = new VertexArray(generatedData.vertexData);
             drawCommands = generatedData.drawCommands;
-            texture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
+            texture = hourGlassTexture;//ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
             ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         }
     }
@@ -67,5 +69,15 @@ public class HourGlass extends Bonus {
         woodenParts = new HourGlassWoodenParts(location, new Cylinder(new Point(0f, -lowerCone.height + woodenBaseHeight /2,0f),lowerCone.bottomRadius, woodenBaseHeight), new Cylinder(new Point(0f, upperCone.height - woodenBaseHeight /2,0f),upperCone.topRadius, woodenBaseHeight), context);
         ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         UP_DOWN_SPEED = HOURGLASS_UP_DOWN_SPEED;
+    }
+
+    public static void initTextures(Context context)
+    {
+        hourGlassTexture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
+    }
+
+    public static int getHourGlassTexture()
+    {
+        return hourGlassTexture;
     }
 }
