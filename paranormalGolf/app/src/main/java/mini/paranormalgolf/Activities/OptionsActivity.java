@@ -15,11 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.Locale;
 
+import mini.paranormalgolf.Helpers.ResourceHelper;
+import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.R;
 
 public class OptionsActivity extends Activity
@@ -31,8 +35,6 @@ public class OptionsActivity extends Activity
     private boolean shadows;
 
     private String language;
-
-    private MediaPlayer mp = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +48,77 @@ public class OptionsActivity extends Activity
             findViewById(R.id.options_pl).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_en).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_shadows).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_texture_scroll_view).setVisibility(View.INVISIBLE);
         }
+        else
+            loadTextures();
 
         LoadFonts();
         checkSharedPreferences();
+    }
+
+    public void loadTextures()
+    {
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.options_texture_scroll_view);
+        linearLayout.removeAllViews();
+        for (Ball.BallTexture ballTexture : Ball.BallTexture.values())
+        {
+            View view = getLayoutInflater().inflate(R.layout.texture_item, null);
+            view.findViewById(R.id.texture_item_image).setBackgroundResource(getTextureResource(ballTexture));
+            linearLayout.addView(view);
+        }
+    }
+
+    private int getTextureResource(Ball.BallTexture ballTextureType)
+    {
+        switch (ballTextureType){
+            case redAndWhite:
+                return R.drawable.ball_texture_red_white_dots;
+            case noise:
+                return R.drawable.ball_texture_noise;
+            case beach:
+                return R.drawable.ball_texture_beachball;
+            case lava:
+                return R.drawable.ball_texture_lava;
+            case sun:
+                return R.drawable.ball_texture_sun;
+            case jelly:
+                return R.drawable.ball_texture_jelly;
+            case marble:
+                return R.drawable.ball_texture_marble;
+            case frozen:
+                return R.drawable.ball_texture_frozen;
+            case tiger:
+                return R.drawable.ball_texture_tiger;
+            case orangeSkin:
+                return R.drawable.ball_texture_orange_skin;
+            case amethystAlcove:
+                return R.drawable.ball_texture_amethyst_alcove;
+            case drizzledPaint:
+                return R.drawable.ball_texture_drizzled_paint;
+            case eyeOfTheSunGod:
+                return R.drawable.ball_texture_eye_of_the_sun_god;
+            case girlsBestFriend:
+                return R.drawable.ball_texture_girls_best_friend;
+            case homeWorld:
+                return R.drawable.ball_texture_home_world;
+            case jupiter:
+                return R.drawable.ball_texture_jupiter;
+            case liquidCrystal:
+                return R.drawable.ball_texture_liquid_crystal;
+            case methaneLakes:
+                return R.drawable.ball_texture_methane_lakes;
+            case spottedBianco:
+                return R.drawable.ball_texture_spotted_bianco;
+            case toxicByproduct:
+                return R.drawable.ball_texture_toxic_byproduct;
+            case verdeJaspe:
+                return R.drawable.ball_texture_verde_jaspe;
+            case dyedStonework:
+                return R.drawable.ball_texture_dyed_stonework;
+
+        }
+        return -1;
     }
 
     public void checkSharedPreferences()
@@ -221,32 +290,17 @@ public class OptionsActivity extends Activity
         onButtonClick();
     }
 
-    public void onButtonClick()
+    private void onButtonClick()
     {
-        playSound("button.wav");
+        playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
-    public void playSound(String sound)
+    public void playSound(int sound)
     {
         if (this.sound)
         {
-            if (mp.isPlaying())
-                mp.stop();
-            try
-            {
-                mp.reset();
-                AssetFileDescriptor afd = getAssets().openFd(sound);
-                mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mp.prepare();
-                mp.start();
-            } catch (IllegalStateException e)
-            {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            ResourceHelper.playSound(this, sound);
         }
     }
 

@@ -95,6 +95,46 @@
                     android:text="@string/options_activity_shadows"
                     android:onClick="onShadowsClick"
                     android:tag="4"/>
+                <TextView
+                    android:id="@+id/options_texture_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/OptionsButtonLanguage"
+                    android:text="Tekstura kulki: "
+                    android:tag="3"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+                    <HorizontalScrollView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        style="@style/OptionsButtonLanguage"
+                        android:tag="3">
+                        <LinearLayout
+                            android:id="@+id/options_texture_scroll_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="60dp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"/>
+                        </HorizontalScrollView>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
             </LinearLayout>
 
         </ScrollView>

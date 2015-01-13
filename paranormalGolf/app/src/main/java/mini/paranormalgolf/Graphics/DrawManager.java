@@ -177,24 +177,29 @@ public class DrawManager {
         }
     }
 
-    public void releaseResources(){
+    public void releaseResources()
+    {
 
-        //usuwanie shader programów
-        glDeleteProgram(colorShaderProgram.getProgram());
-        glDeleteProgram(textureShaderProgram.getProgram());
-        glDeleteProgram(depthMapShaderProgram.getProgram());
-        glDeleteProgram(skyBoxShaderProgram.getProgram());
-        glDeleteProgram(shadowingShaderProgram.getProgram());
+        try
+        {
+            //usuwanie shader programów
+            glDeleteProgram(colorShaderProgram.getProgram());
+            glDeleteProgram(textureShaderProgram.getProgram());
+            glDeleteProgram(depthMapShaderProgram.getProgram());
+            glDeleteProgram(skyBoxShaderProgram.getProgram());
+            glDeleteProgram(shadowingShaderProgram.getProgram());
 
-        //usuwanie fbo
-        glDeleteFramebuffers(1, frameBufferObjectId, 0);
-        glDeleteRenderbuffers(1, depthTextureId, 0);
-        glDeleteTextures(1, renderTextureId, 0);
+            //usuwanie fbo
+            glDeleteFramebuffers(1, frameBufferObjectId, 0);
+            glDeleteRenderbuffers(1, depthTextureId, 0);
+            glDeleteTextures(1, renderTextureId, 0);
 
-        //sposób usuwania tekstur:
-        int textureId = 0;
-        glDeleteTextures(1, new int[] {textureId}, 0);
-        //można też zrobić tablicę int[] ze wszystkimi id tekstur, które chcemy usunąć i użyć funkcji glDeleteTexture raz z parametrami( długość tablicy id, tablica id, 0);
+            //sposób usuwania tekstur:
+            int textureId = 0;
+            glDeleteTextures(1, new int[]{textureId}, 0);
+            //można też zrobić tablicę int[] ze wszystkimi id tekstur, które chcemy usunąć i użyć funkcji glDeleteTexture raz z parametrami( długość tablicy id, tablica id, 0);
+        }
+        catch (Exception ex) {}
     }
 
     private void generateShadowFBO() {

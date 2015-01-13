@@ -325,10 +325,14 @@ public class Updater implements SensorEventListener {
         return max_diamonds_count - last_diamonds_count;
     }
 
-    public void setContext(Context context){
+    public void setContext(Context context)
+    {
         this.context = context;
         if (drawManager != null)
+        {
+            drawManager.releaseResources();
             drawManager = new DrawManager(context, shadows, drawManager.getxRotation(), drawManager.getyRotation());
+        }
         else
             drawManager = new DrawManager(context, shadows);
         reloadTextures(context);
