@@ -75,7 +75,7 @@ public class XMLParser
 
                         float friction = Float.parseFloat(xpp.getAttributeValue(null, "friction"));
 
-                        floors.add(new Floor(new BoxSize(boxsize_x, boxsize_y, boxsize_z), friction, new Point(location_x, location_y, location_z),context));
+                        floors.add(new Floor(new BoxSize(boxsize_x, boxsize_y, boxsize_z), friction, new Point(location_x, location_y, location_z)));
                     }
                     else if (name.equals("Wall"))
                     {
@@ -87,7 +87,7 @@ public class XMLParser
                         float boxsize_y = Float.parseFloat(xpp.getAttributeValue(null, "boxsize_y"));
                         float boxsize_z = Float.parseFloat(xpp.getAttributeValue(null, "boxsize_z"));
 
-                        walls.add(new Wall(new Point(location_x, location_y, location_z), new BoxSize(boxsize_x, boxsize_y, boxsize_z), context));
+                        walls.add(new Wall(new Point(location_x, location_y, location_z), new BoxSize(boxsize_x, boxsize_y, boxsize_z)));
                     }
                     else if (name.equals("Diamond"))
                     {
@@ -98,7 +98,7 @@ public class XMLParser
                         int value = Integer.parseInt(xpp.getAttributeValue(null, "value"));
                         float yShift = Float.parseFloat(xpp.getAttributeValue(null, "y_shift"));
 
-                        diamonds.add(new Diamond(new Point(location_x, location_y, location_z), value, yShift, context));
+                        diamonds.add(new Diamond(new Point(location_x, location_y, location_z), value, yShift));
                     }
                     else if (name.equals("Beam"))
                     {
@@ -122,7 +122,7 @@ public class XMLParser
                         float to_y = Float.parseFloat(xpp.getAttributeValue(null, "to_y"));
                         float to_z = Float.parseFloat(xpp.getAttributeValue(null, "to_z"));
 
-                        beams.add(new Beam(new Point(location_x, location_y, location_z), new Vector(vector_x, vector_y, vector_z), new BoxSize(boxsize_x, boxsize_y, boxsize_z), new Point(from_x, from_y, from_z), new Point(to_x, to_y, to_z), context));
+                        beams.add(new Beam(new Point(location_x, location_y, location_z), new Vector(vector_x, vector_y, vector_z), new BoxSize(boxsize_x, boxsize_y, boxsize_z), new Point(from_x, from_y, from_z), new Point(to_x, to_y, to_z)));
                     }
                     else if (name.equals("Elevator"))
                     {
@@ -148,7 +148,7 @@ public class XMLParser
 
                         float friction = Float.parseFloat(xpp.getAttributeValue(null, "friction"));
 
-                        elevators.add(new Elevator(new Point(location_x, location_y, location_z), new Vector(vector_x, vector_y, vector_z), new BoxSize(boxsize_x, boxsize_y, boxsize_z), new Point(from_x, from_y, from_z), new Point(to_x, to_y, to_z), friction, context));
+                        elevators.add(new Elevator(new Point(location_x, location_y, location_z), new Vector(vector_x, vector_y, vector_z), new BoxSize(boxsize_x, boxsize_y, boxsize_z), new Point(from_x, from_y, from_z), new Point(to_x, to_y, to_z), friction));
                     }
                     else if (name.equals("Finish"))
                     {
@@ -176,7 +176,7 @@ public class XMLParser
 
                         boolean visited = Boolean.parseBoolean(xpp.getAttributeValue(null, "visited"));
 
-                        checkPoints.add(new CheckPoint(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z), visited, context));
+                        checkPoints.add(new CheckPoint(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z), visited));
                     }
                     else if (name.equals("HourGlass"))
                     {
@@ -187,7 +187,7 @@ public class XMLParser
                         int value = Integer.parseInt(xpp.getAttributeValue(null, "value"));
                         float yShift = Float.parseFloat(xpp.getAttributeValue(null, "y_shift"));
 
-                        hourGlasses.add(new HourGlass(new Point(location_x, location_y, location_z), value, yShift, context));
+                        hourGlasses.add(new HourGlass(new Point(location_x, location_y, location_z), value, yShift));
                     }
                 }
                 eventType = xpp.next();

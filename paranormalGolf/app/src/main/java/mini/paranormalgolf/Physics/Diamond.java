@@ -29,7 +29,7 @@ public class Diamond extends Bonus {
 
     private final Pyramid pyramid = new Pyramid(0.7f, 1.4f, 6);
 
-    public Diamond(Point location, int value, float yShift, Context context) {
+    public Diamond(Point location, int value, float yShift) {
         super(location, value, yShift);
         GraphicsData generatedData = ObjectGenerator.createDiamond(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);

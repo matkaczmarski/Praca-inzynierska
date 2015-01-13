@@ -21,16 +21,9 @@ import mini.paranormalgolf.R;
 
 public class SkyBox extends Element {
 
-    public enum SkyBoxTexture {
-        nightClouds,
-        dayClouds,
-        stars
-    }
-    private static final int POSITION_COMPONENT_COUNT = 3;
     private static final int INDICES_COUNT = 36;
     private static final Point CENTER_POINT = new Point(0f,0f,0f);
 
-    //private final VertexArray vertexArray;
     private final ByteBuffer indexArray;
 
     public SkyBox(Context context) {
