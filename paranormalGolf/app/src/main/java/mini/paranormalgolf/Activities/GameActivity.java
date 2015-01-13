@@ -65,8 +65,6 @@ public class GameActivity extends Activity implements Runnable {
 
     protected PowerManager.WakeLock mWakeLock;
 
-    private MediaPlayer mp = new MediaPlayer();
-
     public static boolean game = false;
 
     private String board_id;
@@ -184,7 +182,11 @@ public class GameActivity extends Activity implements Runnable {
     protected void onStop()
     {
         if (backgroundMusic != null)
-            backgroundMusic.stop();
+        {
+            //if (backgroundMusic.isPlaying())
+            //    backgroundMusic.stop();
+            backgroundMusic.release();
+        }
         super.onStop();
     }
 
@@ -213,7 +215,11 @@ public class GameActivity extends Activity implements Runnable {
             super.onPause();
 
             if(backgroundMusic != null)
-                backgroundMusic.stop();
+            {
+                //if (backgroundMusic.isPlaying())
+                //    backgroundMusic.stop();
+                backgroundMusic.release();
+            }
             if (rendererSet) {
                 glSurfaceView.onPause();
             }
@@ -234,7 +240,11 @@ public class GameActivity extends Activity implements Runnable {
     protected void onDestroy()
     {
         if (backgroundMusic != null)
-            backgroundMusic.stop();
+        {
+            //if (backgroundMusic.isPlaying())
+            //    backgroundMusic.stop();
+            backgroundMusic.release();
+        }
         this.mWakeLock.release();
         super.onDestroy();
     }

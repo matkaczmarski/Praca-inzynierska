@@ -112,13 +112,20 @@ public class DrawManager {
 
     private boolean withShadow;
 
-    private float xRotation, yRotation;
+    private float xRotation;
+    private float yRotation;
     private SkyBox skyBox;
     private LightData lightData = new LightData(0.2f, 0.6f);
 
 
-    public float getxRotation() {
+    public float getxRotation()
+    {
         return xRotation;
+    }
+
+    public float getyRotation()
+    {
+        return yRotation;
     }
 
     public DrawManager(Context context, boolean withShadow)
@@ -140,6 +147,13 @@ public class DrawManager {
         skyBox = new SkyBox(context);
         this.withShadow = withShadow;
         resetDrawManager();
+    }
+
+    public DrawManager(Context context, boolean withShadow, float xRotation, float yRotation)
+    {
+        this(context, withShadow);
+        this.xRotation = xRotation;
+        this.yRotation = yRotation;
     }
 
     public void resetDrawManager(){
@@ -675,6 +689,7 @@ public class DrawManager {
             multiplyMM(lightsViewProjectionMatrix, 0, lightsProjectionMatrix, 0, lightsViewMatrix, 0);
         }
     }
+
 
 
     //STAŁE:

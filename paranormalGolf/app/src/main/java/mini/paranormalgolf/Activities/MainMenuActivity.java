@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.Locale;
 
+import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.R;
 
 public class MainMenuActivity extends Activity
@@ -209,5 +210,19 @@ public class MainMenuActivity extends Activity
         checkSharedPreferences();
         setContentView(R.layout.activity_main_menu);
         LoadFonts();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        ResourceHelper.releaseSounds();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        ResourceHelper.releaseSounds();
+        super.onDestroy();
     }
 }

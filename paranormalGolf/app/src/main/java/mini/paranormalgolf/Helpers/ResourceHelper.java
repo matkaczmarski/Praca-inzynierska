@@ -55,6 +55,8 @@ public class ResourceHelper {
 
     public static void initSounds(Context context)
     {
+        if (soundPool != null)
+            soundPool.release();
         soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
         soundPoolMap = new HashMap<Integer, Integer>();
         soundPoolMap.put(SOUND_DIAMOND, soundPool.load(context, R.raw.diamond_new, 1));
@@ -209,5 +211,11 @@ public class ResourceHelper {
         }
 
         return textureObjectIds[0];
+    }
+
+    public static void releaseSounds()
+    {
+        if (soundPool != null)
+            soundPool.release();
     }
 }
