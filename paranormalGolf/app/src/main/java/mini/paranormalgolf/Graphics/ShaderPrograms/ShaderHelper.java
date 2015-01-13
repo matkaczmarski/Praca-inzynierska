@@ -116,6 +116,9 @@ public class ShaderHelper {
             Log.v( TAG, "Results of linking program:\n" + glGetProgramInfoLog(programObjectId));
         }
 
+        glDeleteShader(vertexShaderId);
+        glDeleteShader(fragmentShaderId);
+
         // Verify the link status.
         if (linkStatus[0] == 0) {
             // If it failed, delete the program object.
