@@ -276,7 +276,7 @@ public class Updater implements SensorEventListener {
 
     }
 
-    public void pause()
+    /*public void pause()
     {
         paused = true;
     }
@@ -284,7 +284,7 @@ public class Updater implements SensorEventListener {
     public void resume()
     {
         paused = false;
-    }
+    }*/
 
     public void onHourGlassCollision()
     {
