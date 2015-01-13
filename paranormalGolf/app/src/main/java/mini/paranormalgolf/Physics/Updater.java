@@ -134,7 +134,7 @@ public class Updater implements SensorEventListener {
                 ball.ReactOnCollision(wall);
                 onWallCollision();
             }
-        if (mu < 0)
+
             for (Floor floor : board.floors)
                 if (ball.CheckCollision(floor))
                     ball.ReactOnCollision(floor);
