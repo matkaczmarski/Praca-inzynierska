@@ -200,9 +200,8 @@ public class DrawManager {
             glDeleteTextures(1, renderTextureId, 0);
 
             //sposób usuwania tekstur:
-            int textureId = 0;
-            glDeleteTextures(1, new int[]{textureId}, 0);
-            //można też zrobić tablicę int[] ze wszystkimi id tekstur, które chcemy usunąć i użyć funkcji glDeleteTexture raz z parametrami( długość tablicy id, tablica id, 0);
+            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTexture(), Elevator.getElevatorTexture(), Floor.getBottomFloorTextureNormal(), Floor.getBottomFloorTextureSticky(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Floor.getSideFloorTextureNormal(), Floor.getSideFloorTextureSticky(), Wall.getWallTexture()};
+            glDeleteTextures(textureId.length, textureId, 0);
         }
         catch (Exception ex) {}
     }

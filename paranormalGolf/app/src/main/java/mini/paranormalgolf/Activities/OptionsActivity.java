@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +36,8 @@ public class OptionsActivity extends Activity
     private boolean vibrations;
     private boolean shadows;
 
+    private int texture;
+
     private String language;
 
     @Override
@@ -47,23 +51,29 @@ public class OptionsActivity extends Activity
             findViewById(R.id.options_pl).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_en).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_shadows).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_texture_textview).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_texture_scroll_view).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_chosen_texture).setVisibility(View.INVISIBLE);
         }
-        else
-            loadTextures();
 
         LoadFonts();
         checkSharedPreferences();
+        if (!onPause)
+            loadTextures();
     }
 
     public void loadTextures()
     {
         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.options_texture_scroll_view);
         linearLayout.removeAllViews();
+        int i = 0;
         for (Ball.BallTexture ballTexture : Ball.BallTexture.values())
         {
+            if (i == texture)
+                findViewById(R.id.options_chosen_texture).setBackgroundResource(getTextureResource(ballTexture));
             View view = getLayoutInflater().inflate(R.layout.texture_item, null);
             view.findViewById(R.id.texture_item_image).setBackgroundResource(getTextureResource(ballTexture));
+            view.findViewById(R.id.texture_item_image).setTag(i++);
             linearLayout.addView(view);
         }
     }
@@ -137,6 +147,8 @@ public class OptionsActivity extends Activity
             language = sharedPreferences.getString(getString(R.string.options_language), "en");
             changeLanguage(language);
 
+            texture = sharedPreferences.getInt(getString(R.string.options_texture), 0);
+
             updateControls();
         }
     }
@@ -192,6 +204,9 @@ public class OptionsActivity extends Activity
         tv = (TextView)findViewById(R.id.options_save_button);
         tv.setTypeface(tf);
 
+        tv = (TextView)findViewById(R.id.options_texture_textview);
+        tv.setTypeface(tf);
+
         CheckBox checkBox = (CheckBox)findViewById(R.id.options_pl);
         checkBox.setTypeface(tf);
 
@@ -239,6 +254,7 @@ public class OptionsActivity extends Activity
         editor.putBoolean(getString(R.string.options_shadows), ((CheckBox)findViewById(R.id.options_shadows)).isChecked());
         boolean polish = ((CheckBox)findViewById(R.id.options_pl)).isChecked();
         editor.putString(getString(R.string.options_language), polish ? "pl" : "en");
+        editor.putInt(getString(R.string.options_texture), texture);
         editor.commit();
         finish();
     }
@@ -309,6 +325,24 @@ public class OptionsActivity extends Activity
         {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(getResources().getInteger(R.integer.vibrations_click_time));
+        }
+    }
+
+    public void onTextureClick(View view)
+    {
+        onButtonClick();
+
+        int id = Integer.parseInt(view.getTag().toString());
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.options_texture_scroll_view);
+        for (int i = 0; i < linearLayout.getChildCount(); i++)
+        {
+            View child = linearLayout.getChildAt(i);
+            ImageView child_imageView = (ImageView)child.findViewById(R.id.texture_item_image);
+            if (id == Integer.parseInt(child_imageView.getTag().toString()))
+            {
+                findViewById(R.id.options_chosen_texture).setBackgroundResource(getTextureResource(Ball.BallTexture.values()[id]));
+                texture = id;
+            }
         }
     }
 }

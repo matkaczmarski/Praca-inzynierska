@@ -25,6 +25,7 @@ import static android.opengl.Matrix.setRotateM;
 public class Ball extends MovableElement {
 
     public enum BallTexture{
+        homeWorld,
         redAndWhite,
         noise,
         beach,
@@ -40,7 +41,6 @@ public class Ball extends MovableElement {
         dyedStonework,
         eyeOfTheSunGod,
         girlsBestFriend,
-        homeWorld,
         jupiter,
         liquidCrystal,
         methaneLakes,
