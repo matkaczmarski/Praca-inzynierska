@@ -55,6 +55,10 @@ import static android.opengl.GLES20.glCheckFramebufferStatus;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glCullFace;
+import static android.opengl.GLES20.glDeleteFramebuffers;
+import static android.opengl.GLES20.glDeleteProgram;
+import static android.opengl.GLES20.glDeleteRenderbuffers;
+import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glDepthFunc;
 import static android.opengl.GLES20.glFramebufferRenderbuffer;
 import static android.opengl.GLES20.glFramebufferTexture2D;
@@ -118,18 +122,15 @@ public class DrawManager {
     private LightData lightData = new LightData(0.2f, 0.6f);
 
 
-    public float getxRotation()
-    {
+    public float getxRotation(){
         return xRotation;
     }
 
-    public float getyRotation()
-    {
+    public float getyRotation(){
         return yRotation;
     }
 
-    public DrawManager(Context context, boolean withShadow)
-    {
+    public DrawManager(Context context, boolean withShadow){
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
         skyBoxShaderProgram = new SkyBoxShaderProgram(context);
@@ -149,12 +150,12 @@ public class DrawManager {
         resetDrawManager();
     }
 
-    public DrawManager(Context context, boolean withShadow, float xRotation, float yRotation)
-    {
+    public DrawManager(Context context, boolean withShadow, float xRotation, float yRotation){
         this(context, withShadow);
         this.xRotation = xRotation;
         this.yRotation = yRotation;
     }
+
 
     public void resetDrawManager(){
         xRotation = INITIAL_ROTATION_X;
@@ -174,6 +175,26 @@ public class DrawManager {
             MatrixHelper.perspectiveM(lightsProjectionMatrix, LIGHT_FIELD_OF_VIEW_DEGREES, (float) width / height, LIGHT_NEAR, LIGHT_FAR);
             generateShadowFBO();
         }
+    }
+
+    public void releaseResources(){
+
+        //usuwanie shader programów
+        glDeleteProgram(colorShaderProgram.getProgram());
+        glDeleteProgram(textureShaderProgram.getProgram());
+        glDeleteProgram(depthMapShaderProgram.getProgram());
+        glDeleteProgram(skyBoxShaderProgram.getProgram());
+        glDeleteProgram(shadowingShaderProgram.getProgram());
+
+        //usuwanie fbo
+        glDeleteFramebuffers(1, frameBufferObjectId, 0);
+        glDeleteRenderbuffers(1, depthTextureId, 0);
+        glDeleteTextures(1, renderTextureId, 0);
+
+        //sposób usuwania tekstur:
+        int textureId = 0;
+        glDeleteTextures(1, new int[] {textureId}, 0);
+        //można też zrobić tablicę int[] ze wszystkimi id tekstur, które chcemy usunąć i użyć funkcji glDeleteTexture raz z parametrami( długość tablicy id, tablica id, 0);
     }
 
     private void generateShadowFBO() {

@@ -15,7 +15,7 @@ import mini.paranormalgolf.Helpers.ResourceHelper;
  */
 abstract public class ShaderProgram {
 
-    public enum ShaderProgramType{
+    public enum ShaderProgramType {
         color,
         depthMap,
         withShadowing,
@@ -34,8 +34,8 @@ abstract public class ShaderProgram {
     protected static final String U_LIGHTAMB = "u_LightsAmbient";
     protected static final String U_LIGHTDIFF = "u_LightsDiffusion";
     protected static final String U_OPACITY = "u_Opacity";
-    protected  static final String U_SHADOW_PMATRIX = "u_ShadowProjMatrix";
-    protected  static final String U_SHADOW_TEXTURE = "u_ShadowTexture";
+    protected static final String U_SHADOW_PMATRIX = "u_ShadowProjMatrix";
+    protected static final String U_SHADOW_TEXTURE = "u_ShadowTexture";
 
 
     // Attribute constants
@@ -50,6 +50,10 @@ abstract public class ShaderProgram {
         program = ShaderHelper.buildProgram(ResourceHelper.readTextFileFromResource(context, vertexShaderResourceId), ResourceHelper.readTextFileFromResource(context, fragmentShaderResourceId));
     }
 
+
+    public int getProgram() {
+        return program;
+    }
 
     public void useProgram() {
         glUseProgram(program);
