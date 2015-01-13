@@ -26,7 +26,7 @@ public class Wall extends Element {
     private static final float WALL_TEXTURE_UNIT = 5f;
     public final float WALL_OPACITY = 1f;
 
-    public Wall(Point location, BoxSize measure, Context context) {
+    public Wall(Point location, BoxSize measure) {
         super(location);
         measurements = measure;
 

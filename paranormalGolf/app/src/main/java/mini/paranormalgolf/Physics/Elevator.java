@@ -42,7 +42,7 @@ public class Elevator extends MovableElement {
         return measurements;
     }
 
-    public Elevator(Point location, Vector velocity, BoxSize measure, Point from, Point to, float mu,Context context) {
+    public Elevator(Point location, Vector velocity, BoxSize measure, Point from, Point to, float mu) {
         super(velocity, location);
         this.measurements = measure;
         this.patrolFrom = from;

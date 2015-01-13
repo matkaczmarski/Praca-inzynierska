@@ -18,11 +18,7 @@ import mini.paranormalgolf.R;
 public class Floor extends Element {
 
     public final float FLOOR_OPACITY = 1f;
-    private final float THRESHOLD_MU_FACTOR = 0.05f;
-
-    public BoxSize getMeasurements() {
-        return measurements;
-    }
+    public final float THRESHOLD_MU_FACTOR = 0.05f;
 
     public BoxSize measurements;
     public float mu;
@@ -42,6 +38,52 @@ public class Floor extends Element {
     private int topFloorTexture;
     private int sideFloorTexture;
     private int bottomFloorTexture;
+
+
+
+    public Floor(BoxSize measures, float mu, Point location) {
+        super(location);
+        this.measurements = measures;
+        this.mu = mu;
+        createFloor(measures, location);
+
+        if(mu > THRESHOLD_MU_FACTOR){
+            topFloorTexture = topFloorTextureSticky;//ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
+            sideFloorTexture = sideFloorTextureSticky;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
+        }else {
+            topFloorTexture = topFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
+            sideFloorTexture = sideFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
+        }
+
+        bottomFloorTexture = bottomFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
+    }
+
+    private void createFloor(BoxSize measures, Point location) {
+        topPart = new FloorPart(new Rectangle(new Point(location.x, location.y + measures.y / 2, location.z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, 1);
+        bottomPart = new FloorPart(new Rectangle(new Point(location.x, location.y - measures.y / 2, location.z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, -1);
+
+        FloorPart rightSidePart = new FloorPart(new Rectangle(new Point(location.x + measures.x / 2, location.y, location.z), measures.y, measures.z), ObjectBuilder.Axis.xAxis, 1);
+        FloorPart leftSidePart = new FloorPart(new Rectangle(new Point(location.x - measures.x / 2, location.y, location.z), measures.y, measures.z), ObjectBuilder.Axis.xAxis, -1);
+        FloorPart frontSidePart = new FloorPart(new Rectangle(new Point(location.x, location.y, location.z + measures.z / 2), measures.x, measures.y), ObjectBuilder.Axis.zAxis, 1);
+        FloorPart backSidePart = new FloorPart(new Rectangle(new Point(location.x, location.y, location.z - measures.z / 2), measures.x, measures.y), ObjectBuilder.Axis.zAxis, -1);
+
+        sideParts = Arrays.asList(rightSidePart, leftSidePart, frontSidePart, backSidePart);
+    }
+
+    public static void initTextures(Context context){
+        topFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
+        sideFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
+        bottomFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
+
+        topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
+        sideFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
+        bottomFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
+    }
+
+
+    public BoxSize getMeasurements() {
+        return measurements;
+    }
 
     public FloorPart getTopPart() {
         return topPart;
@@ -72,63 +114,12 @@ public class Floor extends Element {
         this.topFloorTexture = topFloorTexture;
     }
 
-    public void setSideFloorTexture(int sideFloorTexture)
-    {
+    public void setSideFloorTexture(int sideFloorTexture){
         this.sideFloorTexture = sideFloorTexture;
     }
 
-    public void setBottomFloorTexture(int bottomFloorTexture)
-    {
+    public void setBottomFloorTexture(int bottomFloorTexture){
         this.bottomFloorTexture = bottomFloorTexture;
-    }
-
-    public float getTHRESHOLD_MU_FACTOR()
-    {
-        return THRESHOLD_MU_FACTOR;
-    }
-
-    //    public float getFloorTop() {
-//        return this.location.y + this.measurements.y / 2;
-//    }
-
-    public Floor(BoxSize measures, float mu, Point location, Context context) {
-        super(location);
-        this.measurements = measures;
-        this.mu = mu;
-        createFloor(measures, location);
-
-        if(mu > THRESHOLD_MU_FACTOR){
-            topFloorTexture = topFloorTextureSticky;//ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
-            sideFloorTexture = sideFloorTextureSticky;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
-        }else {
-            topFloorTexture = topFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
-            sideFloorTexture = sideFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
-        }
-
-        bottomFloorTexture = bottomFloorTextureNormal;//ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
-    }
-
-    private void createFloor(BoxSize measures, Point location) {
-        topPart = new FloorPart(new Rectangle(new Point(location.x, location.y + measures.y / 2, location.z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, 1);
-        bottomPart = new FloorPart(new Rectangle(new Point(location.x, location.y - measures.y / 2, location.z), measures.x, measures.z), ObjectBuilder.Axis.yAxis, -1);
-
-        FloorPart rightSidePart = new FloorPart(new Rectangle(new Point(location.x + measures.x / 2, location.y, location.z), measures.y, measures.z), ObjectBuilder.Axis.xAxis, 1);
-        FloorPart leftSidePart = new FloorPart(new Rectangle(new Point(location.x - measures.x / 2, location.y, location.z), measures.y, measures.z), ObjectBuilder.Axis.xAxis, -1);
-        FloorPart frontSidePart = new FloorPart(new Rectangle(new Point(location.x, location.y, location.z + measures.z / 2), measures.x, measures.y), ObjectBuilder.Axis.zAxis, 1);
-        FloorPart backSidePart = new FloorPart(new Rectangle(new Point(location.x, location.y, location.z - measures.z / 2), measures.x, measures.y), ObjectBuilder.Axis.zAxis, -1);
-
-        sideParts = Arrays.asList(rightSidePart, leftSidePart, frontSidePart, backSidePart);
-    }
-
-    public static void initTextures(Context context)
-    {
-        topFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
-        sideFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.floor_texture_slower_sideparts);
-        bottomFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
-
-        topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
-        sideFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_sidepart);
-        bottomFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_bottom);
     }
 
     public static int getTopFloorTextureNormal()
@@ -160,4 +151,5 @@ public class Floor extends Element {
     {
         return bottomFloorTextureSticky;
     }
+
 }

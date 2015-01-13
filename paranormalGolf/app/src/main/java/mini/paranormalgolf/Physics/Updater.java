@@ -325,8 +325,7 @@ public class Updater implements SensorEventListener {
         return max_diamonds_count - last_diamonds_count;
     }
 
-    public void setContext(Context context)
-    {
+    public void setContext(Context context){
         this.context = context;
         if (drawManager != null)
             drawManager = new DrawManager(context, shadows, drawManager.getxRotation(), drawManager.getyRotation());
@@ -336,8 +335,7 @@ public class Updater implements SensorEventListener {
         ResourceHelper.initSounds(context);
     }
 
-    public void reloadTextures(Context context)
-    {
+    public void reloadTextures(Context context){
         ball.changeContext(context);
         for (Beam beam : board.beams)
             beam.texture = Beam.getBeamTexture();
@@ -349,16 +347,18 @@ public class Updater implements SensorEventListener {
             diamond.texture = Diamond.getDiamondTexture();
         for (Floor floor : board.floors)
         {
-            floor.setBottomFloorTexture(Floor.getBottomFloorTextureNormal());
-            if (floor.mu > floor.getTHRESHOLD_MU_FACTOR())
+
+            if (floor.mu > floor.THRESHOLD_MU_FACTOR)
             {
                 floor.setTopFloorTexture(Floor.getTopFloorTextureSticky());
                 floor.setSideFloorTexture(Floor.getSideFloorTextureSticky());
+                floor.setBottomFloorTexture(Floor.getBottomFloorTextureSticky());
             }
             else
             {
                 floor.setTopFloorTexture(Floor.getTopFloorTextureNormal());
                 floor.setSideFloorTexture(Floor.getSideFloorTextureNormal());
+                floor.setBottomFloorTexture(Floor.getBottomFloorTextureNormal());
             }
         }
         for (HourGlass hourGlass : board.hourGlasses)

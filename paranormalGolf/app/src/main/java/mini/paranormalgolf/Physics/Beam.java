@@ -24,21 +24,14 @@ public class Beam extends MovableElement {
     public final float BEAM_OPACITY = 1f;
 
     private BoxSize measurements;
-
     private boolean moveToPatrolTo;
-
     private static int beamTexture;
-
-    public BoxSize getMeasurements() {
-        return measurements;
-    }
 
     //punkty oznaczjące do jakiego miejsca ma dochodzić środek elementu
     private Point patrolFrom;
     private Point patrolTo;
 
-    public Beam(Point location, Vector velocity, BoxSize measure, Point from, Point to, Context context)
-    {
+    public Beam(Point location, Vector velocity, BoxSize measure, Point from, Point to){
         super(velocity, location);
         this.measurements = measure;
         this.patrolFrom = from;
@@ -52,8 +45,7 @@ public class Beam extends MovableElement {
         texture = beamTexture;//ResourceHelper.loadTexture(context, R.drawable.beam_texture);
     }
 
-    public void Update(float dt)
-    {
+    public void Update(float dt){
         lastMove = new Vector(velocity.x * dt, 0, velocity.z * dt);
         location.x = location.x + lastMove.x;
         location.z = location.z + lastMove.z;
@@ -66,8 +58,7 @@ public class Beam extends MovableElement {
         }
     }
 
-    private boolean findMovementDirection(Point from, Point to, Vector velocity)
-    {
+    private boolean findMovementDirection(Point from, Point to, Vector velocity){
         if (velocity.x != 0)
         {
             if (from.x > to.x)
@@ -102,13 +93,15 @@ public class Beam extends MovableElement {
         return true;
     }
 
-    public static void initTextures(Context context)
-    {
+    public static void initTextures(Context context){
         beamTexture = ResourceHelper.loadTexture(context, R.drawable.beam_texture);
     }
 
-    public static int getBeamTexture()
-    {
+    public static int getBeamTexture(){
         return beamTexture;
+    }
+
+    public BoxSize getMeasurements() {
+        return measurements;
     }
 }

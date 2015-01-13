@@ -44,7 +44,7 @@ public class HourGlass extends Bonus {
         private final int HOURGLASS_MESH_DIMENSION = 32;
         private final float TEXTURE_UNIT = 5f;
 
-        public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder, Context context) {
+        public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder) {
             super(location, 0, 0);
 
             GraphicsData generatedData = ObjectGenerator.createHourglassWoodenParts(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION,TEXTURE_UNIT );
@@ -59,25 +59,23 @@ public class HourGlass extends Bonus {
     private HourGlassWoodenParts woodenParts;
     public HourGlassWoodenParts getWoodenParts(){return woodenParts;}
 
-    public HourGlass(Point location, int value, float yShift, Context context) {
+    public HourGlass(Point location, int value, float yShift) {
         super(location, value, yShift);
 
         GraphicsData generatedData = ObjectGenerator.createHourglassGlassPart(lowerCone, upperCone, HOURGLASS_MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         float woodenBaseHeight = (lowerCone.height + upperCone.height) * WOODEN_BASE_HEIGHT_RATIO;
-        woodenParts = new HourGlassWoodenParts(location, new Cylinder(new Point(0f, -lowerCone.height + woodenBaseHeight /2,0f),lowerCone.bottomRadius, woodenBaseHeight), new Cylinder(new Point(0f, upperCone.height - woodenBaseHeight /2,0f),upperCone.topRadius, woodenBaseHeight), context);
+        woodenParts = new HourGlassWoodenParts(location, new Cylinder(new Point(0f, -lowerCone.height + woodenBaseHeight /2,0f),lowerCone.bottomRadius, woodenBaseHeight), new Cylinder(new Point(0f, upperCone.height - woodenBaseHeight /2,0f),upperCone.topRadius, woodenBaseHeight));
         ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
         UP_DOWN_SPEED = HOURGLASS_UP_DOWN_SPEED;
     }
 
-    public static void initTextures(Context context)
-    {
+    public static void initTextures(Context context){
         hourGlassTexture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
     }
 
-    public static int getHourGlassTexture()
-    {
+    public static int getHourGlassTexture(){
         return hourGlassTexture;
     }
 }

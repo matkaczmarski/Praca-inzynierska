@@ -32,7 +32,7 @@ public class CheckPoint extends ControlPoint {
     public boolean isVisited(){return visited;}
     public void visit(){visited = true;}
 
-    public CheckPoint(Point location, ConicalFrustum conicalFrustum, boolean visited, Context context){
+    public CheckPoint(Point location, ConicalFrustum conicalFrustum, boolean visited){
         super(location,conicalFrustum);
         this.visited=visited;
 
