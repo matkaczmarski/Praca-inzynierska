@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import mini.paranormalgolf.Activities.MainMenuActivity;
+import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.R;
 
 /**
@@ -139,13 +140,19 @@ public class ConsoleView extends LinearLayout
     private boolean changeBallRadiusCommand (String radius_string)
     {
         float radius = 0;
-        try
+        if (radius_string.equalsIgnoreCase("default"))
+            radius = Ball.DEFAULT_RADIUS;
+        else
         {
-            radius = Float.parseFloat(radius_string);
-        }
-        catch (Exception ex)
-        {
-            return false;
+            try
+            {
+                radius = Float.parseFloat(radius_string);
+                if (radius <= 0)
+                    radius = Ball.DEFAULT_RADIUS;
+            } catch (Exception ex)
+            {
+                return false;
+            }
         }
         ((MainMenuActivity)getContext()).radius_set = true;
         ((MainMenuActivity)getContext()).radius = radius;
