@@ -17,11 +17,15 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import mini.paranormalgolf.Controls.ConsoleView;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.R;
 
@@ -32,6 +36,10 @@ public class MainMenuActivity extends Activity
     private boolean vibrations = false;
     private boolean shadows;
 
+    private List<Long> clicks = new ArrayList<Long>();
+    private final int clicks_nr = 3;
+    private final long clicks_max_interval = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +48,7 @@ public class MainMenuActivity extends Activity
         checkSharedPreferences();
 
         setContentView(R.layout.activity_main_menu);
+
         LoadFonts();
         ManageFiles();
     }
@@ -93,6 +102,14 @@ public class MainMenuActivity extends Activity
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
         TextView tv = (TextView) findViewById(R.id.main_menu_title);
+        tv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onTitleClick(view);
+            }
+        });
         tv.setTypeface(tf);
 
         Shader textShader=new LinearGradient(0, 0, 0, 20,
@@ -111,6 +128,32 @@ public class MainMenuActivity extends Activity
 
         tv = (TextView)findViewById(R.id.main_menu_exit);
         tv.setTypeface(tf);
+    }
+
+    public void onTitleClick(View view)
+    {
+        long time = System.currentTimeMillis();
+        if (clicks.size() < clicks_nr)
+            clicks.add(time);
+        else
+        {
+            clicks.remove(0);
+            clicks.add(time);
+        }
+        if (clicks.size() == clicks_nr)
+        {
+            if (clicks.get(2) - clicks.get(0) <= clicks_max_interval)
+                ((ConsoleView) findViewById(R.id.console_view)).show();
+        }
+
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        ConsoleView consoleView = (ConsoleView)findViewById(R.id.console_view);
+        if (consoleView.getVisibility() == View.VISIBLE)
+            consoleView.hide();
     }
 
     public void ManageFiles()

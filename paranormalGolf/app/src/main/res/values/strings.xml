@@ -60,4 +60,7 @@
     <string name="level_locked">To unlock this level you have to complete the previous ones!</string>
     <string name="ok">OK</string>
     <string name="ball_texture">Ball texture:</string>
+    <string name="command_prompt">>></string>
+    <string name="command_ok">OK</string>
+    <string name="command_error">ERROR</string>
 </resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#B0000000">
+
+    <TextView
+        android:id="@+id/console_history"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textColor="#fff"
+        android:background="#B0000000"
+        android:scrollbars="vertical"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#B0ffffff"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#B0000000"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <EditText
+            android:id="@+id/console_command"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:background="#B0000000"
+            android:text="@string/command_prompt"
+            android:singleLine="true"/>
+        <Button
+            android:id="@+id/console_button"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:text="OK"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:background="#B0ffffff"/>
+    </LinearLayout>
+
+</LinearLayout>
