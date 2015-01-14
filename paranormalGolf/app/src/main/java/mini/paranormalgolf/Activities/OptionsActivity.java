@@ -55,6 +55,7 @@ public class OptionsActivity extends Activity
             findViewById(R.id.options_texture_textview).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_texture_scroll_view).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_chosen_texture).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_texture_chosen_textview).setVisibility(View.INVISIBLE);
         }
 
         LoadFonts();
