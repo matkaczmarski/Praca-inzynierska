@@ -61,6 +61,7 @@ public class GameActivity extends Activity implements Runnable {
     private boolean music;
     private boolean sound;
     private boolean shadows;
+    private int texture;
 
     private boolean win = false;
 
@@ -111,7 +112,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows);
+        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture);
 
         if (supportsEs2) {
             // ...
@@ -256,6 +257,7 @@ public class GameActivity extends Activity implements Runnable {
         sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
         vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
         shadows = sharedPreferences.getBoolean(getString(R.string.options_shadows), false);
+        texture = sharedPreferences.getInt(getString(R.string.options_texture), 0);
 
         if (music)
         {
@@ -451,7 +453,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows);
+        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(gameRenderer);
         glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
@@ -512,7 +514,7 @@ public class GameActivity extends Activity implements Runnable {
         GameActivity.game = false;
         end_game_dialog = new Dialog(this, R.style.EndGameDialogTheme);
         end_game_dialog.setContentView(R.layout.win_dialog);
-        end_game_dialog.setCanceledOnTouchOutside(false);
+        end_game_dialog.setCanceledOnTouchOutside(true);
         loadFontsForDialog(end_game_dialog);
         setDialogTitleAndResult(end_game_dialog, diamonds, time, win);
 

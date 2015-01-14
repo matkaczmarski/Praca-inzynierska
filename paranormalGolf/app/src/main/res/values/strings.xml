@@ -59,4 +59,5 @@
     <string name="help_page_3_text_2">Collect hourglasses for time bonus</string>
     <string name="level_locked">To unlock this level you have to complete the previous ones!</string>
     <string name="ok">OK</string>
+    <string name="ball_texture">Ball texture:</string>
 </resources>

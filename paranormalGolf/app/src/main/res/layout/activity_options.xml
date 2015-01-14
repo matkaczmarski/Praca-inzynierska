@@ -95,20 +95,24 @@
                     android:text="@string/options_activity_shadows"
                     android:onClick="onShadowsClick"
                     android:tag="4"/>
-                <TextView
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"/>
+                <mini.paranormalgolf.Controls.OptionTextView
                     android:id="@+id/options_texture_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/OptionsButtonLanguage"
-                    android:text="Tekstura kulki: "
-                    android:tag="3"/>
+                    style="@style/OptionsLabel"
+                    android:text="@string/ball_texture"
+                    android:tag="5"/>
 
-                <LinearLayout
+                <mini.paranormalgolf.Controls.OptionLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:tag="6">
 
                     <View
                         android:layout_width="0dp"
@@ -117,8 +121,7 @@
                     <HorizontalScrollView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        style="@style/OptionsButtonLanguage"
+                        android:layout_weight="2"
                         android:tag="3">
                         <LinearLayout
                             android:id="@+id/options_texture_scroll_view"
@@ -134,7 +137,15 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
 
-                </LinearLayout>
+                </mini.paranormalgolf.Controls.OptionLinearLayout>
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"/>
+                <mini.paranormalgolf.Controls.OptionImageView
+                    android:id="@+id/options_chosen_texture"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:tag="7"/>
             </LinearLayout>
 
         </ScrollView>

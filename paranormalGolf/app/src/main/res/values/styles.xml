@@ -34,7 +34,12 @@
         <item name="android:textColor">@color/activity_main_menu_option</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/options_button_language_selector</item>
-        <!--item name="android:gravity">center_vertical|left</item-->
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="OptionsLabel">
+        <item name="android:textSize">@dimen/activity_main_menu_option</item>
+        <item name="android:textColor">@color/activity_background</item>
         <item name="android:gravity">center</item>
     </style>
 

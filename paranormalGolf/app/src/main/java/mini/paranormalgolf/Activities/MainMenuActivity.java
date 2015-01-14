@@ -54,6 +54,7 @@ public class MainMenuActivity extends Activity
             editor.putBoolean(getString(R.string.options_sound_effects), true);
             editor.putBoolean(getString(R.string.options_vibrations), true);
             editor.putBoolean(getString(R.string.options_shadows), true);
+            editor.putInt(getString(R.string.options_texture), 0);
             String language = Locale.getDefault().getLanguage();
             if (!language.equalsIgnoreCase("pl"))
                 language = "en";

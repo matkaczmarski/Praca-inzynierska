@@ -70,6 +70,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean music;
     private boolean sound;
     private boolean shadows;
+    private int texture;
 
     private boolean started = false;
 
@@ -77,7 +78,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows)
+    public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows, int texture)
     {
         this.context = context;
         this.activity = activity;
@@ -86,8 +87,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         this.music = music;
         this.sound = sound;
         this.shadows = shadows;
+        this.texture = texture;
 
-        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.homeWorld, context);
+        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture], context);
 
 
         boardInfo = loadBoardInfo(board_id);
@@ -110,7 +112,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     public void changeBoard(String board_id)
     {
-        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.homeWorld, context);
+        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture], context);
         updater.changeBoardAndBall(loadBoard(board_id), ball);
     }
 
