@@ -182,9 +182,7 @@ public class DrawManager {
         }
     }
 
-    public void releaseResources()
-    {
-
+    public void releaseResources(){
         try
         {
             //usuwanie shader programów
