@@ -33,5 +33,5 @@
     <HourGlass location_x="-15" location_y="1" location_z="0" value="5" y_shift="0.5"/>
     <HourGlass location_x="15" location_y="1" location_z="0" value="5" y_shift="0.5"/>
 
-    <Ball location_x="0" location_y="0" location_z="0"/>
+    <Ball location_x="0" location_y="0" location_z="3"/>
 </Board>

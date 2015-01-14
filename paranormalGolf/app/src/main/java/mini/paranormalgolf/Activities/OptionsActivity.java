@@ -37,6 +37,7 @@ public class OptionsActivity extends Activity
     private boolean shadows;
 
     private int texture;
+    private boolean onPause;
 
     private String language;
 
@@ -45,7 +46,7 @@ public class OptionsActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
         Bundle extras = getIntent().getExtras();
-        boolean onPause = extras.getBoolean("ON_PAUSE");
+        onPause = extras.getBoolean("ON_PAUSE");
         if (onPause)
         {
             findViewById(R.id.options_pl).setVisibility(View.INVISIBLE);
@@ -270,6 +271,8 @@ public class OptionsActivity extends Activity
         setContentView(R.layout.activity_options);
         LoadFonts();
         updateControls();
+        if (!onPause)
+            loadTextures();
         onButtonClick();
     }
 
@@ -281,6 +284,8 @@ public class OptionsActivity extends Activity
         setContentView(R.layout.activity_options);
         LoadFonts();
         updateControls();
+        if (!onPause)
+            loadTextures();
         onButtonClick();
     }
 
