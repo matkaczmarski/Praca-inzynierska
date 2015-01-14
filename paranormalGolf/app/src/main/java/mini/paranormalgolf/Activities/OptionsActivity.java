@@ -207,6 +207,9 @@ public class OptionsActivity extends Activity
         tv = (TextView)findViewById(R.id.options_texture_textview);
         tv.setTypeface(tf);
 
+        tv = (TextView)findViewById(R.id.options_texture_chosen_textview);
+        tv.setTypeface(tf);
+
         CheckBox checkBox = (CheckBox)findViewById(R.id.options_pl);
         checkBox.setTypeface(tf);
 

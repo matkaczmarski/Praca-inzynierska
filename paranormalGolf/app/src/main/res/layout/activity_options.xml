@@ -141,11 +141,25 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"/>
-                <mini.paranormalgolf.Controls.OptionImageView
-                    android:id="@+id/options_chosen_texture"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:tag="7"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <mini.paranormalgolf.Controls.OptionTextView
+                        android:id="@+id/options_texture_chosen_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/OptionsLabel"
+                        android:text="@string/chosen"
+                        android:tag="7"
+                        android:layout_marginRight="10dp"/>
+                    <mini.paranormalgolf.Controls.OptionImageView
+                        android:id="@+id/options_chosen_texture"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:tag="8"/>
+                </LinearLayout>
             </LinearLayout>
 
         </ScrollView>

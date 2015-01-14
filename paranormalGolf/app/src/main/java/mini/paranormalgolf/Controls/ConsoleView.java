@@ -107,7 +107,7 @@ public class ConsoleView extends LinearLayout
         {
             try
             {
-                nr = Integer.parseInt(level);
+                nr = Integer.parseInt(level) - 1;
             }
             catch (Exception ex)
             {
