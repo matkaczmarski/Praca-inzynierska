@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import mini.paranormalgolf.Activities.MainMenuActivity;
 import mini.paranormalgolf.R;
 
 /**
@@ -93,6 +94,12 @@ public class ConsoleView extends LinearLayout
                 return getContext().getString(R.string.command_error);
             return unlockLevelCommand(args[1]) ? getContext().getString(R.string.command_ok) : getContext().getString(R.string.command_error);
         }
+        else if (args[0].equalsIgnoreCase("ball_radius"))
+        {
+            if (args.length == 1)
+                return getContext().getString(R.string.command_error);
+            return changeBallRadiusCommand(args[1]) ? getContext().getString(R.string.command_ok) : getContext().getString(R.string.command_error);
+        }
         else
             return getContext().getString(R.string.command_error);
     }
@@ -126,6 +133,22 @@ public class ConsoleView extends LinearLayout
                 editor.putInt(board_id, 1);
         }
         editor.commit();
+        return true;
+    }
+
+    private boolean changeBallRadiusCommand (String radius_string)
+    {
+        float radius = 0;
+        try
+        {
+            radius = Float.parseFloat(radius_string);
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+        ((MainMenuActivity)getContext()).radius_set = true;
+        ((MainMenuActivity)getContext()).radius = radius;
         return true;
     }
 

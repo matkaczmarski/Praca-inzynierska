@@ -24,6 +24,8 @@ import static android.opengl.Matrix.setRotateM;
  */
 public class Ball extends MovableElement {
 
+    public static final float DEFAULT_RADIUS = 1.0f;
+
     public enum BallTexture{
         homeWorld,
         redAndWhite,

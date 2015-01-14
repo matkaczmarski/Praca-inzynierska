@@ -38,6 +38,9 @@ public class LevelsActivity extends Activity
 
     private boolean firstResume = true;
 
+    private boolean radius_set = false;
+    private float radius = 1.0f;
+
     private PowerManager.WakeLock mWakeLock;
 
     @Override
@@ -47,6 +50,10 @@ public class LevelsActivity extends Activity
         final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
         this.mWakeLock.acquire();
+
+        Bundle extras = getIntent().getExtras();
+        radius_set = extras.getBoolean(getString(R.string.radius_set));
+        radius = extras.getFloat(getString(R.string.radius));
 
         LoadFonts();
         InitializeBoardList();
@@ -160,6 +167,8 @@ public class LevelsActivity extends Activity
         {
             Intent intent = new Intent(this, GameActivity.class);
             intent.putExtra("BOARD_ID", board_id);
+            intent.putExtra(getString(R.string.radius_set), radius_set);
+            intent.putExtra(getString(R.string.radius), radius);
             startActivityForResult(intent, 0);
         }
     }

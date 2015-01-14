@@ -64,4 +64,6 @@
     <string name="command_ok">OK</string>
     <string name="command_error">ERROR</string>
     <string name="chosen">Chosen:</string>
+    <string name="radius_set">RADIUS_SET</string>
+    <string name="radius">RADIUS</string>
 </resources>

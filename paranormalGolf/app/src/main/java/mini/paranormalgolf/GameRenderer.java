@@ -78,7 +78,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows, int texture)
+    public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows, int texture, boolean radius_set, float radius)
     {
         this.context = context;
         this.activity = activity;
@@ -89,8 +89,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         this.shadows = shadows;
         this.texture = texture;
 
-        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture], context);
-
+        Board board = loadBoard(board_id);
+        float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
+        Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture], context);
 
         boardInfo = loadBoardInfo(board_id);
         timeLeft = boardInfo.getTime() * 1000;
@@ -106,7 +107,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
         started = false;
-        updater = new Updater(context, ball, loadBoard(board_id), vibrations, music, sound, shadows, this);
+        updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
         fpsCounter = new FPSCounter();
     }
 

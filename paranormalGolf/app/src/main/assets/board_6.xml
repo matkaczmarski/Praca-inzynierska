@@ -8,5 +8,6 @@
 
     <Finish location_x="20" location_y="0" location_z="0" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="true"/>
 
+    <Ball location_x="0" location_y="0" location_z="0"/>
 
 </Board>

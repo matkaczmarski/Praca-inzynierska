@@ -40,6 +40,9 @@ public class MainMenuActivity extends Activity
     private final int clicks_nr = 3;
     private final long clicks_max_interval = 1000;
 
+    public boolean radius_set = false;
+    public float radius = 1.0f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,6 @@ public class MainMenuActivity extends Activity
         setContentView(R.layout.activity_main_menu);
 
         LoadFonts();
-        ManageFiles();
     }
 
     public void checkSharedPreferences()
@@ -156,11 +158,6 @@ public class MainMenuActivity extends Activity
             consoleView.hide();
     }
 
-    public void ManageFiles()
-    {
-        //TODO sprawdzenie czy pliki istnieją i ich ewentualne utworzenie
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -184,6 +181,8 @@ public class MainMenuActivity extends Activity
     {
         onButtonClick();
         Intent intent = new Intent(getApplicationContext(), LevelsActivity.class);
+        intent.putExtra(getString(R.string.radius_set), radius_set);
+        intent.putExtra(getString(R.string.radius), radius);
         startActivity(intent);
     }
 
