@@ -6,4 +6,5 @@
     <Board id="board_4" two_stars="100" three_stars="200" time="100"/>
     <Board id="board_5" two_stars="760" three_stars="840" time="100"/>
     <Board id="board_6" two_stars="100" three_stars="200" time="100"/>
+    <Board id="board_7" two_stars="100" three_stars="200" time="100"/>
 </Board_Information>
