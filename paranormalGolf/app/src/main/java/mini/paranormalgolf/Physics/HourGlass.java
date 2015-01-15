@@ -4,11 +4,6 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
@@ -47,7 +42,7 @@ public class HourGlass extends Bonus {
         public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder) {
             super(location, 0, 0);
 
-            GraphicsData generatedData = ObjectGenerator.createHourglassWoodenParts(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION,TEXTURE_UNIT );
+            GraphicsData generatedData = ObjectGenerator.createHourglassWoodenPartsModel(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION, TEXTURE_UNIT);
             vertexData = new VertexArray(generatedData.vertexData);
             drawCommands = generatedData.drawCommands;
             texture = hourGlassTexture;//ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
@@ -62,7 +57,7 @@ public class HourGlass extends Bonus {
     public HourGlass(Point location, int value, float yShift) {
         super(location, value, yShift);
 
-        GraphicsData generatedData = ObjectGenerator.createHourglassGlassPart(lowerCone, upperCone, HOURGLASS_MESH_DIMENSION);
+        GraphicsData generatedData = ObjectGenerator.createHourglassGlassPartModel(lowerCone, upperCone, HOURGLASS_MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         float woodenBaseHeight = (lowerCone.height + upperCone.height) * WOODEN_BASE_HEIGHT_RATIO;

@@ -2,8 +2,6 @@ package mini.paranormalgolf.Physics;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ColorShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
@@ -29,7 +27,7 @@ public class Glow extends ControlPoint {
         super(location, conicalFrustum);
         this.canFinish = canFinish;
 
-        GraphicsData generatedData = ObjectGenerator.createControlPointGlow(conicalFrustum, GLOW_MESH_DIMENSION);
+        GraphicsData generatedData = ObjectGenerator.createControlPointGlowModel(conicalFrustum, GLOW_MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }

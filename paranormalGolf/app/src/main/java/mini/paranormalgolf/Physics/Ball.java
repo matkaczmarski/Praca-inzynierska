@@ -83,7 +83,7 @@ public class Ball extends MovableElement {
         rotation=new float[16];
         setIdentityM(rotation,0);
 
-        GraphicsData generatedData = ObjectGenerator.createBall(location, radius, MESH_DIMENSION);
+        GraphicsData generatedData = ObjectGenerator.createBallModel(radius, MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
 

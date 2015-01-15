@@ -4,10 +4,6 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Point;
@@ -31,7 +27,7 @@ public class Diamond extends Bonus {
 
     public Diamond(Point location, int value, float yShift) {
         super(location, value, yShift);
-        GraphicsData generatedData = ObjectGenerator.createDiamond(pyramid);
+        GraphicsData generatedData = ObjectGenerator.createDiamondModel(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = diamondTexture;//ResourceHelper.loadTexture(context, R.drawable.diamond_texture);

@@ -16,7 +16,7 @@ public class FloorPart  extends Element {
     public FloorPart(Rectangle rectangle, ObjectBuilder.Axis axis, float normalVectorDirection) {
         super(rectangle.center);
 
-        GraphicsData generatedData = ObjectGenerator.createFloorPart(rectangle, axis, normalVectorDirection, FLOOR_TEXTURE_UNIT);
+        GraphicsData generatedData = ObjectGenerator.createFloorPartModel(rectangle, axis, normalVectorDirection, FLOOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }

@@ -4,10 +4,6 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
@@ -37,7 +33,7 @@ public class Finish extends ControlPoint {
         super(location, conicalFrustum);
         this.canFinish = canFinish;
 
-        GraphicsData generatedData = ObjectGenerator.createControlPointPlatform(conicalFrustum.bottomRadius, FINISH_PLATFORM_DIMENSION, FINISH_PLATFORM_SHIFT);
+        GraphicsData generatedData = ObjectGenerator.createControlPointPlatformModel(conicalFrustum.bottomRadius, FINISH_PLATFORM_DIMENSION, FINISH_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);

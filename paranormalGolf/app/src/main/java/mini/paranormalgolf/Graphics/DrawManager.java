@@ -24,6 +24,7 @@ import mini.paranormalgolf.Physics.Finish;
 import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.HourGlass;
+import mini.paranormalgolf.Physics.SkyBox;
 import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.Point;
 
@@ -132,7 +133,6 @@ public class DrawManager {
 
     public DrawManager(Context context, boolean withShadow){
         initTextures(context);
-
         this.withShadow = withShadow;
         resetDrawManager();
     }
@@ -143,8 +143,7 @@ public class DrawManager {
         this.yRotation = yRotation;
     }
 
-    public void initTextures(Context context)
-    {
+    public void initTextures(Context context){
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
         skyBoxShaderProgram = new SkyBoxShaderProgram(context);
@@ -160,6 +159,28 @@ public class DrawManager {
         Wall.initTextures(context);
 
         skyBox = new SkyBox(context);
+    }
+
+    public void releaseResources(){
+        try
+        {
+            //usuwanie shader programów
+            glDeleteProgram(colorShaderProgram.getProgram());
+            glDeleteProgram(textureShaderProgram.getProgram());
+            glDeleteProgram(depthMapShaderProgram.getProgram());
+            glDeleteProgram(skyBoxShaderProgram.getProgram());
+            glDeleteProgram(shadowingShaderProgram.getProgram());
+
+            //usuwanie fbo
+            glDeleteFramebuffers(1, frameBufferObjectId, 0);
+            glDeleteRenderbuffers(1, depthTextureId, 0);
+            glDeleteTextures(1, renderTextureId, 0);
+
+            //sposób usuwania tekstur:
+            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTexture(), Elevator.getElevatorTexture(), Floor.getBottomFloorTextureNormal(), Floor.getBottomFloorTextureSticky(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Floor.getSideFloorTextureNormal(), Floor.getSideFloorTextureSticky(), Wall.getWallTexture(), skyBox.getTexture()};
+            glDeleteTextures(textureId.length, textureId, 0);
+        }
+        catch (Exception ex) {}
     }
 
     public void resetDrawManager(){
@@ -180,28 +201,6 @@ public class DrawManager {
             MatrixHelper.perspectiveM(lightsProjectionMatrix, LIGHT_FIELD_OF_VIEW_DEGREES, (float) width / height, LIGHT_NEAR, LIGHT_FAR);
             generateShadowFBO();
         }
-    }
-
-    public void releaseResources(){
-        try
-        {
-            //usuwanie shader programów
-            glDeleteProgram(colorShaderProgram.getProgram());
-            glDeleteProgram(textureShaderProgram.getProgram());
-            glDeleteProgram(depthMapShaderProgram.getProgram());
-            glDeleteProgram(skyBoxShaderProgram.getProgram());
-            glDeleteProgram(shadowingShaderProgram.getProgram());
-
-            //usuwanie fbo
-            glDeleteFramebuffers(1, frameBufferObjectId, 0);
-            glDeleteRenderbuffers(1, depthTextureId, 0);
-            glDeleteTextures(1, renderTextureId, 0);
-
-            //sposób usuwania tekstur:
-            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTexture(), Elevator.getElevatorTexture(), Floor.getBottomFloorTextureNormal(), Floor.getBottomFloorTextureSticky(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Floor.getSideFloorTextureNormal(), Floor.getSideFloorTextureSticky(), Wall.getWallTexture()};
-            glDeleteTextures(textureId.length, textureId, 0);
-        }
-        catch (Exception ex) {}
     }
 
     private void generateShadowFBO() {

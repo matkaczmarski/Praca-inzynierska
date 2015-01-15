@@ -4,10 +4,6 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.BoxSize;
@@ -57,7 +53,7 @@ public class Elevator extends MovableElement {
 
         moveToPatrolTo = findMovementDirection(from, to, velocity);
 
-        GraphicsData generatedData = ObjectGenerator.createBox(measure, ELEVATOR_TEXTURE_UNIT);
+        GraphicsData generatedData = ObjectGenerator.createBoxModel(measure, ELEVATOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = elevatorTexture;//ResourceHelper.loadTexture(context, R.drawable.elevator_texture);

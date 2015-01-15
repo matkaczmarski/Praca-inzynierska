@@ -4,10 +4,6 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Graphics.ShaderPrograms.DepthMapShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.TextureShaderProgram;
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShadowingShaderProgram;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
@@ -36,7 +32,7 @@ public class CheckPoint extends ControlPoint {
         super(location,conicalFrustum);
         this.visited=visited;
 
-        GraphicsData generatedData = ObjectGenerator.createControlPointPlatform(conicalFrustum.bottomRadius, CHECKPOINT_PLATFORM_DIMENSION, CHECKPOINT_PLATFORM_SHIFT);
+        GraphicsData generatedData = ObjectGenerator.createControlPointPlatformModel(conicalFrustum.bottomRadius, CHECKPOINT_PLATFORM_DIMENSION, CHECKPOINT_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = checkPointTexture;//ResourceHelper.loadTexture(context, R.drawable.checkpoint_texture);

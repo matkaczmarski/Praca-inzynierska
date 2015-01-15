@@ -1,6 +1,5 @@
 package mini.paranormalgolf.Graphics.ModelBuilders;
 
-import android.opengl.Matrix;
 import android.util.FloatMath;
 
 import java.nio.ByteBuffer;
@@ -26,8 +25,16 @@ import static android.opengl.GLES20.glDrawElements;
  */
 public class ObjectBuilder {
 
+    public enum DrawType{
+        texturing,
+        coloring,
+        skyBox
+    }
+
     private static final int FLOATS_PER_VERTEX_WITHOUT_TEXTURE = 6; //3 na pozycję oraz 3 na wektor normalny
-    private static final int FLOATS_PER_VERTEX_WITH_TETURE = 8; //3 na pozycje, 3 na wektor normalny oraz 2 na pozycje tekstury
+    private static final int FLOATS_PER_VERTEX_WITH_TEXTURE = 8; //3 na pozycje, 3 na wektor normalny oraz 2 na pozycje tekstury
+    private static final int FLOATS_PER_CUBE_IN_SKYBOX = 24;
+    private static final int INDICES_COUNT_IN_SKYBOX = 36;
 
     public static interface DrawCommand {
         void draw();
@@ -44,11 +51,60 @@ public class ObjectBuilder {
     private int offset;
     private  boolean isTextured;
 
-    public ObjectBuilder(int sizeInVertices, boolean ifTextured) {
-        vertexData = new float[sizeInVertices * (ifTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE)];
+    public ObjectBuilder(int sizeInVertices, DrawType drawType) {
+        vertexData = new float[getArraySize(sizeInVertices, drawType)];
         drawCommands = new ArrayList<DrawCommand>();
         offset = 0;
-        isTextured = ifTextured;
+    }
+
+    private int getArraySize(int vertices, DrawType drawType){
+        switch (drawType){
+            case texturing:
+                isTextured = true;
+                return vertices * FLOATS_PER_VERTEX_WITH_TEXTURE;
+            case coloring:
+                isTextured = false;
+                return vertices * FLOATS_PER_VERTEX_WITHOUT_TEXTURE;
+            case skyBox:
+                isTextured = false;
+                return FLOATS_PER_CUBE_IN_SKYBOX;
+        }
+        return 0;
+    }
+
+    public void appendSkyBox(){
+
+        vertexData[offset++] = -1; vertexData[offset++] = 1; vertexData[offset++] = 1;
+        vertexData[offset++] = 1; vertexData[offset++] = 1; vertexData[offset++] = 1;
+        vertexData[offset++] = -1; vertexData[offset++] = -1; vertexData[offset++] = 1;
+        vertexData[offset++] = 1; vertexData[offset++] = -1; vertexData[offset++] = 1;
+        vertexData[offset++] = -1; vertexData[offset++] = 1; vertexData[offset++] = -1;
+        vertexData[offset++] = 1; vertexData[offset++] = 1; vertexData[offset++] = -1;
+        vertexData[offset++] = -1; vertexData[offset++] = -1; vertexData[offset++] = -1;
+        vertexData[offset++] = 1; vertexData[offset++] = -1; vertexData[offset++] = -1;
+
+        final ByteBuffer indexArray =  ByteBuffer.allocateDirect(INDICES_COUNT_IN_SKYBOX).put(new byte[]{
+                        // Front
+                        1, 3, 0, 0, 3, 2,
+                        // Back
+                        4, 6, 5, 5, 6, 7,
+                        // Left
+                        0, 2, 4, 4, 2, 6,
+                        // Right
+                        5, 7, 1, 1, 7, 3,
+                        // Top
+                        5, 1, 4, 4, 1, 0,
+                        // Bottom
+                        6, 2, 7, 7, 2, 3
+                });
+        indexArray.position(0);
+
+        drawCommands.add(new ObjectBuilder.DrawCommand() {
+            @Override
+            public void draw() {
+                glDrawElements(GL_TRIANGLES, INDICES_COUNT_IN_SKYBOX, GL_UNSIGNED_BYTE, indexArray);
+            }
+        });
     }
 
     public void appendSphere(Sphere sphere, int numPoints){
@@ -57,7 +113,7 @@ public class ObjectBuilder {
 
         for(int i=0; i<numPoints; i++){
 
-            final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
+            final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
             float textureY1 = (float)i/numPoints;
             float textureY2 = (float)(i+1)/numPoints;
             float iRadian = -1f * (float)Math.PI/2 + (textureY1  * (float)Math.PI);
@@ -109,7 +165,7 @@ public class ObjectBuilder {
 
     public void appendRectangle(Rectangle rectangle, Axis constantAxis, float normalVectorDirection, float textureUnit) {
 
-        final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
+        final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         float aTextureUnits = rectangle.a / textureUnit;
         float bTextureUnits = rectangle.b / textureUnit;
 
@@ -457,7 +513,7 @@ public class ObjectBuilder {
     public void appendPyramidWithoutBase(Point location, Pyramid pyramid, float direction) {
 
         final int indicesCount = pyramid.baseVerticesCount * 3;
-        int vertexStar = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
+        int vertexStar = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
 
         for (int i = 0; i < pyramid.baseVerticesCount; i++) {
             float ratio = direction > 0 ? ((float)( pyramid.baseVerticesCount - i) / pyramid.baseVerticesCount) : ( (float)i / pyramid.baseVerticesCount);
@@ -512,7 +568,7 @@ public class ObjectBuilder {
     }
 
     public void appendCylindersCurvedSurface( Point bottomCenter, float bottomRadius, Point topCenter, float topRadius, int numPoints, float textureUnit) {
-        final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
+        final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = (numPoints + 1) * 2;
 
         float height = Math.abs(new Vector(bottomCenter.Substract(topCenter)).length());
@@ -564,7 +620,7 @@ public class ObjectBuilder {
     }
 
     public void appendCircle(Point center, float radius, float direction, int numPoints) {
-        final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TETURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
+        final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = 1 + (numPoints + 1);
 
         final boolean upper = direction > 0;

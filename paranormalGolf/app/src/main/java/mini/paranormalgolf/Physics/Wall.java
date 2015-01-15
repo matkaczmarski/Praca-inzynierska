@@ -30,7 +30,7 @@ public class Wall extends Element {
         super(location);
         measurements = measure;
 
-        GraphicsData generatedData = ObjectGenerator.createBox(measure, WALL_TEXTURE_UNIT);
+        GraphicsData generatedData = ObjectGenerator.createBoxModel(measure, WALL_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         texture = wallTexture;//ResourceHelper.loadTexture(context, R.drawable.wall_texture);
