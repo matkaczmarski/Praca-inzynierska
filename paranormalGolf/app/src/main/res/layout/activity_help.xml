@@ -27,7 +27,8 @@
             android:layout_marginTop="20dp"/>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,11 +40,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"/>
-                <ImageView
+                <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
-                    android:background="@drawable/page"/>
+                    android:background="@drawable/help_background"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -53,8 +54,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="60dp"
-                android:layout_marginTop="30dp">
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="10dp">
 
                 <View
                     android:layout_width="0dp"
@@ -64,7 +65,7 @@
                     android:id="@+id/help_view_to_inflate"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"/>
+                    android:layout_weight="3"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -91,7 +92,7 @@
                         android:layout_weight="1"
                         android:gravity="center">
 
-                        <TextView
+                        <mini.paranormalgolf.Controls.ItemTextView
                             android:id="@+id/help_menu"
                             style="@style/HelpButton"
                             android:text="@string/help_menu"
@@ -105,7 +106,7 @@
                         android:layout_weight="1"
                         android:gravity="center">
 
-                        <TextView
+                        <mini.paranormalgolf.Controls.ItemTextView
                             android:id="@+id/help_next"
                             style="@style/HelpButton"
                             android:text="@string/help_next"

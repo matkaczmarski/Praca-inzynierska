@@ -63,6 +63,9 @@ public class GameActivity extends Activity implements Runnable {
     private boolean shadows;
     private int texture;
 
+    private boolean radius_set = false;
+    private float radius = 1.0f;
+
     private boolean win = false;
 
     protected PowerManager.WakeLock mWakeLock;
@@ -78,6 +81,10 @@ public class GameActivity extends Activity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         LoadFonts();
+
+        Bundle extras = getIntent().getExtras();
+        radius_set = extras.getBoolean(getString(R.string.radius_set));
+        radius = extras.getFloat(getString(R.string.radius));
 
         ProgressDialog dialog = ProgressDialog.show(this, "Loading", "Please wait...", true);
 
@@ -112,7 +119,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture);
+        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture, radius_set, radius);
 
         if (supportsEs2) {
             // ...
@@ -453,7 +460,7 @@ public class GameActivity extends Activity implements Runnable {
         Intent intent = getIntent();
         String board_id = intent.getStringExtra("BOARD_ID");
 
-        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture);
+        gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture, radius_set, radius);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(gameRenderer);
         glSurfaceView.setOnTouchListener(new View.OnTouchListener() {

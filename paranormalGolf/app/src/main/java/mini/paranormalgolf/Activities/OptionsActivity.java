@@ -37,6 +37,7 @@ public class OptionsActivity extends Activity
     private boolean shadows;
 
     private int texture;
+    private boolean onPause;
 
     private String language;
 
@@ -45,7 +46,7 @@ public class OptionsActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
         Bundle extras = getIntent().getExtras();
-        boolean onPause = extras.getBoolean("ON_PAUSE");
+        onPause = extras.getBoolean("ON_PAUSE");
         if (onPause)
         {
             findViewById(R.id.options_pl).setVisibility(View.INVISIBLE);
@@ -54,6 +55,7 @@ public class OptionsActivity extends Activity
             findViewById(R.id.options_texture_textview).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_texture_scroll_view).setVisibility(View.INVISIBLE);
             findViewById(R.id.options_chosen_texture).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_texture_chosen_textview).setVisibility(View.INVISIBLE);
         }
 
         LoadFonts();
@@ -207,6 +209,9 @@ public class OptionsActivity extends Activity
         tv = (TextView)findViewById(R.id.options_texture_textview);
         tv.setTypeface(tf);
 
+        tv = (TextView)findViewById(R.id.options_texture_chosen_textview);
+        tv.setTypeface(tf);
+
         CheckBox checkBox = (CheckBox)findViewById(R.id.options_pl);
         checkBox.setTypeface(tf);
 
@@ -267,6 +272,8 @@ public class OptionsActivity extends Activity
         setContentView(R.layout.activity_options);
         LoadFonts();
         updateControls();
+        if (!onPause)
+            loadTextures();
         onButtonClick();
     }
 
@@ -278,6 +285,8 @@ public class OptionsActivity extends Activity
         setContentView(R.layout.activity_options);
         LoadFonts();
         updateControls();
+        if (!onPause)
+            loadTextures();
         onButtonClick();
     }
 

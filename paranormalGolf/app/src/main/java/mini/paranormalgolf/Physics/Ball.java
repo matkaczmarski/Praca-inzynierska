@@ -24,6 +24,8 @@ import static android.opengl.Matrix.setRotateM;
  */
 public class Ball extends MovableElement {
 
+    public static final float DEFAULT_RADIUS = 1.0f;
+
     public enum BallTexture{
         homeWorld,
         redAndWhite,
@@ -221,8 +223,15 @@ public class Ball extends MovableElement {
         return acceleration;
     }
 
-    private Vector CountAccelerationForFlying(Vector accData,Vector localVelocity){
-        return accData;
+    private Vector CountAccelerationForFlying(Vector accData,Vector actualVelocity) {
+        float v = (float) (Math.sqrt(actualVelocity.x * actualVelocity.x + actualVelocity.y * actualVelocity.y + actualVelocity.z * actualVelocity.z) + 1e-8);
+        float Fd = 0.5f * DENSITY * area * CD * v * v;
+
+        Vector acceleration = new Vector(
+                accData.x - (Fd) * actualVelocity.x / (mass * v),
+                accData.y - (Fd) * actualVelocity.y / (mass * v),
+                accData.z - (Fd) * actualVelocity.z / (mass * v));
+        return acceleration;
     }
 
 

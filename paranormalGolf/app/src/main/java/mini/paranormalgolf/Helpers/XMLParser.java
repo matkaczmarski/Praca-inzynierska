@@ -48,6 +48,8 @@ public class XMLParser
         List<CheckPoint> checkPoints = new ArrayList<CheckPoint>();
         List<HourGlass> hourGlasses = new ArrayList<HourGlass>();
         Finish finish = null;
+        Point ballLocation = null;
+
         try
         {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -189,6 +191,14 @@ public class XMLParser
 
                         hourGlasses.add(new HourGlass(new Point(location_x, location_y, location_z), value, yShift));
                     }
+                    else if (name.equals("Ball"))
+                    {
+                        float location_x = Float.parseFloat(xpp.getAttributeValue(null, "location_x"));
+                        float location_y = Float.parseFloat(xpp.getAttributeValue(null, "location_y"));
+                        float location_z = Float.parseFloat(xpp.getAttributeValue(null, "location_z"));
+
+                        ballLocation = new Point(location_x, location_y, location_z);
+                    }
                 }
                 eventType = xpp.next();
             }
@@ -199,7 +209,7 @@ public class XMLParser
         }
 
         finish.setCanFinish(checkPoints.size() == 0);
-        Board board = new Board(Integer.valueOf(board_id.split("_")[1]), floors, walls, diamonds, beams, elevators, checkPoints, hourGlasses, finish);
+        Board board = new Board(Integer.valueOf(board_id.split("_")[1]), floors, walls, diamonds, beams, elevators, checkPoints, hourGlasses, finish, ballLocation);
         return board;
     }
 

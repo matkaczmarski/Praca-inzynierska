@@ -4,6 +4,8 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import mini.paranormalgolf.Primitives.Point;
+
 /**
  * Created by Mateusz on 2014-12-05.
  */
@@ -20,9 +22,11 @@ public class Board {
     public List<Diamond> diamonds;
     public List<HourGlass> hourGlasses;
 
+    public Point ballLocation;
 
 
-    public Board(int boardId, List<Floor> floors, List<Wall> walls, List<Diamond> diamonds, List<Beam> beams, List<Elevator> elevators, List<CheckPoint> checkPoints, List<HourGlass> hourGlasses, Finish finish){
+
+    public Board(int boardId, List<Floor> floors, List<Wall> walls, List<Diamond> diamonds, List<Beam> beams, List<Elevator> elevators, List<CheckPoint> checkPoints, List<HourGlass> hourGlasses, Finish finish, Point ballLocation){
         this.boardId = boardId;
         this.floors = floors;
         this.walls = walls;
@@ -32,6 +36,7 @@ public class Board {
         this.checkpoints = checkPoints;
         this.hourGlasses = hourGlasses;
         this.finish = finish;
+        this.ballLocation = ballLocation;
     }
 
 }

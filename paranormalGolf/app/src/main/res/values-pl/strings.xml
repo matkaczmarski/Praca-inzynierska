@@ -47,4 +47,5 @@
     <string name="help_page_3_text_2">Zbieraj klepsydry aby zwiększyć limit czasu</string>
     <string name="level_locked">Aby odblokować poziom, ukończ poprzednie!</string>
     <string name="ball_texture">Tekstura kulki:</string>
+    <string name="chosen">Wybrana:</string>
 </resources>

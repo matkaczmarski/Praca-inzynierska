@@ -32,7 +32,13 @@ public class Elevator extends MovableElement {
 
     private boolean moveToPatrolTo;
 
+    private static float wait_time = 2.0f;
+
+    private float time_left;
+
     private static int elevatorTexture;
+
+    private boolean change = false;
 
     public float getMu() {
         return mu;
@@ -59,12 +65,35 @@ public class Elevator extends MovableElement {
 
     public void Update(float dt)
     {
-        lastMove.y=velocity.y*dt;
-        location.y = location.y + lastMove.y;
-        if ((moveToPatrolTo && (location.y > patrolTo.y)) || (!moveToPatrolTo && (location.y < patrolFrom.y)))
+        if (change)
         {
-            velocity.y = -velocity.y;
-            moveToPatrolTo = !moveToPatrolTo;
+            time_left -= dt;
+            if (time_left <= 0)
+            {
+                velocity.x = -velocity.x;
+                velocity.y = -velocity.y;
+                velocity.z = -velocity.z;
+                moveToPatrolTo = !moveToPatrolTo;
+                change = false;
+            }
+            else
+                return;
+        }
+
+        lastMove = new Vector(velocity.x *dt, velocity.y * dt, velocity.z * dt);
+        location.x = location.x + lastMove.x;
+        location.y = location.y + lastMove.y;
+        location.z = location.z + lastMove.z;
+
+        if ((moveToPatrolTo && ((location.x > patrolTo.x) || (location.y > patrolTo.y) || location.z > patrolTo.z)) || (!moveToPatrolTo && ((location.x < patrolFrom.x) || (location.y < patrolFrom.y) || location.z < patrolFrom.z)))
+        {
+            change = true;
+            time_left = wait_time;
+            lastMove = new Vector(0,0,0);
+            /*if (moveToPatrolTo)
+                location = patrolTo;
+            else
+                location = patrolFrom;*/
         }
     }
 
