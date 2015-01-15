@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Board id="9">
+    <Floor location_x="0" location_y="-1" location_z="0" boxsize_x="36" boxsize_y="2" boxsize_z="6" friction="0.05"/>
+    <Floor location_x="3" location_y="-1" location_z="-9" boxsize_x="6" boxsize_y="2" boxsize_z="12" friction="0.05"/>
+    <Floor location_x="15" location_y="-1" location_z="-9" boxsize_x="6" boxsize_y="2" boxsize_z="12" friction="0.05"/>
+    <Floor location_x="9" location_y="-1" location_z="-12" boxsize_x="6" boxsize_y="2" boxsize_z="6" friction="0.05"/>
+    <Floor location_x="3" location_y="-1" location_z="18" boxsize_x="6" boxsize_y="2" boxsize_z="30" friction="0.05"/>
+
+    <Floor location_x="14" location_y="-1" location_z="31" boxsize_x="16" boxsize_y="2" boxsize_z="4" friction="0.05"/>
+    <Floor location_x="24" location_y="-1" location_z="27" boxsize_x="12" boxsize_y="2" boxsize_z="4" friction="0.05"/>
+    <Floor location_x="28" location_y="-1" location_z="35" boxsize_x="4" boxsize_y="2" boxsize_z="12" friction="0.05"/>
+    <Floor location_x="36" location_y="-1" location_z="39" boxsize_x="12" boxsize_y="2" boxsize_z="4" friction="0.05"/>
+
+    <Floor location_x="43" location_y="-1" location_z="39" boxsize_x="2" boxsize_y="2" boxsize_z="22" friction="0.05"/>
+    <Floor location_x="47" location_y="-1" location_z="29" boxsize_x="6" boxsize_y="2" boxsize_z="2" friction="0.05"/>
+    <Floor location_x="51" location_y="-1" location_z="27" boxsize_x="6" boxsize_y="2" boxsize_z="2" friction="0.05"/>
+    <Floor location_x="55" location_y="-1" location_z="29" boxsize_x="6" boxsize_y="2" boxsize_z="2" friction="0.05"/>
+    <Floor location_x="63" location_y="-1" location_z="29" boxsize_x="10" boxsize_y="2" boxsize_z="10" friction="0.05"/>
+    <Floor location_x="47" location_y="-1" location_z="49" boxsize_x="6" boxsize_y="2" boxsize_z="2" friction="0.05"/>
+    <Floor location_x="51" location_y="-1" location_z="51" boxsize_x="6" boxsize_y="2" boxsize_z="2" friction="0.05"/>
+    <Floor location_x="55" location_y="-1" location_z="49" boxsize_x="6" boxsize_y="2" boxsize_z="2" friction="0.05"/>
+    <Floor location_x="63" location_y="-1" location_z="49" boxsize_x="10" boxsize_y="2" boxsize_z="10" friction="0.05"/>
+
+    <Diamond location_x="3" location_y="1.4" location_z="-6" value="100" y_shift="0.7"/>
+    <Diamond location_x="3" location_y="1.4" location_z="-12" value="100" y_shift="0.7"/>
+    <Diamond location_x="9" location_y="1.4" location_z="-12" value="100" y_shift="0.7"/>
+    <Diamond location_x="15" location_y="1.4" location_z="-12" value="100" y_shift="0.7"/>
+    <Diamond location_x="15" location_y="1.4" location_z="-6" value="100" y_shift="0.7"/>
+
+    <Beam location_x="3" location_y="1.5" location_z="18" vector_x="1" vector_y="0" vector_z="0" boxsize_x="6" boxsize_y="2" boxsize_z="3" from_x="-3" from_y="1.5" from_z="18" to_x="9" to_y="1.5" to_z="18"/>
+
+    <Beam location_x="28" location_y="1.5" location_z="35" vector_x="1" vector_y="0" vector_z="0" boxsize_x="4" boxsize_y="2" boxsize_z="2" from_x="24" from_y="1.5" from_z="35" to_x="32" to_y="1.5" to_z="35"/>
+
+    <Checkpoint location_x="63" location_y="0" location_z="29" frustum_x="15" frustum_y="2" frustum_z="3" visited="false"/>
+
+    <Finish location_x="63" location_y="0" location_z="49" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="false"/>
+
+    <Ball location_x="-15" location_y="0" location_z="0"/>
+</Board>

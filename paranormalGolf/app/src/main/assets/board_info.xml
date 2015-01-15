@@ -8,4 +8,5 @@
     <Board id="board_6" two_stars="100" three_stars="200" time="100"/>
     <Board id="board_7" two_stars="100" three_stars="200" time="100"/>
     <Board id="board_8" two_stars="100" three_stars="200" time="100"/>
+    <Board id="board_9" two_stars="290" three_stars="440" time="50"/>
 </Board_Information>
