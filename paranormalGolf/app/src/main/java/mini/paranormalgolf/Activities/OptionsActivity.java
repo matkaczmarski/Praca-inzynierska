@@ -49,13 +49,13 @@ public class OptionsActivity extends Activity
         onPause = extras.getBoolean("ON_PAUSE");
         if (onPause)
         {
-            findViewById(R.id.options_pl).setVisibility(View.INVISIBLE);
-            findViewById(R.id.options_en).setVisibility(View.INVISIBLE);
-            findViewById(R.id.options_shadows).setVisibility(View.INVISIBLE);
-            findViewById(R.id.options_texture_textview).setVisibility(View.INVISIBLE);
-            findViewById(R.id.options_texture_scroll_view).setVisibility(View.INVISIBLE);
-            findViewById(R.id.options_chosen_texture).setVisibility(View.INVISIBLE);
-            findViewById(R.id.options_texture_chosen_textview).setVisibility(View.INVISIBLE);
+            findViewById(R.id.options_pl).setVisibility(View.GONE);
+            findViewById(R.id.options_en).setVisibility(View.GONE);
+            findViewById(R.id.options_shadows).setVisibility(View.GONE);
+            findViewById(R.id.options_texture_textview).setVisibility(View.GONE);
+            findViewById(R.id.options_texture_scroll_view).setVisibility(View.GONE);
+            findViewById(R.id.options_chosen_texture).setVisibility(View.GONE);
+            findViewById(R.id.options_texture_chosen_textview).setVisibility(View.GONE);
         }
 
         LoadFonts();
