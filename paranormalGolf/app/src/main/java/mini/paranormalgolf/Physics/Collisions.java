@@ -16,6 +16,14 @@ public final class Collisions {
 
     public final static float USER_EXPERIENCE = 4e-4f;
 
+    public static boolean getWasNotResolvedCollision() {
+        boolean value = wasNotResolvedCollision;
+        wasNotResolvedCollision = false;
+        return value;
+    }
+
+    private static boolean wasNotResolvedCollision=false;
+
     public static boolean CheckSphereAABBCollision(Sphere sphere, Box box) {
 
         Point boxCenter = box.center;
@@ -67,7 +75,7 @@ public final class Collisions {
         return normal;
     }
 
-    public static void ResponseBallAABBCollisions(Ball ball, Box collidedBox) throws NotResolvingCollisionException {
+    public static void ResponseBallAABBCollisions(Ball ball, Box collidedBox) {
 
         //finding collision place and time
         Point startLocation = new Point(ball.getLocation().x - ball.getLastMove().x, ball.getLocation().y - ball.getLastMove().y, ball.getLocation().z - ball.getLastMove().z);
@@ -97,7 +105,7 @@ public final class Collisions {
         Vector normalVelocity;
         Vector newNormalVelocity = new Vector(0, 0, 0);
 
-        if (normal.x == 0 && normal.y == 0 && normal.z == 0) throw new NotResolvingCollisionException();
+        if (normal.x == 0 && normal.y == 0 && normal.z == 0) wasNotResolvedCollision=true;
         if (normal.IsParallelToAxis()) {
             if (normal.x != 0) velocity.x = -velocity.x;
             else if (normal.z != 0) velocity.z = -velocity.z;
@@ -241,7 +249,7 @@ public final class Collisions {
                 && Math.abs(sphere.center.y - circle.center.y - sphere.radius) <= USER_EXPERIENCE;
     }
 
-    public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element) throws NotResolvingCollisionException {
+    public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element){
         BoxSize boxSize;
         if (element.getClass() == Elevator.class)
             boxSize = ((Elevator) element).getMeasurements();
@@ -286,7 +294,7 @@ public final class Collisions {
         Vector velocity = ball.getVelocity();
         Vector normalVelocity;
         Vector newNormalVelocity = new Vector(0, 0, 0);
-        if (normal.x == 0 && normal.y == 0 && normal.z == 0) throw new NotResolvingCollisionException();
+        if (normal.x == 0 && normal.y == 0 && normal.z == 0) wasNotResolvedCollision=true;
         if (normal.IsParallelToAxis()) {
             if (normal.x != 0) {
                 if (element.getLastMove().x == 0)

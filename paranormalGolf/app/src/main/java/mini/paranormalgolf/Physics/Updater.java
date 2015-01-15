@@ -119,65 +119,61 @@ public class Updater implements SensorEventListener {
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
 
-        try {
-            for (Elevator elevator : board.elevators)
-                if (ball.CheckCollision(elevator))
-                    ball.ReactOnCollision(elevator);
+        for (Elevator elevator : board.elevators)
+            if (ball.CheckCollision(elevator))
+                ball.ReactOnCollision(elevator);
 
-            for (Beam beam : board.beams)
-                if (ball.CheckCollision(beam)) {
-                    ball.ReactOnCollision(beam);
-                    onBeamCollision();
-                }
-
-            for (Wall wall : board.walls)
-                if (ball.CheckCollision(wall)) {
-                    ball.ReactOnCollision(wall);
-                    onWallCollision();
-                }
-
-            for (Floor floor : board.floors)
-                if (ball.CheckCollision(floor))
-                    ball.ReactOnCollision(floor);
-
-            for (int i = 0; i < board.diamonds.size(); i++)
-                if (ball.CheckCollision(board.diamonds.get(i))) {
-                    //board.diamonds.set(i, null);
-                    board.diamonds.remove(i--);
-                    onDiamondCollision();
-                    // i dodaj jakieś punkty
-                }
-
-            for (int i = 0; i < board.hourGlasses.size(); i++)
-                if (ball.CheckCollision(board.hourGlasses.get(i))) {
-                    //board.hourGlasses.set(i, null);
-                    gameRenderer.addTime(board.hourGlasses.get(i).getValue());
-                    board.hourGlasses.remove(i--);
-                    onHourGlassCollision();
-                    // i dodaj jakiś czas
-                }
-
-            boolean areAllCheckpointVisited = true;
-            for (int i = 0; i < board.checkpoints.size(); i++) {
-                if (ball.CheckCollision(board.checkpoints.get(i))) {
-                    board.checkpoints.get(i).visit();
-                    continue;
-                }
-                if (!board.checkpoints.get(i).isVisited())
-                    areAllCheckpointVisited = false;
+        for (Beam beam : board.beams)
+            if (ball.CheckCollision(beam)) {
+                ball.ReactOnCollision(beam);
+                onBeamCollision();
             }
-            if (areAllCheckpointVisited) {
-                board.finish.enableFinishing();
+
+        for (Wall wall : board.walls)
+            if (ball.CheckCollision(wall)) {
+                ball.ReactOnCollision(wall);
+                onWallCollision();
             }
-            if (board.finish.isCanFinish())
-                if (ball.CheckCollision(board.finish))
-                    return UpdateResult.WIN;
 
+        for (Floor floor : board.floors)
+            if (ball.CheckCollision(floor))
+                ball.ReactOnCollision(floor);
 
-            return UpdateResult.NONE;
-        } catch (NotResolvingCollisionException ex) {
-            return UpdateResult.DEFEAT;
+        for (int i = 0; i < board.diamonds.size(); i++)
+            if (ball.CheckCollision(board.diamonds.get(i))) {
+                //board.diamonds.set(i, null);
+                board.diamonds.remove(i--);
+                onDiamondCollision();
+                // i dodaj jakieś punkty
+            }
+
+        for (int i = 0; i < board.hourGlasses.size(); i++)
+            if (ball.CheckCollision(board.hourGlasses.get(i))) {
+                //board.hourGlasses.set(i, null);
+                gameRenderer.addTime(board.hourGlasses.get(i).getValue());
+                board.hourGlasses.remove(i--);
+                onHourGlassCollision();
+                // i dodaj jakiś czas
+            }
+
+        boolean areAllCheckpointVisited = true;
+        for (int i = 0; i < board.checkpoints.size(); i++) {
+            if (ball.CheckCollision(board.checkpoints.get(i))) {
+                board.checkpoints.get(i).visit();
+                continue;
+            }
+            if (!board.checkpoints.get(i).isVisited())
+                areAllCheckpointVisited = false;
         }
+        if (areAllCheckpointVisited) {
+            board.finish.enableFinishing();
+        }
+        if (board.finish.isCanFinish())
+            if (ball.CheckCollision(board.finish))
+                return UpdateResult.WIN;
+
+        if (Collisions.getWasNotResolvedCollision() == true) return UpdateResult.DEFEAT;
+        return UpdateResult.NONE;
     }
 
     private void onWallCollision()

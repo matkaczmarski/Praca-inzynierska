@@ -278,19 +278,19 @@ public class Ball extends MovableElement {
         return Collisions.CheckSphereAABBCollision(new Sphere(location, radius), new Box(element.getLocation(), element.getMeasurements()));
     }
 
-    public void ReactOnCollision(Wall element) throws NotResolvingCollisionException {
+    public void ReactOnCollision(Wall element)  {
         Collisions.ResponseBallAABBCollisions(this,new Box(element.getLocation(),element.getMeasurements()));
     }
 
-    public void ReactOnCollision(Floor element) throws NotResolvingCollisionException  {
+    public void ReactOnCollision(Floor element)   {
         Collisions.ResponseBallAABBCollisions(this,new Box(element.getLocation(),element.getMeasurements()));
     }
 
-    public void ReactOnCollision(Beam beam) throws NotResolvingCollisionException {
+    public void ReactOnCollision(Beam beam) {
         Collisions.ResponseBallMovingAABBCollisions(this, beam);
     }
 
-    public void ReactOnCollision(Elevator elevator) throws NotResolvingCollisionException {
+    public void ReactOnCollision(Elevator elevator) {
         Collisions.ResponseBallMovingAABBCollisions(this, elevator);
     }
 
