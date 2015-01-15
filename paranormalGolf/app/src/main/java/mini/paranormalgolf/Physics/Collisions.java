@@ -105,7 +105,7 @@ public final class Collisions {
         Vector normalVelocity;
         Vector newNormalVelocity = new Vector(0, 0, 0);
 
-        if (normal.x == 0 && normal.y == 0 && normal.z == 0) wasNotResolvedCollision=true;
+        if (normal.x == 0 && normal.y == 0 && normal.z == 0) {wasNotResolvedCollision=true; return;}
         if (normal.IsParallelToAxis()) {
             if (normal.x != 0) velocity.x = -velocity.x;
             else if (normal.z != 0) velocity.z = -velocity.z;
@@ -294,7 +294,7 @@ public final class Collisions {
         Vector velocity = ball.getVelocity();
         Vector normalVelocity;
         Vector newNormalVelocity = new Vector(0, 0, 0);
-        if (normal.x == 0 && normal.y == 0 && normal.z == 0) wasNotResolvedCollision=true;
+        if (normal.x == 0 && normal.y == 0 && normal.z == 0) {wasNotResolvedCollision=true; return;}
         if (normal.IsParallelToAxis()) {
             if (normal.x != 0) {
                 if (element.getLastMove().x == 0)
