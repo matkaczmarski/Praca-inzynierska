@@ -264,7 +264,7 @@ public class DrawManager {
 
     private void renderSceneWithoutShadow(Board board, Ball ball){
         glViewport(0, 0, displayWidth, displayHeight);
-        glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawSkyBox();
         for (Floor floor : board.floors) {
@@ -398,7 +398,7 @@ public class DrawManager {
     //////////////////////////// Z CIENIAMI: ////////////////////////////
 
     private void renderSceneWithShadow(Board board, Ball ball){
-        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferObjectId[0]);
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObjectId[0]);
         glViewport(0, 0, depthMapWidth, depthMapHeight);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -406,9 +406,9 @@ public class DrawManager {
         renderDepthMap(board, ball);
         glCullFace(GL_BACK);
 
-        glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, displayWidth, displayHeight);
-        glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderBoardWithShadows(board, ball);
     }

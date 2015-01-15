@@ -51,7 +51,7 @@ public class Ball extends MovableElement {
         verdeJaspe
     }
 
-    private final int MESH_DIMENSION = 32;
+    private final int MESH_DIMENSION = 20;
     public final float BALL_OPACITY = 1f;
 
     private final float CD =0.4f;
