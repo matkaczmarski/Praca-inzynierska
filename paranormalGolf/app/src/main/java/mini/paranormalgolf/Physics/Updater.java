@@ -20,6 +20,7 @@ import static android.opengl.Matrix.translateM;
 import mini.paranormalgolf.Activities.GameActivity;
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Graphics.DrawManager;
+import mini.paranormalgolf.Helpers.NotResolvingCollisionException;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.Point;
@@ -118,62 +119,65 @@ public class Updater implements SensorEventListener {
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
 
-        for (Elevator elevator : board.elevators)
-            if (ball.CheckCollision(elevator))
-                ball.ReactOnCollision(elevator);
+        try {
+            for (Elevator elevator : board.elevators)
+                if (ball.CheckCollision(elevator))
+                    ball.ReactOnCollision(elevator);
 
-        for (Beam beam : board.beams)
-            if (ball.CheckCollision(beam))
-            {
-                ball.ReactOnCollision(beam);
-                onBeamCollision();
-            }
+            for (Beam beam : board.beams)
+                if (ball.CheckCollision(beam)) {
+                    ball.ReactOnCollision(beam);
+                    onBeamCollision();
+                }
 
-        for (Wall wall : board.walls)
-            if (ball.CheckCollision(wall)) {
-                ball.ReactOnCollision(wall);
-                onWallCollision();
-            }
+            for (Wall wall : board.walls)
+                if (ball.CheckCollision(wall)) {
+                    ball.ReactOnCollision(wall);
+                    onWallCollision();
+                }
 
             for (Floor floor : board.floors)
                 if (ball.CheckCollision(floor))
                     ball.ReactOnCollision(floor);
 
-        for (int i = 0; i < board.diamonds.size(); i++)
-            if (ball.CheckCollision(board.diamonds.get(i))) {
-                //board.diamonds.set(i, null);
-                board.diamonds.remove(i--);
-                onDiamondCollision();
-                // i dodaj jakieś punkty
-            }
+            for (int i = 0; i < board.diamonds.size(); i++)
+                if (ball.CheckCollision(board.diamonds.get(i))) {
+                    //board.diamonds.set(i, null);
+                    board.diamonds.remove(i--);
+                    onDiamondCollision();
+                    // i dodaj jakieś punkty
+                }
 
-        for (int i = 0; i < board.hourGlasses.size(); i++)
-            if (ball.CheckCollision(board.hourGlasses.get(i))) {
-                //board.hourGlasses.set(i, null);
-                gameRenderer.addTime(board.hourGlasses.get(i).getValue());
-                board.hourGlasses.remove(i--);
-                onHourGlassCollision();
-                // i dodaj jakiś czas
-            }
+            for (int i = 0; i < board.hourGlasses.size(); i++)
+                if (ball.CheckCollision(board.hourGlasses.get(i))) {
+                    //board.hourGlasses.set(i, null);
+                    gameRenderer.addTime(board.hourGlasses.get(i).getValue());
+                    board.hourGlasses.remove(i--);
+                    onHourGlassCollision();
+                    // i dodaj jakiś czas
+                }
 
-        boolean areAllCheckpointVisited = true;
-        for (int i = 0; i < board.checkpoints.size(); i++) {
-            if (ball.CheckCollision(board.checkpoints.get(i))) {
-                board.checkpoints.get(i).visit();
-                continue;
+            boolean areAllCheckpointVisited = true;
+            for (int i = 0; i < board.checkpoints.size(); i++) {
+                if (ball.CheckCollision(board.checkpoints.get(i))) {
+                    board.checkpoints.get(i).visit();
+                    continue;
+                }
+                if (!board.checkpoints.get(i).isVisited())
+                    areAllCheckpointVisited = false;
             }
-            if(!board.checkpoints.get(i).isVisited())
-                areAllCheckpointVisited = false;
+            if (areAllCheckpointVisited) {
+                board.finish.enableFinishing();
+            }
+            if (board.finish.isCanFinish())
+                if (ball.CheckCollision(board.finish))
+                    return UpdateResult.WIN;
+
+
+            return UpdateResult.NONE;
+        } catch (NotResolvingCollisionException ex) {
+            return UpdateResult.DEFEAT;
         }
-        if(areAllCheckpointVisited){
-            board.finish.enableFinishing();
-        }
-        if (board.finish.isCanFinish())
-            if(ball.CheckCollision(board.finish))
-                return UpdateResult.WIN;
-
-
-        return UpdateResult.NONE;
     }
 
     private void onWallCollision()

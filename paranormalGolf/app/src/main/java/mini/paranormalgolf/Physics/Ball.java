@@ -5,6 +5,7 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
+import mini.paranormalgolf.Helpers.NotResolvingCollisionException;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.Circle;
@@ -277,19 +278,19 @@ public class Ball extends MovableElement {
         return Collisions.CheckSphereAABBCollision(new Sphere(location, radius), new Box(element.getLocation(), element.getMeasurements()));
     }
 
-    public void ReactOnCollision(Wall element) {
+    public void ReactOnCollision(Wall element) throws NotResolvingCollisionException {
         Collisions.ResponseBallAABBCollisions(this,new Box(element.getLocation(),element.getMeasurements()));
     }
 
-    public void ReactOnCollision(Floor element) {
+    public void ReactOnCollision(Floor element) throws NotResolvingCollisionException  {
         Collisions.ResponseBallAABBCollisions(this,new Box(element.getLocation(),element.getMeasurements()));
     }
 
-    public void ReactOnCollision(Beam beam) {
+    public void ReactOnCollision(Beam beam) throws NotResolvingCollisionException {
         Collisions.ResponseBallMovingAABBCollisions(this, beam);
     }
 
-    public void ReactOnCollision(Elevator elevator) {
+    public void ReactOnCollision(Elevator elevator) throws NotResolvingCollisionException {
         Collisions.ResponseBallMovingAABBCollisions(this, elevator);
     }
 

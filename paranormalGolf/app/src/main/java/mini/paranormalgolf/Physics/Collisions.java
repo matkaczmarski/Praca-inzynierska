@@ -1,5 +1,6 @@
 package mini.paranormalgolf.Physics;
 
+import mini.paranormalgolf.Helpers.NotResolvingCollisionException;
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Circle;
@@ -66,8 +67,7 @@ public final class Collisions {
         return normal;
     }
 
-    public static void ResponseBallAABBCollisions(Ball ball, Box collidedBox) {
-
+    public static void ResponseBallAABBCollisions(Ball ball, Box collidedBox) throws NotResolvingCollisionException {
 
         //finding collision place and time
         Point startLocation = new Point(ball.getLocation().x - ball.getLastMove().x, ball.getLocation().y - ball.getLastMove().y, ball.getLocation().z - ball.getLastMove().z);
@@ -97,6 +97,7 @@ public final class Collisions {
         Vector normalVelocity;
         Vector newNormalVelocity = new Vector(0, 0, 0);
 
+        if (normal.x == 0 && normal.y == 0 && normal.z == 0) throw new NotResolvingCollisionException();
         if (normal.IsParallelToAxis()) {
             if (normal.x != 0) velocity.x = -velocity.x;
             else if (normal.z != 0) velocity.z = -velocity.z;
@@ -170,7 +171,7 @@ public final class Collisions {
                 halfLocation.z + velocity.z * (1 - halfTime) * Updater.INTERVAL_TIME));
         ball.setVelocity(velocity);
         if (CheckSphereAABBCollision(new Sphere(ball.getLocation(), ball.getRadius()), collidedBox)) {
-            Point newBallLocation =ball.getLocation();
+            Point newBallLocation = ball.getLocation();
 //            if(element.getLastMove().x!=0||element.getLastMove().z!=0) {
 //
 //                Vector distance = element.getLastMove().x!=0?new Vector(element.getLastMove().x, 0, normal.z * element.getLastMove().x / normal.x):
@@ -199,8 +200,8 @@ public final class Collisions {
                 distance.z = newBallLocation.z - min.z;
             else if (newBallLocation.z - max.z > 0 && newBallLocation.z - max.z <= ball.getRadius() + Collisions.USER_EXPERIENCE)
                 distance.z = newBallLocation.z - max.z;
-          //  distance.x = Math.signum(normal.x) * ball.getRadius();
-          //  distance.z = Math.signum(normal.z) * ball.getRadius();
+            //  distance.x = Math.signum(normal.x) * ball.getRadius();
+            //  distance.z = Math.signum(normal.z) * ball.getRadius();
             newBallLocation.x += distance.x;
             newBallLocation.z += distance.z;
             for (int i = 0; i < 10; i++) {
@@ -240,7 +241,7 @@ public final class Collisions {
                 && Math.abs(sphere.center.y - circle.center.y - sphere.radius) <= USER_EXPERIENCE;
     }
 
-    public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element) {
+    public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element) throws NotResolvingCollisionException {
         BoxSize boxSize;
         if (element.getClass() == Elevator.class)
             boxSize = ((Elevator) element).getMeasurements();
@@ -285,7 +286,7 @@ public final class Collisions {
         Vector velocity = ball.getVelocity();
         Vector normalVelocity;
         Vector newNormalVelocity = new Vector(0, 0, 0);
-
+        if (normal.x == 0 && normal.y == 0 && normal.z == 0) throw new NotResolvingCollisionException();
         if (normal.IsParallelToAxis()) {
             if (normal.x != 0) {
                 if (element.getLastMove().x == 0)
