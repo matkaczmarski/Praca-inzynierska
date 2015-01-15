@@ -72,8 +72,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean shadows;
     private int texture;
 
-    private boolean started = false;
-
     private FPSCounter fpsCounter;
 
     public Updater getUpdater(){return updater;}
@@ -106,7 +104,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
                 ((GameActivity)contextForUiThread).updatePanel(boardInfo.getTime(), 0);
             }
         });
-        started = false;
         updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
         fpsCounter = new FPSCounter();
     }
@@ -139,7 +136,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glEnable(GLES20.GL_CULL_FACE);
 
         updater.setContext(activity);
-        started = true;
     }
 
     @Override
@@ -151,8 +147,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
-        if (!started)
-            return;
         float interval = 0;
         if(LoggerConfig.ON) {
             fpsCounter.logFrame();
@@ -220,7 +214,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         else
         {
             paused = true;
-            //started = false;
         }
     }
 
