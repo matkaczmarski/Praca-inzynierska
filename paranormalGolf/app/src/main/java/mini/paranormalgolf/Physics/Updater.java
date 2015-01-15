@@ -338,19 +338,12 @@ public class Updater implements SensorEventListener {
             elevator.texture = Elevator.getElevatorTexture();
         for (Diamond diamond : board.diamonds)
             diamond.texture = Diamond.getDiamondTexture();
-        for (Floor floor : board.floors)
-        {
-            if (floor.mu > floor.THRESHOLD_MU_FACTOR)
-            {
-                floor.setTopFloorTexture(Floor.getTopFloorTextureSticky());
-                floor.setSideFloorTexture(Floor.getSideFloorTextureSticky());
-                floor.setBottomFloorTexture(Floor.getBottomFloorTextureSticky());
+        for (Floor floor : board.floors){
+            if (floor.mu > floor.THRESHOLD_MU_FACTOR){
+                floor.texture = Floor.getTopFloorTextureSticky();
             }
-            else
-            {
-                floor.setTopFloorTexture(Floor.getTopFloorTextureNormal());
-                floor.setSideFloorTexture(Floor.getSideFloorTextureNormal());
-                floor.setBottomFloorTexture(Floor.getBottomFloorTextureNormal());
+            else{
+                floor.texture = Floor.getTopFloorTextureNormal();
             }
         }
         for (HourGlass hourGlass : board.hourGlasses)

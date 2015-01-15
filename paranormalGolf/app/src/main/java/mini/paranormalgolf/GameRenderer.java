@@ -1,21 +1,11 @@
 package mini.paranormalgolf;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.hardware.SensorManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -27,27 +17,17 @@ import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.Physics.Board;
-import mini.paranormalgolf.Physics.Floor;
 import mini.paranormalgolf.Physics.Updater;
-import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
-import static android.opengl.GLES20.GL_BACK;
 import static android.opengl.GLES20.GL_BLEND;
-import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
-import static android.opengl.GLES20.GL_FRONT;
-import static android.opengl.GLES20.GL_FRONT_AND_BACK;
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
-import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClearColor;
-import static android.opengl.GLES20.glCompressedTexImage2D;
-import static android.opengl.GLES20.glCullFace;
 import static android.opengl.GLES20.glEnable;
-import static android.opengl.GLES20.glFinish;
 
 
 /**
@@ -76,8 +56,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     public Updater getUpdater(){return updater;}
 
-    public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows, int texture, boolean radius_set, float radius)
-    {
+    public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows, int texture, boolean radius_set, float radius){
         this.context = context;
         this.activity = activity;
         this.board_id = board_id;
@@ -127,8 +106,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onSurfaceCreated(GL10 glUnused, EGLConfig config)
-    {
+    public void onSurfaceCreated(GL10 glUnused, EGLConfig config){
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);

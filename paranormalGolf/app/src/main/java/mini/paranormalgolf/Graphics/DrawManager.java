@@ -22,7 +22,6 @@ import mini.paranormalgolf.Physics.Diamond;
 import mini.paranormalgolf.Physics.Elevator;
 import mini.paranormalgolf.Physics.Finish;
 import mini.paranormalgolf.Physics.Floor;
-import mini.paranormalgolf.Physics.FloorPart;
 import mini.paranormalgolf.Physics.HourGlass;
 import mini.paranormalgolf.Physics.SkyBox;
 import mini.paranormalgolf.Physics.Wall;
@@ -177,7 +176,7 @@ public class DrawManager {
             glDeleteTextures(1, renderTextureId, 0);
 
             //sposób usuwania tekstur:
-            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTexture(), Elevator.getElevatorTexture(), Floor.getBottomFloorTextureNormal(), Floor.getBottomFloorTextureSticky(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Floor.getSideFloorTextureNormal(), Floor.getSideFloorTextureSticky(), Wall.getWallTexture(), skyBox.getTexture()};
+            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTexture(), Elevator.getElevatorTexture(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Wall.getWallTexture(), skyBox.getTexture()};
             glDeleteTextures(textureId.length, textureId, 0);
         }
         catch (Exception ex) {}
@@ -310,22 +309,10 @@ public class DrawManager {
 
     private void drawFloor(Floor floor) {
         textureShaderProgram.useProgram();
-        positionObjectInScene(floor.getBottomPart().getLocation());
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY);
-        floor.getBottomPart().bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
-        floor.getBottomPart().draw();
-
-        for (FloorPart floorPart : floor.getSideParts()) {
-            positionObjectInScene(floorPart.getLocation());
-            textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getSideFloorTexture(), floor.FLOOR_OPACITY);
-            floorPart.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
-            floorPart.draw();
-        }
-
-        positionObjectInScene(floor.getTopPart().getLocation());
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getTopFloorTexture(), floor.FLOOR_OPACITY);
-        floor.getTopPart().bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
-        floor.getTopPart().draw();
+        positionObjectInScene(floor.getLocation());
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getTexture(), floor.FLOOR_OPACITY);
+        floor.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        floor.draw();
     }
 
     private void drawWall(Wall wall) {
@@ -417,22 +404,10 @@ public class DrawManager {
         depthMapShaderProgram.useProgram();
 
         for (Floor floor : board.floors) {
-            positionObjectInScene(floor.getBottomPart().getLocation());
+            positionObjectInScene(floor.getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            floor.getBottomPart().bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            floor.getBottomPart().draw();
-
-            for (FloorPart floorPart : floor.getSideParts()) {
-                positionObjectInScene(floorPart.getLocation());
-                depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-                floorPart.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-                floorPart.draw();
-            }
-
-            positionObjectInScene(floor.getTopPart().getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            floor.getTopPart().bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            floor.getTopPart().draw();
+            floor.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            floor.draw();
         }
 
         for (Wall wall : board.walls) {
@@ -539,22 +514,10 @@ public class DrawManager {
 
     private void drawFloorWithShadow(Floor floor) {
         shadowingShaderProgram.useProgram();
-        positionObjectInScene(floor.getBottomPart().getLocation());
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getBottomFloorTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        floor.getBottomPart().bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
-        floor.getBottomPart().draw();
-
-        for (FloorPart floorPart : floor.getSideParts()) {
-            positionObjectInScene(floorPart.getLocation());
-            shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getSideFloorTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-            floorPart.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
-            floorPart.draw();
-        }
-
-        positionObjectInScene(floor.getTopPart().getLocation());
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getTopFloorTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        floor.getTopPart().bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
-        floor.getTopPart().draw();
+        positionObjectInScene(floor.getLocation());
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        floor.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        floor.draw();
     }
 
     private void drawWallWithShadow(Wall wall) {
