@@ -318,12 +318,12 @@ public class GameActivity extends Activity implements Runnable {
         if (!game)
             return;
         onButtonClick();
-        //if (gameRenderer != null)
-        //    gameRenderer.pause();
-        //glSurfaceView.onPause();
+
         if (pause_dialog == null)
         {
-            Runnable runnable = new Runnable()
+            if (gameRenderer != null)
+                gameRenderer.pause();
+            /*Runnable runnable = new Runnable()
             {
                 @Override
                 public void run()
@@ -332,7 +332,7 @@ public class GameActivity extends Activity implements Runnable {
                     gameRenderer.pause();
                 }
             };
-            runnable.run();
+            runnable.run();*/
             //glSurfaceView.onPause();
             pause_dialog = new Dialog(this, R.style.PauseDialogTheme);
             pause_dialog.setContentView(R.layout.pause_dialog);
@@ -394,7 +394,11 @@ public class GameActivity extends Activity implements Runnable {
         {
             pause_dialog.dismiss();
             pause_dialog = null;
-            Runnable runnable = new Runnable()
+
+
+            if (gameRenderer != null)
+                gameRenderer.pause();
+            /*Runnable runnable = new Runnable()
             {
                 @Override
                 public void run()
@@ -403,7 +407,7 @@ public class GameActivity extends Activity implements Runnable {
                     gameRenderer.pause();
                 }
             };
-            runnable.run();
+            runnable.run();*/
         }
     }
 

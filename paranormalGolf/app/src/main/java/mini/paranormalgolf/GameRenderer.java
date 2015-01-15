@@ -220,7 +220,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         else
         {
             paused = true;
-            started = false;
+            //started = false;
         }
     }
 
