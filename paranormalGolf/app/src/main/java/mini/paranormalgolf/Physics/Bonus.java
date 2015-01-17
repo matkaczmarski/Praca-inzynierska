@@ -1,23 +1,66 @@
 package mini.paranormalgolf.Physics;
 
-import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 import mini.paranormalgolf.Primitives.Point;
 
 /**
- * Created by Sławomir on 2014-12-08.
+ * Klasa abstrakcyjna reprezentująca bonus w grze. Dla uatrakcyjnienia wyglądu elementy
+ * te jednocześnie poruszają się wzdłuż osi OY a także obracają wzdłuż osi OY
  */
 public abstract class Bonus extends Element {
 
-    protected float ROTATION_SPEED = 1f;
-    protected float UP_DOWN_SPEED = 0.002f;
-    private float currentRotationAngle;
-    private int value;
+    /**
+     * Wartość prędkości kątowej elementu podczas animacji ruchu bonusu
+     */
+    protected float rotationSpeed = 1f;
+
+    /**
+     * Wartość prędkości postępowej wzdłuż osi OY podczas animacji ruchu bonusu
+     */
+    protected float upDownSpeed = 0.002f;
+
+    /**
+     * Minimalna wartość współrzędnej y środka bonusu podczas animacji ruchu
+     */
     protected float yShiftFrom;
+
+    /**
+     * Maksymalna wartość współrzędnej y środka bonusu podczas animacji ruchu
+     */
     protected float yShiftTo;
 
+    /**
+     * Aktualna wartość kąta obrotu bonusu wzdłuż osi OY względem położenia początkowego bonusu
+     */
+    private float currentRotationAngle;
+
+    /**
+     * Wartość bonusu związanego z elementem
+     */
+    private int value;
+
+
+    /**
+     * Odświeża i zwraca współrzędne środka bonusu w globalnym układzie współrzędnych
+     * @return Aktualne współrzędne środka bonusu w globalnym układzie współrzędnych
+     */
     @Override
     public Point getLocation(){return lift();}
 
+    /**
+     * Zwraca wartość bonusu związanego z elementem
+     * @return Wartość bonusu związanego z elementem
+     */
+    public int getValue()
+    {
+        return value;
+    }
+
+    /**
+     * Tworzy obiekt typu bonus
+     * @param location Współrzędne środka bonusu w globalnym układzie współrzędnych
+     * @param value Wartość bonusu związanego z zebraniem elementu
+     * @param yShift Wartość o jaką wzdłuż osi OY można podnosić element podczas animacji ruchu
+     */
     public Bonus(Point location, int value, float yShift) {
         super(location);
         this.value = value;
@@ -26,20 +69,24 @@ public abstract class Bonus extends Element {
         currentRotationAngle = 0f;
     }
 
+    /**
+     * Odświeża i zwraca wartość kąta obrotu bonusu wzdłuż osi OY względem położenia początkowego bonusu
+     * @return Aktualna wartość kąta obrotu bonusu wzdłuż osi OY względem położenia początkowego bonusu
+     */
     public float rotate(){
-        currentRotationAngle = (currentRotationAngle + ROTATION_SPEED) % 360f;
+        currentRotationAngle = (currentRotationAngle + rotationSpeed) % 360f;
         return  currentRotationAngle;
     }
 
+    /**
+     * Odświeża współrzędne środka bonusu i wartość prędkości postępowej wzdłuż osi OY
+     * w globalnym układzie współrzędnych
+     * @return Aktualne współrzędne środka bonusu w globalnym układzie współrzędnych
+     */
     private Point lift(){
         if(location.y < yShiftFrom || location.y >= yShiftTo)
-            UP_DOWN_SPEED *= (-1f);
-        location = new Point(location.x, location.y + UP_DOWN_SPEED, location.z);
+            upDownSpeed *= (-1f);
+        location = new Point(location.x, location.y + upDownSpeed, location.z);
         return location;
-    }
-
-    public int getValue()
-    {
-        return value;
     }
 }

@@ -16,22 +16,72 @@ import mini.paranormalgolf.Primitives.Rectangle;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Sławomir on 2014-12-03.
+ * Podłoga w grze reprezentowana jako prostopadłościan równoległy do osi układu współrzędnych
  */
 public class Floor extends Element {
 
+    /** Opisz Mateusz tutaj!!!!!!  */
     public final float FLOOR_OPACITY = 1f;
+
+    /** Opisz Mateusz tutaj!!!!!!!!  */
     public final float THRESHOLD_MU_FACTOR = 0.05f;
 
+    /** Opisz Mateusz tutaj!!!!!!!!  */
     private static final float FLOOR_TEXTURE_UNIT = 5f;
 
-    public BoxSize measurements;
-    public float mu;
+    /** Rozmiar prostopadłościanu podłogi*/
+    private BoxSize measurements;
 
+    /** Współczynnik tarcia dla powierzchni podłogi*/
+    private float mu;
+
+    /** Opisz Mateusz tutaj!!!!!!!!  */
     private static int topFloorTextureNormal;
+
+    /** Opisz Mateusz tutaj!!!!!!!!  */
     private static int topFloorTextureSticky;
 
+    /**
+     * Zwraca rozmiar prostopadłościanu  podłogi
+     * @return Rozmiar prostopadłościanu podłogi
+     */
+    public BoxSize getMeasurements() {
+        return measurements;
+    }
 
+    /**
+     * Zwraca wartość współczynnika tarcia dla powierzchni podłogi
+     * @return Wartość współczynnika tarcia dla powierzchni podłogi
+     */
+    public float getMu() {
+        return mu;
+    }
+
+    /**
+     * Opisz Mateusz tutaj!!!!!!!!
+     * @return
+     */
+    public static int getTopFloorTextureNormal()
+    {
+        return topFloorTextureNormal;
+    }
+
+    /**
+     * Opisz Mateusz tutaj!!!!!!!!
+     * @return
+     */
+    public static int getTopFloorTextureSticky()
+    {
+        return topFloorTextureSticky;
+    }
+
+
+    /**
+     * Tworzy obiekt typu podłoga
+     * @param measures Wymiary prostopadłościanu opisującego podłogę
+     * @param mu Wartość współczynnika tarcia
+     * @param location Współrzędne środka prostopadłościanu w globalnym układzie współrzędnych
+     */
     public Floor(BoxSize measures, float mu, Point location) {
         super(location);
         this.measurements = measures;
@@ -42,27 +92,14 @@ public class Floor extends Element {
         drawCommands = generatedData.drawCommands;
     }
 
-
+    /**
+     * Opisz Mateusz tutaj!!!!!!!!
+     * @param context
+     */
     public static void initTextures(Context context){
         topFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
         topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
         //topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_cos);
         //topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_lunabase);
     }
-
-
-    public BoxSize getMeasurements() {
-        return measurements;
-    }
-
-    public static int getTopFloorTextureNormal()
-    {
-        return topFloorTextureNormal;
-    }
-
-    public static int getTopFloorTextureSticky()
-    {
-        return topFloorTextureSticky;
-    }
-
 }
