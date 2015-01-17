@@ -32,7 +32,7 @@ import mini.paranormalgolf.R;
  */
 public class Updater implements SensorEventListener {
 
-    public static float INTERVAL_TIME=0f;
+    public static float INTERVAL_TIME = 0.035f;
     public static final float INTERVAL_FACTOR = 1.5f;
 
     private Context context;
@@ -97,8 +97,8 @@ public class Updater implements SensorEventListener {
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public UpdateResult update(float interval) {
-        INTERVAL_TIME = interval * INTERVAL_FACTOR;
+    public UpdateResult update(/*float interval*/) {
+        //INTERVAL_TIME = interval * INTERVAL_FACTOR;
         //if (paused)
         //    return UpdateResult.PAUSE;
 
