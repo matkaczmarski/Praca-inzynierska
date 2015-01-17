@@ -12,63 +12,62 @@ import mini.paranormalgolf.R;
 
 /**
  * Diament w grze reprezentowany jako 2 identyczne ostrosłupy sklejone podstawami,
- * których wysokości są równoległe do osi OY układu współrzędnych
+ * których wysokości są równoległe do osi OY układu współrzędnych.
  */
 public class Diamond extends Bonus {
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Stała opisująca stopień przezroczystości diamentu.
      */
     public final float DIAMOND_OPACITY = 0.9f;
 
     /**
-     * Rozmiar ostrosłupa używanego przy rysowaniu diamentu
+     * Rozmiar ostrosłupa używanego przy rysowaniu diamentu.
      */
     private final Pyramid pyramid = new Pyramid(0.7f, 1.4f, 6);
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Statyczna wartość identyfikatora OpenGL tekstury diamentu.
      */
-    private static int diamondTexture;
+    private static int diamondTextureId;
 
     /**
-     * Zwraca rozmiar ostrosłupa - elementu składowego diamentu
-     * @return Rozmiar ostrosłupa - elementu składowego diamentu
+     * Zwraca rozmiar ostrosłupa - elementu składowego diamentu.
+     * @return Obiekt <b><em><pyramid/em></b>.
      */
     public Pyramid getPyramid() {
         return pyramid;
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!!
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury diamentu.
+     * @return Wartość <b><em>diamondTextureId</em></b>.
      */
-    public static int getDiamondTexture()
+    public static int getDiamondTextureId()
     {
-        return diamondTexture;
+        return diamondTextureId;
     }
 
 
     /**
-     * Tworzy obiekt typu diament
-    * @param location Współrzędne środka diamentu w globalnym układzie współrzędnych
-    * @param value Liczba punktów związanych ze zdobyciem diamentów
-    * @param yShift Wartość o jaką wzdłuż osi OY można podnosić diament podczas animacji ruchu
+     * Tworzy obiekt typu diament.
+    * @param location Współrzędne środka diamentu w globalnym układzie współrzędnych.
+    * @param value Liczba punktów związanych ze zdobyciem diamentów.
+    * @param yShift Wartość o jaką wzdłuż osi OY można podnosić diament podczas animacji ruchu.
     */
     public Diamond(Point location, int value, float yShift) {
         super(location, value, yShift);
         GraphicsData generatedData = ObjectGenerator.createDiamondModel(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = diamondTexture;//ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
+        texture = diamondTextureId;
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury diamentu.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
-    public static void initTextures(Context context)
-    {
-        diamondTexture = ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
+    public static void initTextures(Context context){
+        diamondTextureId = ResourceHelper.loadTexture(context, R.drawable.diamond_texture);
     }
 }

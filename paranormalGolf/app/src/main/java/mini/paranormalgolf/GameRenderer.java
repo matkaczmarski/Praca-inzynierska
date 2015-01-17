@@ -159,7 +159,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
 
-        UpdateResult updateResult = updater.update((float)(interval / 1000f));
+        UpdateResult updateResult = updater.update();//(float)(interval / 1000f));
         if (timeLeft <= 0)
         {
             updateResult = UpdateResult.DEFEAT;

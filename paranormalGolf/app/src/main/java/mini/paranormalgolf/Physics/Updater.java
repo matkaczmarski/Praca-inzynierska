@@ -1,26 +1,20 @@
 package mini.paranormalgolf.Physics;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.view.Surface;
 import android.view.WindowManager;
-import android.widget.CheckBox;
-
-import java.io.IOException;
 
 import static android.opengl.Matrix.translateM;
 
 import mini.paranormalgolf.Activities.GameActivity;
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Graphics.DrawManager;
-import mini.paranormalgolf.Helpers.NotResolvingCollisionException;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.UpdateResult;
 import mini.paranormalgolf.Primitives.BoxSize;
@@ -33,7 +27,7 @@ import mini.paranormalgolf.R;
  */
 public class Updater implements SensorEventListener {
 
-    public static float INTERVAL_TIME=0f;
+    public static float INTERVAL_TIME = 0.035f;
     public static final float INTERVAL_FACTOR = 1.5f;
 
     private Context context;
@@ -98,8 +92,8 @@ public class Updater implements SensorEventListener {
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public UpdateResult update(float interval) {
-        INTERVAL_TIME = interval * INTERVAL_FACTOR;
+    public UpdateResult update(/*float interval*/) {
+        //INTERVAL_TIME = interval * INTERVAL_FACTOR;
         //if (paused)
         //    return UpdateResult.PAUSE;
 
@@ -341,7 +335,7 @@ public class Updater implements SensorEventListener {
         for (Elevator elevator : board.elevators)
             elevator.texture = Elevator.getElevatorTexture();
         for (Diamond diamond : board.diamonds)
-            diamond.texture = Diamond.getDiamondTexture();
+            diamond.texture = Diamond.getDiamondTextureId();
         for (Floor floor : board.floors){
             if (floor.getMu() > floor.THRESHOLD_MU_FACTOR){
                 floor.texture = Floor.getTopFloorTextureSticky();

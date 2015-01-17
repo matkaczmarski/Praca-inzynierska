@@ -98,8 +98,8 @@ public class Floor extends Element {
      */
     public static void initTextures(Context context){
         topFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
-        //topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
-        topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_cos);
+        topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
+        //topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_cos);
         //topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_lunabase);
     }
 }
