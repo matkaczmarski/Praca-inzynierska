@@ -56,7 +56,7 @@ public abstract class Bonus extends Element {
     }
 
     /**
-     * Tworzy obiekt typu bonus
+     * Tworzy obiekt typu Bonus
      * @param location Współrzędne środka bonusu w globalnym układzie współrzędnych
      * @param value Wartość bonusu związanego z zebraniem elementu
      * @param yShift Wartość o jaką wzdłuż osi OY można podnosić element podczas animacji ruchu
