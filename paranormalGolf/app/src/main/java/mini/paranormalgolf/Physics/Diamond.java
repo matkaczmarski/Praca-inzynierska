@@ -32,7 +32,7 @@ public class Diamond extends Bonus {
 
     /**
      * Zwraca rozmiar ostrosłupa - elementu składowego diamentu.
-     * @return Obiekt <b><em><pyramid/em></b>.
+     * @return Obiekt <b><em>pyramid</em></b>.
      */
     public Pyramid getPyramid() {
         return pyramid;

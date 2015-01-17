@@ -44,7 +44,7 @@ public class Floor extends Element {
 
     /**
      * Zwraca rozmiar prostopadłościanu  podłogi
-     * @return Rozmiar prostopadłościanu podłogi
+     * @return Obiekt <b><em>measurements</em></b>
      */
     public BoxSize getMeasurements() {
         return measurements;
@@ -52,7 +52,7 @@ public class Floor extends Element {
 
     /**
      * Zwraca wartość współczynnika tarcia dla powierzchni podłogi
-     * @return Wartość współczynnika tarcia dla powierzchni podłogi
+     * @return Wartość <b><em>mu</em></b>
      */
     public float getMu() {
         return mu;
