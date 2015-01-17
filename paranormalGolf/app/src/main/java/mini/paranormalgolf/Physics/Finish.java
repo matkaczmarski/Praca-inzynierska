@@ -19,41 +19,34 @@ public class Finish extends ControlPoint {
     private final int FINISH_PLATFORM_DIMENSION = 32;
     private  final float FINISH_PLATFORM_SHIFT = 0.01f;
 
-    private boolean canFinish;
-    private Glow glow;
-
+    private boolean isActive;
+    private final Glow glow;
     private static int finishTextureId;
 
-    public void enableFinishing() {
-        canFinish = true;
-        glow.activateFinish();
+    public boolean isActive(){
+        return isActive;
     }
 
-    public int getTexture(){return finishTextureId;}
+    public void activate() {
+        isActive = true;
+    }
 
     public Glow getGlow(){return glow;}
 
-    public Finish(Point location, ConicalFrustum conicalFrustum, boolean canFinish) {
+    public int getTexture(){return finishTextureId;}
+
+    public Finish(Point location, ConicalFrustum conicalFrustum) {
         super(location, conicalFrustum);
-        this.canFinish = canFinish;
+        isActive = false;
 
         GraphicsData generatedData = ObjectGenerator.createControlPointPlatformModel(conicalFrustum.bottomRadius, FINISH_PLATFORM_DIMENSION, FINISH_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        glow = new Glow(location, conicalFrustum, canFinish);
+        glow = new Glow(location, conicalFrustum);
     }
 
     public static void initTextures(Context context){
         finishTextureId = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
     }
 
-    public boolean isCanFinish()
-    {
-        return canFinish;
-    }
-
-    public void setCanFinish(boolean canFinish)
-    {
-        this.canFinish = canFinish;
-    }
 }

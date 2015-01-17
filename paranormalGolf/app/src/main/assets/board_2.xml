@@ -26,7 +26,7 @@
     <Diamond location_x="3" location_y="1.4" location_z="2.5" value="100" y_shift="0.7"/>
     <Diamond location_x="3" location_y="1.4" location_z="-2.5" value="100" y_shift="0.7"/>
 
-    <Finish location_x="20" location_y="0" location_z="0" frustum_x="15" frustum_y="2" frustum_z="3" canFinish="false"/>
+    <Finish location_x="20" location_y="0" location_z="0" frustum_x="15" frustum_y="2" frustum_z="3" />
 
     <Ball location_x="0" location_y="0" location_z="0"/>
 </Board>

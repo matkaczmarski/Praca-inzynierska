@@ -96,7 +96,5 @@ public class Floor extends Element {
     public static void initTextures(Context context){
         stickyFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
         standardFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
-        //standardFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.floor_texture_cos);
-        //standardFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.floor_texture_lunabase);
     }
 }

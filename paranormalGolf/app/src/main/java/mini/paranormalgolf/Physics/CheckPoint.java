@@ -20,23 +20,25 @@ public class CheckPoint extends ControlPoint {
     private  final float CHECKPOINT_PLATFORM_SHIFT = 0.01f;
 
     private boolean visited;
-    private Glow glow;
-
+    private final Glow glow;
     private static int checkPointTextureId;
 
-    public Glow getGlow(){return glow;}
     public boolean isVisited(){return visited;}
+
     public void visit(){visited = true;}
+
+    public Glow getGlow(){return glow;}
+
     public static int getTexture(){return checkPointTextureId;}
 
-    public CheckPoint(Point location, ConicalFrustum conicalFrustum, boolean visited){
+    public CheckPoint(Point location, ConicalFrustum conicalFrustum){
         super(location,conicalFrustum);
-        this.visited=visited;
+        visited=false;
 
         GraphicsData generatedData = ObjectGenerator.createControlPointPlatformModel(conicalFrustum.bottomRadius, CHECKPOINT_PLATFORM_DIMENSION, CHECKPOINT_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        glow = new Glow(location, conicalFrustum, true);
+        glow = new Glow(location, conicalFrustum);
     }
 
     public static void initTextures(Context context){

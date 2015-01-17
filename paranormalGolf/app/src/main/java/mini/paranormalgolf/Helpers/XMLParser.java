@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,6 @@ import mini.paranormalgolf.Physics.Wall;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Point;
-import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
@@ -162,9 +159,7 @@ public class XMLParser
                         float frustum_y = Float.parseFloat(xpp.getAttributeValue(null, "frustum_y"));
                         float frustum_z = Float.parseFloat(xpp.getAttributeValue(null, "frustum_z"));
 
-                        boolean canFinish = Boolean.parseBoolean(xpp.getAttributeValue(null, "canFinish"));
-
-                        finish = new Finish(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z), canFinish);
+                        finish = new Finish(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z));
                     }
                     else if (name.equals("Checkpoint"))
                     {
@@ -176,9 +171,7 @@ public class XMLParser
                         float frustum_y = Float.parseFloat(xpp.getAttributeValue(null, "frustum_y"));
                         float frustum_z = Float.parseFloat(xpp.getAttributeValue(null, "frustum_z"));
 
-                        boolean visited = Boolean.parseBoolean(xpp.getAttributeValue(null, "visited"));
-
-                        checkPoints.add(new CheckPoint(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z), visited));
+                        checkPoints.add(new CheckPoint(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z)));
                     }
                     else if (name.equals("HourGlass"))
                     {
@@ -208,7 +201,6 @@ public class XMLParser
             return null;
         }
 
-        finish.setCanFinish(checkPoints.size() == 0);
         Board board = new Board(Integer.valueOf(board_id.split("_")[1]), floors, walls, diamonds, beams, elevators, checkPoints, hourGlasses, finish, ballLocation);
         return board;
     }

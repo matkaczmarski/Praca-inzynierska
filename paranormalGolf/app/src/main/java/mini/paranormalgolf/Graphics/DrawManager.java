@@ -350,7 +350,7 @@ public class DrawManager {
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getGlow().isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
         finish.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         finish.getGlow().draw();
     }
@@ -555,7 +555,7 @@ public class DrawManager {
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getGlow().isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
         finish.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         finish.getGlow().draw();
     }
