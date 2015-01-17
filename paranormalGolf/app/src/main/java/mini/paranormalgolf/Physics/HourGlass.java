@@ -12,33 +12,37 @@ import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Sławomir on 2014-12-08.
+ * Klepsydra w grze reprezentowana jako 2 ścięte stożki sklejone podstawami,
+ * których wysokości są równoległe do osi OY układu współrzędnych
  */
-
 public class HourGlass extends Bonus {
 
-    private float HOURGLASS_ROTATION_SPEED = 0.5f;
-    private float HOURGLASS_UP_DOWN_SPEED = 0.001f;
-    public final float HOURGLASS_OPACITY = 0.75f;
-    private final int HOURGLASS_MESH_DIMENSION = 32;
-    private final float WOODEN_BASE_HEIGHT_RATIO = 0.1f;
-    public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
-
-    private static int hourGlassTexture;
-
-    public ConicalFrustum getLowerCone() {
-        return lowerCone;
-    }
-
-    private final ConicalFrustum lowerCone = new ConicalFrustum(0.7f, 0.5f, 0.15f);
-    private final ConicalFrustum upperCone = new ConicalFrustum(0.7f, 0.15f, 0.5f);
-
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     public class HourGlassWoodenParts extends Bonus{
 
+        /**
+         * OPISZ MATEUSZ TUTAJ!!!!
+         */
         public final float HOURGLASS_WOODEN_PART_OPACITY = 1f;
+
+        /**
+         * OPISZ MATEUSZ TUTAJ!!!!
+         */
         private final int HOURGLASS_MESH_DIMENSION = 32;
+
+        /**
+         * OPISZ MATEUSZ TUTAJ!!!!
+         */
         private final float TEXTURE_UNIT = 5f;
 
+        /**
+         * OPISZ MATEUSZ TUTAJ!!!
+         * @param location
+         * @param lowerCylinder
+         * @param upperCylinder
+         */
         public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder) {
             super(location, 0, 0);
 
@@ -46,14 +50,89 @@ public class HourGlass extends Bonus {
             vertexData = new VertexArray(generatedData.vertexData);
             drawCommands = generatedData.drawCommands;
             texture = hourGlassTexture;//ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
-            ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
+            rotationSpeed = HOURGLASS_ROTATION_SPEED;
         }
     }
 
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     */
+    public final float HOURGLASS_OPACITY = 0.75f;
 
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     */
+    public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
+
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     */
+    private final float HOURGLASS_ROTATION_SPEED = 0.5f;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     */
+    private final float HOURGLASS_UP_DOWN_SPEED = 0.001f;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     */
+    private final int HOURGLASS_MESH_DIMENSION = 32;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     */
+    private final float WOODEN_BASE_HEIGHT_RATIO = 0.1f;
+
+
+    /**
+     * Rozmiar dolnego względem osi OY ściętego stożka
+     */
+    private final ConicalFrustum lowerCone = new ConicalFrustum(0.7f, 0.5f, 0.15f);
+
+    /**
+     * Rozmiar górnego względem osi OY ściętego stożka
+     */
+    private final ConicalFrustum upperCone = new ConicalFrustum(0.7f, 0.15f, 0.5f);
+
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     */
+    private static int hourGlassTexture;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     private HourGlassWoodenParts woodenParts;
+
+    /**
+     * Zwraca rozmiar dolnego względem osi OY ściętego stożka
+     * @return Rozmiar dolnego względem osi OY ściętego stożka
+     */
+    public ConicalFrustum getLowerCone() {
+        return lowerCone;
+    }
+
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     * @return
+     */
+    public static int getHourGlassTexture(){
+        return hourGlassTexture;
+    }
+
+    /**
+     * OPISZ MATEUSZ TUTAJ!!!
+     * @return
+     */
     public HourGlassWoodenParts getWoodenParts(){return woodenParts;}
 
+    /**
+     * Tworzy obiekt typu klepsydra
+     * @param location Współrzędne środka klepsydry w globalnym układzie współrzędnych
+     * @param value Liczba dodawanych sekund związanych z zebraniem klepsydry
+     * @param yShift Wartość o jaką wzdłuż osi OY można podnosić klepsydrę podczas animacji ruchu
+     */
     public HourGlass(Point location, int value, float yShift) {
         super(location, value, yShift);
 
@@ -62,15 +141,15 @@ public class HourGlass extends Bonus {
         drawCommands = generatedData.drawCommands;
         float woodenBaseHeight = (lowerCone.height + upperCone.height) * WOODEN_BASE_HEIGHT_RATIO;
         woodenParts = new HourGlassWoodenParts(location, new Cylinder(new Point(0f, -lowerCone.height + woodenBaseHeight /2,0f),lowerCone.bottomRadius, woodenBaseHeight), new Cylinder(new Point(0f, upperCone.height - woodenBaseHeight /2,0f),upperCone.topRadius, woodenBaseHeight));
-        ROTATION_SPEED = HOURGLASS_ROTATION_SPEED;
-        UP_DOWN_SPEED = HOURGLASS_UP_DOWN_SPEED;
+        rotationSpeed = HOURGLASS_ROTATION_SPEED;
+        upDownSpeed = HOURGLASS_UP_DOWN_SPEED;
     }
 
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     * @param context
+     */
     public static void initTextures(Context context){
         hourGlassTexture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
-    }
-
-    public static int getHourGlassTexture(){
-        return hourGlassTexture;
     }
 }

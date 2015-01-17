@@ -23,6 +23,7 @@ import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Helpers.NotResolvingCollisionException;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.UpdateResult;
+import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
@@ -191,7 +192,7 @@ public class Updater implements SensorEventListener {
     private boolean isUnderFloors() {
         float value = ball.location.y + ball.getRadius();
         for (Floor floor : board.floors)
-            if (floor.location.y - floor.measurements.y / 2 <= value)
+            if (floor.location.y - floor.getMeasurements().y / 2 <= value)
                 return false;
         for (Elevator elevator : board.elevators)
             if (elevator.location.y - elevator.getMeasurements().y / 2 <= value)
@@ -202,21 +203,24 @@ public class Updater implements SensorEventListener {
     private float getActualCoefficientFriction() {
         float mu = -1;
         for (Floor floor : board.floors) {
-            if (floor.location.x - floor.measurements.x / 2 <= ball.location.x && floor.location.x + floor.measurements.x / 2 >= ball.location.x
-                    && floor.location.z - floor.measurements.z / 2 <= ball.location.z && floor.location.z + floor.measurements.z / 2 >= ball.location.z
-                    && Math.abs(ball.location.y - ball.getRadius() - (floor.location.y + floor.measurements.y / 2)) < Collisions.USER_EXPERIENCE) {
-                mu = floor.mu;
+            BoxSize floorMeasurements =floor.getMeasurements();
+            if (floor.location.x - floorMeasurements.x / 2 <= ball.location.x && floor.location.x + floorMeasurements.x / 2 >= ball.location.x
+                    && floor.location.z - floorMeasurements.z / 2 <= ball.location.z && floor.location.z + floorMeasurements.z / 2 >= ball.location.z
+                    && Math.abs(ball.location.y - ball.getRadius() - (floor.location.y + floorMeasurements.y / 2)) < Collisions.USER_EXPERIENCE) {
+                mu = floor.getMu();
                 break;
             }
         }
         if (mu < 0)
-            for (Elevator elevator : board.elevators)
-                if (elevator.location.x - elevator.getMeasurements().x / 2 <= ball.location.x && elevator.location.x + elevator.getMeasurements().x / 2 >= ball.location.x
-                        && elevator.location.z - elevator.getMeasurements().z / 2 <= ball.location.z && elevator.location.z + elevator.getMeasurements().z / 2 >= ball.location.z
-                        && Math.abs(ball.location.y - ball.getRadius() - (elevator.location.y + elevator.getMeasurements().y / 2)) < Collisions.USER_EXPERIENCE) {
+            for (Elevator elevator : board.elevators) {
+                BoxSize elevatorMeasurements = elevator.getMeasurements();
+                if (elevator.location.x - elevatorMeasurements.x / 2 <= ball.location.x && elevator.location.x + elevatorMeasurements.x / 2 >= ball.location.x
+                        && elevator.location.z - elevatorMeasurements.z / 2 <= ball.location.z && elevator.location.z + elevatorMeasurements.z / 2 >= ball.location.z
+                        && Math.abs(ball.location.y - ball.getRadius() - (elevator.location.y + elevatorMeasurements.y / 2)) < Collisions.USER_EXPERIENCE) {
                     mu = elevator.getMu();
                     break;
                 }
+            }
         return mu;
     }
 
@@ -339,7 +343,7 @@ public class Updater implements SensorEventListener {
         for (Diamond diamond : board.diamonds)
             diamond.texture = Diamond.getDiamondTexture();
         for (Floor floor : board.floors){
-            if (floor.mu > floor.THRESHOLD_MU_FACTOR){
+            if (floor.getMu() > floor.THRESHOLD_MU_FACTOR){
                 floor.texture = Floor.getTopFloorTextureSticky();
             }
             else{
