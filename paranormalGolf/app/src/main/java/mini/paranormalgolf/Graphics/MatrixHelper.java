@@ -1,10 +1,18 @@
 package mini.paranormalgolf.Graphics;
 
 /**
- * Created by Mateusz on 2014-12-05.
+ * Wspomaga tworzenie macierzy stosowanych do wyliczania położen obiektów na ekranie.
  */
 public class MatrixHelper {
 
+    /**
+     * Tworzy macierz projekcji.
+     * @param m Macierz wyjściowa.
+     * @param fovDegree Kąt zasięgu widoczności.
+     * @param aspect Stosunek szerokości oraz wysokości rzutni (ekranu).
+     * @param near Odległość od rzutni bliższej.
+     * @param far Odległość od rzutni dalszej.
+     */
     public static void perspectiveM(float[] m, float fovDegree, float aspect, float near, float far) {
         final float angleInRadians = (float) (fovDegree * Math.PI / 180.0);
         final float a = (float) (1.0 / Math.tan(angleInRadians / 2.0));

@@ -36,6 +36,11 @@ public abstract class Element {
      this.location=location;
     }
 
+    /**
+     * Kojarzy atrybuty z odpowiednimi miejscami w buforze <em><b>vertexData</b></em> uwzględniając typ przekazanego programu.
+     * @param shaderProgram Obiekt programu, którego atrybuty mają być odpowiednio skojarzone.
+     * @param shaderProgramType Typ programu.
+     */
     public void bindData(ShaderProgram shaderProgram, ShaderProgram.ShaderProgramType shaderProgramType){
             switch(shaderProgramType) {
                 case depthMap:
@@ -64,6 +69,9 @@ public abstract class Element {
             }
     }
 
+    /**
+     * Rysuje siatkę trójkątów zdefiniowaną w buforze <em><b>vertexData</b></em> na podstawie reguł z listy <b><em>drawCommands</em></b>
+     */
     public void draw() {
         for (DrawCommand drawCommand : drawCommands) {
             drawCommand.draw();
