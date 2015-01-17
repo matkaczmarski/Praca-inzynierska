@@ -156,6 +156,8 @@ public class DrawManager {
         Diamond.initTextures(context);
         HourGlass.initTextures(context);
         Wall.initTextures(context);
+        Finish.initTextures(context);
+        Ball.initTextures(context);
 
         skyBox = new SkyBox(context);
     }
@@ -176,7 +178,7 @@ public class DrawManager {
             glDeleteTextures(1, renderTextureId, 0);
 
             //sposób usuwania tekstur:
-            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTextureId(), Elevator.getElevatorTexture(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Wall.getWallTexture(), skyBox.getTexture()};
+            int[] textureId = new int[] {Ball.getTexture(), Beam.getTexture(), CheckPoint.getTexture(), Diamond.getTexture(),HourGlass.getTexture(), Elevator.getTexture(), Floor.getStandardFloorTextureId(), Floor.getStickyFloorTextureId(), Wall.getTexture(), SkyBox.getTexture()};
             glDeleteTextures(textureId.length, textureId, 0);
         }
         catch (Exception ex) {}
@@ -348,7 +350,7 @@ public class DrawManager {
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getGlow().ifCanFinish() ? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getGlow().isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
         finish.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         finish.getGlow().draw();
     }
@@ -363,7 +365,7 @@ public class DrawManager {
         if (!checkPoint.isVisited()) {
             colorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
-            colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().ACTIVE_COLOR);
+            colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().CHECKPOINT_GLOW_COLOR);
             checkPoint.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
             checkPoint.getGlow().draw();
         }
@@ -372,7 +374,7 @@ public class DrawManager {
     private void drawHourglass(HourGlass hourGlass) {
         textureShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
         hourGlass.getWoodenParts().bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         hourGlass.getWoodenParts().draw();
 
@@ -553,7 +555,7 @@ public class DrawManager {
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
-        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getGlow().ifCanFinish() ? finish.getGlow().CAN_FINISH_COLOR : finish.getGlow().CANNOT_FINISH_COLOR);
+        colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getGlow().isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
         finish.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         finish.getGlow().draw();
     }
@@ -568,7 +570,7 @@ public class DrawManager {
         if (!checkPoint.isVisited()) {
             colorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
-            colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().ACTIVE_COLOR);
+            colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().CHECKPOINT_GLOW_COLOR);
             checkPoint.getGlow().bindData( colorShaderProgram, ShaderProgram.ShaderProgramType.color);
             checkPoint.getGlow().draw();
         }
@@ -577,7 +579,7 @@ public class DrawManager {
     private void drawHourglassWithShadow(HourGlass hourGlass) {
         shadowingShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.getWoodenParts().getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         hourGlass.getWoodenParts().bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         hourGlass.getWoodenParts().draw();
 

@@ -14,18 +14,19 @@ public class Glow extends ControlPoint {
     public final float GLOW_OPACITY = 0.65f;
     private final int GLOW_MESH_DIMENSION = 32;
 
-    private boolean canFinish;
+    private boolean isActive;
 
-    public final float[] CAN_FINISH_COLOR = new float[] {0.678431f, 1.0f, 0.184314f, GLOW_OPACITY};
-    public final float[] CANNOT_FINISH_COLOR = new float[] {1f, 0.388235f, 0.278431f, GLOW_OPACITY};
-    public final float[] ACTIVE_COLOR = new float[] {1f, 1f, 0f, GLOW_OPACITY};
+    public final float[] ACTIVE_FINISH_COLOR = new float[] {0.678431f, 1.0f, 0.184314f, GLOW_OPACITY};
+    public final float[] INACTIVE_FINISH_COLOR = new float[] {1f, 0.388235f, 0.278431f, GLOW_OPACITY};
 
-    public boolean ifCanFinish() {return canFinish;}
-    public void enableFinishing(){canFinish = true;}
+    public final float[] CHECKPOINT_GLOW_COLOR = new float[] {1f, 1f, 0f, GLOW_OPACITY};
+
+    public boolean isActive() {return isActive;}
+    public void activateFinish(){isActive = true;}
 
     public Glow(Point location, ConicalFrustum conicalFrustum, boolean canFinish) {
         super(location, conicalFrustum);
-        this.canFinish = canFinish;
+        this.isActive = canFinish;
 
         GraphicsData generatedData = ObjectGenerator.createControlPointGlowModel(conicalFrustum, GLOW_MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);

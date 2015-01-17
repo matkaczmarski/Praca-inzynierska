@@ -5,7 +5,6 @@ import android.content.Context;
 
 import mini.paranormalgolf.Graphics.GraphicsData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
-import mini.paranormalgolf.Helpers.NotResolvingCollisionException;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.Circle;
@@ -64,7 +63,8 @@ public class Ball extends MovableElement {
 
     private float[] rotation;
 
-    private BallTexture ballTexture;
+    private static BallTexture ballTextureType;
+    private static int ballTextureId;
 
     public float getRadius(){
         return this.radius;
@@ -72,10 +72,12 @@ public class Ball extends MovableElement {
 
     public float[] getRotation() {return this.rotation;}
 
+    public static int getTexture(){return ballTextureId;}
+
     public Ball(Point location, float radius, Vector velocity, BallTexture ballTexture, Context context) {
         super(velocity, location);
 
-        this.ballTexture = ballTexture;
+        this.ballTextureType = ballTexture;
 
         this.radius = radius;
         mass=5;
@@ -87,11 +89,9 @@ public class Ball extends MovableElement {
         GraphicsData generatedData = ObjectGenerator.createBallModel(radius, MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-
-        texture = loadTexture(ballTexture, context);
     }
 
-    private int loadTexture(BallTexture ballTextureType, Context context){
+    private static int loadTexture(BallTexture ballTextureType, Context context){
         switch (ballTextureType){
             case redAndWhite:
                 return ResourceHelper.loadTexture(context, R.drawable.ball_texture_red_white_dots);
@@ -294,8 +294,7 @@ public class Ball extends MovableElement {
         Collisions.ResponseBallMovingAABBCollisions(this, elevator);
     }
 
-    public void changeContext(Context context)
-    {
-        texture = loadTexture(ballTexture, context);
+    public static void initTextures(Context context){
+        ballTextureId = loadTexture(ballTextureType, context);
     }
 }

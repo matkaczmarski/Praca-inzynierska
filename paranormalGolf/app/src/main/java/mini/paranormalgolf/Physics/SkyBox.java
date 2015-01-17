@@ -19,10 +19,13 @@ import mini.paranormalgolf.R;
 public class SkyBox extends Element {
 
     private static final Point CENTER_POINT = new Point(0f,0f,0f);
+    private static int skyBoxTextureId;
+
+    public static int getTexture(){return skyBoxTextureId;}
 
     public SkyBox(Context context) {
         super(CENTER_POINT);
-        texture = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_space_left, R.drawable.skybox_texture_space_right, R.drawable.skybox_texture_space_bottom, R.drawable.skybox_texture_space_top, R.drawable.skybox_texture_space_back, R.drawable.skybox_texture_space_front});
+        skyBoxTextureId = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_space_left, R.drawable.skybox_texture_space_right, R.drawable.skybox_texture_space_bottom, R.drawable.skybox_texture_space_top, R.drawable.skybox_texture_space_back, R.drawable.skybox_texture_space_front});
 
         GraphicsData generatedData = ObjectGenerator.createSkyBoxModel();
         vertexData = new VertexArray(generatedData.vertexData);

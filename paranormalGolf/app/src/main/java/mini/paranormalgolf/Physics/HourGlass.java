@@ -49,7 +49,6 @@ public class HourGlass extends Bonus {
             GraphicsData generatedData = ObjectGenerator.createHourglassWoodenPartsModel(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION, TEXTURE_UNIT);
             vertexData = new VertexArray(generatedData.vertexData);
             drawCommands = generatedData.drawCommands;
-            texture = hourGlassTexture;//ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
             rotationSpeed = HOURGLASS_ROTATION_SPEED;
         }
     }
@@ -98,7 +97,10 @@ public class HourGlass extends Bonus {
     /**
      * OPISZ MATEUSZ TUTAJ!!!
      */
-    private static int hourGlassTexture;
+    private static int hourGlassTextureId;
+
+
+    public static int getTexture(){return hourGlassTextureId;}
 
     /**
      * OPISZ MATEUSZ TUTAJ
@@ -111,14 +113,6 @@ public class HourGlass extends Bonus {
      */
     public ConicalFrustum getLowerCone() {
         return lowerCone;
-    }
-
-    /**
-     * OPISZ MATEUSZ TUTAJ!!!
-     * @return
-     */
-    public static int getHourGlassTexture(){
-        return hourGlassTexture;
     }
 
     /**
@@ -150,6 +144,6 @@ public class HourGlass extends Bonus {
      * @param context
      */
     public static void initTextures(Context context){
-        hourGlassTexture = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
+        hourGlassTextureId = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);
     }
 }

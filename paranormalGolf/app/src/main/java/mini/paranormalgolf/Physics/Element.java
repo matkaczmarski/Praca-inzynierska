@@ -26,14 +26,11 @@ public abstract class Element {
     private final int STRIDE_WITHOUT_TEXTURE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
     protected Point location;
-    protected int texture;
     protected VertexArray vertexData;
     protected List<DrawCommand> drawCommands;
 
     public Point getLocation() { return this.location;}
     public void setLocation(Point location) { this.location = location;}
-
-    public int getTexture() {return  this.texture;}
 
     protected Element(Point location){
      this.location=location;

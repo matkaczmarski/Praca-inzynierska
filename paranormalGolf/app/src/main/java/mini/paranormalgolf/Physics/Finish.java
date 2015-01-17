@@ -22,22 +22,29 @@ public class Finish extends ControlPoint {
     private boolean canFinish;
     private Glow glow;
 
+    private static int finishTextureId;
+
     public void enableFinishing() {
         canFinish = true;
-        glow.enableFinishing();
+        glow.activateFinish();
     }
+
+    public int getTexture(){return finishTextureId;}
 
     public Glow getGlow(){return glow;}
 
-    public Finish(Point location, ConicalFrustum conicalFrustum, boolean canFinish, Context context) {
+    public Finish(Point location, ConicalFrustum conicalFrustum, boolean canFinish) {
         super(location, conicalFrustum);
         this.canFinish = canFinish;
 
         GraphicsData generatedData = ObjectGenerator.createControlPointPlatformModel(conicalFrustum.bottomRadius, FINISH_PLATFORM_DIMENSION, FINISH_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
         glow = new Glow(location, conicalFrustum, canFinish);
+    }
+
+    public static void initTextures(Context context){
+        finishTextureId = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
     }
 
     public boolean isCanFinish()

@@ -33,7 +33,7 @@ public class Wall extends Element {
     /**
      * OPISZ MATEUSZ TUTAJ!!!!
      */
-    private static int wallTexture;
+    private static int wallTextureId;
 
     /**
      * Zwraca rozmiar prostopadłościanu ściany
@@ -47,10 +47,7 @@ public class Wall extends Element {
      * OPISZ MATEUSZ TUTAJ!!!!
      * @return
      */
-    public static int getWallTexture()
-    {
-        return wallTexture;
-    }
+    public static int getTexture(){return wallTextureId;}
 
 
     /**
@@ -65,15 +62,13 @@ public class Wall extends Element {
         GraphicsData generatedData = ObjectGenerator.createBoxModel(measures, WALL_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = wallTexture;//ResourceHelper.loadTexture(context, R.drawable.wall_texture);
     }
 
     /**
      * OPISZ MATEUSZ TUTAJ!!!!
      * @param context
      */
-    public static void initTextures(Context context)
-    {
-        wallTexture = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
+    public static void initTextures(Context context){
+        wallTextureId = ResourceHelper.loadTexture(context, R.drawable.wall_texture);
     }
 }

@@ -2,17 +2,12 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 
-import java.util.Arrays;
-import java.util.List;
-
 import mini.paranormalgolf.Graphics.GraphicsData;
-import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Point;
-import mini.paranormalgolf.Primitives.Rectangle;
 import mini.paranormalgolf.R;
 
 /**
@@ -36,10 +31,10 @@ public class Floor extends Element {
     private float mu;
 
     /** Opisz Mateusz tutaj!!!!!!!!  */
-    private static int topFloorTextureNormal;
+    private static int standardFloorTextureId;
 
     /** Opisz Mateusz tutaj!!!!!!!!  */
-    private static int topFloorTextureSticky;
+    private static int stickyFloorTextureId;
 
     /**
      * Zwraca rozmiar prostopadłościanu  podłogi
@@ -61,20 +56,22 @@ public class Floor extends Element {
      * Opisz Mateusz tutaj!!!!!!!!
      * @return
      */
-    public static int getTopFloorTextureNormal()
+    public static int getStandardFloorTextureId()
     {
-        return topFloorTextureNormal;
+        return standardFloorTextureId;
     }
 
     /**
      * Opisz Mateusz tutaj!!!!!!!!
      * @return
      */
-    public static int getTopFloorTextureSticky()
+    public static int getStickyFloorTextureId()
     {
-        return topFloorTextureSticky;
+        return stickyFloorTextureId;
     }
 
+
+    public int getTexture(){return mu <= THRESHOLD_MU_FACTOR ? standardFloorTextureId : stickyFloorTextureId;}
 
     /**
      * Tworzy obiekt typu podłoga
@@ -97,9 +94,9 @@ public class Floor extends Element {
      * @param context
      */
     public static void initTextures(Context context){
-        topFloorTextureSticky = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
-        topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
-        //topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_cos);
-        //topFloorTextureNormal = ResourceHelper.loadTexture(context, R.drawable.floor_texture_lunabase);
+        stickyFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);
+        standardFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture3);
+        //standardFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.floor_texture_cos);
+        //standardFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.floor_texture_lunabase);
     }
 }

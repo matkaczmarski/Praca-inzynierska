@@ -323,32 +323,5 @@ public class Updater implements SensorEventListener {
         }
         else
             drawManager = new DrawManager(context, shadows);
-        reloadTextures(context);
-    }
-
-    public void reloadTextures(Context context){
-        ball.changeContext(context);
-        for (Beam beam : board.beams)
-            beam.texture = Beam.getBeamTexture();
-        for (CheckPoint checkPoint : board.checkpoints)
-            checkPoint.texture = CheckPoint.getCheckPointTexture();
-        for (Elevator elevator : board.elevators)
-            elevator.texture = Elevator.getElevatorTexture();
-        for (Diamond diamond : board.diamonds)
-            diamond.texture = Diamond.getDiamondTextureId();
-        for (Floor floor : board.floors){
-            if (floor.getMu() > floor.THRESHOLD_MU_FACTOR){
-                floor.texture = Floor.getTopFloorTextureSticky();
-            }
-            else{
-                floor.texture = Floor.getTopFloorTextureNormal();
-            }
-        }
-        for (HourGlass hourGlass : board.hourGlasses)
-            hourGlass.getWoodenParts().texture = HourGlass.getHourGlassTexture();
-        for (Wall wall : board.walls)
-            wall.texture = Wall.getWallTexture();
-        board.finish.texture = ResourceHelper.loadTexture(context, R.drawable.finish_texture);
-
     }
 }

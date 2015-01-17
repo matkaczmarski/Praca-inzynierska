@@ -164,7 +164,7 @@ public class XMLParser
 
                         boolean canFinish = Boolean.parseBoolean(xpp.getAttributeValue(null, "canFinish"));
 
-                        finish = new Finish(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z), canFinish, context);
+                        finish = new Finish(new Point(location_x, location_y, location_z), new ConicalFrustum(frustum_x, frustum_y, frustum_z), canFinish);
                     }
                     else if (name.equals("Checkpoint"))
                     {

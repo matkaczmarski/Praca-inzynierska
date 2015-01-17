@@ -32,7 +32,9 @@ public class Elevator extends MovableElement {
 
     private float time_left;
 
-    private static int elevatorTexture;
+    private static int elevatorTextureId;
+
+    public static int getTexture(){return elevatorTextureId;}
 
     private boolean change = false;
 
@@ -56,7 +58,6 @@ public class Elevator extends MovableElement {
         GraphicsData generatedData = ObjectGenerator.createBoxModel(measure, ELEVATOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = elevatorTexture;//ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
     }
 
     public void Update(float dt)
@@ -129,13 +130,7 @@ public class Elevator extends MovableElement {
         return true;
     }
 
-    public static void initTextures(Context context)
-    {
-        elevatorTexture = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
-    }
-
-    public static int getElevatorTexture()
-    {
-        return elevatorTexture;
+    public static void initTextures(Context context){
+        elevatorTextureId = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
     }
 }

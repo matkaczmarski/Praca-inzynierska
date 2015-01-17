@@ -43,11 +43,8 @@ public class Diamond extends Bonus {
      * Zwraca wartość identyfikatora OpenGL tekstury diamentu.
      * @return Wartość <b><em>diamondTextureId</em></b>.
      */
-    public static int getDiamondTextureId()
-    {
-        return diamondTextureId;
-    }
 
+    public static int getTexture(){return diamondTextureId;}
 
     /**
      * Tworzy obiekt typu diament.
@@ -60,7 +57,6 @@ public class Diamond extends Bonus {
         GraphicsData generatedData = ObjectGenerator.createDiamondModel(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
-        texture = diamondTextureId;
     }
 
     /**
