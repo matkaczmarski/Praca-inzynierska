@@ -7,14 +7,28 @@ import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 
 /**
- * Created by Mateusz on 2015-01-03.
+ * Opisuje program do generowania mapy głębokości cieni.
  */
 public class DepthMapShaderProgram extends ShaderProgram {
+
+    /**
+     * Określa lokalizację stałej wartości (uniform macierzy modelViewProjection) występującej w kodzie programu.
+     */
     private final int uMVPMatrixLocation;
+    /**
+     * Określa lokalizację stałej wartości (uniform macierzy modelView) występującej w kodzie programu.
+     */
     private final int uMVMatrixLocation;
 
+    /**
+     * Określa lokalizację atrybutu pozycji wierzchołków występującego w kodzie programu.
+     */
     private final int aPositionLocation;
 
+    /**
+     * Tworzy obiekt programu do generowania mapy głębokości cieni.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     */
     public DepthMapShaderProgram(Context context){
         super(context, R.raw.depthmap_vertex_shader, R.raw.depthmap_fragment_shader);
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
@@ -22,11 +36,20 @@ public class DepthMapShaderProgram extends ShaderProgram {
         aPositionLocation = glGetAttribLocation(program, A_POSITION);
     }
 
+    /**
+     * Przypisuje stałym wartościom (uniformom) występującym w kodzie programu odpowiednie wartości.
+     * @param mvpMatrix Przypisywana wartość macierzy modelViewProjection dla światła.
+     * @param mvMatrix Przypisywana wartość macierzy modelView.
+     */
     public void setUniforms(float[] mvpMatrix, float[] mvMatrix) {
         glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
     }
 
+    /**
+     * Zwraca lokalizację atrybutu pozycji wierzchołków.
+     * @return Wartość <em><b>aPositionLocation</b></em>.
+     */
     public int getPositionAttributeLocation() {
         return aPositionLocation;
     }
