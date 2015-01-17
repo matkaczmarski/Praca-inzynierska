@@ -176,7 +176,7 @@ public class DrawManager {
             glDeleteTextures(1, renderTextureId, 0);
 
             //sposób usuwania tekstur:
-            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTexture(), Elevator.getElevatorTexture(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Wall.getWallTexture(), skyBox.getTexture()};
+            int[] textureId = new int[] {Beam.getBeamTexture(), CheckPoint.getCheckPointTexture(), Diamond.getDiamondTextureId(), Elevator.getElevatorTexture(), Floor.getTopFloorTextureNormal(), Floor.getTopFloorTextureSticky(), Wall.getWallTexture(), skyBox.getTexture()};
             glDeleteTextures(textureId.length, textureId, 0);
         }
         catch (Exception ex) {}
@@ -682,7 +682,7 @@ public class DrawManager {
 
 
 
-    //STAŁE:
+    //STALE:
 
     //Dla orbit kamery i światła
     private final float CAMERA_ORBIT_RADIUS = 20f;
