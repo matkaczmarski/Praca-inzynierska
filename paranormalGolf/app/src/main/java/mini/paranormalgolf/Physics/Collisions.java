@@ -10,20 +10,37 @@ import mini.paranormalgolf.Primitives.Sphere;
 import mini.paranormalgolf.Primitives.Vector;
 
 /**
- * Created by Sławomir on 2014-12-29.
+ * Sprawdza i rozwiązuje kolizje kuli z elementami
  */
 public final class Collisions {
 
+    /**
+     * Niewielka wartość pomocnicza przy sprawdzaniu równości i nierówności wyrażeń
+     * związana z niedokładnością obliczeń numerycznych.
+     */
     public final static float USER_EXPERIENCE = 4e-4f;
 
+    /**
+     * Informacja, czy podczas działania wystąpiła nierozwiązywalna kolizja.
+     */
+    private static boolean wasNotResolvedCollision=false;
+
+    /**
+     * Zwraca informację, czy podczas działania wystąpiła nierozwiązywalna kolizja.
+     * @return Wartość <b><em>wasNotResolvedCollision</em></b>.
+     */
     public static boolean getWasNotResolvedCollision() {
         boolean value = wasNotResolvedCollision;
         wasNotResolvedCollision = false;
         return value;
     }
 
-    private static boolean wasNotResolvedCollision=false;
-
+    /**
+     * Sprawdza, czy kula oraz prostopadłościan równoległy do osi układu współrzędnych przecinają się.
+     * @param sphere Kula opisana w globalnym układzie współrzędnych.
+     * @param box Prostopadłościan równoległy do osi układu współrzędnych opisany w globalnym układzie współrzędnych.
+     * @return Informacja, czy elementy przecinają się.
+     */
     public static boolean CheckSphereAABBCollision(Sphere sphere, Box box) {
 
         Point boxCenter = box.center;
@@ -53,28 +70,46 @@ public final class Collisions {
         return d <= sphereRadius * sphereRadius;
     }
 
-    private static Vector FindNormalVectorInCollision(Sphere sphere, Box collidedBox) {
-        Vector normal = new Vector(0, 0, 0);
-        Point min = new Point(collidedBox.center.x - collidedBox.size.x / 2, collidedBox.center.y - collidedBox.size.y / 2, collidedBox.center.z - collidedBox.size.z / 2);
-        Point max = new Point(collidedBox.center.x + collidedBox.size.x / 2, collidedBox.center.y + collidedBox.size.y / 2, collidedBox.center.z + collidedBox.size.z / 2);
-
-        if (min.x - sphere.center.x > 0 && min.x - sphere.center.x <= sphere.radius + Collisions.USER_EXPERIENCE)
-            normal.x = sphere.center.x - min.x;
-        else if (sphere.center.x - max.x > 0 && sphere.center.x - max.x <= sphere.radius + Collisions.USER_EXPERIENCE)
-            normal.x = sphere.center.x - max.x;
-
-        if (min.y - sphere.center.y > 0 && min.y - sphere.center.y <= sphere.radius + Collisions.USER_EXPERIENCE)
-            normal.y = sphere.center.y - min.y;
-        else if (sphere.center.y - max.y > 0 && sphere.center.y - max.y <= sphere.radius + Collisions.USER_EXPERIENCE)
-            normal.y = sphere.center.y - max.y;
-
-        if (min.z - sphere.center.z > 0 && min.z - sphere.center.z <= sphere.radius + Collisions.USER_EXPERIENCE)
-            normal.z = sphere.center.z - min.z;
-        else if (sphere.center.z - max.z > 0 && sphere.center.z - max.z <= sphere.radius + Collisions.USER_EXPERIENCE)
-            normal.z = sphere.center.z - max.z;
-        return normal;
+    /**
+     * Sprawdza, czy kula oraz walec, którego wysokość jest równoległa do osi OY układu współrzędnych przecinają się.
+     * @param sphere Kula opisana w globalnym układzie współrzędnych.
+     * @param cylinder Walec, którego wysokość jest równoległa do osi OY układu współrzędnych opisany w globalnym układzie współrzędnych.
+     * @return Informacja, czy elementy przecinają się.
+     */
+    public static boolean CheckSphereCylinderCollision(Sphere sphere, Cylinder cylinder) {
+        Point cylinderCenter = cylinder.center;
+        float cylinderRadius = cylinder.radius;
+        float cylinderMinY = cylinderCenter.y - cylinder.height / 2;
+        float cylinderMaxY = cylinderCenter.y + cylinder.height / 2;
+        Point sphereCenter = sphere.center;
+        float sphereRadius = sphere.radius;
+        float d = 0;
+        if (sphereCenter.y < cylinderMinY) {
+            d += (sphereCenter.y - cylinderMinY) * (sphereCenter.y - cylinderMinY);
+        } else if (sphereCenter.y > cylinderMaxY) {
+            d += (sphereCenter.y - cylinderMaxY) * (sphereCenter.y - cylinderMaxY);
+        }
+        d += (sphereCenter.x - cylinderCenter.x) * (sphereCenter.x - cylinderCenter.x) + (sphereCenter.z - cylinderCenter.z) * (sphereCenter.z - cylinderCenter.z);
+        return d <= (sphereRadius + cylinderRadius) * (sphereRadius + cylinderRadius);
     }
 
+    /**
+     * Sprawdza, czy kula znajduje się na kole znajdującym się w płaszczyźnie równoległej do płaszczyzny OXZ.
+     * @param sphere Kula opisana w globalnym układzie współrzędnych.
+     * @param circle Koło znajdujące się w płaszczyźnie równoległej do płaszczyzny OXZ.
+     * @return Informacja, czy zachodzi warunek.
+     */
+    public static boolean CheckSphereCircleCollision(Sphere sphere, Circle circle) {
+        return (sphere.center.x - circle.center.x) * (sphere.center.x - circle.center.x) + (sphere.center.z - circle.center.z) * (sphere.center.z - circle.center.z) <= circle.radius * circle.radius
+                && Math.abs(sphere.center.y - circle.center.y - sphere.radius) <= USER_EXPERIENCE;
+    }
+
+    /**
+     * Rozwiązuje sytację kolizji kuli z prostopadłościanem równoległym do osi układu współrzędnych.
+     * Prostopadłościan <b><em> collidedBox </em></b> nie porusza się.
+     * @param ball Kula, dla której zmieniamy stan w związku z kolizją.
+     * @param collidedBox Prostopadłościan stacjonarny, z którym kulka koliduje.
+     */
     public static void ResponseBallAABBCollisions(Ball ball, Box collidedBox) {
 
         //finding collision place and time
@@ -227,28 +262,12 @@ public final class Collisions {
         }
     }
 
-    public static boolean CheckSphereCylinderCollision(Sphere sphere, Cylinder cylinder) {
-        Point cylinderCenter = cylinder.center;
-        float cylinderRadius = cylinder.radius;
-        float cylinderMinY = cylinderCenter.y - cylinder.height / 2;
-        float cylinderMaxY = cylinderCenter.y + cylinder.height / 2;
-        Point sphereCenter = sphere.center;
-        float sphereRadius = sphere.radius;
-        float d = 0;
-        if (sphereCenter.y < cylinderMinY) {
-            d += (sphereCenter.y - cylinderMinY) * (sphereCenter.y - cylinderMinY);
-        } else if (sphereCenter.y > cylinderMaxY) {
-            d += (sphereCenter.y - cylinderMaxY) * (sphereCenter.y - cylinderMaxY);
-        }
-        d += (sphereCenter.x - cylinderCenter.x) * (sphereCenter.x - cylinderCenter.x) + (sphereCenter.z - cylinderCenter.z) * (sphereCenter.z - cylinderCenter.z);
-        return d <= (sphereRadius + cylinderRadius) * (sphereRadius + cylinderRadius);
-    }
-
-    public static boolean CheckSphereCircleCollision(Sphere sphere, Circle circle) {
-        return (sphere.center.x - circle.center.x) * (sphere.center.x - circle.center.x) + (sphere.center.z - circle.center.z) * (sphere.center.z - circle.center.z) <= circle.radius * circle.radius
-                && Math.abs(sphere.center.y - circle.center.y - sphere.radius) <= USER_EXPERIENCE;
-    }
-
+    /**
+     * Rozwiązuje sytację kolizji kuli z elementem poruszającym się.
+     * Element <b><em> element </em></b> nie zmienia swojej prędkości.
+     * @param ball Kula, dla której zmieniamy stan w związku z kolizją.
+     * @param element Element poruszający się, z którym kulka koliduje.
+     */
     public static void ResponseBallMovingAABBCollisions(Ball ball, MovableElement element){
         BoxSize boxSize;
         if (element.getClass() == Elevator.class)
@@ -489,5 +508,33 @@ public final class Collisions {
 //            ball.setVelocity(velocity);
 
         //  }
+    }
+
+    /**
+     * Oblicza wektor normalny do płaszczyzny kolizji kuli z prostopadłościanem.
+     * @param sphere Kula stykająca się z prostopadłościanem.
+     * @param collidedBox Prostopadłościan stykający się z kulą.
+     * @return Wektor normalny do płaszczyzny kolziji elementów.
+     */
+    private static Vector FindNormalVectorInCollision(Sphere sphere, Box collidedBox) {
+        Vector normal = new Vector(0, 0, 0);
+        Point min = new Point(collidedBox.center.x - collidedBox.size.x / 2, collidedBox.center.y - collidedBox.size.y / 2, collidedBox.center.z - collidedBox.size.z / 2);
+        Point max = new Point(collidedBox.center.x + collidedBox.size.x / 2, collidedBox.center.y + collidedBox.size.y / 2, collidedBox.center.z + collidedBox.size.z / 2);
+
+        if (min.x - sphere.center.x > 0 && min.x - sphere.center.x <= sphere.radius + Collisions.USER_EXPERIENCE)
+            normal.x = sphere.center.x - min.x;
+        else if (sphere.center.x - max.x > 0 && sphere.center.x - max.x <= sphere.radius + Collisions.USER_EXPERIENCE)
+            normal.x = sphere.center.x - max.x;
+
+        if (min.y - sphere.center.y > 0 && min.y - sphere.center.y <= sphere.radius + Collisions.USER_EXPERIENCE)
+            normal.y = sphere.center.y - min.y;
+        else if (sphere.center.y - max.y > 0 && sphere.center.y - max.y <= sphere.radius + Collisions.USER_EXPERIENCE)
+            normal.y = sphere.center.y - max.y;
+
+        if (min.z - sphere.center.z > 0 && min.z - sphere.center.z <= sphere.radius + Collisions.USER_EXPERIENCE)
+            normal.z = sphere.center.z - min.z;
+        else if (sphere.center.z - max.z > 0 && sphere.center.z - max.z <= sphere.radius + Collisions.USER_EXPERIENCE)
+            normal.z = sphere.center.z - max.z;
+        return normal;
     }
 }
