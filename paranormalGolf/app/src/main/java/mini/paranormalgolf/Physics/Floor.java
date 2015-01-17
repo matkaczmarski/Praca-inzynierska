@@ -15,13 +15,19 @@ import mini.paranormalgolf.R;
  */
 public class Floor extends Element {
 
-    /** Opisz Mateusz tutaj!!!!!!  */
+    /**
+     * Stała opisująca stopień przezroczystości podłogi.
+     */
     public final float FLOOR_OPACITY = 1f;
 
-    /** Opisz Mateusz tutaj!!!!!!!!  */
+    /**
+     * Stała definiująca próg, powyżej którego tekstura podłogi jest zmnieniana.
+     */
     public final float THRESHOLD_MU_FACTOR = 0.05f;
 
-    /** Opisz Mateusz tutaj!!!!!!!!  */
+    /**
+     * Stała definiująca rozmiar kwadratowego kafelka tekstury podłogi.
+     */
     private static final float FLOOR_TEXTURE_UNIT = 5f;
 
     /** Rozmiar prostopadłościanu podłogi*/
@@ -30,10 +36,10 @@ public class Floor extends Element {
     /** Współczynnik tarcia dla powierzchni podłogi*/
     private float mu;
 
-    /** Opisz Mateusz tutaj!!!!!!!!  */
+    /** Statyczna wartość identyfikatora OpenGL tekstury podłogi o standardowym współczynniku tarcia.  */
     private static int standardFloorTextureId;
 
-    /** Opisz Mateusz tutaj!!!!!!!!  */
+    /** Statyczna wartość identyfikatora OpenGL tekstury podłogi o zwiększonym współczynniku tarcia.  */
     private static int stickyFloorTextureId;
 
     /**
@@ -53,8 +59,8 @@ public class Floor extends Element {
     }
 
     /**
-     * Opisz Mateusz tutaj!!!!!!!!
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury podłogi o standardowym współczynniku tarcia.
+     * @return Wartość <b><em>standardFloorTextureId</em></b>.
      */
     public static int getStandardFloorTextureId()
     {
@@ -62,15 +68,18 @@ public class Floor extends Element {
     }
 
     /**
-     * Opisz Mateusz tutaj!!!!!!!!
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury podłogi o zwiększonym współczynniku tarcia.
+     * @return Wartość <b><em>stickyFloorTextureId</em></b>.
      */
     public static int getStickyFloorTextureId()
     {
         return stickyFloorTextureId;
     }
 
-
+    /**
+     * Zwraca wartość identyfikatora OpenGL aktualnej tekstury podłogi.
+     * @return Wartość <b><em>standardFloorTextureId</em></b> gdy wartość współczynnika tarcia jest nie większy niż wartość progowego współczynnika lub <b><em>stickyFloorTextureId</em></b> w przeciwnym przypadku.
+     */
     public int getTexture(){return mu <= THRESHOLD_MU_FACTOR ? standardFloorTextureId : stickyFloorTextureId;}
 
     /**
@@ -90,8 +99,8 @@ public class Floor extends Element {
     }
 
     /**
-     * Opisz Mateusz tutaj!!!!!!!!
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury podłogi o standardowym i zwiększkonym współczynniku tarcia.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
     public static void initTextures(Context context){
         stickyFloorTextureId = ResourceHelper.loadTexture(context, R.drawable.new_floor_texture5);

@@ -13,20 +13,28 @@ import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Mateusz on 2014-12-14.
+ * Tło sceny reprezentowane jako sześcian z nałożonymi teksturami przestrzennego tła.
  */
-
 public class SkyBox extends Element {
 
-    private static final Point CENTER_POINT = new Point(0f,0f,0f);
+    /**
+     * Statyczna wartość identyfikatora OpenGL sześciennej tekstury tła.
+     */
     private static int skyBoxTextureId;
 
+    /**
+     * Zwraca wartość identyfikatora OpenGL sześciennej tekstury tła.
+     * @return Wartość <b><em>skyBoxTextureId</em></b>.
+     */
     public static int getTexture(){return skyBoxTextureId;}
 
+    /**
+     * Tworzy obiekt typu przestrzenne tło.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     */
     public SkyBox(Context context) {
-        super(CENTER_POINT);
+        super(new Point(0f,0f,0f));
         skyBoxTextureId = ResourceHelper.loadCubeMap(context, new int[]{R.drawable.skybox_texture_space_left, R.drawable.skybox_texture_space_right, R.drawable.skybox_texture_space_bottom, R.drawable.skybox_texture_space_top, R.drawable.skybox_texture_space_back, R.drawable.skybox_texture_space_front});
-
         GraphicsData generatedData = ObjectGenerator.createSkyBoxModel();
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;

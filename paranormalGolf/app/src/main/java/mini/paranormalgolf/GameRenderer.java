@@ -113,12 +113,14 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GLES20.GL_CULL_FACE);
 
-        updater.setContext(activity);
+//        updater.setContext(activity);
     }
 
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         updater.surfaceChange(width, height);
+
+        updater.setContext(activity);
     }
 
 

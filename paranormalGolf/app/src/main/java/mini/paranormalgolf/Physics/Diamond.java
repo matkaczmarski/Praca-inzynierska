@@ -25,7 +25,6 @@ public class Diamond extends Bonus {
      * Rozmiar ostrosłupa używanego przy rysowaniu diamentu.
      */
     private final Pyramid pyramid = new Pyramid(0.7f, 1.4f, 6);
-
     /**
      * Statyczna wartość identyfikatora OpenGL tekstury diamentu.
      */
@@ -43,7 +42,6 @@ public class Diamond extends Bonus {
      * Zwraca wartość identyfikatora OpenGL tekstury diamentu.
      * @return Wartość <b><em>diamondTextureId</em></b>.
      */
-
     public static int getTexture(){return diamondTextureId;}
 
     /**

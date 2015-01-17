@@ -82,15 +82,35 @@ import static android.opengl.Matrix.transposeM;
  */
 public class DrawManager {
 
-    //Wymiary ekranu i depthMapy
+    /**
+     * Szerokość ekranu.
+     */
     private int displayWidth;
+    /**
+     * Wysokość ekranu.
+     */
     private int displayHeight;
+    /**
+     * Szerokość mapy głębokości cieni.
+     */
     private int depthMapWidth;
+    /**
+     * Wysokość mapy głębokości cieni.
+     */
     private int depthMapHeight;
 
-    //Macierze:
+    //MACIERZE:
+    /**
+     * Macierz modeli stosowana do umiejscawiania modeli obiektów w odpowiedniej pozycji we współrzędnych świata.
+     */
     private final float[] modelsMatrix = new float[16];
+    /**
+     * Macierz widoku kamery określająca położenie kamery oraz kierunek jej patrzenia.
+     */
     private final float[] viewMatrix = new float[16];
+    /**
+     * Macierz projekcji kamery określająca bryłę zasięgu widoku.
+     */
     private final float[] projectionMatrix = new float[16];
     private final float[] viewProjectionMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
@@ -136,12 +156,6 @@ public class DrawManager {
         resetDrawManager();
     }
 
-    public DrawManager(Context context, boolean withShadow, float xRotation, float yRotation){
-        this(context, withShadow);
-        this.xRotation = xRotation;
-        this.yRotation = yRotation;
-    }
-
     public void initTextures(Context context){
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
@@ -163,8 +177,7 @@ public class DrawManager {
     }
 
     public void releaseResources(){
-        try
-        {
+        try {
             //usuwanie shader programów
             glDeleteProgram(colorShaderProgram.getProgram());
             glDeleteProgram(textureShaderProgram.getProgram());
@@ -172,16 +185,22 @@ public class DrawManager {
             glDeleteProgram(skyBoxShaderProgram.getProgram());
             glDeleteProgram(shadowingShaderProgram.getProgram());
 
-            //usuwanie fbo
-            glDeleteFramebuffers(1, frameBufferObjectId, 0);
-            glDeleteRenderbuffers(1, depthTextureId, 0);
-            glDeleteTextures(1, renderTextureId, 0);
-
             //sposób usuwania tekstur:
-            int[] textureId = new int[] {Ball.getTexture(), Beam.getTexture(), CheckPoint.getTexture(), Diamond.getTexture(),HourGlass.getTexture(), Elevator.getTexture(), Floor.getStandardFloorTextureId(), Floor.getStickyFloorTextureId(), Wall.getTexture(), SkyBox.getTexture()};
+            int[] textureId = new int[]{Ball.getTexture(), Beam.getTexture(), CheckPoint.getTexture(), Diamond.getTexture(), HourGlass.getTexture(), Elevator.getTexture(), Floor.getStandardFloorTextureId(), Floor.getStickyFloorTextureId(), Wall.getTexture(), SkyBox.getTexture()};
             glDeleteTextures(textureId.length, textureId, 0);
+
+            //usuwanie fbo
+            if (withShadow){
+                glDeleteRenderbuffers(1, depthTextureId, 0);
+                glDeleteTextures(1, renderTextureId, 0);
+                glDeleteFramebuffers(1, frameBufferObjectId, 0);
+            }
         }
-        catch (Exception ex) {}
+        catch (Exception ex) {
+            if(LoggerConfig.ON) {
+                Log.d("RELEASING RESOURCES:", ex.getMessage());
+            }
+        }
     }
 
     public void resetDrawManager(){

@@ -13,35 +13,35 @@ import mini.paranormalgolf.R;
 
 /**
  * Klepsydra w grze reprezentowana jako 2 ścięte stożki sklejone podstawami,
- * których wysokości są równoległe do osi OY układu współrzędnych
+ * których wysokości są równoległe do osi OY układu współrzędnych.
  */
 public class HourGlass extends Bonus {
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Opisuje drewniane części klepsydry.
      */
     public class HourGlassWoodenParts extends Bonus{
 
         /**
-         * OPISZ MATEUSZ TUTAJ!!!!
+         * Stała opisująca stopień przezroczystości drewnianych części klepsydry.
          */
         public final float HOURGLASS_WOODEN_PART_OPACITY = 1f;
 
         /**
-         * OPISZ MATEUSZ TUTAJ!!!!
+         * Stała opisująca rozdzielczość siatki trójkątów drewnianych części klepsydry.
          */
         private final int HOURGLASS_MESH_DIMENSION = 32;
 
         /**
-         * OPISZ MATEUSZ TUTAJ!!!!
+         * Stała definiująca rozmiar kwadratowego kafelka tekstury drewnianych części klepsydry.
          */
         private final float TEXTURE_UNIT = 5f;
 
         /**
-         * OPISZ MATEUSZ TUTAJ!!!
-         * @param location
-         * @param lowerCylinder
-         * @param upperCylinder
+         * Tworzy obiekt drewnianych części klepsydry.
+         * @param location Współrzędne klepsydry w globalnym układzie współrzędnych.
+         * @param lowerCylinder Rozmiary dolnej drewnianej części klepsydry.
+         * @param upperCylinder Rozmiary górnej drewnianej części klepsydry.
          */
         public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder) {
             super(location, 0, 0);
@@ -54,32 +54,27 @@ public class HourGlass extends Bonus {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Stała opisująca kolor oraz stopień przezroczystości szkła klepsydry.
      */
-    public final float HOURGLASS_OPACITY = 0.75f;
+    public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, 0.75f};
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
-     */
-    public final float[] GLASS_COLOR = new float[] {0.690196f, 0.878431f, 0.901961f, HOURGLASS_OPACITY};
-
-    /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Stała opisująca prędkość kątową obrotu klepsydry.
      */
     private final float HOURGLASS_ROTATION_SPEED = 0.5f;
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Stała opisująca szybkość podnoszenia i opadania klepsydry.
      */
     private final float HOURGLASS_UP_DOWN_SPEED = 0.001f;
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Stała opisująca rozdzielczość siatki trójkątów szklanej części klepsydry.
      */
     private final int HOURGLASS_MESH_DIMENSION = 32;
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Stała opisująca stosunek wysokości drewnianych części klepsydry do wysokości klepsydry.
      */
     private final float WOODEN_BASE_HEIGHT_RATIO = 0.1f;
 
@@ -95,15 +90,14 @@ public class HourGlass extends Bonus {
     private final ConicalFrustum upperCone = new ConicalFrustum(0.7f, 0.15f, 0.5f);
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
+     * Statyczna wartość identyfikatora OpenGL tekstury drewnianych części klepsydry.
      */
     private static int hourGlassTextureId;
 
 
-    public static int getTexture(){return hourGlassTextureId;}
-
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Zwraca wartość identyfikatora OpenGL tekstury drewnianych części klepsydry.
+     * @return Wartość <b><em>hourGlassTextureId</em></b>.
      */
     private HourGlassWoodenParts woodenParts;
 
@@ -116,10 +110,17 @@ public class HourGlass extends Bonus {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ!!!
-     * @return
+     * Zwraca obiekt definiujący drewniane części klepsydry.
+     * @return Obiekt <b><em>woodenParts</em></b>
      */
     public HourGlassWoodenParts getWoodenParts(){return woodenParts;}
+
+
+    /**
+     *
+     * @return
+     */
+    public static int getTexture(){return hourGlassTextureId;}
 
     /**
      * Tworzy obiekt typu klepsydra
@@ -140,8 +141,8 @@ public class HourGlass extends Bonus {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury drewnianych częsci klepsydry.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
     public static void initTextures(Context context){
         hourGlassTextureId = ResourceHelper.loadTexture(context, R.drawable.hourglass_texture_wooden_part);

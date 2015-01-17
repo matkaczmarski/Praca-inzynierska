@@ -1,8 +1,11 @@
 package mini.paranormalgolf;
 
 /**
- * Created by Mateusz on 2014-12-05.
+ * Odpowiada za opcje włączania/wyłączania pisania do Logów.
  */
 public class LoggerConfig {
+    /**
+     * Informacja, czy opcja pisania do Logów jest włączona (true) lub wyłączona (false).
+     */
     public static final boolean ON = true;
 }
