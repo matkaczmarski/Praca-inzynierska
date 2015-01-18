@@ -64,7 +64,7 @@ public class Finish extends ControlPoint {
      * OPISZ MATEUSZ TUTAJ
      * @return
      */
-    public int getTexture(){return finishTextureId;}
+    public static int getTexture(){return finishTextureId;}
 
     /**
      * Tworzy obiekt typu meta.
