@@ -319,7 +319,7 @@ public class Updater implements SensorEventListener {
         if (drawManager != null)
         {
             drawManager.releaseResources();
-            drawManager.initTextures(context);
+            drawManager.initialize(context);
         }
         else
             drawManager = new DrawManager(context, shadows);

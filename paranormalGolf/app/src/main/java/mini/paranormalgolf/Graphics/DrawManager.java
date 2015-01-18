@@ -78,7 +78,7 @@ import static android.opengl.Matrix.rotateM;
 import static android.opengl.Matrix.transposeM;
 
 /**
- * Created by Mateusz on 2014-12-13.
+ * Służy do generowania pojedynczej klatki obrazu: rysowania wszystkich obiektów, wyznaczanie mapy głębokości cieni, obroty kamery.
  */
 public class DrawManager {
 
@@ -99,7 +99,7 @@ public class DrawManager {
      */
     private int depthMapHeight;
 
-    //MACIERZE:
+
     /**
      * Macierz modeli stosowana do umiejscawiania modeli obiektów w odpowiedniej pozycji we współrzędnych świata.
      */
@@ -112,51 +112,120 @@ public class DrawManager {
      * Macierz projekcji kamery określająca bryłę zasięgu widoku.
      */
     private final float[] projectionMatrix = new float[16];
+    /**
+     * Iloczyn macierzy projekcji i macierzy widoku.
+     */
     private final float[] viewProjectionMatrix = new float[16];
+    /**
+     * Iloczyn macierzy modelu oraz macierzy viewProjection.
+     */
     private final float[] modelViewProjectionMatrix = new float[16];
 
+    /**
+     * Macierz do rotacji wektorów normalnych.
+     */
     private final float[] normalsRotationMatrix = new float[16];
 
+    /**
+     * Macierz widoku światła określająca położenie jego źródła i nominalny kierunek świecenia.
+     */
     private final float[] lightsViewMatrix = new float[16];
+    /**
+     * Macierz projekcji światła określający zasięg padania promieni.
+     */
     private final float[] lightsProjectionMatrix = new float[16];
+    /**
+     * Iloczyn macierzy projekcji i widoku światła.
+     */
     private final float[] lightsViewProjectionMatrix = new float[16];
 
+    /**
+     * Macierz określająca część tła, która w danym momencie jest wyświetlana.
+     */
     private final float[] skyBoxViewProjectionMatrix = new float[16];
 
-    //Programy
+
+    /**
+     *  Program do rysowania modeli obiektów przy użyciu określonego koloru.
+     */
     private ColorShaderProgram colorShaderProgram;
+    /**
+     * Program do mapowania tekstur na modele obiektów (bez generowania ich cieni).
+     */
     private TextureShaderProgram textureShaderProgram;
+    /**
+     * Program do rysowania przestrzennego tła.
+     */
     private SkyBoxShaderProgram skyBoxShaderProgram;
+    /**
+     * Program do tworzenia mapy głębokośi cieni stosowanej do generowania cieni obiektów.
+     */
     private DepthMapShaderProgram depthMapShaderProgram;
+    /**
+     * Program do mapowania tekstur na modele obiektów wraz z generowaniem ich cieni.
+     */
     private ShadowingShaderProgram shadowingShaderProgram;
 
+    /**
+     * Identyfikator przechowujący informacje o buforze klatki wykorzystywanym do tworzenia mapy cieni.
+     */
     private int[] frameBufferObjectId;
+    /**
+     * Identyfikator przechowujący informacje o buforze klatki wykorzystywanym do tworzenia mapy cieni.
+     */
     private int[] depthTextureId;
+    /**
+     * Identyfikator przechowujący informacje o buforze klatki wykorzystywanym do tworzenia mapy cieni.
+     */
     private int[] renderTextureId;
 
+    /**
+     * Informacja, czy opcja generowania cieni jest włączona (true) czy wyłączona (false).
+     */
     private boolean withShadow;
 
+    /**
+     * Wartość kąta obrotu kamery wokół osi Y.
+     */
     private float xRotation;
+    /**
+     * Wartość kąta obrotu wokół osi X.
+     */
     private float yRotation;
+    /**
+     * Definiuje przestrzenne tło sceny.
+     */
     private SkyBox skyBox;
+    /**
+     * Parametry światła.
+     */
     private LightData lightData = new LightData(0.2f, 0.6f);
 
-
+    /**
+     * Zwraca wartość aktualnego kąta obrotu kamery wokół osi Y.
+     * @return Wartość <em><b>xRotation</b></em>.
+     */
     public float getxRotation(){
         return xRotation;
     }
 
-    public float getyRotation(){
-        return yRotation;
-    }
-
+    /**
+     * Tworzy obiekt generujący pojedynczą klatkę.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     * @param withShadow Informacja czy podczas generowania klatki zastosować generowanie cieni.
+     */
     public DrawManager(Context context, boolean withShadow){
-        initTextures(context);
+        initialize(context);
         this.withShadow = withShadow;
-        resetDrawManager();
+        xRotation = INITIAL_ROTATION_X;
+        yRotation = INITIAL_ROTATION_Y;
     }
 
-    public void initTextures(Context context){
+    /**
+     * Tworzy programy, obiekt tła sceny oraz pobiera tekstury z zasobów.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     */
+    public void initialize(Context context){
         textureShaderProgram = new TextureShaderProgram(context);
         colorShaderProgram = new ColorShaderProgram(context);
         skyBoxShaderProgram = new SkyBoxShaderProgram(context);
@@ -176,20 +245,20 @@ public class DrawManager {
         skyBox = new SkyBox(context);
     }
 
+    /**
+     * Zwalnia zasoby.
+     */
     public void releaseResources(){
         try {
-            //usuwanie shader programów
             glDeleteProgram(colorShaderProgram.getProgram());
             glDeleteProgram(textureShaderProgram.getProgram());
             glDeleteProgram(depthMapShaderProgram.getProgram());
             glDeleteProgram(skyBoxShaderProgram.getProgram());
             glDeleteProgram(shadowingShaderProgram.getProgram());
 
-            //sposób usuwania tekstur:
-            int[] textureId = new int[]{Ball.getTexture(), Beam.getTexture(), CheckPoint.getTexture(), Diamond.getTexture(), HourGlass.getTexture(), Elevator.getTexture(), Floor.getStandardFloorTextureId(), Floor.getStickyFloorTextureId(), Wall.getTexture(), SkyBox.getTexture()};
+            int[] textureId = new int[]{Ball.getTexture(), Beam.getTexture(), CheckPoint.getTexture(), Diamond.getTexture(), HourGlass.getTexture(), Elevator.getTexture(), Floor.getStandardFloorTextureId(), Floor.getStickyFloorTextureId(), Wall.getTexture(), Finish.getTexture(), SkyBox.getTexture()};
             glDeleteTextures(textureId.length, textureId, 0);
 
-            //usuwanie fbo
             if (withShadow){
                 glDeleteRenderbuffers(1, depthTextureId, 0);
                 glDeleteTextures(1, renderTextureId, 0);
@@ -203,11 +272,11 @@ public class DrawManager {
         }
     }
 
-    public void resetDrawManager(){
-        xRotation = INITIAL_ROTATION_X;
-        yRotation = INITIAL_ROTATION_Y;
-    }
-
+    /**
+     * Wyznacza macierze projekcji oraz inicjuje mapę głębokości cieni.
+     * @param width Szerokość ekranu.
+     * @param height Wysokość ekranu.
+     */
     public void surfaceChange(int width, int height) {
         displayHeight = height;
         displayWidth = width;
@@ -223,6 +292,9 @@ public class DrawManager {
         }
     }
 
+    /**
+     * Inicjuje mapę głębokości cieni.
+     */
     private void generateShadowFBO() {
 
         frameBufferObjectId = new int[1];
@@ -271,6 +343,11 @@ public class DrawManager {
         }
     }
 
+    /**
+     * Rysuje wszystkie obiekty na planszy oraz kulkę.
+     * @param board Obiekt zawierający wszystkie elementy planszy.
+     * @param ball Obiekt kulki.
+     */
     public void drawBoard(Board board, Ball ball) {
         positionViewAndLightFrustums(ball.getLocation());
         if (withShadow) {
@@ -282,6 +359,11 @@ public class DrawManager {
 
     //////////////////////////// BEZ CIENI: ////////////////////////////
 
+    /**
+     * Rysuje wszystkie obiekty bez generowania ich cieni.
+     * @param board Obiekt zawierający wszystkie elementy planszy.
+     * @param ball Obiekt kulki.
+     */
     private void renderSceneWithoutShadow(Board board, Ball ball){
         glViewport(0, 0, displayWidth, displayHeight);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -312,22 +394,34 @@ public class DrawManager {
         drawFinish(board.finish);
     }
 
+    /**
+     * Rysuje model kulki w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param ball Obiekt kulki.
+     */
     private void drawBall(Ball ball) {
         textureShaderProgram.useProgram();
         positionBallInScene(ball);
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, ball.getTexture(), ball.BALL_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Ball.getTexture(), ball.BALL_OPACITY);
         ball.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         ball.draw();
     }
 
+    /**
+     * Rysuje model diamentu w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param diamond Obiekt diamentu.
+     */
     private void drawDiamond(Diamond diamond) {
         textureShaderProgram.useProgram();
         positionBonusInScene(diamond);
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, diamond.getTexture(), diamond.DIAMOND_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Diamond.getTexture(), diamond.DIAMOND_OPACITY);
         diamond.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         diamond.draw();
     }
 
+    /**
+     * Rysuje model podłogi w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param floor
+     */
     private void drawFloor(Floor floor) {
         textureShaderProgram.useProgram();
         positionObjectInScene(floor.getLocation());
@@ -336,34 +430,50 @@ public class DrawManager {
         floor.draw();
     }
 
+    /**
+     * Rysuje model ściany w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param wall Obiekt ściany.
+     */
     private void drawWall(Wall wall) {
         textureShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, wall.getTexture(), wall.WALL_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Wall.getTexture(), wall.WALL_OPACITY);
         wall.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         wall.draw();
     }
 
+    /**
+     * Rysuje model belki w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param beam Obiekt belki.
+     */
     private void drawBeam(Beam beam) {
         textureShaderProgram.useProgram();
         positionObjectInScene(beam.getLocation());
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, beam.getTexture(), beam.BEAM_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Beam.getTexture(), beam.BEAM_OPACITY);
         beam.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         beam.draw();
     }
 
+    /**
+     * Rysuje model windy w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param elevator Obiekt windy.
+     */
     private void drawElevator(Elevator elevator) {
         textureShaderProgram.useProgram();
         positionObjectInScene(elevator.getLocation());
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, elevator.getTexture(), elevator.ELEVATOR_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Elevator.getTexture(), elevator.ELEVATOR_OPACITY);
         elevator.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         elevator.draw();
     }
 
+    /**
+     * Rysuje model mety w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param finish Obiekt mety.
+     */
     private void drawFinish(Finish finish) {
         textureShaderProgram.useProgram();
         positionObjectInScene(finish.getLocation());
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getTexture(), finish.FINISH_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Finish.getTexture(), finish.FINISH_OPACITY);
         finish.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         finish.draw();
 
@@ -374,10 +484,14 @@ public class DrawManager {
         finish.getGlow().draw();
     }
 
+    /**
+     * Rysuje model punktu kontrolnego w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param checkPoint Obiekt punktu kontrolnego.
+     */
     private void drawCheckPoint(CheckPoint checkPoint) {
         textureShaderProgram.useProgram();
         positionObjectInScene(checkPoint.getLocation());
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, CheckPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY);
         checkPoint.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         checkPoint.draw();
 
@@ -390,10 +504,14 @@ public class DrawManager {
         }
     }
 
+    /**
+     * Rysuje model klepsydry w odpowiednim miejscu na ekranie, bez generowania jego cienia.
+     * @param hourGlass Obiekt klepsydry.
+     */
     private void drawHourglass(HourGlass hourGlass) {
         textureShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, HourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
         hourGlass.getWoodenParts().bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         hourGlass.getWoodenParts().draw();
 
@@ -405,6 +523,11 @@ public class DrawManager {
 
     //////////////////////////// Z CIENIAMI: ////////////////////////////
 
+    /**
+     * Rysuje wszystkie elementy razem z tworzonymi przez nie cieniami
+     * @param board Obiekt zawierający wszystkie elementy planszy.
+     * @param ball Obiekt kulki.
+     */
     private void renderSceneWithShadow(Board board, Ball ball){
         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObjectId[0]);
         glViewport(0, 0, depthMapWidth, depthMapHeight);
@@ -421,6 +544,11 @@ public class DrawManager {
         renderBoardWithShadows(board, ball);
     }
 
+    /**
+     * Generuje mapę głębokości cieni.
+     * @param board Obiekt zawierający wszystkie elementy planszy.
+     * @param ball Obiekt kulki.
+     */
     private void renderDepthMap(Board board, Ball ball){
         depthMapShaderProgram.useProgram();
 
@@ -484,6 +612,11 @@ public class DrawManager {
         }
     }
 
+    /**
+     * Rysuje wszystkie obiekty uwzględniając wygenerowaną mapę głębokości cieni.
+     * @param board Obiekt zawierający wszystkie elementy planszy.
+     * @param ball Obiekt kulki.
+     */
     private void renderBoardWithShadows(Board board, Ball ball){
         drawSkyBox();
         for (Floor floor : board.floors) {
@@ -517,22 +650,34 @@ public class DrawManager {
         drawFinishWithShadow(board.finish);
     }
 
+    /**
+     * Rysuje model kulki w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param ball Obiekt kulki.
+     */
     private void drawBallWithShadow(Ball ball) {
         shadowingShaderProgram.useProgram();
         positionBallInScene(ball);
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, ball.getTexture(), ball.BALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Ball.getTexture(), ball.BALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         ball.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         ball.draw();
     }
 
+    /**
+     * Rysuje model diamentu w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param diamond Obiekt diamentu.
+     */
     private void drawDiamondWithShadow(Diamond diamond) {
         shadowingShaderProgram.useProgram();
         positionBonusInScene(diamond);
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, diamond.getTexture(), diamond.DIAMOND_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Diamond.getTexture(), diamond.DIAMOND_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         diamond.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         diamond.draw();
     }
 
+    /**
+     * Rysuje model podłogi w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param floor Obiekt podłogi.
+     */
     private void drawFloorWithShadow(Floor floor) {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(floor.getLocation());
@@ -541,34 +686,50 @@ public class DrawManager {
         floor.draw();
     }
 
+    /**
+     * Rysuje model ściany w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param wall Obiekt podłogi.
+     */
     private void drawWallWithShadow(Wall wall) {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, wall.getTexture(), wall.WALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Wall.getTexture(), wall.WALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         wall.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         wall.draw();
     }
 
+    /**
+     * Rysuje model belki w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param beam Obiekt belki.
+     */
     private void drawBeamWithShadow(Beam beam) {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(beam.getLocation());
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, beam.getTexture(), beam.BEAM_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Beam.getTexture(), beam.BEAM_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         beam.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         beam.draw();
     }
 
+    /**
+     * Rysuje model windy w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param elevator Obiekt windy.
+     */
     private void drawElevatorWithShadow(Elevator elevator) {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(elevator.getLocation());
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, elevator.getTexture(), elevator.ELEVATOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Elevator.getTexture(), elevator.ELEVATOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         elevator.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         elevator.draw();
     }
 
+    /**
+     * Rysuje model mety w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param finish Obiekt mety.
+     */
     private void drawFinishWithShadow(Finish finish) {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(finish.getLocation());
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.getTexture(), finish.FINISH_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Finish.getTexture(), finish.FINISH_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         finish.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         finish.draw();
 
@@ -579,10 +740,14 @@ public class DrawManager {
         finish.getGlow().draw();
     }
 
+    /**
+     * Rysuje model punktu kontrolnego w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param checkPoint Obiekt punktu kontrolnego.
+     */
     private void drawCheckPointWithShadow(CheckPoint checkPoint) {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(checkPoint.getLocation());
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, CheckPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         checkPoint.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         checkPoint.draw();
 
@@ -595,10 +760,14 @@ public class DrawManager {
         }
     }
 
+    /**
+     * Rysuje model klepsydry w odpowiednim miejscu na ekranie, razem z jego cieniem.
+     * @param hourGlass Obiekt klepsydry.
+     */
     private void drawHourglassWithShadow(HourGlass hourGlass) {
         shadowingShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
-        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
+        shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, HourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
         hourGlass.getWoodenParts().bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         hourGlass.getWoodenParts().draw();
 
@@ -611,10 +780,13 @@ public class DrawManager {
 
    ///////////////////////////
 
+    /**
+     * Rysuje model przestrzennego tła.
+     */
     private void drawSkyBox() {
         glDepthFunc(GL_LEQUAL);
         skyBoxShaderProgram.useProgram();
-        skyBoxShaderProgram.setUniforms(skyBoxViewProjectionMatrix, skyBox.getTexture());
+        skyBoxShaderProgram.setUniforms(skyBoxViewProjectionMatrix, SkyBox.getTexture());
         skyBox.bindData(skyBoxShaderProgram, ShaderProgram.ShaderProgramType.skyBox);
         skyBox.draw();
         glDepthFunc(GL_LESS);
@@ -622,15 +794,17 @@ public class DrawManager {
 
     ///////////////////////////
 
+    /**
+     * Obsługuje zdarzenie dotyku ekranu.
+     * @param deltaX Wartość przesunięcia dotyku względem szerokości ekranu.
+     * @param deltaY Wartość przesunięcia dotyku względem wysokości ekranu.
+     */
     public void handleTouchDrag(float deltaX, float deltaY) {
         xRotation = (xRotation + deltaX / ROTATION_FACTOR) %360f;
         yRotation += deltaY / ROTATION_FACTOR;
 
         if (yRotation < -RIGHT_ANGLE) {
             yRotation = -RIGHT_ANGLE + RIGHT_ANGLE_BIAS;
-//        } else if (yRotation > 0){
-//            yRotation = 0f;
-//        }
         } else if (yRotation > RIGHT_ANGLE){
             yRotation = RIGHT_ANGLE - RIGHT_ANGLE_BIAS;
         }
@@ -638,6 +812,9 @@ public class DrawManager {
         updateSkyBoxMVPMatrix();
     }
 
+    /**
+     * Odświeża macierz viewProjection dla obiektu przestrzennego tła.
+     */
     private void updateSkyBoxMVPMatrix() {
         float[] skyBoxViewRotationMatrix = new float[16];
         setIdentityM(skyBoxViewRotationMatrix, 0);
@@ -646,6 +823,10 @@ public class DrawManager {
         multiplyMM(skyBoxViewProjectionMatrix, 0, projectionMatrix, 0, skyBoxViewRotationMatrix, 0);
     }
 
+    /**
+     * Wylicza macierz modelu dla aktualnej pozycji obiektu kulki, macierz modelViewProjection oraz macierz obrotu wekorów normalnych.
+     * @param ball Obiekt kulki.
+     */
     private void positionBallInScene(Ball ball) {
         float[] tmp1 = new float[16];
         float[] tmp2 = new float[16];
@@ -661,6 +842,10 @@ public class DrawManager {
         transposeM(normalsRotationMatrix, 0, tmp1, 0);
     }
 
+    /**
+     * Wylicza macierz modelu dla aktualnego położenia elementów bonusowych, macierz modelViewProjection oraz macierz obrotu wekorów normalnych.
+     * @param bonus Obiekt bonusu.
+     */
     private void positionBonusInScene(Bonus bonus) {
         setIdentityM(modelsMatrix, 0);
         translateM(modelsMatrix, 0, bonus.getLocation().x, bonus.getLocation().y, bonus.getLocation().z);
@@ -675,6 +860,10 @@ public class DrawManager {
         transposeM(normalsRotationMatrix, 0, tmp2, 0);
     }
 
+    /**
+     * Wylicza macierz modelu oraz modelViewProjection dla nieobracających się elementów planszy.
+     * @param location Aktualne położenie obiektu.
+     */
     private void positionObjectInScene(Point location) {
         setIdentityM(modelsMatrix, 0);
         translateM(modelsMatrix, 0, location.x, location.y, location.z);
@@ -682,6 +871,10 @@ public class DrawManager {
         setIdentityM(normalsRotationMatrix, 0); //bo gdy nie ma rotacji, to nie musimy nic robić z wektorami normalnymi
     }
 
+    /**
+     * Wylicza macierze widoku kamery oraz światła.
+     * @param ballLocation
+     */
     private void positionViewAndLightFrustums(Point ballLocation){
         float cameraX = ballLocation.x - CAMERA_ORBIT_RADIUS * FloatMath.sin(xRotation * DEGREE_TO_RAD_CONVERSION) * FloatMath.cos(yRotation * DEGREE_TO_RAD_CONVERSION);
         float cameraY = ballLocation.y - CAMERA_ORBIT_RADIUS * FloatMath.sin(yRotation * DEGREE_TO_RAD_CONVERSION);

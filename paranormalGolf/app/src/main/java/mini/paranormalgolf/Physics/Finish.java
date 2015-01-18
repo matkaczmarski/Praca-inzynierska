@@ -33,7 +33,7 @@ public class Finish extends ControlPoint {
 
     public Glow getGlow(){return glow;}
 
-    public int getTexture(){return finishTextureId;}
+    public static int getTexture(){return finishTextureId;}
 
     public Finish(Point location, ConicalFrustum conicalFrustum) {
         super(location, conicalFrustum);
