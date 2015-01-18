@@ -301,7 +301,6 @@ public class Ball extends MovableElement {
      * @return Informacja, czy kulka i diament kolidują ze sobą.
      */
     public boolean CheckCollision(Diamond diamond) {
-        if (diamond == null) return false;
         return Collisions.CheckSphereCylinderCollision(new Sphere(location, radius), new Cylinder(diamond.location, diamond.getPyramid().radius, 2 * diamond.getPyramid().height));
     }
 
@@ -311,7 +310,6 @@ public class Ball extends MovableElement {
      * @return Informacja, czy kulka i klepsydra kolidują ze sobą.
      */
     public boolean CheckCollision(HourGlass hourGlass) {
-        if (hourGlass == null) return false;
         return Collisions.CheckSphereCylinderCollision(new Sphere(location, radius), new Cylinder(hourGlass.location, hourGlass.getLowerCone().bottomRadius, 2 * hourGlass.getLowerCone().height));
     }
 
