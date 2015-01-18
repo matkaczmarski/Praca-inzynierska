@@ -11,7 +11,7 @@ import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.R;
 
 /**
- * Podłoga w grze reprezentowana jako prostopadłościan równoległy do osi układu współrzędnych
+ * Podłoga w grze reprezentowana jako prostopadłościan równoległy do osi układu współrzędnych.
  */
 public class Floor extends Element {
 
@@ -30,10 +30,10 @@ public class Floor extends Element {
      */
     private static final float FLOOR_TEXTURE_UNIT = 5f;
 
-    /** Rozmiar prostopadłościanu podłogi*/
+    /** Rozmiar prostopadłościanu podłogi.*/
     private BoxSize measurements;
 
-    /** Współczynnik tarcia dla powierzchni podłogi*/
+    /** Współczynnik tarcia dla powierzchni podłogi.*/
     private float mu;
 
     /** Statyczna wartość identyfikatora OpenGL tekstury podłogi o standardowym współczynniku tarcia.  */
@@ -43,16 +43,16 @@ public class Floor extends Element {
     private static int stickyFloorTextureId;
 
     /**
-     * Zwraca rozmiar prostopadłościanu  podłogi
-     * @return Obiekt <b><em>measurements</em></b>
+     * Zwraca rozmiar prostopadłościanu  podłogi.
+     * @return Obiekt <b><em>measurements</em></b>.
      */
     public BoxSize getMeasurements() {
         return measurements;
     }
 
     /**
-     * Zwraca wartość współczynnika tarcia dla powierzchni podłogi
-     * @return Wartość <b><em>mu</em></b>
+     * Zwraca wartość współczynnika tarcia dla powierzchni podłogi.
+     * @return Wartość <b><em>mu</em></b>.
      */
     public float getMu() {
         return mu;
@@ -83,10 +83,10 @@ public class Floor extends Element {
     public int getTexture(){return mu <= THRESHOLD_MU_FACTOR ? standardFloorTextureId : stickyFloorTextureId;}
 
     /**
-     * Tworzy obiekt typu podłoga
-     * @param measures Wymiary prostopadłościanu opisującego podłogę
-     * @param mu Wartość współczynnika tarcia
-     * @param location Współrzędne środka prostopadłościanu w globalnym układzie współrzędnych
+     * Tworzy obiekt typu podłoga.
+     * @param measures Wymiary prostopadłościanu opisującego podłogę.
+     * @param mu Wartość współczynnika tarcia.
+     * @param location Współrzędne środka prostopadłościanu w globalnym układzie współrzędnych.
      */
     public Floor(BoxSize measures, float mu, Point location) {
         super(location);
