@@ -17,17 +17,17 @@ import mini.paranormalgolf.R;
 public class CheckPoint extends ControlPoint {
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała opisująca stopień przezroczystości ściany.
      */
     public final float CHECKPOINT_OPACITY = 1f;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Rozdzielczość siatki trójkątów.
      */
     private final int CHECKPOINT_PLATFORM_DIMENSION = 32;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała określająca podniesienie platformy punktu kontrolnego względem swojego położenia.
      */
     private final float CHECKPOINT_PLATFORM_SHIFT = 0.01f;
 
@@ -42,7 +42,7 @@ public class CheckPoint extends ControlPoint {
     private boolean visited;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Statyczna wartość identyfikatora OpenGL tekstury punktu kontrolnego.
      */
     private static int checkPointTextureId;
 
@@ -59,8 +59,8 @@ public class CheckPoint extends ControlPoint {
     public Glow getGlow(){return glow;}
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury punktu kontrolnego.
+     * @return Wartość <b><em>checkPointTextureId</em></b>.
      */
     public static int getTexture(){return checkPointTextureId;}
 
@@ -80,8 +80,8 @@ public class CheckPoint extends ControlPoint {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury punktu kontrolnego.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
     public static void initTextures(Context context){
         checkPointTextureId = ResourceHelper.loadTexture(context, R.drawable.checkpoint_texture);

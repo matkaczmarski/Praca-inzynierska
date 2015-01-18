@@ -25,12 +25,12 @@ import static android.opengl.Matrix.setRotateM;
 public class Ball extends MovableElement {
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała opisująca stopień przezroczystości kulki.
      */
     public final float BALL_OPACITY = 1f;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała określająca rozdzielczość (gęstość) siatki trójkątów w modelu kulki.
      */
     private final int MESH_DIMENSION = 25;
 
@@ -71,7 +71,7 @@ public class Ball extends MovableElement {
     private float[] rotation;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Typ wyliczeniowy określający możliwe rodzaje teksturowania kulki.
      */
     public enum BallTexture{
         homeWorld,
@@ -99,11 +99,13 @@ public class Ball extends MovableElement {
     }
 
 
-
+    /**
+     * Opisuje typ tekstury kulki.
+     */
     private static BallTexture ballTextureType;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Statyczna wartość identyfikatora OpenGL tekstury kulki.
      */
     private static int ballTextureId;
 
@@ -122,21 +124,19 @@ public class Ball extends MovableElement {
     public float[] getRotation() {return this.rotation;}
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @return
+     * Zwraca wartość identyfikatora OpenGL aktualnej tekstury kulki.
+     * @return Wartość <b><em>ballTextureId</em></b>.
      */
     public static int getTexture(){return ballTextureId;}
 
     /**
-     * UZUPEŁNIJ MATEUSZ!UZUPEŁNIJ MATEUSZ!UZUPEŁNIJ MATEUSZ!UZUPEŁNIJ MATEUSZ!UZUPEŁNIJ MATEUSZ!UZUPEŁNIJ MATEUSZ!
      * Tworzy obiekt typu kulka.
      * @param location Współrzędne środka kulki w globalnym układzie współrzędnych.
      * @param radius Długość promienia kulki.
      * @param velocity Wektor prędkości początkowej.
-     * @param ballTexture
-     * @param context
+     * @param ballTexture Typ tekstury kulki.
      */
-    public Ball(Point location, float radius, Vector velocity, BallTexture ballTexture, Context context) {
+    public Ball(Point location, float radius, Vector velocity, BallTexture ballTexture) {
         super(velocity, location);
 
         this.ballTextureType = ballTexture;
@@ -392,10 +392,10 @@ public class Ball extends MovableElement {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param ballTextureType
-     * @param context
-     * @return
+     * Zwraca identyfikator OpenGL dla danego typu tekstury kulki.
+     * @param ballTextureType Typ tekstury kulki.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     * @return Identyfikator OpenGL dla danej tekstury.
      */
     private static int loadTexture(BallTexture ballTextureType, Context context){
         switch (ballTextureType){
@@ -449,8 +449,8 @@ public class Ball extends MovableElement {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury kulki.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
     public static void initTextures(Context context){
         ballTextureId = loadTexture(ballTextureType, context);

@@ -17,17 +17,17 @@ import mini.paranormalgolf.R;
 public class Finish extends ControlPoint {
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała opisująca stopień przezroczystości mety.
      */
     public final float FINISH_OPACITY = 1f;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Rozdzielczość siatki trójkątów mety.
      */
     private final int FINISH_PLATFORM_DIMENSION = 32;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała określająca podniesienie platformy mety względem swojego położenia.
      */
     private  final float FINISH_PLATFORM_SHIFT = 0.01f;
 
@@ -42,7 +42,7 @@ public class Finish extends ControlPoint {
     private boolean isActive;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Statyczna wartość identyfikatora OpenGL tekstury mety.
      */
     private static int finishTextureId;
 
@@ -61,8 +61,8 @@ public class Finish extends ControlPoint {
     public Glow getGlow(){return glow;}
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury mety.
+     * @return Wartość <b><em>finishTextureId</em></b>.
      */
     public static int getTexture(){return finishTextureId;}
 
@@ -82,8 +82,8 @@ public class Finish extends ControlPoint {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury mety.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
     public static void initTextures(Context context){
         finishTextureId = ResourceHelper.loadTexture(context, R.drawable.finish_texture);

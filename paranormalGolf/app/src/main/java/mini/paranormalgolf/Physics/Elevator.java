@@ -17,12 +17,12 @@ import mini.paranormalgolf.R;
 public class Elevator extends MovableElement {
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała opisująca stopień przezroczystości windy.
      */
     public final float ELEVATOR_OPACITY = 1f;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała definiująca rozmiar kwadratowego kafelka tekstury windy.
      */
     private static final float ELEVATOR_TEXTURE_UNIT = 5f;
 
@@ -69,7 +69,7 @@ public class Elevator extends MovableElement {
     private boolean change = false;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Statyczna wartość identyfikatora OpenGL tekstury windy.
      */
     private static int elevatorTextureId;
 
@@ -92,8 +92,8 @@ public class Elevator extends MovableElement {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury windy.
+     * @return Wartość <b><em>elevatorTextureId</em></b>.
      */
     public static int getTexture(){return elevatorTextureId;}
 
@@ -202,8 +202,8 @@ public class Elevator extends MovableElement {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury windy.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
     public static void initTextures(Context context){
         elevatorTextureId = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);

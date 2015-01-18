@@ -18,32 +18,32 @@ import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 public abstract class Element {
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Liczba współrzędnych potrzebnych do określenia położenia punktu.
      */
     protected final int POSITION_COMPONENT_COUNT = 3;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Liczba współrzędnych potrzebnych do określenia wektora normalnego.
      */
     protected final int NORMAL_COMPONENT_COUNT = 3;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Liczba współrzędnych potrzebnych do określenia pozycji tekstury.
      */
     protected final int TEXTURE_COMPONENT_COUNT = 2;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Liczba bajtów w liczbie zmiennoprzecinkowej typu float.
      */
     protected final int BYTES_PER_FLOAT = 4;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Krok określający ile komórek definiuje atrybuty pozycji, wektorów normalnych oraz współrzędnych tekstury.
      */
     private final int STRIDE_WITH_TEXTURE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * BYTES_PER_FLOAT;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Krok określający ile komórek definiuje atrybuty pozycji i wektorów normalnych.
      */
     private final int STRIDE_WITHOUT_TEXTURE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
@@ -53,12 +53,12 @@ public abstract class Element {
     protected Point location;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Bufor z atrybutami wszystkich wierzchołków modelu elementu.
      */
     protected VertexArray vertexData;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Lista reguł rysowania modelu elementu.
      */
     protected List<DrawCommand> drawCommands;
 

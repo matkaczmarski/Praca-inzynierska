@@ -17,12 +17,12 @@ import mini.paranormalgolf.R;
 public class Beam extends MovableElement {
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała opisująca stopień przezroczystości belki.
      */
     public final float BEAM_OPACITY = 1f;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Stała definiująca rozmiar kwadratowego kafelka tekstury belki.
      */
     private static final float BEAM_TEXTURE_UNIT = 5f;
 
@@ -49,7 +49,7 @@ public class Beam extends MovableElement {
     private boolean moveToPatrolTo;
 
     /**
-     * OPISZ MATEUSZ TUTAJ
+     * Statyczna wartość identyfikatora OpenGL tekstury belki.
      */
     private static int beamTextureId;
 
@@ -62,8 +62,8 @@ public class Beam extends MovableElement {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury belki.
+     * @return Wartość <b><em>beamTextureId</em></b>.
      */
     public static int getTexture(){return beamTextureId;}
 
@@ -148,8 +148,8 @@ public class Beam extends MovableElement {
     }
 
     /**
-     * OPISZ MATEUSZ TUTAJ
-     * @param context
+     * Inicjuje wartość identyfikatora OpenGL tekstury belki.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
      */
     public static void initTextures(Context context){
         beamTextureId = ResourceHelper.loadTexture(context, R.drawable.beam_texture);

@@ -68,7 +68,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Board board = loadBoard(board_id);
         float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
-        Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture], context);
+        Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
 
         boardInfo = loadBoardInfo(board_id);
         timeLeft = boardInfo.getTime() * 1000;
@@ -89,7 +89,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     public void changeBoard(String board_id)
     {
-        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture], context);
+        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
         updater.changeBoardAndBall(loadBoard(board_id), ball);
     }
 
