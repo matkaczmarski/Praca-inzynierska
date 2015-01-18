@@ -21,42 +21,86 @@ import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glDrawElements;
 
 /**
- * Created by Mateusz on 2014-12-05.
+ * Generowanie podstawowych modeli obiektów. Zawiera metody rozszerzające dany model o podstawowe kształty.
  */
 public class ObjectBuilder {
 
+    /**
+     * Typ wyliczeniowy określający sposób rysowania poszczególnych modeli.
+     */
     public enum DrawType{
         texturing,
         coloring,
         skyBox
     }
 
-    private static final int FLOATS_PER_VERTEX_WITHOUT_TEXTURE = 6; //3 na pozycję oraz 3 na wektor normalny
-    private static final int FLOATS_PER_VERTEX_WITH_TEXTURE = 8; //3 na pozycje, 3 na wektor normalny oraz 2 na pozycje tekstury
+    /**
+     * Stała określająca ilość liczb zmiennoprzecinkowych typu <em>float</em> potrzebnych do zdefiniowania atrybutów położenia (3 floats) oraz wektorów normlnych (3 floats) dla danego wierzchołka.
+     */
+    private static final int FLOATS_PER_VERTEX_WITHOUT_TEXTURE = 6;
+    /**
+     * Stała określająca ilość liczb zmiennoprzecinkowych typu <em>float</em> potrzebnych do zdefiniowania atrybutów położenia (3 floats), wektorów normlnych (3 floats) oraz współrzędnych tekstury (2 floats) dla danego wierzchołka.
+     */
+    private static final int FLOATS_PER_VERTEX_WITH_TEXTURE = 8;
+    /**
+     * Stała opisująca ilość liczb zmniennoprzecinkowych typu <em>float</em> potrzebnych do zdefiniowania obiektu tła przestrzennego.
+     */
     private static final int FLOATS_PER_CUBE_IN_SKYBOX = 24;
+    /**
+     * Stała opisująca ilość indeksów potrzebnych do zdefiniowania obiektu tła przestrzennego.
+     */
     private static final int INDICES_COUNT_IN_SKYBOX = 36;
 
+    /**
+     * Określa regułę rysowania części lub całości modelu.
+     */
     public static interface DrawCommand {
         void draw();
     }
 
+    /**
+     * Typ wyliczeniowy określający osie globalnego układu współrzędnych.
+     */
     public enum Axis{
         xAxis,
         yAxis,
         zAxis
     }
 
+    /**
+     * Tablica atrybutów wszyskich wierzchołków siatki trójkątów.
+     */
     private final float[] vertexData;
+    /**
+     * Lista reguł rysowania siatki trójkątów.
+     */
     private final List<DrawCommand> drawCommands;
+    /**
+     * Określa aktualny index dla tablicy <em><b>vertexData</b></em>.
+     */
     private int offset;
+    /**
+     * Informuje, czy model będzie miał nakładaną teksturę.
+     */
     private  boolean isTextured;
 
+    /**
+     * Na podstawie liczby wierzchołków i sposobu rysowania, tworzy tablicę <em><b>vertexData</b></em> o odpowiednim rozmiarze służącą do przechowywania atrybutów dla wszystkich wierzchołków modelu.
+     * @param sizeInVertices Liczba wierzchołków w końcowym modelu.
+     * @param drawType Sposób rysowania modelu.
+     */
     public ObjectBuilder(int sizeInVertices, DrawType drawType) {
         vertexData = new float[getArraySize(sizeInVertices, drawType)];
         drawCommands = new ArrayList<DrawCommand>();
         offset = 0;
     }
 
+    /**
+     * Wyznacza rozmiar tablicy <em><b>vertexData</b></em>.
+     * @param vertices Liczba wierzchołków w modelu.
+     * @param drawType Sposób rysowania modelu.
+     * @return Rozmiar tablicy.
+     */
     private int getArraySize(int vertices, DrawType drawType){
         switch (drawType){
             case texturing:
@@ -72,8 +116,10 @@ public class ObjectBuilder {
         return 0;
     }
 
+    /**
+     * Dodaje do tablicy <em><b>vertexData</b></em> atrybuty wierzchołków przestrzennego tła a do listy <em><b>drawCommands</b></em> odpowiednie reguły rysowania.
+     */
     public void appendSkyBox(){
-
         vertexData[offset++] = -1; vertexData[offset++] = 1; vertexData[offset++] = 1;
         vertexData[offset++] = 1; vertexData[offset++] = 1; vertexData[offset++] = 1;
         vertexData[offset++] = -1; vertexData[offset++] = -1; vertexData[offset++] = 1;
@@ -107,6 +153,11 @@ public class ObjectBuilder {
         });
     }
 
+    /**
+     * Dodaje do tablicy <em><b>vertexData</b></em> atrybuty wierzchołków obiektu kulki a do listy <em><b>drawCommands</b></em> odpowiednie reguły rysowania.
+     * @param sphere Wymiary kuli.
+     * @param numPoints Rozdzielczość siatki trójkątów.
+     */
     public void appendSphere(Sphere sphere, int numPoints){
 
         final int verticesCount = (numPoints + 1) * 2;
@@ -163,6 +214,13 @@ public class ObjectBuilder {
         }
     }
 
+    /**
+     * Dodaje do tablicy <em><b>vertexData</b></em> atrybuty wierzchołków prostokąta a do listy <em><b>drawCommands</b></em> odpowiednie reguły rysowania.
+     * @param rectangle Wymiary prostokąta.
+     * @param constantAxis Oś względem której prostokąt jest prostopadły.
+     * @param normalVectorDirection Określa kierunek wektora normalnego.
+     * @param textureUnit Wielkość kwadratowego kafelka tekstury.
+     */
     public void appendRectangle(Rectangle rectangle, Axis constantAxis, float normalVectorDirection, float textureUnit) {
 
         final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
@@ -510,7 +568,12 @@ public class ObjectBuilder {
 
     }
 
-    public void appendPyramidWithoutBase(Point location, Pyramid pyramid, float direction) {
+    /**
+     * Dodaje do tablicy <em><b>vertexData</b></em> atrybuty wierzchołków ostrosłupa (bez podstawy) a do listy <em><b>drawCommands</b></em> odpowiednie reguły rysowania.
+     * @param pyramid Wymiary ostrosłupa definiującego jedną z części diamentu.
+     * @param direction Kierunek wektora wysokości ostrosłupa.
+     */
+    public void appendPyramidWithoutBase(Pyramid pyramid, float direction) {
 
         final int indicesCount = pyramid.baseVerticesCount * 3;
         int vertexStar = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
@@ -519,11 +582,11 @@ public class ObjectBuilder {
             float ratio = direction > 0 ? ((float)( pyramid.baseVerticesCount - i) / pyramid.baseVerticesCount) : ( (float)i / pyramid.baseVerticesCount);
             float alpha =  ratio * 2f * (float) Math.PI;
 
-            vertexData[offset++] = location.x + pyramid.radius * FloatMath.cos(alpha);
-            vertexData[offset++] = location.y;
-            vertexData[offset++] = location.z + pyramid.radius * FloatMath.sin(alpha);
+            vertexData[offset++] =  pyramid.radius * FloatMath.cos(alpha);
+            vertexData[offset++] = 0;
+            vertexData[offset++] = pyramid.radius * FloatMath.sin(alpha);
 
-            Vector vNormal = new Vector(vertexData[offset - 3] - location.x, vertexData[offset - 2] - location.y, vertexData[offset - 1] - location.z).normalize();
+            Vector vNormal = new Vector(vertexData[offset - 3], vertexData[offset - 2], vertexData[offset - 1]).normalize();
             vertexData[offset++] = vNormal.x;
             vertexData[offset++] = vNormal.y;
             vertexData[offset++] = vNormal.z;
@@ -534,9 +597,9 @@ public class ObjectBuilder {
             }
         }
 
-        vertexData[offset++] = location.x;
-        vertexData[offset++] = location.y + (direction * pyramid.height);
-        vertexData[offset++] = location.z;
+        vertexData[offset++] = 0;
+        vertexData[offset++] = (direction * pyramid.height);
+        vertexData[offset++] = 0;
 
         vertexData[offset++] = 0;
         vertexData[offset++] = direction;
@@ -567,6 +630,15 @@ public class ObjectBuilder {
 
     }
 
+    /**
+     *Dodaje do tablicy <em><b>vertexData</b></em> atrybuty wierzchołków bocznej powierzchni ściętego stożka, a do listy <em><b>drawCommands</b></em> odpowiednie reguły rysowania.
+     * @param bottomCenter Położenie dolnej podstawy ściętego stożka.
+     * @param bottomRadius Wartość promienia dolnej podstawy ściętego stożka.
+     * @param topCenter Położenie górnej podstawy ściętego stożka.
+     * @param topRadius Wartość promienia górnej podstawy ściętego stożka.
+     * @param numPoints Rozdzielczość siatki trójkątów.
+     * @param textureUnit Wielkość kwadratowego kafelka tekstury.
+     */
     public void appendCylindersCurvedSurface( Point bottomCenter, float bottomRadius, Point topCenter, float topRadius, int numPoints, float textureUnit) {
         final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = (numPoints + 1) * 2;
@@ -619,6 +691,13 @@ public class ObjectBuilder {
         });
     }
 
+    /**
+     * Dodaje do tablicy <em><b>vertexData</b></em> atrybuty wierzchołków koła, a do listy <em><b>drawCommands</b></em> odpowiednie reguły rysowania.
+     * @param center Środek koła.
+     * @param radius Promień koła.
+     * @param direction Kierunek wektora normalnego.
+     * @param numPoints Rozdzielczość siatki trójkątów.
+     */
     public void appendCircle(Point center, float radius, float direction, int numPoints) {
         final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = 1 + (numPoints + 1);
@@ -665,6 +744,10 @@ public class ObjectBuilder {
         });
     }
 
+    /**
+     * Zwraca dane modelu powstałego poprzez zastosowanie sekwencji metod rozszerzających.
+     * @return Obiekt zawierający <em><b>vertexData</b></em> oraz <em><b>drawCommands</b></em>.
+     */
     public GraphicsData build(){
         return new GraphicsData(vertexData, drawCommands);
     }
