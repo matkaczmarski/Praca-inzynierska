@@ -161,7 +161,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         });
 
-        UpdateResult updateResult = updater.update();//(float)(interval / 1000f));
+        UpdateResult updateResult = updater.update((float)(interval / 1000f));
         if (timeLeft <= 0)
         {
             updateResult = UpdateResult.DEFEAT;
@@ -212,9 +212,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             updater.updatePreferences(vibrations, music, sound);
     }
 
-    public void changeActivity(Activity activity)
-    {
-        this.activity = activity;
-    }
+//    public void changeActivity(Activity activity)
+//    {
+//        this.activity = activity;
+//    }
 
 }
