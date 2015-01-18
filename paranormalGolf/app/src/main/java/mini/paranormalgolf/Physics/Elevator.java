@@ -12,54 +12,118 @@ import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Sławomir on 2014-12-03.
+ * Winda w grze reprezentowana jako prostopadłościan równoległy do osi układu współrzędnych.
  */
 public class Elevator extends MovableElement {
 
-    private static final float ELEVATOR_TEXTURE_UNIT = 5f;
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     public final float ELEVATOR_OPACITY = 1f;
 
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
+    private static final float ELEVATOR_TEXTURE_UNIT = 5f;
+
+    /**
+     * Rozmiar prostopadłościanu windy.
+     */
     private BoxSize measurements;
 
-    //punkty oznaczjące do jakiego miejsca ma dochodzić środek elementu
+    /**
+     * Pierwszy punkt ograniczający poruszanie się windy;
+     * informuje do jakiego miejsca ma dochodzić środek elementu.
+     */
     private Point patrolFrom;
+
+    /**
+     * Drugi punkt ograniczający poruszanie się windy;
+     * informuje do jakiego miejsca ma dochodzić środek elementu.
+     */
     private Point patrolTo;
+
+    /**
+    * Współczynnik tarcia dla powierzchni windy.
+    */
     private float mu;
 
+    /**
+     * OPISZ KUBA TUTAJ
+     */
     private boolean moveToPatrolTo;
 
+    /**
+     * OPISZ KUBA TUTAJ
+     */
     private static float wait_time = 2.0f;
 
+    /**
+     * OPISZ KUBA TUTAJ
+     */
     private float time_left;
 
-    private static int elevatorTextureId;
-
-    public static int getTexture(){return elevatorTextureId;}
-
+    /**
+     * OPISZ KUBA TUTAJ
+     */
     private boolean change = false;
 
-    public float getMu() {
-        return mu;
-    }
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
+    private static int elevatorTextureId;
 
+
+
+    /**
+     * Zwraca rozmiar prostopadłościanu windy.
+     * @return Obiekt <b><em>measurements</em></b>.
+     */
     public BoxSize getMeasurements() {
         return measurements;
     }
 
-    public Elevator(Point location, Vector velocity, BoxSize measure, Point from, Point to, float mu) {
+    /**
+     * Zwraca wartość współczynnika tarcia dla powierzchni windy.
+     * @return Wartość <b><em>mu</em></b>.
+     */
+    public float getMu() {
+        return mu;
+    }
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     * @return
+     */
+    public static int getTexture(){return elevatorTextureId;}
+
+    /**
+     * Tworzy obiekt typu winda.
+     * @param location Współrzędne środka prostopadłościanu w globalnym układzie współrzędnych.
+     * @param velocity Wektor prędkości początkowej windy.
+     * @param measures Wymiary prostopadłościanu opisującego windę.
+     * @param from Pierwszy punkt ograniczający poruszanie się środka elementu.
+     * @param to Drugi punkt ograniczający poruszanie się środka elementu.
+     * @param mu Wartość współczynnika tarcia.
+     */
+    public Elevator(Point location, Vector velocity, BoxSize measures, Point from, Point to, float mu) {
         super(velocity, location);
-        this.measurements = measure;
+        this.measurements = measures;
         this.patrolFrom = from;
         this.patrolTo = to;
         this.mu = mu;
 
         moveToPatrolTo = findMovementDirection(from, to, velocity);
 
-        GraphicsData generatedData = ObjectGenerator.createBoxModel(measure, ELEVATOR_TEXTURE_UNIT);
+        GraphicsData generatedData = ObjectGenerator.createBoxModel(measures, ELEVATOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }
 
+    /**
+     * Odświeża położenie i prędkość windy.
+     * @param dt Czas (w sekundach), który upływa pomiędzy 2 kolejnymi wyświetlanymi klatkami.
+     */
     public void Update(float dt)
     {
         if (change)
@@ -94,6 +158,13 @@ public class Elevator extends MovableElement {
         }
     }
 
+    /**
+     * OPISZ KUBA TUTAJ
+     * @param from
+     * @param to
+     * @param velocity
+     * @return
+     */
     private boolean findMovementDirection(Point from, Point to, Vector velocity)
     {
         if (velocity.x != 0)
@@ -130,6 +201,10 @@ public class Elevator extends MovableElement {
         return true;
     }
 
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     * @param context
+     */
     public static void initTextures(Context context){
         elevatorTextureId = ResourceHelper.loadTexture(context, R.drawable.elevator_texture);
     }
