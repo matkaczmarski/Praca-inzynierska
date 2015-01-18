@@ -10,7 +10,7 @@ import mini.paranormalgolf.Primitives.Sphere;
 import mini.paranormalgolf.Primitives.Vector;
 
 /**
- * Sprawdza i rozwiązuje kolizje kuli z elementami
+ * Sprawdza i rozwiązuje kolizje kuli z elementami.
  */
 public final class Collisions {
 

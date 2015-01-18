@@ -23,34 +23,124 @@ import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Mateusz on 2014-12-05.
+ * Odświeża pozycję wszystkich elementów.
  */
 public class Updater implements SensorEventListener {
 
+    /**
+     * Czas (w sekundach), który upływa pomiędzy 2 wyświetlanymi klatkami.
+     */
     public static float INTERVAL_TIME = 0.035f;
+
+    /**
+     * Współczynnik skalujący <b><em>INTERVAL_TIME</em></b>.
+     */
     public static final float INTERVAL_FACTOR = 1.5f;
 
+    /**
+     * Kulka znajdująca się na planszy.
+     */
+    private Ball ball;
+
+    /**
+     * Aktualna zawartość planszy.
+     */
+    private Board board;
+
+    /**
+     * Wektor wartości przyspieszenia dla aktualnego położenia urządzenia mobilnego.
+     */
+    private Vector accData=new Vector(0,0,0);
+
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private Context context;
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private DrawManager drawManager;
 
-    private Ball ball;
-    private Board board;
-    private Vector accData=new Vector(0,0,0);
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private boolean landscape;
 
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private int max_diamonds_count;
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private int last_diamonds_count;
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private boolean paused = false;
 
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private boolean vibrations;
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private boolean sound;
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private boolean music;
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private boolean shadows;
 
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     private GameRenderer gameRenderer;
 
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     * @return
+     */
     public DrawManager getDrawManager(){return drawManager;}
 
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     * @param context
+     */
+    public void setContext(Context context)
+    {
+        this.context = context;
+        if (drawManager != null)
+        {
+            drawManager.releaseResources();
+            drawManager.initialize(context);
+        }
+        else
+            drawManager = new DrawManager(context, shadows);
+    }
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     * @param context
+     * @param ball Kulka znajdująca się na planszy.
+     * @param board Aktualna zawartość planszy.
+     * @param vibrations
+     * @param music
+     * @param sound
+     * @param shadows
+     * @param gameRenderer
+     */
     public Updater(Context context, Ball ball, Board board, boolean vibrations, boolean music, boolean sound, boolean shadows, GameRenderer gameRenderer) {
         this.ball = ball;
         this.context = context;
@@ -66,36 +156,15 @@ public class Updater implements SensorEventListener {
         drawManager = new DrawManager(context, shadows);
     }
 
-    private boolean getDeviceDefaultOrientation() {
-
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-
-        Configuration config = context.getResources().getConfiguration();
-
-        int rotation = windowManager.getDefaultDisplay().getRotation();
-
-        return ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) &&
-                config.orientation == Configuration.ORIENTATION_LANDSCAPE)
-                || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) &&
-                config.orientation == Configuration.ORIENTATION_PORTRAIT);
-    }
-
-    public void changeBoardAndBall(Board board, Ball ball)
-    {
-        this.ball = ball;
-        this.board = board;
-    }
-
-    private void RegisterAccelerometer() {
-        SensorManager sensorManager = (android.hardware.SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    public UpdateResult update(/*float interval*/) {
-        //INTERVAL_TIME = interval * INTERVAL_FACTOR;
-        //if (paused)
-        //    return UpdateResult.PAUSE;
+    /**
+     * Odświeża pozycję wszystkich elementów.
+     * @param interval Czas (w sekundach), który upłynął pomiędzy 2 ostatnimi klatkami.
+     * @return Aktualny stan rozgrywki.
+     */
+    public UpdateResult update(float interval) {
+        INTERVAL_TIME = interval * INTERVAL_FACTOR;
+        if (paused)
+            return UpdateResult.PAUSE;
 
         float mu = getActualCoefficientFriction();
         int index = getIndexOfElevatorBallOn();
@@ -171,18 +240,10 @@ public class Updater implements SensorEventListener {
         return UpdateResult.NONE;
     }
 
-    private void onWallCollision()
-    {
-        playSound(ResourceHelper.SOUND_WALL);
-        vibrate();
-    }
-
-    private void onBeamCollision()
-    {
-        playSound(ResourceHelper.SOUND_BEAM);
-        vibrate();
-    }
-
+    /**
+     * Sprawdza, czy kulka znajduje się poniżej podłóg i wind.
+     * @return Informacja, czy kulka znajduje się poniżej podłóg i wind.
+     */
     private boolean isUnderFloors() {
         float value = ball.location.y + ball.getRadius();
         for (Floor floor : board.floors)
@@ -194,6 +255,11 @@ public class Updater implements SensorEventListener {
         return true;
     }
 
+    /**
+     * Znajduje współczynnik tarcia dla powierzchni na której znajduje się kulka.
+     * @return Wartość współczynnika tarcia dla powierzchni, na której kulka się znajduje
+     * lub -1, jeśli kulka nie znajduje się na powierzchni.
+     */
     private float getActualCoefficientFriction() {
         float mu = -1;
         for (Floor floor : board.floors) {
@@ -218,6 +284,10 @@ public class Updater implements SensorEventListener {
         return mu;
     }
 
+    /**
+     * Numer windy z listy wind, na której kulka się znajduje.
+     * @return Indeks windy, na ktorej kulka się znajduje lub -1, jeśli kulka nie znajduje się na windzie.
+     */
     private int getIndexOfElevatorBallOn() {
         int index = -1;
         for (int i = 0; i < board.elevators.size(); i++) {
@@ -232,6 +302,10 @@ public class Updater implements SensorEventListener {
         return index;
     }
 
+    /**
+     * Poprawia pozycję kulki, ustawiając ją na windzie
+     * @param index Indeks windy, na której kulka się znajduje.
+     */
     private void setBallOnElevator(int index) {
         Point lastLocation = ball.getLocation();
         ball.setLocation(new Point(lastLocation.x + board.elevators.get(index).getLastMove().x,
@@ -239,10 +313,9 @@ public class Updater implements SensorEventListener {
                 lastLocation.z + board.elevators.get(index).getLastMove().z));
     }
 
-    public void surfaceChange(int width, int height){
-        drawManager.surfaceChange(width, height);
-    }
-
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
     public void draw() {
         //if (paused)
         //    return;
@@ -260,6 +333,114 @@ public class Updater implements SensorEventListener {
         }
     }
 
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     * @param width
+     * @param height
+     */
+    public void surfaceChange(int width, int height){
+        drawManager.surfaceChange(width, height);
+    }
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     * @param board
+     * @param ball
+     */
+    public void changeBoardAndBall(Board board, Ball ball)
+    {
+        this.ball = ball;
+        this.board = board;
+    }
+
+    /**
+     * UZUPEŁNIJ KUBA TUTAJ
+     */
+    private void onWallCollision()
+    {
+        playSound(ResourceHelper.SOUND_WALL);
+        vibrate();
+    }
+
+    /**
+     * UZUPEŁNIJ KUBA TUTAJ
+     */
+    private void onBeamCollision()
+    {
+        playSound(ResourceHelper.SOUND_BEAM);
+        vibrate();
+    }
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
+    public void onHourGlassCollision()
+    {
+        playSound(ResourceHelper.SOUND_HOURGLASS);
+    }
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
+    public void onDiamondCollision()
+    {
+        playSound(ResourceHelper.SOUND_DIAMOND);
+    }
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     * @return
+     */
+    public int getCollectedDiamondsCount()
+    {
+        return max_diamonds_count - last_diamonds_count;
+    }
+
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     * @param vibrations
+     * @param music
+     * @param sound
+     */
+    public void updatePreferences (boolean vibrations, boolean music, boolean sound)
+    {
+        this.vibrations = vibrations;
+        this.music = music;
+        this.sound = sound;
+    }
+
+    /**
+     * Sprawdza, czy urządzenie mobilne ma domyślnie oientację typu landscape
+     * @return Informacja, czy urządzenie mobilne ma domyślnie oientację typu landscape
+     */
+    private boolean getDeviceDefaultOrientation() {
+
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+        Configuration config = context.getResources().getConfiguration();
+
+        int rotation = windowManager.getDefaultDisplay().getRotation();
+
+        return ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) &&
+                config.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) &&
+                config.orientation == Configuration.ORIENTATION_PORTRAIT);
+    }
+
+    /**
+     * Umożliwia pobieranie danych z akcelerometru.
+     */
+    private void RegisterAccelerometer() {
+        SensorManager sensorManager = (android.hardware.SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    /**
+     * Wymagana do implementacji przez interfejs <em>SensorEventListener</em>. Zachowuje dane
+     * przekazywane przez akcelerometr.
+     * @param event Dane związane z sensorem.
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (drawManager != null) {
@@ -269,22 +450,20 @@ public class Updater implements SensorEventListener {
         }
     }
 
+    /**
+     * Wymagana do implementacji przez interfejs <em>SensorEventListener</em>.
+     * @param sensor Sensor.
+     * @param accuracy Dokładność.
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
-    public void onHourGlassCollision()
-    {
-        playSound(ResourceHelper.SOUND_HOURGLASS);
-    }
-
-    public void onDiamondCollision()
-    {
-        playSound(ResourceHelper.SOUND_DIAMOND);
-    }
-
-    public void playSound(int sound)
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
+    private void playSound(int sound)
     {
         if (this.sound)
         {
@@ -292,36 +471,15 @@ public class Updater implements SensorEventListener {
         }
     }
 
-    public void vibrate()
+    /**
+     * UZUPEŁNIJCIE TUTAJ
+     */
+    private void vibrate()
     {
         if (vibrations)
         {
             Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(context.getResources().getInteger(R.integer.vibrations_click_time));
         }
-    }
-
-    public void updatePreferences (boolean vibrations, boolean music, boolean sound)
-    {
-        this.vibrations = vibrations;
-        this.music = music;
-        this.sound = sound;
-    }
-
-    public int getCollectedDiamondsCount()
-    {
-        return max_diamonds_count - last_diamonds_count;
-    }
-
-    public void setContext(Context context)
-    {
-        this.context = context;
-        if (drawManager != null)
-        {
-            drawManager.releaseResources();
-            drawManager.initialize(context);
-        }
-        else
-            drawManager = new DrawManager(context, shadows);
     }
 }

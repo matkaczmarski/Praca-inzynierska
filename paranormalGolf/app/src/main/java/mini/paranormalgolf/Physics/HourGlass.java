@@ -80,12 +80,12 @@ public class HourGlass extends Bonus {
 
 
     /**
-     * Rozmiar dolnego względem osi OY ściętego stożka
+     * Rozmiar dolnego względem osi OY ściętego stożka.
      */
     private final ConicalFrustum lowerCone = new ConicalFrustum(0.7f, 0.5f, 0.15f);
 
     /**
-     * Rozmiar górnego względem osi OY ściętego stożka
+     * Rozmiar górnego względem osi OY ściętego stożka.
      */
     private final ConicalFrustum upperCone = new ConicalFrustum(0.7f, 0.15f, 0.5f);
 
@@ -102,8 +102,8 @@ public class HourGlass extends Bonus {
     private HourGlassWoodenParts woodenParts;
 
     /**
-     * Zwraca rozmiar dolnego względem osi OY ściętego stożka
-     * @return Rozmiar dolnego względem osi OY ściętego stożka
+     * Zwraca rozmiar dolnego względem osi OY ściętego stożka.
+     * @return Obiekt <b><em>lowerCone</em></b>
      */
     public ConicalFrustum getLowerCone() {
         return lowerCone;
@@ -111,22 +111,22 @@ public class HourGlass extends Bonus {
 
     /**
      * Zwraca obiekt definiujący drewniane części klepsydry.
-     * @return Obiekt <b><em>woodenParts</em></b>
+     * @return Obiekt <b><em>woodenParts</em></b>.
      */
     public HourGlassWoodenParts getWoodenParts(){return woodenParts;}
 
 
     /**
-     *
-     * @return
+     * Zwraca wartość identyfikatora OpenGL tekstury klepsydry.
+     * @return Wartość <b><em>hourGlassTextureId</em></b>.
      */
     public static int getTexture(){return hourGlassTextureId;}
 
     /**
-     * Tworzy obiekt typu klepsydra
-     * @param location Współrzędne środka klepsydry w globalnym układzie współrzędnych
-     * @param value Liczba dodawanych sekund związanych z zebraniem klepsydry
-     * @param yShift Wartość o jaką wzdłuż osi OY można podnosić klepsydrę podczas animacji ruchu
+     * Tworzy obiekt typu klepsydra.
+     * @param location Współrzędne środka klepsydry w globalnym układzie współrzędnych.
+     * @param value Liczba dodawanych sekund związanych z zebraniem klepsydry.
+     * @param yShift Wartość o jaką wzdłuż osi OY można podnosić klepsydrę podczas animacji ruchu.
      */
     public HourGlass(Point location, int value, float yShift) {
         super(location, value, yShift);

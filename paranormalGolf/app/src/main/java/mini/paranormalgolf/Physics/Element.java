@@ -13,25 +13,71 @@ import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder.DrawCommand;
 import mini.paranormalgolf.Graphics.ShaderPrograms.ShaderProgram;
 
 /**
- * Created by Sławomir on 2014-12-03.
+ * Klasa abstrakcyjna reprezentująca element znajdujący się na planszy.
  */
 public abstract class Element {
 
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     protected final int POSITION_COMPONENT_COUNT = 3;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     protected final int NORMAL_COMPONENT_COUNT = 3;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     protected final int TEXTURE_COMPONENT_COUNT = 2;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     protected final int BYTES_PER_FLOAT = 4;
 
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     private final int STRIDE_WITH_TEXTURE = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * BYTES_PER_FLOAT;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     private final int STRIDE_WITHOUT_TEXTURE = (POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT) * 4;
 
+    /**
+     * Współrzędne punktu charakterystycznego dla elementu w globalnym układzie współrzędnych.
+     */
     protected Point location;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     protected VertexArray vertexData;
+
+    /**
+     * OPISZ MATEUSZ TUTAJ
+     */
     protected List<DrawCommand> drawCommands;
 
+    /**
+     * Zwraca współrzędne punktu charakterystycznego dla elementu w globalnym układzie współrzędnych.
+     * @return Obiekt <b><em>location</em></b>.
+     */
     public Point getLocation() { return this.location;}
+
+    /**
+     * Ustawia obiekt <b><em>location</em></b>.
+     * @param location Współrzędne punktu charakterystycznego dla elementu w globalnym układzie współrzędnych.
+     */
     public void setLocation(Point location) { this.location = location;}
 
+    /**
+     * Tworzy obiekt typu <em>Element</em>.
+     * @param location Współrzędne punktu charakterystycznego dla elementu w globalnym układzie współrzędnych.
+     */
     protected Element(Point location){
      this.location=location;
     }

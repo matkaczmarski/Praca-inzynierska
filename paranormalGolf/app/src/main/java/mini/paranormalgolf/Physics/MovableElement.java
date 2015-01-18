@@ -39,9 +39,9 @@ public abstract class MovableElement extends Element {
     }
 
     /**
-     * Tworzy obiekt typu MovableElement
-     * @param velocity Wektor początkowej prędkości elementu
-     * @param location Współrzędne środka elementu w globalnym układzie współrzędnych
+     * Tworzy obiekt typu <em>MovableElement</em>.
+     * @param velocity Wektor początkowej prędkości elementu.
+     * @param location Współrzędne środka elementu w globalnym układzie współrzędnych.
      */
     protected MovableElement(Vector velocity, Point location) {
         super(location);

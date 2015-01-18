@@ -29,6 +29,7 @@ public class Glow extends ControlPoint {
      * Stała opisująca kolor nieaktywnego obiektu typu <em>Finish</em>.
      */
     public final float[] INACTIVE_FINISH_COLOR = new float[]{1f, 0.388235f, 0.278431f, GLOW_OPACITY};
+
     /**
      * Stała opisująca kolor poświaty obiektu typu <em>Checkpoint</em>.
      */
@@ -36,7 +37,7 @@ public class Glow extends ControlPoint {
 
     /**
      * Tworzy obiekt poświaty.
-     * @param location Współrzędne środka dolnej podstawy poświaty w globalnym układzie współrzędnych
+     * @param location Współrzędne środka dolnej podstawy poświaty w globalnym układzie współrzędnych.
      * @param conicalFrustum Rozmiar poświaty.
      */
     public Glow(Point location, ConicalFrustum conicalFrustum) {
