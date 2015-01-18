@@ -899,32 +899,89 @@ public class DrawManager {
     //STALE:
 
     //Dla orbit kamery i światła
+    /**
+     * Promień orbity, po której kamera jest obracana.
+     */
     private final float CAMERA_ORBIT_RADIUS = 20f;
+    /**
+     * Promień orboty, po której żródło światła jest obracane.
+     */
     private final float LIGHT_ORBIT_RADIUS = 30f;
+    /**
+     * Liczba stopni o jakie źródło światła jest przesunięte w stosunku do kamery w płaszczyźnie poziomej.
+     */
     private final float LIGHT_SHIFT_DEGREE_X = 20f;
+    /**
+     * Liczba stopni o jakie źródło światła jest przesunięte w stosunku do kamery w płaszczyźnie pionowej.
+     */
     private final float LIGHT_SHIFT_DEGREE_Y = -15f;
+    /**
+     * Przelicznik stosowany do zmiany kąta w stopniach na radiany.
+     */
     private final float DEGREE_TO_RAD_CONVERSION = (float) Math.PI / 180;
 
     //Dla obrotów:
+    /**
+     * Stała określająca początkowy kąt obrótu kamery wokół osi Y.
+     */
     private final float INITIAL_ROTATION_X = 180f;
+    /**
+     *  Stała określająca początkowy kąt obrótu kamery wokół osi X.
+     */
     private final float INITIAL_ROTATION_Y = -45f;
 
+    /**
+     * Stała określająca wspołczynnik szybkości obrotu kamery przy dotyku ekranu.
+     */
     private final float ROTATION_FACTOR = 16f;
+    /**
+     * Stała definiująca kąt prosty.
+     */
     private final float RIGHT_ANGLE = 90f;
+    /**
+     * Stała określająca przesunięcie względem kąta prostego.
+     */
     private final float RIGHT_ANGLE_BIAS = 0.01f;
 
+    /**
+     * Stała określająca przesunięcie kąta widoczności tła względem kąta obrotu kamery dla osi Y.
+     */
     private final float SKYBOX_ANGLE_SHIFT_X = 15f;
+    /**
+     * Stała określająca przesunięcie kąta widoczności tła względem kąta obrotu kamery dla osi X.
+     */
     private final float SKYBOX_ANGLE_SHIFT_Y = 180f;
 
     //Dla frustum widoku
+    /**
+     * Kąt zasięgu widoczności kamery.
+     */
     private final float VIEW_FIELD_OF_VIEW_DEGREES = 45;
+    /**
+     * Odległość od bliższej rzutni kamery.
+     */
     private final float VIEW_NEAR = 1f;
+    /**
+     * Odległość od dalszej rzutni kamery.
+     */
     private final float VIEW_FAR = 100f;
 
     //Dla frustum światła
+    /**
+     * Kąt zasięgu padania promieni światła.
+     */
     private final float LIGHT_FIELD_OF_VIEW_DEGREES = 45;
+    /**
+     * Odległość bliższej rzutni światła.
+     */
     private final float LIGHT_NEAR = 2f;
+    /**
+     * Odległość dalszej rzutni światła.
+     */
     private final float LIGHT_FAR = 100f;
 
+    /**
+     * Stosunek wymiarów mapy głębokości cieni i erkanu.
+     */
     private final float DEPTH_MAP_PRECISION = 1.5f;
 }
