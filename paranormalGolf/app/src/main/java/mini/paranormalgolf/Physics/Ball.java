@@ -98,24 +98,8 @@ public class Ball extends MovableElement {
         verdeJaspe
     }
 
-<<<<<<< HEAD
-    private final int MESH_DIMENSION = 25;
-    public final float BALL_OPACITY = 1f;
 
-    private final float CD =0.4f;
-    private final float DENSITY =1.225f;
 
-    private final float radius;
-    private final float mass;
-    private final float area;
-
-    private float[] rotation;
-
-=======
-    /**
-     * OPISZ MATEUSZ TUTAJ
-     */
->>>>>>> d058958a4d2e0b2706c9426a11d49d69c0b80681
     private static BallTexture ballTextureType;
 
     /**
