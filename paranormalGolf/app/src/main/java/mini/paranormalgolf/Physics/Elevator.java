@@ -113,7 +113,7 @@ public class Elevator extends MovableElement {
         this.patrolTo = to;
         this.mu = mu;
 
-        moveToPatrolTo = findMovementDirection(from, to, velocity);
+       // moveToPatrolTo = findMovementDirection(from, to, velocity);
 
         GraphicsData generatedData = ObjectGenerator.createBoxModel(measures, ELEVATOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
@@ -126,36 +126,73 @@ public class Elevator extends MovableElement {
      */
     public void Update(float dt)
     {
-        if (change)
-        {
-            time_left -= dt;
-            if (time_left <= 0)
-            {
-                velocity.x = -velocity.x;
-                velocity.y = -velocity.y;
-                velocity.z = -velocity.z;
-                moveToPatrolTo = !moveToPatrolTo;
-                change = false;
-            }
-            else
-                return;
-        }
+       if(location.y==patrolFrom.y)
+       {
+           time_left-=dt;
+           if(time_left<0) {
+               velocity.y = Math.abs(velocity.y);
+               lastMove.y = (-time_left) * velocity.y;
+               location.y += lastMove.y;
+           }
+           else lastMove.y=0;
+       }
+        else if(location.y==patrolTo.y) {
+           time_left -= dt;
+           if (time_left < 0) {
+               velocity.y = -Math.abs(velocity.y);
+               lastMove.y = (-time_left) * velocity.y;
+               location.y += lastMove.y;
+           }
+           else
+               lastMove.y=0;
+       }
+        else { //winda jest pomiędzy położeniami
+           lastMove.y = velocity.y * dt;
 
-        lastMove = new Vector(velocity.x *dt, velocity.y * dt, velocity.z * dt);
-        location.x = location.x + lastMove.x;
-        location.y = location.y + lastMove.y;
-        location.z = location.z + lastMove.z;
+           if (location.y + lastMove.y >= patrolTo.y) {
+               time_left = wait_time;
+               time_left -= (((patrolTo.y - location.y) / lastMove.y) * dt);
+               lastMove.y = patrolTo.y - location.y;
+               location.y = patrolTo.y;
+           } else if (location.y + lastMove.y <= patrolFrom.y) {
+               time_left = wait_time;
+               time_left -= (((location.y - patrolFrom.y) / (-lastMove.y)) * dt);
+               lastMove.y = patrolFrom.y - location.y;
+               location.y = patrolFrom.y;
+           } else
+               location.y += lastMove.y;
+       }
 
-        if ((moveToPatrolTo && ((location.x > patrolTo.x) || (location.y > patrolTo.y) || location.z > patrolTo.z)) || (!moveToPatrolTo && ((location.x < patrolFrom.x) || (location.y < patrolFrom.y) || location.z < patrolFrom.z)))
-        {
-            change = true;
-            time_left = wait_time;
-            lastMove = new Vector(0,0,0);
-            /*if (moveToPatrolTo)
-                location = patrolTo;
-            else
-                location = patrolFrom;*/
-        }
+//        if (change)
+//        {
+//            time_left -= dt;
+//            if (time_left <= 0)
+//            {
+//                velocity.x = -velocity.x;
+//                velocity.y = -velocity.y;
+//                velocity.z = -velocity.z;
+//                moveToPatrolTo = !moveToPatrolTo;
+//                change = false;
+//            }
+//            else
+//                return;
+//        }
+//
+//        lastMove = new Vector(velocity.x *dt, velocity.y * dt, velocity.z * dt);
+//        location.x = location.x + lastMove.x;
+//        location.y = location.y + lastMove.y;
+//        location.z = location.z + lastMove.z;
+//
+//        if ((moveToPatrolTo && ((location.x > patrolTo.x) || (location.y > patrolTo.y) || location.z > patrolTo.z)) || (!moveToPatrolTo && ((location.x < patrolFrom.x) || (location.y < patrolFrom.y) || location.z < patrolFrom.z)))
+//        {
+//            change = true;
+//            time_left = wait_time;
+//            lastMove = new Vector(0,0,0);
+//            /*if (moveToPatrolTo)
+//                location = patrolTo;
+//            else
+//                location = patrolFrom;*/
+//        }
     }
 
     /**

@@ -1,8 +1,12 @@
-package mini.paranormalgolf.Primitives;
+package mini.paranormalgolf.Physics;
 
 import android.test.InstrumentationTestCase;
 
 import mini.paranormalgolf.Physics.Collisions;
+import mini.paranormalgolf.Primitives.Box;
+import mini.paranormalgolf.Primitives.BoxSize;
+import mini.paranormalgolf.Primitives.Point;
+import mini.paranormalgolf.Primitives.Sphere;
 
 /**
  * Created by Sławomir on 2015-01-18.
