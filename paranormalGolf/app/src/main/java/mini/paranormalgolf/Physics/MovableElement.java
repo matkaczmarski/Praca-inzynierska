@@ -39,6 +39,12 @@ public abstract class MovableElement extends Element {
     }
 
     /**
+     * Ustawia obiekt <b><em>lastMove</em></b>
+     * @param lastMove Nowe przesunięcie przebyte pomiędzy 2 klatkami symulacji przez element, wyrażone jako wektor.
+     */
+    public void setLastMove(Vector lastMove) {this.lastMove=lastMove;}
+
+    /**
      * Tworzy obiekt typu <em>MovableElement</em>.
      * @param velocity Wektor początkowej prędkości elementu.
      * @param location Współrzędne środka elementu w globalnym układzie współrzędnych.

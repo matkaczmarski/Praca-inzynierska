@@ -75,13 +75,13 @@ public class Beam extends MovableElement {
      * @param from Pierwszy punkt ograniczający poruszanie się środka elementu.
      * @param to Drugi punkt ograniczający poruszanie się środka elementu.
      */
-    public Beam(Point location, Vector velocity, BoxSize measures, Point from, Point to){
+    public Beam(Point location, Vector velocity, BoxSize measures, Point from, Point to) {
         super(velocity, location);
         this.measurements = measures;
         this.patrolFrom = from;
         this.patrolTo = to;
 
-        moveToPatrolTo = findMovementDirection(from, to, velocity);
+        // moveToPatrolTo = findMovementDirection(from, to, velocity);
 
         GraphicsData generatedData = ObjectGenerator.createBoxModel(measures, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
@@ -92,17 +92,23 @@ public class Beam extends MovableElement {
      * Odświeża położenie i prędkość belki.
      * @param dt Czas (w sekundach), który upływa pomiędzy 2 kolejnymi wyświetlanymi klatkami.
      */
-    public void Update(float dt){
+    public void Update(float dt) {
         lastMove = new Vector(velocity.x * dt, 0, velocity.z * dt);
         location.x = location.x + lastMove.x;
         location.z = location.z + lastMove.z;
-        if ((moveToPatrolTo && (location.x > patrolTo.x || location.z > patrolTo.z)) || (!moveToPatrolTo && (location.x < patrolFrom.x || location.z < patrolFrom.z)))
-        {
-            velocity.x = -velocity.x;
-            velocity.z = -velocity.z;
+        if (velocity.x != 0) {
+            if ((location.x >= patrolTo.x && velocity.x > 0) || (location.x <= patrolFrom.x && velocity.x < 0))
+                velocity.x = -velocity.x;
+        } else  //velocity.z!=0
+            if ((location.z >= patrolTo.z && velocity.z > 0) || (location.z <= patrolFrom.z && velocity.z < 0))
+                velocity.z = -velocity.z;
 
-            moveToPatrolTo = !moveToPatrolTo;
-        }
+//        if ((moveToPatrolTo && (location.x > patrolTo.x || location.z > patrolTo.z)) || (!moveToPatrolTo && (location.x < patrolFrom.x || location.z < patrolFrom.z))) {
+//            velocity.x = -velocity.x;
+//            velocity.z = -velocity.z;
+//
+//            moveToPatrolTo = !moveToPatrolTo;
+//        }
     }
 
     /**
