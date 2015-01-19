@@ -583,7 +583,7 @@ public class DrawManager {
         positionBallInScene(ball);
         depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
         ball.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-        ball.draw();
+        //ball.draw();
 
         for (Diamond diamond : board.diamonds) {
             positionBonusInScene(diamond);
@@ -634,7 +634,7 @@ public class DrawManager {
             drawElevatorWithShadow(elevator);
         }
 
-        drawBallWithShadow(ball);
+        //drawBallWithShadow(ball);
 
         for (Diamond diamond : board.diamonds) {
             drawDiamondWithShadow(diamond);

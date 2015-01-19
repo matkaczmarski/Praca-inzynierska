@@ -3,7 +3,7 @@ package mini.paranormalgolf.Graphics;
 import mini.paranormalgolf.Primitives.Point;
 
 /**
- * Informacje na temat źródła światła występującego na scenie.
+ * Przehowuje informacje na temat źródła światła występującego na scenie.
  */
 public class LightData{
     /**
