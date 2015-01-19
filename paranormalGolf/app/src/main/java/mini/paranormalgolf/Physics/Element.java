@@ -87,7 +87,7 @@ public abstract class Element {
      * @param shaderProgram Obiekt programu, którego atrybuty mają być odpowiednio skojarzone.
      * @param shaderProgramType Typ programu.
      */
-    public void bindData(ShaderProgram shaderProgram, ShaderProgram.ShaderProgramType shaderProgramType){
+    public void bindAttributes(ShaderProgram shaderProgram, ShaderProgram.ShaderProgramType shaderProgramType){
             switch(shaderProgramType) {
                 case depthMap:
                     vertexData.setVertexAttribPointer(0, ((DepthMapShaderProgram) shaderProgram).getPositionAttributeLocation(), POSITION_COMPONENT_COUNT, STRIDE_WITH_TEXTURE);

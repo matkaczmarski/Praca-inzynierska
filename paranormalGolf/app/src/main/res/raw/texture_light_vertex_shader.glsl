@@ -1,9 +1,10 @@
+precision mediump float;
 
 uniform mat4 u_MVPMatrix;
-uniform mat4 u_MVMatrix;
-uniform mat4 u_itMVMatrix;
+uniform mat4 u_MMatrix;
+uniform mat4 u_NMatrix;
 
-uniform vec3 u_LightPos;
+uniform vec3 u_LightPosition;
 uniform float u_LightsAmbient;
 uniform float u_LightsDiffusion;
 
@@ -15,13 +16,12 @@ varying vec2 v_TextureCoordinates;
 varying float v_Light;
 
 
-void main()                    
-{
-    vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
-    vec3 lightVector = normalize(u_LightPos - modelViewVertex);
-    vec3 modelViewNormal = vec3(normalize(u_itMVMatrix * vec4(a_Normal,0)));
+void main() {
+    vec3 worldVertex = vec3(u_MMatrix * a_Position);
+    vec3 lightVector = normalize(u_LightPosition - worldVertex);
+    vec3 worldNormal = normalize(vec3(u_NMatrix * vec4(a_Normal,0)));
 
-    float diffuseComponent = dot(modelViewNormal, lightVector);
+    float diffuseComponent = dot(worldNormal, lightVector);
     if(diffuseComponent < 0.0){
         diffuseComponent = 0.0;
     }

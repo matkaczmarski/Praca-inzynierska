@@ -2,9 +2,7 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Graphics.LightData;
-import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 import static android.opengl.GLES20.GL_TEXTURE0;
@@ -78,12 +76,12 @@ public class TextureShaderProgram extends ShaderProgram {
 
         // Retrieve uniform locations for the shader program.
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
-        uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
-        uItMVMatrixLocation = glGetUniformLocation(program, U_ITMVMATRIX);
-        uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
-        uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMB);
-        uLightDiffLocation = glGetUniformLocation(program, U_LIGHTDIFF);
-        uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE_UNIT);
+        uMVMatrixLocation = glGetUniformLocation(program, U_MODELMATRIX);
+        uItMVMatrixLocation = glGetUniformLocation(program, U_NORMALSROTATIONMATRIX);
+        uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOSITION);
+        uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMBIENT);
+        uLightDiffLocation = glGetUniformLocation(program, U_LIGHTDIFFUSION);
+        uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE);
         uOpacityLocation = glGetUniformLocation(program, U_OPACITY);
 
         // Retrieve attribute locations for the shader program.

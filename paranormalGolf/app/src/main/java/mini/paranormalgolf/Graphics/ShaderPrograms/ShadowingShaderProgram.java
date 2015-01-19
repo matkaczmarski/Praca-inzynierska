@@ -86,16 +86,16 @@ public class ShadowingShaderProgram extends ShaderProgram {
 
         // Retrieve uniform locations for the shader program.
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
-        uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
-        uItMVMatrixLocation = glGetUniformLocation(program, U_ITMVMATRIX);
-        uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
-        uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMB);
-        uLightDiffLocation = glGetUniformLocation(program, U_LIGHTDIFF);
-        uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE_UNIT);
+        uMVMatrixLocation = glGetUniformLocation(program, U_MODELMATRIX);
+        uItMVMatrixLocation = glGetUniformLocation(program, U_NORMALSROTATIONMATRIX);
+        uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOSITION);
+        uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMBIENT);
+        uLightDiffLocation = glGetUniformLocation(program, U_LIGHTDIFFUSION);
+        uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE);
         uOpacityLocation = glGetUniformLocation(program, U_OPACITY);
 
-        uShadowPMatrixLocation = glGetUniformLocation(program, U_SHADOW_PMATRIX);
-        uShadowTextureLocation = glGetUniformLocation(program, U_SHADOW_TEXTURE);
+        uShadowPMatrixLocation = glGetUniformLocation(program, U_SHADOWPMATRIX);
+        uShadowTextureLocation = glGetUniformLocation(program, U_SHADOWTEXTURE);
 
         // Retrieve attribute locations for the shader program.
         aPositionLocation = glGetAttribLocation(program, A_POSITION);

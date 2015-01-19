@@ -4,13 +4,7 @@
 package mini.paranormalgolf.Graphics.ShaderPrograms;
 
 import android.content.Context;
-
-import static android.opengl.GLES20.glUniform1f;
-import static android.opengl.GLES20.glUniform3f;
-import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glUseProgram;
-
-import mini.paranormalgolf.Graphics.LightData;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 
 /**
@@ -36,11 +30,11 @@ abstract public class ShaderProgram {
     /**
      * Definiuje nazwę stałej wartości (uniform macierzy modelView) występującej w kodzie programów.
      */
-    protected static final String U_MVMATRIX = "u_MVMatrix";
+    protected static final String U_MODELMATRIX = "u_MMatrix";
     /**
      * Definiuje nazwę stałej wartości (uniform macierzy normalsRotation) występującej w kodzie programów.
      */
-    protected static final String U_ITMVMATRIX = "u_itMVMatrix";
+    protected static final String U_NORMALSROTATIONMATRIX = "u_NMatrix";
     /**
      * Definiuje nazwę stałej wartości (uniform tablicy RGB koloru) występującej w kodzie programów.
      */
@@ -48,19 +42,19 @@ abstract public class ShaderProgram {
     /**
      * Definiuje nazwę stałej wartości (uniform tekstury) występującej w kodzie programów.
      */
-    protected static final String U_TEXTURE_UNIT = "u_TextureUnit";
+    protected static final String U_TEXTURE = "u_Texture";
     /**
      * Definiuje nazwę stałej wartości (uniform położenia źródła światła) występującej w kodzie programów.
      */
-    protected static final String U_LIGHTPOS = "u_LightPos";
+    protected static final String U_LIGHTPOSITION = "u_LightPosition";
     /**
      * Definiuje nazwę stałej wartości (uniform współczynnika światła otoczenia) występującej w kodzie programów.
      */
-    protected static final String U_LIGHTAMB = "u_LightsAmbient";
+    protected static final String U_LIGHTAMBIENT = "u_LightsAmbient";
     /**
      * Definiuje nazwę stałej wartości (uniform współczynnika światła rozproszonego) występującej w kodzie programów.
      */
-    protected static final String U_LIGHTDIFF = "u_LightsDiffusion";
+    protected static final String U_LIGHTDIFFUSION = "u_LightsDiffusion";
     /**
      * Definiuje nazwę stałej wartości (uniform stopnia przezroczystości obiektu) występującej w kodzie programów.
      */
@@ -68,11 +62,11 @@ abstract public class ShaderProgram {
     /**
      * Definiuje nazwę stałej wartości (uniform macierzy lightsViewProjection) występującej w kodzie programów.
      */
-    protected static final String U_SHADOW_PMATRIX = "u_ShadowProjMatrix";
+    protected static final String U_SHADOWPMATRIX = "u_ShadowVPMatrix";
     /**
      * Definiuje nazwę stałej wartości (uniform mapy głębokości cieni) występującej w kodzie programów.
      */
-    protected static final String U_SHADOW_TEXTURE = "u_ShadowTexture";
+    protected static final String U_SHADOWTEXTURE = "u_ShadowTexture";
 
 
     /**

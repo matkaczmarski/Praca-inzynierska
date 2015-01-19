@@ -199,7 +199,7 @@ public class DrawManager {
     /**
      * Parametry światła.
      */
-    private LightData lightData = new LightData(0.2f, 0.6f);
+    private LightData lightData = new LightData(0.3f, 0.6f);
 
     /**
      * Zwraca wartość aktualnego kąta obrotu kamery wokół osi Y.
@@ -402,7 +402,7 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionBallInScene(ball);
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Ball.getTexture(), ball.BALL_OPACITY);
-        ball.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        ball.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         ball.draw();
     }
 
@@ -414,7 +414,7 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionBonusInScene(diamond);
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Diamond.getTexture(), diamond.DIAMOND_OPACITY);
-        diamond.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        diamond.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         diamond.draw();
     }
 
@@ -426,7 +426,7 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionObjectInScene(floor.getLocation());
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getTexture(), floor.FLOOR_OPACITY);
-        floor.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        floor.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         floor.draw();
     }
 
@@ -438,7 +438,7 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Wall.getTexture(), wall.WALL_OPACITY);
-        wall.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        wall.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         wall.draw();
     }
 
@@ -450,7 +450,7 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionObjectInScene(beam.getLocation());
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Beam.getTexture(), beam.BEAM_OPACITY);
-        beam.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        beam.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         beam.draw();
     }
 
@@ -462,7 +462,7 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionObjectInScene(elevator.getLocation());
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Elevator.getTexture(), elevator.ELEVATOR_OPACITY);
-        elevator.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        elevator.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         elevator.draw();
     }
 
@@ -474,13 +474,13 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionObjectInScene(finish.getLocation());
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Finish.getTexture(), finish.FINISH_OPACITY);
-        finish.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        finish.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         finish.draw();
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
         colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
-        finish.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
+        finish.getGlow().bindAttributes(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         finish.getGlow().draw();
     }
 
@@ -492,14 +492,14 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionObjectInScene(checkPoint.getLocation());
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, CheckPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY);
-        checkPoint.bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        checkPoint.bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         checkPoint.draw();
 
         if (!checkPoint.isVisited()) {
             colorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
             colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().CHECKPOINT_GLOW_COLOR);
-            checkPoint.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
+            checkPoint.getGlow().bindAttributes(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
             checkPoint.getGlow().draw();
         }
     }
@@ -512,12 +512,12 @@ public class DrawManager {
         textureShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
         textureShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, HourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY);
-        hourGlass.getWoodenParts().bindData(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
+        hourGlass.getWoodenParts().bindAttributes(textureShaderProgram, ShaderProgram.ShaderProgramType.withoutShadowing);
         hourGlass.getWoodenParts().draw();
 
         colorShaderProgram.useProgram();
         colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.GLASS_COLOR);
-        hourGlass.bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
+        hourGlass.bindAttributes(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         hourGlass.draw();
     }
 
@@ -555,59 +555,59 @@ public class DrawManager {
         for (Floor floor : board.floors) {
             positionObjectInScene(floor.getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            floor.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            floor.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
             floor.draw();
         }
 
         for (Wall wall : board.walls) {
             positionObjectInScene(wall.getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            wall.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            wall.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
             wall.draw();
         }
 
         for (Beam beam : board.beams) {
             positionObjectInScene(beam.getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            beam.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            beam.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
             beam.draw();
         }
 
         for (Elevator elevator : board.elevators) {
             positionObjectInScene(elevator.getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            elevator.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            elevator.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
             elevator.draw();
         }
 
         positionBallInScene(ball);
         depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-        ball.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+        ball.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
         ball.draw();
 
         for (Diamond diamond : board.diamonds) {
             positionBonusInScene(diamond);
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            diamond.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            diamond.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
             diamond.draw();
         }
 
         for (HourGlass hourGlass : board.hourGlasses) {
             positionBonusInScene(hourGlass);
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            hourGlass.getWoodenParts().bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            hourGlass.getWoodenParts().bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
             hourGlass.getWoodenParts().draw();
         }
 
         positionObjectInScene(board.finish.getLocation());
         depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-        board.finish.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+        board.finish.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
         board.finish.draw();
 
         for (CheckPoint checkPoint : board.checkpoints) {
             positionObjectInScene(checkPoint.getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            checkPoint.bindData(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            checkPoint.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
             checkPoint.draw();
         }
     }
@@ -658,7 +658,7 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionBallInScene(ball);
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Ball.getTexture(), ball.BALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        ball.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        ball.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         ball.draw();
     }
 
@@ -670,7 +670,7 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionBonusInScene(diamond);
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Diamond.getTexture(), diamond.DIAMOND_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        diamond.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        diamond.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         diamond.draw();
     }
 
@@ -682,7 +682,7 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(floor.getLocation());
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, floor.getTexture(), floor.FLOOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        floor.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        floor.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         floor.draw();
     }
 
@@ -694,7 +694,7 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(wall.getLocation());
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Wall.getTexture(), wall.WALL_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        wall.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        wall.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         wall.draw();
     }
 
@@ -706,7 +706,7 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(beam.getLocation());
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Beam.getTexture(), beam.BEAM_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        beam.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        beam.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         beam.draw();
     }
 
@@ -718,7 +718,7 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(elevator.getLocation());
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Elevator.getTexture(), elevator.ELEVATOR_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        elevator.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        elevator.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         elevator.draw();
     }
 
@@ -730,13 +730,13 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(finish.getLocation());
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, Finish.getTexture(), finish.FINISH_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        finish.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        finish.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         finish.draw();
 
         colorShaderProgram.useProgram();
         positionObjectInScene(finish.getGlow().getLocation());
         colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, finish.isActive() ? finish.getGlow().ACTIVE_FINISH_COLOR : finish.getGlow().INACTIVE_FINISH_COLOR);
-        finish.getGlow().bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
+        finish.getGlow().bindAttributes(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         finish.getGlow().draw();
     }
 
@@ -748,14 +748,14 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionObjectInScene(checkPoint.getLocation());
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, CheckPoint.getTexture(), checkPoint.CHECKPOINT_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        checkPoint.bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        checkPoint.bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         checkPoint.draw();
 
         if (!checkPoint.isVisited()) {
             colorShaderProgram.useProgram();
             positionObjectInScene(checkPoint.getGlow().getLocation());
             colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, checkPoint.getGlow().CHECKPOINT_GLOW_COLOR);
-            checkPoint.getGlow().bindData( colorShaderProgram, ShaderProgram.ShaderProgramType.color);
+            checkPoint.getGlow().bindAttributes(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
             checkPoint.getGlow().draw();
         }
     }
@@ -768,12 +768,12 @@ public class DrawManager {
         shadowingShaderProgram.useProgram();
         positionBonusInScene(hourGlass);
         shadowingShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, HourGlass.getTexture(), hourGlass.getWoodenParts().HOURGLASS_WOODEN_PART_OPACITY, lightsViewProjectionMatrix, renderTextureId[0]);
-        hourGlass.getWoodenParts().bindData(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
+        hourGlass.getWoodenParts().bindAttributes(shadowingShaderProgram, ShaderProgram.ShaderProgramType.withShadowing);
         hourGlass.getWoodenParts().draw();
 
         colorShaderProgram.useProgram();
         colorShaderProgram.setUniforms(modelViewProjectionMatrix, modelsMatrix, normalsRotationMatrix, lightData, hourGlass.GLASS_COLOR);
-        hourGlass.bindData(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
+        hourGlass.bindAttributes(colorShaderProgram, ShaderProgram.ShaderProgramType.color);
         hourGlass.draw();
     }
 
@@ -787,7 +787,7 @@ public class DrawManager {
         glDepthFunc(GL_LEQUAL);
         skyBoxShaderProgram.useProgram();
         skyBoxShaderProgram.setUniforms(skyBoxViewProjectionMatrix, SkyBox.getTexture());
-        skyBox.bindData(skyBoxShaderProgram, ShaderProgram.ShaderProgramType.skyBox);
+        skyBox.bindAttributes(skyBoxShaderProgram, ShaderProgram.ShaderProgramType.skyBox);
         skyBox.draw();
         glDepthFunc(GL_LESS);
     }

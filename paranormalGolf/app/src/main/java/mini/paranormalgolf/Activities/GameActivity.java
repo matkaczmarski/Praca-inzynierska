@@ -9,38 +9,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Typeface;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Xml;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ActionMenuView;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.util.Locale;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Helpers.BoardInfo;
@@ -212,7 +193,7 @@ public class GameActivity extends Activity implements Runnable {
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
+            // automatically handle clicks on the Home/Up sound_button, so long
             // as you specify a parent activity in AndroidManifest.xml.
             int id = item.getItemId();
             if (id == R.id.action_settings) {
@@ -268,7 +249,7 @@ public class GameActivity extends Activity implements Runnable {
 
         if (music)
         {
-            backgroundMusic = MediaPlayer.create(this, R.raw.motyw);
+            backgroundMusic = MediaPlayer.create(this, R.raw.sound_motyw);
             backgroundMusic.setLooping(true);
             backgroundMusic.setVolume(10.0f, 3.0f);
             backgroundMusic.start();

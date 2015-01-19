@@ -12,9 +12,9 @@ import static android.opengl.GLES20.glUniformMatrix4fv;
 public class DepthMapShaderProgram extends ShaderProgram {
 
     /**
-     * Określa lokalizację stałej wartości (uniform macierzy modelViewProjection) występującej w kodzie programu.
+     * Określa lokalizację stałej wartości (uniform macierzy lightsViewProjection) występującej w kodzie programu.
      */
-    private final int uMVPMatrixLocation;
+    private final int uShadowPMatrixLocation;
     /**
      * Określa lokalizację stałej wartości (uniform macierzy modelView) występującej w kodzie programu.
      */
@@ -31,8 +31,8 @@ public class DepthMapShaderProgram extends ShaderProgram {
      */
     public DepthMapShaderProgram(Context context){
         super(context, R.raw.depthmap_vertex_shader, R.raw.depthmap_fragment_shader);
-        uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
-        uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
+        uShadowPMatrixLocation = glGetUniformLocation(program, U_SHADOWPMATRIX);
+        uMVMatrixLocation = glGetUniformLocation(program, U_MODELMATRIX);
         aPositionLocation = glGetAttribLocation(program, A_POSITION);
     }
 
@@ -42,7 +42,7 @@ public class DepthMapShaderProgram extends ShaderProgram {
      * @param mvMatrix Przypisywana wartość macierzy modelView.
      */
     public void setUniforms(float[] mvpMatrix, float[] mvMatrix) {
-        glUniformMatrix4fv(uMVPMatrixLocation, 1, false, mvpMatrix, 0);
+        glUniformMatrix4fv(uShadowPMatrixLocation, 1, false, mvpMatrix, 0);
         glUniformMatrix4fv(uMVMatrixLocation, 1, false, mvMatrix, 0);
     }
 

@@ -59,13 +59,13 @@ public class ResourceHelper {
             soundPool.release();
         soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
         soundPoolMap = new HashMap<Integer, Integer>();
-        soundPoolMap.put(SOUND_DIAMOND, soundPool.load(context, R.raw.diamond_new, 1));
-        soundPoolMap.put(SOUND_HOURGLASS, soundPool.load(context, R.raw.hourglass_new, 1));
-        soundPoolMap.put(SOUND_WIN, soundPool.load(context, R.raw.win_new, 1));
-        soundPoolMap.put(SOUND_LOSE, soundPool.load(context, R.raw.lost_new, 1));
-        soundPoolMap.put(SOUND_BUTTON, soundPool.load(context, R.raw.button, 1));
-        soundPoolMap.put(SOUND_WALL, soundPool.load(context, R.raw.wall, 1));
-        soundPoolMap.put(SOUND_BEAM, soundPool.load(context, R.raw.wall_2, 1));
+        soundPoolMap.put(SOUND_DIAMOND, soundPool.load(context, R.raw.sound_diamond_new, 1));
+        soundPoolMap.put(SOUND_HOURGLASS, soundPool.load(context, R.raw.sound_hourglass_new, 1));
+        soundPoolMap.put(SOUND_WIN, soundPool.load(context, R.raw.sound_win_new, 1));
+        soundPoolMap.put(SOUND_LOSE, soundPool.load(context, R.raw.sound_lost_new, 1));
+        soundPoolMap.put(SOUND_BUTTON, soundPool.load(context, R.raw.sound_button, 1));
+        soundPoolMap.put(SOUND_WALL, soundPool.load(context, R.raw.sound_wall, 1));
+        soundPoolMap.put(SOUND_BEAM, soundPool.load(context, R.raw.sound_wall_2, 1));
     }
 
     public static void playSound(int sound)

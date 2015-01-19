@@ -2,9 +2,7 @@ package mini.paranormalgolf.Graphics.ShaderPrograms;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.DrawManager;
 import mini.paranormalgolf.Graphics.LightData;
-import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 import static android.opengl.GLES20.glGetAttribLocation;
@@ -65,12 +63,12 @@ public class ColorShaderProgram extends ShaderProgram {
         super(context, R.raw.light_vertex_shader, R.raw.light_fragmet_shader);
 
         uMVPMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
-        uMVMatrixLocation = glGetUniformLocation(program, U_MVMATRIX);
-        uItMVMatrixLocation = glGetUniformLocation(program, U_ITMVMATRIX);
+        uMVMatrixLocation = glGetUniformLocation(program, U_MODELMATRIX);
+        uItMVMatrixLocation = glGetUniformLocation(program, U_NORMALSROTATIONMATRIX);
         uColorLocation = glGetUniformLocation(program, U_COLOR);
-        uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOS);
-        uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMB);
-        uLightDiffLocation = glGetUniformLocation(program, U_LIGHTDIFF);
+        uLightPosLocation = glGetUniformLocation(program, U_LIGHTPOSITION);
+        uLightAmbLocation = glGetUniformLocation(program, U_LIGHTAMBIENT);
+        uLightDiffLocation = glGetUniformLocation(program, U_LIGHTDIFFUSION);
 
         aPositionLocation = glGetAttribLocation(program, A_POSITION);
         aNormalLocation = glGetAttribLocation(program, A_NORMAL);

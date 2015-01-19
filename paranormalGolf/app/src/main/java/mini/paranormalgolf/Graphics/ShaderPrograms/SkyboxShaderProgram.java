@@ -41,7 +41,7 @@ public class SkyBoxShaderProgram extends ShaderProgram {
                 R.raw.skybox_fragment_shader);
 
         uMatrixLocation = glGetUniformLocation(program, U_MVPMATRIX);
-        uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE_UNIT);
+        uTextureUnitLocation = glGetUniformLocation(program, U_TEXTURE);
         aPositionLocation = glGetAttribLocation(program, A_POSITION);
     }
 
