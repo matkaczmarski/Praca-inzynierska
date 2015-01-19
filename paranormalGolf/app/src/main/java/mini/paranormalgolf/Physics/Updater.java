@@ -153,7 +153,8 @@ public class Updater implements SensorEventListener {
         last_diamonds_count = max_diamonds_count = board.diamonds.size();
         RegisterAccelerometer();
         landscape = getDeviceDefaultOrientation();
-        drawManager = new DrawManager(context, shadows);
+        if (context != null)
+            drawManager = new DrawManager(context, shadows);
     }
 
     /**
@@ -414,26 +415,30 @@ public class Updater implements SensorEventListener {
      * @return Informacja, czy urządzenie mobilne ma domyślnie oientację typu landscape
      */
     private boolean getDeviceDefaultOrientation() {
+        if (context != null) {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Configuration config = context.getResources().getConfiguration();
 
-        Configuration config = context.getResources().getConfiguration();
+            int rotation = windowManager.getDefaultDisplay().getRotation();
 
-        int rotation = windowManager.getDefaultDisplay().getRotation();
-
-        return ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) &&
-                config.orientation == Configuration.ORIENTATION_LANDSCAPE)
-                || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) &&
-                config.orientation == Configuration.ORIENTATION_PORTRAIT);
+            return ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) &&
+                    config.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) &&
+                    config.orientation == Configuration.ORIENTATION_PORTRAIT);
+        }
+        return false;
     }
 
     /**
      * Umożliwia pobieranie danych z akcelerometru.
      */
     private void RegisterAccelerometer() {
-        SensorManager sensorManager = (android.hardware.SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if(context!=null) {
+            SensorManager sensorManager = (android.hardware.SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+            Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     /**
