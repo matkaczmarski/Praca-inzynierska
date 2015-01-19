@@ -643,7 +643,7 @@ public class ObjectBuilder {
         final int startVertex = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
         final int numVertices = (numPoints + 1) * 2;
 
-        float height = Math.abs(new Vector(bottomCenter.Substract(topCenter)).length());
+        float height = Math.abs(new Vector(bottomCenter.Subtract(topCenter)).length());
         float basePerimeter = 2f * (float) Math.PI * ((bottomRadius + topRadius)/2); // uśredniłem promienie obu podstaw
 
         float aTextureUnits = basePerimeter / textureUnit;

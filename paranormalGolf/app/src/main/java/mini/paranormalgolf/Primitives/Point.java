@@ -39,7 +39,7 @@ public class Point {
      * @param other Punkt, którego współrzędne używamy jako odjemniki.
      * @return Punkt będący różnicą po współrzędnych danego punktu i punktu <b><em>other</em></b>.
      */
-    public Point Substract(Point other){
+    public Point Subtract(Point other){
         return new Point(this.x - other.x, this.y - other.y, this.z - other.z);
     }
 }
