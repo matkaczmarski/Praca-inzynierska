@@ -1,3 +1,4 @@
+
 package mini.paranormalgolf.Physics;
 
 import android.test.InstrumentationTestCase;
@@ -5,9 +6,11 @@ import android.test.InstrumentationTestCase;
 import mini.paranormalgolf.Physics.Collisions;
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.BoxSize;
+import mini.paranormalgolf.Primitives.Circle;
 import mini.paranormalgolf.Primitives.Cylinder;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Sphere;
+import mini.paranormalgolf.Primitives.Vector;
 
 /**
  * Created by Sławomir on 2015-01-18.
@@ -86,6 +89,67 @@ public class CollisionsTest extends InstrumentationTestCase {
 //        Sphere sphere5 = new Sphere(new Point(2, 2, 0), 2);
 //        Box box5 = new Box(new Point(-1, 0, 0), new BoxSize(2, 2, 1));
 //        assertEquals(false, Collisions.CheckSphereCylinderCollision(sphere5, box5));
+    }
+
+
+    public void testCheckSphereCircleCollision(){
+        Circle circle=new Circle(new Point(4,6,4),3);
+
+        Sphere sphere=new Sphere(new Point(4,10,7),2);
+        assertEquals(false,Collisions.CheckSphereCircleCollision(sphere,circle));
+
+        Sphere sphere2=new Sphere(new Point(0,8,4),2);
+        assertEquals(false,Collisions.CheckSphereCircleCollision(sphere2,circle));
+
+        Sphere sphere3=new Sphere(new Point(2,8,6),2);
+        assertEquals(true,Collisions.CheckSphereCircleCollision(sphere3,circle));
+
+        Sphere sphere4=new Sphere(new Point(6.5f,8,5),2);
+        assertEquals(true,Collisions.CheckSphereCircleCollision(sphere4,circle));
+    }
+
+    public void testResponseBallAABBCollisions() {
+
+        //2 collisions with walls
+        Updater.INTERVAL_TIME = 1;
+        Box box = new Box(new Point(4, 0, 0), new BoxSize(4, 8, 6));
+
+        Ball ball = new Ball(new Point(7.5f, 4, 2.5f), 2, new Vector(-1.5f, 3, 1.5f), Ball.BallTexture.amethystAlcove);
+        ball.setLastMove(new Vector(-1.5f, 3, 1.5f));
+        Collisions.ResponseBallAABBCollisions(ball, box);
+
+        Vector velocity = ball.getVelocity();
+        assertEquals(1.5f, velocity.x);
+        assertEquals(3f, velocity.y);
+        assertEquals(1.5f, velocity.z);
+
+        Ball ball2 = new Ball(new Point(4, 4.9f, 0), 1, new Vector(-1, -0.2f, 0), Ball.BallTexture.amethystAlcove);
+        ball2.setLastMove(new Vector(-1, -0.2f, 0));
+        Collisions.ResponseBallAABBCollisions(ball2, box);
+
+        velocity = ball2.getVelocity();
+        assertEquals(-1f, velocity.x);
+        assertEquals(0f, velocity.y);
+        assertEquals(0f, velocity.z);
+
+
+        //2 collisions with edges
+        Ball ball3 = new Ball(new Point(8f, 7.6666666f, -2.3333333f), 5, new Vector(-2f, -0.6666666f, -0.6666666f), Ball.BallTexture.amethystAlcove);
+        ball3.setLastMove(new Vector(-2f, -0.6666666f, -0.6666666f));
+        Collisions.ResponseBallAABBCollisions(ball3, box);
+        velocity = ball3.getVelocity();
+        assertEquals(true, Math.abs(-0.6666666f - velocity.z) < 0.00001f);
+        assertEquals(false, Math.abs(-0.6666666f - velocity.y) < 0.00001f);
+        assertEquals(false, Math.abs(-2 - velocity.x) < 0.00001f);
+
+
+        Ball ball4 = new Ball(new Point(9, -3, 5.5f), 5, new Vector(-3, -3, -1.5f), Ball.BallTexture.amethystAlcove);
+        ball4.setLastMove(new Vector(-3, -3, -1.5f));
+        Collisions.ResponseBallAABBCollisions(ball4, box);
+        velocity = ball4.getVelocity();
+        assertEquals(true, Math.abs(-3f - velocity.y) < 0.00001f);
+        assertEquals(false, Math.abs(-3 - velocity.x) < 0.00001f);
+        assertEquals(false, Math.abs(-1.5f - velocity.z) < 0.00001f);
     }
 //
 //    public void test() throws Exception {
