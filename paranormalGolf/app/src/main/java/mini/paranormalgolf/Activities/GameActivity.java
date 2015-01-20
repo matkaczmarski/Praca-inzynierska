@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import mini.paranormalgolf.Controls.MyBroadcastReceiver;
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.Helpers.ResourceHelper;
@@ -44,6 +48,8 @@ public class GameActivity extends Activity implements Runnable {
     private boolean shadows;
     private int texture;
 
+    public static boolean screen_lock = false;
+
     private boolean radius_set = false;
     private float radius = 1.0f;
 
@@ -56,6 +62,8 @@ public class GameActivity extends Activity implements Runnable {
     private String board_id;
 
     private MediaPlayer backgroundMusic;
+
+    private BroadcastReceiver broadcastReceiver = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +107,28 @@ public class GameActivity extends Activity implements Runnable {
 
         Intent intent = getIntent();
         board_id = intent.getStringExtra("BOARD_ID");
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                if (intent.getAction() == Intent.ACTION_SCREEN_OFF)
+                {
+                    screen_lock = true;
+                }
+                else if (intent.getAction() == Intent.ACTION_SCREEN_ON)
+                {
+
+                }
+            }
+        };
+
+        registerReceiver(broadcastReceiver, intentFilter);
 
         gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture, radius_set, radius);
 
@@ -173,12 +203,14 @@ public class GameActivity extends Activity implements Runnable {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     protected void onStop()
     {
-        if (backgroundMusic != null)
-        {
-            backgroundMusic.release();
-        }
         super.onStop();
     }
 
@@ -233,6 +265,8 @@ public class GameActivity extends Activity implements Runnable {
         {
             backgroundMusic.release();
         }
+        if (broadcastReceiver != null)
+            unregisterReceiver(broadcastReceiver);
         this.mWakeLock.release();
         super.onDestroy();
     }
@@ -308,6 +342,7 @@ public class GameActivity extends Activity implements Runnable {
             pause_dialog = new Dialog(this, R.style.PauseDialogTheme);
             pause_dialog.setContentView(R.layout.pause_dialog);
             pause_dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            pause_dialog.setCanceledOnTouchOutside(false);
             setFontsForPauseDialog(pause_dialog);
             ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
             {
@@ -486,7 +521,7 @@ public class GameActivity extends Activity implements Runnable {
         GameActivity.game = false;
         end_game_dialog = new Dialog(this, R.style.EndGameDialogTheme);
         end_game_dialog.setContentView(R.layout.win_dialog);
-        end_game_dialog.setCanceledOnTouchOutside(true);
+        end_game_dialog.setCanceledOnTouchOutside(false);
         loadFontsForDialog(end_game_dialog);
         setDialogTitleAndResult(end_game_dialog, diamonds, time, win);
 

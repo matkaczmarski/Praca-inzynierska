@@ -7,6 +7,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        <!--receiver android:name=".Controls.MyBroadcastReceiver" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SCREEN_ON"></action>
+                <action android:name="android.intent.action.ACTION_SCREEN_OFF"></action>
+            </intent-filter>
+        </receiver-->
         <activity
             android:name=".Activities.MainMenuActivity"
             android:label="@string/app_name"
@@ -20,7 +26,8 @@
         <activity
             android:name=".Activities.GameActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation">
         </activity>
         <activity
             android:name=".Activities.OptionsActivity"
