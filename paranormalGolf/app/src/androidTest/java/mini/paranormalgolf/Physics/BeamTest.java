@@ -79,8 +79,4 @@ public class BeamTest extends TestCase {
         assertEquals(true, lastZPosition < nextPosition.z);
         assertEquals(6.0f, nextPosition.z);
     }
-
-    public void testInitTextures() throws Exception {
-
-    }
 }

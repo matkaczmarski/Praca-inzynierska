@@ -64,8 +64,4 @@ public class ElevatorTest extends TestCase {
         position = elevator.getLocation();
         assertEquals(-3.5f, position.y);
     }
-
-    public void testInitTextures() throws Exception {
-
-    }
 }

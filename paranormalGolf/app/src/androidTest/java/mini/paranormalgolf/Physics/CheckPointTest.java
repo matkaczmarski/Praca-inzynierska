@@ -7,10 +7,6 @@ import mini.paranormalgolf.Primitives.Point;
 
 public class CheckPointTest extends TestCase {
 
-    public void testInitTextures() throws Exception {
-
-    }
-
     public void testVisit() throws Exception {
         CheckPoint checkPoint=new CheckPoint(new Point(0,0,0),new ConicalFrustum(4,2,3));
         assertEquals(false,checkPoint.isVisited());
