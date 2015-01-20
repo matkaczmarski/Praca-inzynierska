@@ -22,12 +22,17 @@ import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Vector;
 
 import static android.opengl.GLES20.GL_BLEND;
+import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
+import static android.opengl.GLES20.GL_LEQUAL;
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glClearDepthf;
+import static android.opengl.GLES20.glDepthFunc;
 import static android.opengl.GLES20.glEnable;
+import static android.opengl.GLES20.glHint;
 
 
 /**
@@ -111,8 +116,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GLES20.GL_CULL_FACE);
-
+        glEnable(GL_CULL_FACE);
+        glDepthFunc(GL_LEQUAL);
         updater.setContext(activity);
     }
 

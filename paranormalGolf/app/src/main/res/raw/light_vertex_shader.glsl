@@ -11,8 +11,7 @@ attribute vec3 a_Normal;
 
 varying float v_Light;
 
-void main()
-{
+void main(){
     vec3 worldVertex = vec3(u_MMatrix * a_Position);
     vec3 lightVector = normalize(u_LightPosition - worldVertex);
     vec3 worldNormal = normalize(vec3(u_NMatrix * vec4(a_Normal,0)));

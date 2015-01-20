@@ -1,6 +1,7 @@
 package mini.paranormalgolf.Graphics;
 
 import android.content.Context;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.FloatMath;
@@ -54,6 +55,7 @@ import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glCheckFramebufferStatus;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glClearDepthf;
 import static android.opengl.GLES20.glCullFace;
 import static android.opengl.GLES20.glDeleteFramebuffers;
 import static android.opengl.GLES20.glDeleteProgram;
@@ -308,6 +310,8 @@ public class DrawManager {
         glGenRenderbuffers(1, depthTextureId, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, depthTextureId[0]);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
+        //glRenderbufferStorage(GL_RENDERBUFFER, GLES11Ext.GL_DEPTH_COMPONENT24_OES, depthMapWidth, depthMapHeight);
+
 
         // Try to use a texture depth component
         glGenTextures(1, renderTextureId, 0);
@@ -367,6 +371,7 @@ public class DrawManager {
     private void renderSceneWithoutShadow(Board board, Ball ball){
         glViewport(0, 0, displayWidth, displayHeight);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
         drawSkyBox();
         for (Floor floor : board.floors) {
@@ -974,7 +979,7 @@ public class DrawManager {
     /**
      * Odległość bliższej rzutni światła.
      */
-    private final float LIGHT_NEAR = 2f;
+    private final float LIGHT_NEAR = 2.0f;
     /**
      * Odległość dalszej rzutni światła.
      */

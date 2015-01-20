@@ -21,7 +21,7 @@ float unpack (vec4 color){
 
 float calcBias(){
 	float cosTheta = clamp( dot( v_modelViewNormal,v_LightVector ), 0.0, 1.0 );
- 	float bias = 0.0001*tan(acos(cosTheta));
+ 	float bias =  0.0001*tan(acos(cosTheta));// 0.0000617*tan(acos(cosTheta));
 	bias = clamp(bias, 0.0, 0.01);
  	return bias;
 }
