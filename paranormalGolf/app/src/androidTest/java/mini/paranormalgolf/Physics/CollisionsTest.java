@@ -131,6 +131,71 @@ public class CollisionsTest extends InstrumentationTestCase {
     }
 
     public void testResponseMovingBallAABBCollisions() {
+        Updater.INTERVAL_TIME = 1;
+        //2 collisions with walls
 
+        //collision with beam
+        MovableElement element=new Beam(new Point(2,0,0),new Vector(2,0,0),new BoxSize(10,2,2),new Point(-10,0,0),new Point(10,0,0));
+        element.setLastMove(new Vector(2,0,0));
+        Ball ball = new Ball(new Point(-3,0,0), 1, new Vector(4,0,0), Ball.BallTexture.amethystAlcove);
+        ball.setLastMove(new Vector(4,0,0));
+        Collisions.ResponseBallMovingAABBCollisions(ball, element);
+        assertEquals(2f,element.getLocation().x);
+        assertEquals(0f,element.getLocation().y);
+        assertEquals(0f,element.getLocation().z);
+
+        assertEquals(-4f,ball.getVelocity().x);
+        assertEquals(0f,ball.getVelocity().y);
+        assertEquals(0f,ball.getVelocity().z);
+
+        assertEquals(true,ball.getLocation().x<-5);
+        assertEquals(0f,ball.getLocation().y);
+        assertEquals(0f,ball.getLocation().z);
+
+        //collision with moving elevator
+        Updater.INTERVAL_TIME = 1;
+        MovableElement element2=new Elevator(new Point(0,2,0),new Vector(0,2,0),new BoxSize(10,2,2),new Point(0,-10,0),new Point(0,10,0),0.05f);
+        element2.setLastMove(new Vector(0,2,0));
+        Ball ball2 = new Ball(new Point(0,2.5f,0), 1, new Vector(0,-1,0), Ball.BallTexture.amethystAlcove);
+        ball2.setLastMove(new Vector(0,-1,0));
+        Collisions.ResponseBallMovingAABBCollisions(ball2, element2);
+        assertEquals(0f,ball2.getLocation().x);
+        assertEquals(true,Math.abs(ball2.getLocation().y-4)<0.00001);
+        assertEquals(0f,ball2.getLocation().z);
+
+        assertEquals(0f,ball2.getVelocity().y);
+
+//        Vector velocity = ball.getVelocity();
+//        assertEquals(1.5f, velocity.x);
+//        assertEquals(3f, velocity.y);
+//        assertEquals(1.5f, velocity.z);
+//
+//        Ball ball2 = new Ball(new Point(4, 4.9f, 0), 1, new Vector(-1, -0.2f, 0), Ball.BallTexture.amethystAlcove);
+//        ball2.setLastMove(new Vector(-1, -0.2f, 0));
+//        Collisions.ResponseBallAABBCollisions(ball2, box);
+//
+//        velocity = ball2.getVelocity();
+//        assertEquals(-1f, velocity.x);
+//        assertEquals(0f, velocity.y);
+//        assertEquals(0f, velocity.z);
+//
+//
+//        //2 collisions with edges
+//        Ball ball3 = new Ball(new Point(8f, 7.6666666f, -2.3333333f), 5, new Vector(-2f, -0.6666666f, -0.6666666f), Ball.BallTexture.amethystAlcove);
+//        ball3.setLastMove(new Vector(-2f, -0.6666666f, -0.6666666f));
+//        Collisions.ResponseBallAABBCollisions(ball3, box);
+//        velocity = ball3.getVelocity();
+//        assertEquals(true, Math.abs(-0.6666666f - velocity.z) < 0.00001f);
+//        assertEquals(false, Math.abs(-0.6666666f - velocity.y) < 0.00001f);
+//        assertEquals(false, Math.abs(-2 - velocity.x) < 0.00001f);
+//
+//
+//        Ball ball4 = new Ball(new Point(9, -3, 5.5f), 5, new Vector(-3, -3, -1.5f), Ball.BallTexture.amethystAlcove);
+//        ball4.setLastMove(new Vector(-3, -3, -1.5f));
+//        Collisions.ResponseBallAABBCollisions(ball4, box);
+//        velocity = ball4.getVelocity();
+//        assertEquals(true, Math.abs(-3f - velocity.y) < 0.00001f);
+//        assertEquals(false, Math.abs(-3 - velocity.x) < 0.00001f);
+//        assertEquals(false, Math.abs(-1.5f - velocity.z) < 0.00001f);
     }
 }

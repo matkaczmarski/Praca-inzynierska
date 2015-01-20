@@ -285,7 +285,7 @@ public final class Collisions {
         Point halfMovableElementLocation = new Point((startMovableElementLocation.x + endMovableElementLocation.x) / 2, (startMovableElementLocation.y + endMovableElementLocation.y) / 2, (startMovableElementLocation.z + endMovableElementLocation.z) / 2);
 
         float startTime = 0, endTime = 1, halfTime = 0.5f;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             if (Collisions.CheckSphereAABBCollision(new Sphere(halfBallLocation, ball.getRadius()), new Box(halfMovableElementLocation, boxSize))) {
                 endTime = halfTime;
                 endBallLocation = halfBallLocation;
@@ -441,8 +441,8 @@ public final class Collisions {
 //                velocity.z += Math.signum(element.getLastMove().z) * Math.abs(element.getVelocity().z);
 //            }
         }
-   //     if (element.getClass() == Elevator.class)
-   //         halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
+//        if (element.getClass() == Elevator.class)
+//            halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
 
         ball.setLocation(new Point(halfBallLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfBallLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
