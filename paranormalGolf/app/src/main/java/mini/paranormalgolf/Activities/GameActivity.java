@@ -118,7 +118,7 @@ public class GameActivity extends Activity implements Runnable {
             {
                 if (intent.getAction() == Intent.ACTION_SCREEN_OFF)
                 {
-                    screen_lock = true;
+                    GameRenderer.screen_lock = true;
                 }
                 else if (intent.getAction() == Intent.ACTION_SCREEN_ON)
                 {
@@ -203,7 +203,7 @@ public class GameActivity extends Activity implements Runnable {
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
-        super.onConfigurationChanged(newConfig);
+        //super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -259,6 +259,7 @@ public class GameActivity extends Activity implements Runnable {
     @Override
     protected void onDestroy()
     {
+        gameRenderer.getUpdater().getDrawManager().releaseResources();
         if (backgroundMusic != null)
         {
             backgroundMusic.release();

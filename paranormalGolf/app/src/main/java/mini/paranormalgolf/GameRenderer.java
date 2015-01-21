@@ -59,6 +59,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private int texture;
     private float radius;
 
+    public static boolean screen_lock = false;
 
     private FPSCounter fpsCounter;
 
@@ -119,18 +120,24 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glEnable(GL_CULL_FACE);
         glDepthFunc(GL_LEQUAL);
 
-        Board board = loadBoard(board_id);
-        float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
-        Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
+        if (!screen_lock)
+        {
+            screen_lock = false;
+            Board board = loadBoard(board_id);
+            float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
+            Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
 
-        updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
-
-        updater.setContext(activity);
+            updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
+            updater.setContext(activity);
+        }
+        else
+            screen_lock = false;
     }
 
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-        updater.surfaceChange(width, height);
+        if (updater != null)
+            updater.surfaceChange(width, height);
 
         //updater.setContext(activity);
     }
