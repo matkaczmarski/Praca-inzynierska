@@ -9,11 +9,15 @@ S³awomir: Rekord: 50s i 16D
 
 
 POZIOM 4:
-
+S³awomir: Rekord: 41s i 15D lub 68s i 18D
+	  Proponowany limit czasowy: conajmniej 80-90s?
 
 
 POZIOM 5:
-
+S³awomir: Rekord: 54s i 20D lub 69s i 22D
+	  Proponowany limit czasowy: mo¿e niewielki bufor bezpieczeñstwa np.75-80s?
 
 
 POZIOM 6:
+S³awomir: Rekord: 49s i 6D lub 62s i 7D lub 79s i 8D
+	  Proponowany limit czasowy: mo¿e wiêkszy, w³aœnie 100s?
