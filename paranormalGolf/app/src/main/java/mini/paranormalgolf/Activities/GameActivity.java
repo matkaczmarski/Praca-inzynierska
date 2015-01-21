@@ -433,11 +433,17 @@ public class GameActivity extends Activity implements Runnable {
         vibrate();
     }
 
-    public void playSound(int sound)
+    public void playSound(final int sound)
     {
         if (this.sound)
         {
-            ResourceHelper.playSound(sound);
+            new Runnable(){
+                @Override
+                public void run()
+                {
+                    ResourceHelper.playSound(sound);
+                }
+            }.run();
         }
     }
 
@@ -513,6 +519,8 @@ public class GameActivity extends Activity implements Runnable {
 
     public void onWinDialog(int diamonds, int time, boolean win)
     {
+        if (end_game_dialog != null)
+            return;
         if (backgroundMusic != null)
             backgroundMusic.stop();
         playEndGameSound(win);

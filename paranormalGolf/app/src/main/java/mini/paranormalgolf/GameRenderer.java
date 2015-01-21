@@ -55,7 +55,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private boolean music;
     private boolean sound;
     private boolean shadows;
+    private boolean radius_set;
     private int texture;
+    private float radius;
+
 
     private FPSCounter fpsCounter;
 
@@ -70,10 +73,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         this.sound = sound;
         this.shadows = shadows;
         this.texture = texture;
-
-        Board board = loadBoard(board_id);
-        float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
-        Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
+        this.radius_set = radius_set;
+        this.radius = radius;
 
         boardInfo = loadBoardInfo(board_id);
         timeLeft = boardInfo.getTime() * 1000;
@@ -88,7 +89,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
                 ((GameActivity)contextForUiThread).updatePanel(boardInfo.getTime(), 0);
             }
         });
-        updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
         fpsCounter = new FPSCounter();
     }
 
@@ -118,6 +118,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_CULL_FACE);
         glDepthFunc(GL_LEQUAL);
+
+        Board board = loadBoard(board_id);
+        float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
+        Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
+
+        updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
+
         updater.setContext(activity);
     }
 
