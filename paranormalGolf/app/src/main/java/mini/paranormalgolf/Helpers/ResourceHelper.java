@@ -53,10 +53,13 @@ public class ResourceHelper {
 
     private static final String TAG = "TextureHelper";
 
+    private static Context context;
+
     public static void initSounds(Context context)
     {
         if (soundPool != null)
             soundPool.release();
+        ResourceHelper.context = context;
         soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
         soundPoolMap = new HashMap<Integer, Integer>();
         soundPoolMap.put(SOUND_DIAMOND, soundPool.load(context, R.raw.sound_diamond_new, 1));
@@ -70,7 +73,18 @@ public class ResourceHelper {
 
     public static void playSound(int sound)
     {
-        soundPool.play(soundPoolMap.get(sound), 1, 1, 1, 0, 1f);
+        AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        float volume;
+        switch (am.getRingerMode())
+        {
+            case AudioManager.RINGER_MODE_SILENT:
+                volume = 0.0f;
+                break;
+            default:
+                volume = 1.0f;
+                break;
+        }
+        soundPool.play(soundPoolMap.get(sound), volume, volume, 1, 0, 1f);
     }
 
     //Metoda zwracająca tekst Z pliku

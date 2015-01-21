@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -280,9 +281,20 @@ public class GameActivity extends Activity implements Runnable {
 
         if (music && !onCreate)
         {
+            AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
             backgroundMusic = MediaPlayer.create(this, R.raw.sound_motyw);
             backgroundMusic.setLooping(true);
-            backgroundMusic.setVolume(10.0f, 3.0f);
+
+            switch (am.getRingerMode())
+            {
+                case AudioManager.RINGER_MODE_SILENT:
+                    backgroundMusic.setVolume(0.0f, 0.0f);
+                    break;
+                default:
+                    backgroundMusic.setVolume(1.0f, 1.0f);
+                    break;
+            }
             backgroundMusic.start();
         }
     }
