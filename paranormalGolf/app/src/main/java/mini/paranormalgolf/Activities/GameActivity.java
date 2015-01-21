@@ -75,9 +75,7 @@ public class GameActivity extends Activity implements Runnable {
         radius_set = extras.getBoolean(getString(R.string.radius_set));
         radius = extras.getFloat(getString(R.string.radius));
 
-        ProgressDialog dialog = ProgressDialog.show(this, "Loading", "Please wait...", true);
-
-        checkSharedPreferences();
+        checkSharedPreferences(true);
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
         // Check if the system supports OpenGL ES 2.0.
@@ -199,7 +197,6 @@ public class GameActivity extends Activity implements Runnable {
                 }
             }
         });
-        dialog.dismiss();
     }
 
     @Override
@@ -251,7 +248,7 @@ public class GameActivity extends Activity implements Runnable {
         protected void onResume() {
             super.onResume();
 
-            checkSharedPreferences();
+            checkSharedPreferences(false);
             gameRenderer.updatePreferences(vibrations, music, sound);
             if (rendererSet) {
                 glSurfaceView.onResume();
@@ -271,7 +268,7 @@ public class GameActivity extends Activity implements Runnable {
         super.onDestroy();
     }
 
-    public void checkSharedPreferences()
+    public void checkSharedPreferences(boolean onCreate)
     {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
 
@@ -281,7 +278,7 @@ public class GameActivity extends Activity implements Runnable {
         shadows = sharedPreferences.getBoolean(getString(R.string.options_shadows), false);
         texture = sharedPreferences.getInt(getString(R.string.options_texture), 0);
 
-        if (music)
+        if (music && !onCreate)
         {
             backgroundMusic = MediaPlayer.create(this, R.raw.sound_motyw);
             backgroundMusic.setLooping(true);
