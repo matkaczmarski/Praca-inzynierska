@@ -35,7 +35,7 @@ public class Updater implements SensorEventListener {
     /**
      * Współczynnik skalujący <b><em>INTERVAL_TIME</em></b>.
      */
-    public static final float INTERVAL_FACTOR = 1.5f;
+    protected static float INTERVAL_FACTOR = 1.5f;
 
     /**
      * Kulka znajdująca się na planszy.
@@ -50,7 +50,7 @@ public class Updater implements SensorEventListener {
     /**
      * Wektor wartości przyspieszenia dla aktualnego położenia urządzenia mobilnego.
      */
-    private Vector accData=new Vector(0,0,0);
+    protected Vector accData=new Vector(0,0,0);
 
 
     /**
