@@ -252,11 +252,6 @@ public class DrawManager {
      */
     public void releaseResources(){
         try {
-            glDeleteProgram(colorShaderProgram.getProgram());
-            glDeleteProgram(textureShaderProgram.getProgram());
-            glDeleteProgram(depthMapShaderProgram.getProgram());
-            glDeleteProgram(skyBoxShaderProgram.getProgram());
-            glDeleteProgram(shadowingShaderProgram.getProgram());
 
             int[] textureId = new int[]{Ball.getTexture(), Beam.getTexture(), CheckPoint.getTexture(), Diamond.getTexture(), HourGlass.getTexture(), Elevator.getTexture(), Floor.getStandardFloorTextureId(), Floor.getStickyFloorTextureId(), Wall.getTexture(), Finish.getTexture(), SkyBox.getTexture()};
             glDeleteTextures(textureId.length, textureId, 0);
@@ -266,6 +261,12 @@ public class DrawManager {
                 glDeleteTextures(1, renderTextureId, 0);
                 glDeleteFramebuffers(1, frameBufferObjectId, 0);
             }
+
+            glDeleteProgram(colorShaderProgram.getProgram());
+            glDeleteProgram(textureShaderProgram.getProgram());
+            glDeleteProgram(depthMapShaderProgram.getProgram());
+            glDeleteProgram(skyBoxShaderProgram.getProgram());
+            glDeleteProgram(shadowingShaderProgram.getProgram());
         }
         catch (Exception ex) {
             if(LoggerConfig.ON) {

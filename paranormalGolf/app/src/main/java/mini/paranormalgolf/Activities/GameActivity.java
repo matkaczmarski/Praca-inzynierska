@@ -116,14 +116,7 @@ public class GameActivity extends Activity implements Runnable {
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                if (intent.getAction() == Intent.ACTION_SCREEN_OFF)
-                {
-                    GameRenderer.screen_lock = true;
-                }
-                else if (intent.getAction() == Intent.ACTION_SCREEN_ON)
-                {
-
-                }
+                return;
             }
         };
 
@@ -203,7 +196,7 @@ public class GameActivity extends Activity implements Runnable {
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
-        //super.onConfigurationChanged(newConfig);
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
