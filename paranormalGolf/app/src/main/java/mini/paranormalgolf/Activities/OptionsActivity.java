@@ -58,7 +58,7 @@ public class OptionsActivity extends Activity
             findViewById(R.id.options_texture_chosen_textview).setVisibility(View.GONE);
         }
 
-        LoadFonts();
+        //LoadFonts();
         checkSharedPreferences();
         if (!onPause)
             loadTextures();
@@ -185,7 +185,7 @@ public class OptionsActivity extends Activity
         findViewById(android.R.id.content).invalidate();
     }
 
-    public void LoadFonts()
+    /*public void LoadFonts()
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
         TextView tv = (TextView) findViewById(R.id.options_title);
@@ -220,7 +220,7 @@ public class OptionsActivity extends Activity
 
         checkBox = (CheckBox)findViewById(R.id.options_shadows);
         checkBox.setTypeface(tf);
-    }
+    }*/
 
 
     @Override
@@ -270,7 +270,7 @@ public class OptionsActivity extends Activity
         ((CheckBox)findViewById(R.id.options_en)).setChecked(false);
         changeLanguage("pl");
         setContentView(R.layout.activity_options);
-        LoadFonts();
+        //LoadFonts();
         updateControls();
         if (!onPause)
             loadTextures();
@@ -283,7 +283,7 @@ public class OptionsActivity extends Activity
         ((CheckBox)findViewById(R.id.options_pl)).setChecked(false);
         changeLanguage("en");
         setContentView(R.layout.activity_options);
-        LoadFonts();
+        //LoadFonts();
         updateControls();
         if (!onPause)
             loadTextures();

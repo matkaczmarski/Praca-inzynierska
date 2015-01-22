@@ -30,7 +30,7 @@ public class FontTextView extends TextView
 
     private void init()
     {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "batmanFont.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "SonsieOne-Regular.otf");//"batmanFont.ttf");
         setTypeface(tf);
     }
 }

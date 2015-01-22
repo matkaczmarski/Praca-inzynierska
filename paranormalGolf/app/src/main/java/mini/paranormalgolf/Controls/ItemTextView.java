@@ -16,7 +16,7 @@ import mini.paranormalgolf.R;
 /**
  * Created by Kuba on 2015-01-09.
  */
-public class ItemTextView extends TextView
+public class ItemTextView extends FontTextView
 {
     private final int duration = 500;
     private final int offset = 100;

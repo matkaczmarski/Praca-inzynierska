@@ -70,7 +70,7 @@ public class GameActivity extends Activity implements Runnable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        LoadFonts();
+        //LoadFonts();
 
         Bundle extras = getIntent().getExtras();
         radius_set = extras.getBoolean(getString(R.string.radius_set));
@@ -315,7 +315,7 @@ public class GameActivity extends Activity implements Runnable {
 
     }
 
-    public void LoadFonts()
+    /*public void LoadFonts()
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
         TextView tv = (TextView) findViewById(R.id.game_activity_time_header);
@@ -329,7 +329,7 @@ public class GameActivity extends Activity implements Runnable {
 
         tv = (TextView)findViewById(R.id.game_activity_diamonds);
         tv.setTypeface(tf);
-    }
+    }*/
 
     public void onPauseClick(View view)
     {
@@ -346,7 +346,7 @@ public class GameActivity extends Activity implements Runnable {
             pause_dialog.setContentView(R.layout.pause_dialog);
             pause_dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             pause_dialog.setCanceledOnTouchOutside(false);
-            setFontsForPauseDialog(pause_dialog);
+            //setFontsForPauseDialog(pause_dialog);
             ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -410,7 +410,7 @@ public class GameActivity extends Activity implements Runnable {
         }
     }
 
-    public void setFontsForPauseDialog(Dialog dialog)
+    /*public void setFontsForPauseDialog(Dialog dialog)
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
 
@@ -428,7 +428,7 @@ public class GameActivity extends Activity implements Runnable {
 
         textView = (TextView)dialog.findViewById(R.id.pause_dialog_title);
         textView.setTypeface(tf);
-    }
+    }*/
 
     public void onButtonClick()
     {
@@ -462,7 +462,7 @@ public class GameActivity extends Activity implements Runnable {
     public void restart()
     {
         setContentView(R.layout.activity_game);
-        LoadFonts();
+        //LoadFonts();
         ProgressDialog dialog = ProgressDialog.show(this, "Loading", "Please wait...", true);
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
@@ -533,7 +533,7 @@ public class GameActivity extends Activity implements Runnable {
         end_game_dialog = new Dialog(this, R.style.EndGameDialogTheme);
         end_game_dialog.setContentView(R.layout.win_dialog);
         end_game_dialog.setCanceledOnTouchOutside(false);
-        loadFontsForDialog(end_game_dialog);
+        //loadFontsForDialog(end_game_dialog);
         setDialogTitleAndResult(end_game_dialog, diamonds, time, win);
 
         end_game_dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -586,7 +586,7 @@ public class GameActivity extends Activity implements Runnable {
         }
     }
 
-    public void loadFontsForDialog(Dialog dialog)
+    /*public void loadFontsForDialog(Dialog dialog)
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
 
@@ -598,7 +598,7 @@ public class GameActivity extends Activity implements Runnable {
 
         textView = (TextView)dialog.findViewById(R.id.end_game_ok_button);
         textView.setTypeface(tf);
-    }
+    }*/
 
 
 

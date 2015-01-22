@@ -12,7 +12,7 @@ import android.widget.TextView;
 /**
  * Created by Kuba on 2015-01-14.
  */
-public class OptionTextView extends TextView
+public class OptionTextView extends FontTextView
 {
     private final int duration = 500;
     private final int offset = 100;

@@ -55,7 +55,7 @@ public class LevelsActivity extends Activity
         radius_set = extras.getBoolean(getString(R.string.radius_set));
         radius = extras.getFloat(getString(R.string.radius));
 
-        LoadFonts();
+        //LoadFonts();
         InitializeBoardList();
         checkSharedPreferences();
     }
@@ -75,7 +75,7 @@ public class LevelsActivity extends Activity
         }
     }
 
-    public void LoadFonts()
+    /*public void LoadFonts()
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
         TextView tv = (TextView) findViewById(R.id.select_level_title);
@@ -89,7 +89,7 @@ public class LevelsActivity extends Activity
 
         tv = (TextView)findViewById(R.id.levels_select_best_result);
         tv.setTypeface(tf);
-    }
+    }*/
 
     public void InitializeBoardList()
     {

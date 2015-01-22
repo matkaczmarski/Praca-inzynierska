@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <TextView
+            <mini.paranormalgolf.Controls.FontTextView
                 android:id="@+id/game_activity_time_header"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -29,7 +29,7 @@
                 android:textSize="20sp"
                 android:text="@string/time"
                 android:gravity="center"/>
-            <TextView
+            <mini.paranormalgolf.Controls.FontTextView
                 android:id="@+id/game_activity_time"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <TextView
+            <mini.paranormalgolf.Controls.FontTextView
                 android:id="@+id/game_activity_diamonds_header"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -53,7 +53,7 @@
                 android:textSize="20sp"
                 android:text="@string/diamonds"
                 android:gravity="center"/>
-            <TextView
+            <mini.paranormalgolf.Controls.FontTextView
                 android:id="@+id/game_activity_diamonds"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

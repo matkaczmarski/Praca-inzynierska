@@ -59,9 +59,9 @@ public class LevelsListAdapter extends BaseAdapter
                     dialog.dismiss();
                 }
             });
-            Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
-            TextView tv = (TextView) dialog.findViewById(R.id.lock_dialog_ok);
-            tv.setTypeface(tf);
+            //Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
+            //TextView tv = (TextView) dialog.findViewById(R.id.lock_dialog_ok);
+            //tv.setTypeface(tf);
 
             dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
             dialog.show();
@@ -148,8 +148,8 @@ public class LevelsListAdapter extends BaseAdapter
                 textView.setBackgroundDrawable(null);
                 textView.setBackgroundColor(Color.TRANSPARENT);
             }
-            Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
-            textView.setTypeface(tf);
+            /*Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
+            textView.setTypeface(tf);*/
         }
 
         return rowView;

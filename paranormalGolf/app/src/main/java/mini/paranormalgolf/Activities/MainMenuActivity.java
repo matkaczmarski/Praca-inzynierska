@@ -52,7 +52,16 @@ public class MainMenuActivity extends Activity
 
         setContentView(R.layout.activity_main_menu);
 
-        LoadFonts();
+        TextView tv = (TextView) findViewById(R.id.main_menu_title);
+        tv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onTitleClick(view);
+            }
+        });
+        //LoadFonts();
     }
 
     public void checkSharedPreferences()
@@ -100,7 +109,7 @@ public class MainMenuActivity extends Activity
         res.updateConfiguration(conf, dm);
     }
 
-    public void LoadFonts()
+    /*public void LoadFonts()
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
         TextView tv = (TextView) findViewById(R.id.main_menu_title);
@@ -130,7 +139,7 @@ public class MainMenuActivity extends Activity
 
         tv = (TextView)findViewById(R.id.main_menu_exit);
         tv.setTypeface(tf);
-    }
+    }*/
 
     public void onTitleClick(View view)
     {
@@ -236,7 +245,7 @@ public class MainMenuActivity extends Activity
         super.onResume();
         checkSharedPreferences();
         setContentView(R.layout.activity_main_menu);
-        LoadFonts();
+        //LoadFonts();
     }
 
     @Override

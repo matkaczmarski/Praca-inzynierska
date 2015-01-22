@@ -138,8 +138,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         if (updater != null)
             updater.surfaceChange(width, height);
-
-        //updater.setContext(activity);
     }
 
 

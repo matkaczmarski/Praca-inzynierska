@@ -989,5 +989,5 @@ public class DrawManager {
     /**
      * Stosunek wymiarów mapy głębokości cieni i erkanu.
      */
-    private final float DEPTH_MAP_PRECISION = 1.0f;
+    private final float DEPTH_MAP_PRECISION = 2.0f;
 }

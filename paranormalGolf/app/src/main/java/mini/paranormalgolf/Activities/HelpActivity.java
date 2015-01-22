@@ -54,7 +54,7 @@ public class HelpActivity extends Activity
 
         page_max = pages.length;
 
-        LoadFonts();
+        //LoadFonts();
         checkSharedPreferences();
         changePage();
     }
@@ -74,7 +74,7 @@ public class HelpActivity extends Activity
         }
     }
 
-    private void LoadFonts()
+    /*private void LoadFonts()
     {
         Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
         TextView tv = (TextView)findViewById(R.id.help_title);
@@ -85,7 +85,7 @@ public class HelpActivity extends Activity
 
         tv = (TextView)findViewById(R.id.help_next);
         tv.setTypeface(tf);
-    }
+    }*/
 
 
     @Override

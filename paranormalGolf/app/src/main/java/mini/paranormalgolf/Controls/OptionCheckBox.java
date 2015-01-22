@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -21,16 +22,19 @@ public class OptionCheckBox extends CheckBox
     public OptionCheckBox(Context context)
     {
         super(context);
+        init();
     }
 
     public OptionCheckBox(Context context, AttributeSet attrs)
     {
         super(context, attrs);
+        init();
     }
 
     public OptionCheckBox(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     @Override
@@ -71,5 +75,11 @@ public class OptionCheckBox extends CheckBox
         }
         animation.setStartOffset(nr * offset);
         startAnimation(animation);
+    }
+
+    private void init()
+    {
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "SonsieOne-Regular.otf");//"batmanFont.ttf");
+        setTypeface(tf);
     }
 }

@@ -12,7 +12,7 @@ import org.w3c.dom.Text;
 /**
  * Created by Kuba on 2015-01-09.
  */
-public class TitleTextView extends TextView
+public class TitleTextView extends FontTextView
 {
 
     public TitleTextView(Context context)
