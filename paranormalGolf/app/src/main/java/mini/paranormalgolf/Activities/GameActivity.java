@@ -109,25 +109,21 @@ public class GameActivity extends Activity implements Runnable {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
 
-        /*broadcastReceiver = new BroadcastReceiver()
+        broadcastReceiver = new BroadcastReceiver()
         {
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                if (intent.getAction() == Intent.ACTION_SCREEN_ON)
+                if (intent.getAction() == Intent.ACTION_SCREEN_OFF)
                 {
-
-                }
-                else if (intent.getAction() == Intent.ACTION_SCREEN_OFF)
-                {
-
+                    if (pause_dialog == null)
+                        onPauseClick(null);
                 }
             }
         };
 
-        registerReceiver(broadcastReceiver, intentFilter);*/
+        registerReceiver(broadcastReceiver, intentFilter);
 
         gameRenderer = new GameRenderer(this, getApplicationContext(), board_id, vibrations, music, sound, shadows, texture, radius_set, radius);
 
