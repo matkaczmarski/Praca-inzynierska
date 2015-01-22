@@ -6,6 +6,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
@@ -81,5 +82,12 @@ public class OptionCheckBox extends CheckBox
     {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "SonsieOne-Regular.otf");//"batmanFont.ttf");
         setTypeface(tf);
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility)
+    {
+        super.onVisibilityChanged(changedView, visibility);
+        init();
     }
 }

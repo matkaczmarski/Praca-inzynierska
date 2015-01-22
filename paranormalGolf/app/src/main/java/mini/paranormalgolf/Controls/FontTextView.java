@@ -3,6 +3,7 @@ package mini.paranormalgolf.Controls;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -32,5 +33,12 @@ public class FontTextView extends TextView
     {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "SonsieOne-Regular.otf");//"batmanFont.ttf");
         setTypeface(tf);
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility)
+    {
+        super.onVisibilityChanged(changedView, visibility);
+        init();
     }
 }

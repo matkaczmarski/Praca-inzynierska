@@ -52,7 +52,7 @@ public class MainMenuActivity extends Activity
 
         setContentView(R.layout.activity_main_menu);
 
-        TextView tv = (TextView) findViewById(R.id.main_menu_title);
+        /*TextView tv = (TextView) findViewById(R.id.main_menu_title);
         tv.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -60,7 +60,7 @@ public class MainMenuActivity extends Activity
             {
                 onTitleClick(view);
             }
-        });
+        });*/
         //LoadFonts();
     }
 

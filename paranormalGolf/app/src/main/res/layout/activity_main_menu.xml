@@ -24,7 +24,8 @@
             android:textSize="@dimen/activity_main_menu_title"
             android:textColor="@color/activity_main_menu_title"
             android:text="@string/main_menu_activity_game"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:onClick="onTitleClick"/>
 
         <View
             android:layout_width="match_parent"
