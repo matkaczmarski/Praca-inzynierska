@@ -236,7 +236,7 @@ public class Updater implements SensorEventListener {
             if (ball.CheckCollision(board.finish))
                 return UpdateResult.WIN;
 
-        if (Collisions.getWasNotResolvedCollision() == true) return UpdateResult.DEFEAT;
+        if (Collisions.getWasNotResolvedCollision()) return UpdateResult.DEFEAT;
         return UpdateResult.NONE;
     }
 

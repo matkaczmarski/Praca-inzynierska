@@ -260,6 +260,9 @@ public class DrawManager {
                 glDeleteRenderbuffers(1, depthTextureId, 0);
                 glDeleteTextures(1, renderTextureId, 0);
                 glDeleteFramebuffers(1, frameBufferObjectId, 0);
+                depthTextureId = null;
+                renderTextureId = null;
+                frameBufferObjectId = null;
             }
 
             glDeleteProgram(colorShaderProgram.getProgram());
@@ -267,6 +270,7 @@ public class DrawManager {
             glDeleteProgram(depthMapShaderProgram.getProgram());
             glDeleteProgram(skyBoxShaderProgram.getProgram());
             glDeleteProgram(shadowingShaderProgram.getProgram());
+
         }
         catch (Exception ex) {
             if(LoggerConfig.ON) {
@@ -373,29 +377,28 @@ public class DrawManager {
         glViewport(0, 0, displayWidth, displayHeight);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
         drawSkyBox();
-        for (Floor floor : board.floors) {
-            drawFloor(floor);
+        for (int i=0; i<board.floors.size();i++){
+            drawFloor(board.floors.get(i));
         }
-        for (Wall wall : board.walls) {
-            drawWall(wall);
+        for (int i=0; i<board.walls.size(); i++){
+            drawWall(board.walls.get(i));
         }
-        for (Beam beam : board.beams) {
-            drawBeam(beam);
+        for (int i=0; i<board.beams.size(); i++) {
+            drawBeam(board.beams.get(i));
         }
-        for (Elevator elevator : board.elevators) {
-            drawElevator(elevator);
+        for (int i = 0; i<board.elevators.size(); i++){
+            drawElevator(board.elevators.get(i));
         }
         drawBall(ball);
-        for (Diamond diamond : board.diamonds) {
-            drawDiamond(diamond);
+        for (int i=0; i<board.diamonds.size(); i++){
+            drawDiamond(board.diamonds.get(i));
         }
-        for (HourGlass hourGlass : board.hourGlasses) {
-            drawHourglass(hourGlass);
+        for (int i=0; i<board.hourGlasses.size(); i++){
+            drawHourglass(board.hourGlasses.get(i));
         }
-        for (CheckPoint checkPoint : board.checkpoints) {
-            drawCheckPoint(checkPoint);
+        for (int i= 0; i<board.checkpoints.size(); i++){
+            drawCheckPoint(board.checkpoints.get(i));
         }
         drawFinish(board.finish);
     }
@@ -558,32 +561,32 @@ public class DrawManager {
     private void renderDepthMap(Board board, Ball ball){
         depthMapShaderProgram.useProgram();
 
-        for (Floor floor : board.floors) {
-            positionObjectInScene(floor.getLocation());
+        for (int i=0; i<board.floors.size(); i++){
+            positionObjectInScene(board.floors.get(i).getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            floor.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            floor.draw();
+            board.floors.get(i).bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            board.floors.get(i).draw();
         }
 
-        for (Wall wall : board.walls) {
-            positionObjectInScene(wall.getLocation());
+        for (int i=0; i<board.walls.size(); i++){
+            positionObjectInScene(board.walls.get(i).getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            wall.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            wall.draw();
+            board.walls.get(i).bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            board.walls.get(i).draw();
         }
 
-        for (Beam beam : board.beams) {
-            positionObjectInScene(beam.getLocation());
+        for (int i=0; i<board.beams.size(); i++){
+            positionObjectInScene(board.beams.get(i).getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            beam.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            beam.draw();
+            board.beams.get(i).bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            board.beams.get(i).draw();
         }
 
-        for (Elevator elevator : board.elevators) {
-            positionObjectInScene(elevator.getLocation());
+        for (int i=0; i<board.elevators.size(); i++){
+            positionObjectInScene(board.elevators.get(i).getLocation());
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            elevator.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            elevator.draw();
+            board.elevators.get(i).bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            board.elevators.get(i).draw();
         }
 
         positionBallInScene(ball);
@@ -591,30 +594,18 @@ public class DrawManager {
         ball.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
         ball.draw();
 
-        for (Diamond diamond : board.diamonds) {
-            positionBonusInScene(diamond);
+        for (int i=0; i<board.diamonds.size(); i++){
+            positionBonusInScene(board.diamonds.get(i));
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            diamond.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            diamond.draw();
+            board.diamonds.get(i).bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            board.diamonds.get(i).draw();
         }
 
-        for (HourGlass hourGlass : board.hourGlasses) {
-            positionBonusInScene(hourGlass);
+        for (int i=0; i<board.hourGlasses.size(); i++){
+            positionBonusInScene(board.hourGlasses.get(i));
             depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            hourGlass.getWoodenParts().bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            hourGlass.getWoodenParts().draw();
-        }
-
-        positionObjectInScene(board.finish.getLocation());
-        depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-        board.finish.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-        board.finish.draw();
-
-        for (CheckPoint checkPoint : board.checkpoints) {
-            positionObjectInScene(checkPoint.getLocation());
-            depthMapShaderProgram.setUniforms(lightsViewProjectionMatrix, modelsMatrix);
-            checkPoint.bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
-            checkPoint.draw();
+            board.hourGlasses.get(i).getWoodenParts().bindAttributes(depthMapShaderProgram, ShaderProgram.ShaderProgramType.depthMap);
+            board.hourGlasses.get(i).getWoodenParts().draw();
         }
     }
 
@@ -625,33 +616,28 @@ public class DrawManager {
      */
     private void renderBoardWithShadows(Board board, Ball ball){
         drawSkyBox();
-        for (Floor floor : board.floors) {
-            drawFloorWithShadow(floor);
-        }
 
-        for (Wall wall : board.walls) {
-            drawWallWithShadow(wall);
+        for (int i=0; i<board.floors.size();i++){
+            drawFloorWithShadow(board.floors.get(i));
         }
-
-        for (Beam beam : board.beams) {
-            drawBeamWithShadow(beam);
+        for (int i=0; i<board.walls.size(); i++){
+            drawWallWithShadow(board.walls.get(i));
         }
-        for (Elevator elevator : board.elevators) {
-            drawElevatorWithShadow(elevator);
+        for (int i=0; i<board.beams.size(); i++) {
+            drawBeamWithShadow(board.beams.get(i));
         }
-
+        for (int i = 0; i<board.elevators.size(); i++){
+            drawElevatorWithShadow(board.elevators.get(i));
+        }
         drawBallWithShadow(ball);
-
-        for (Diamond diamond : board.diamonds) {
-            drawDiamondWithShadow(diamond);
+        for (int i=0; i<board.diamonds.size(); i++){
+            drawDiamondWithShadow(board.diamonds.get(i));
         }
-
-        for (HourGlass hourGlass : board.hourGlasses) {
-            drawHourglassWithShadow(hourGlass);
+        for (int i=0; i<board.hourGlasses.size(); i++){
+            drawHourglassWithShadow(board.hourGlasses.get(i));
         }
-
-        for (CheckPoint checkPoint : board.checkpoints) {
-            drawCheckPointWithShadow(checkPoint);
+        for (int i= 0; i<board.checkpoints.size(); i++){
+            drawCheckPointWithShadow(board.checkpoints.get(i));
         }
         drawFinishWithShadow(board.finish);
     }
