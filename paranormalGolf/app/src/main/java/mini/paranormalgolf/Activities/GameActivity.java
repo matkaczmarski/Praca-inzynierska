@@ -253,11 +253,9 @@ public class GameActivity extends Activity implements Runnable {
         }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         gameRenderer.getUpdater().getDrawManager().releaseResources();
-        if (backgroundMusic != null)
-        {
+        if (backgroundMusic != null) {
             backgroundMusic.release();
         }
         if (broadcastReceiver != null)

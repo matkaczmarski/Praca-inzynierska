@@ -121,8 +121,8 @@ public class Updater implements SensorEventListener {
     public void setContext(Context context)
     {
         this.context = context;
-        if (drawManager != null)
-        {
+        if (drawManager != null) {
+          //  drawManager.releaseResources();
             drawManager.initialize(context);
         }
         else
