@@ -44,11 +44,6 @@ public class Beam extends MovableElement {
     private Point patrolTo;
 
     /**
-     * OPISZ KUBA TUTAJ
-     */
-    private boolean moveToPatrolTo;
-
-    /**
      * Statyczna wartość identyfikatora OpenGL tekstury belki.
      */
     private static int beamTextureId;
@@ -81,8 +76,6 @@ public class Beam extends MovableElement {
         this.patrolFrom = from;
         this.patrolTo = to;
 
-        // moveToPatrolTo = findMovementDirection(from, to, velocity);
-
         TriangleMeshData generatedData = ObjectGenerator.createBoxModel(measures, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
@@ -103,54 +96,6 @@ public class Beam extends MovableElement {
             if ((location.z >= patrolTo.z && velocity.z > 0) || (location.z <= patrolFrom.z && velocity.z < 0))
                 velocity.z = -velocity.z;
 
-//        if ((moveToPatrolTo && (location.x > patrolTo.x || location.z > patrolTo.z)) || (!moveToPatrolTo && (location.x < patrolFrom.x || location.z < patrolFrom.z))) {
-//            velocity.x = -velocity.x;
-//            velocity.z = -velocity.z;
-//
-//            moveToPatrolTo = !moveToPatrolTo;
-//        }
-    }
-
-    /**
-     * OPISZ KUBA TUTAJ
-     * @param from
-     * @param to
-     * @param velocity
-     * @return
-     */
-    private boolean findMovementDirection(Point from, Point to, Vector velocity){
-        if (velocity.x != 0)
-        {
-            if (from.x > to.x)
-            {
-                patrolFrom = to;
-                patrolTo = from;
-            }
-
-            return velocity.x > 0;
-        }
-        else if (velocity.y != 0)
-        {
-            if (from.y > to.y)
-            {
-                patrolFrom = to;
-                patrolTo = from;
-            }
-
-            return velocity.y > 0;
-        }
-        else if (velocity.z != 0)
-        {
-            if (from.z > to.z)
-            {
-                patrolFrom = to;
-                patrolTo = from;
-            }
-
-            return velocity.z > 0;
-        }
-
-        return true;
     }
 
     /**

@@ -322,9 +322,7 @@ public class Ball extends MovableElement {
         if (finish == null) return false;
         return Collisions.CheckSphereCircleCollision(new Sphere(location, radius),
         new Circle(finish.getLocation(),finish.conicalFrustum.bottomRadius));
-   //     return Collisions.CheckSphereCylinderCollision(, new Cylinder(finish.getLocation(),
-   //             Math.min(finish.conicalFrustum.bottomRadius, finish.conicalFrustum.topRadius), finish.conicalFrustum.height));
-    }
+  }
 
     /**
      * Sprawdza, czy kulka znajduje się w elemencie punktu kontrolnego.
@@ -335,8 +333,6 @@ public class Ball extends MovableElement {
         if (checkPoint == null) return false;
         return Collisions.CheckSphereCircleCollision(new Sphere(location, radius),
                 new Circle(checkPoint.getLocation(),checkPoint.conicalFrustum.bottomRadius));
-        //    return Collisions.CheckSphereCylinderCollision(new Sphere(location, radius), new Cylinder(checkPoint.getLocation(),
-        //           Math.min(checkPoint.conicalFrustum.bottomRadius, checkPoint.conicalFrustum.topRadius), checkPoint.conicalFrustum.height));
     }
 
     /**
