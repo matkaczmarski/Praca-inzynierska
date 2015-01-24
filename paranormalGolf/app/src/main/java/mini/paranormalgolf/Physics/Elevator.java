@@ -49,19 +49,30 @@ public class Elevator extends MovableElement {
     private float mu;
 
     /**
-     * Czas (w sekundach) postoju windy.
+     * OPISZ KUBA TUTAJ
+     */
+    private boolean moveToPatrolTo;
+
+    /**
+     * OPISZ KUBA TUTAJ
      */
     private static float wait_time = 2.0f;
 
     /**
-     * Pozostały czas postoju windy(w sekundach).
+     * OPISZ KUBA TUTAJ
      */
     private float time_left;
+
+    /**
+     * OPISZ KUBA TUTAJ
+     */
+    private boolean change = false;
 
     /**
      * Statyczna wartość identyfikatora OpenGL tekstury windy.
      */
     private static int elevatorTextureId;
+
 
 
     /**
@@ -102,6 +113,8 @@ public class Elevator extends MovableElement {
         this.patrolTo = to;
         this.mu = mu;
 
+       // moveToPatrolTo = findMovementDirection(from, to, velocity);
+
         TriangleMeshData generatedData = ObjectGenerator.createBoxModel(measures, ELEVATOR_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
@@ -111,38 +124,118 @@ public class Elevator extends MovableElement {
      * Odświeża położenie i prędkość windy.
      * @param dt Czas (w sekundach), który upływa pomiędzy 2 kolejnymi wyświetlanymi klatkami.
      */
-    public void Update(float dt) {
-        if (location.y == patrolFrom.y) {
-            time_left -= dt;
-            if (time_left < 0) {
-                velocity.y = Math.abs(velocity.y);
-                lastMove.y = (-time_left) * velocity.y;
-                location.y += lastMove.y;
-            } else lastMove.y = 0;
-        } else if (location.y == patrolTo.y) {
-            time_left -= dt;
-            if (time_left < 0) {
-                velocity.y = -Math.abs(velocity.y);
-                lastMove.y = (-time_left) * velocity.y;
-                location.y += lastMove.y;
-            } else
-                lastMove.y = 0;
-        } else { //winda jest pomiędzy położeniami
-            lastMove.y = velocity.y * dt;
+    public void Update(float dt)
+    {
+       if(location.y==patrolFrom.y)
+       {
+           time_left-=dt;
+           if(time_left<0) {
+               velocity.y = Math.abs(velocity.y);
+               lastMove.y = (-time_left) * velocity.y;
+               location.y += lastMove.y;
+           }
+           else lastMove.y=0;
+       }
+        else if(location.y==patrolTo.y) {
+           time_left -= dt;
+           if (time_left < 0) {
+               velocity.y = -Math.abs(velocity.y);
+               lastMove.y = (-time_left) * velocity.y;
+               location.y += lastMove.y;
+           }
+           else
+               lastMove.y=0;
+       }
+        else { //winda jest pomiędzy położeniami
+           lastMove.y = velocity.y * dt;
 
-            if (location.y + lastMove.y >= patrolTo.y) {
-                time_left = wait_time;
-                time_left -= (((patrolTo.y - location.y) / lastMove.y) * dt);
-                lastMove.y = patrolTo.y - location.y;
-                location.y = patrolTo.y;
-            } else if (location.y + lastMove.y <= patrolFrom.y) {
-                time_left = wait_time;
-                time_left -= (((location.y - patrolFrom.y) / (-lastMove.y)) * dt);
-                lastMove.y = patrolFrom.y - location.y;
-                location.y = patrolFrom.y;
-            } else
-                location.y += lastMove.y;
+           if (location.y + lastMove.y >= patrolTo.y) {
+               time_left = wait_time;
+               time_left -= (((patrolTo.y - location.y) / lastMove.y) * dt);
+               lastMove.y = patrolTo.y - location.y;
+               location.y = patrolTo.y;
+           } else if (location.y + lastMove.y <= patrolFrom.y) {
+               time_left = wait_time;
+               time_left -= (((location.y - patrolFrom.y) / (-lastMove.y)) * dt);
+               lastMove.y = patrolFrom.y - location.y;
+               location.y = patrolFrom.y;
+           } else
+               location.y += lastMove.y;
+       }
+
+//        if (change)
+//        {
+//            time_left -= dt;
+//            if (time_left <= 0)
+//            {
+//                velocity.x = -velocity.x;
+//                velocity.y = -velocity.y;
+//                velocity.z = -velocity.z;
+//                moveToPatrolTo = !moveToPatrolTo;
+//                change = false;
+//            }
+//            else
+//                return;
+//        }
+//
+//        lastMove = new Vector(velocity.x *dt, velocity.y * dt, velocity.z * dt);
+//        location.x = location.x + lastMove.x;
+//        location.y = location.y + lastMove.y;
+//        location.z = location.z + lastMove.z;
+//
+//        if ((moveToPatrolTo && ((location.x > patrolTo.x) || (location.y > patrolTo.y) || location.z > patrolTo.z)) || (!moveToPatrolTo && ((location.x < patrolFrom.x) || (location.y < patrolFrom.y) || location.z < patrolFrom.z)))
+//        {
+//            change = true;
+//            time_left = wait_time;
+//            lastMove = new Vector(0,0,0);
+//            /*if (moveToPatrolTo)
+//                location = patrolTo;
+//            else
+//                location = patrolFrom;*/
+//        }
+    }
+
+    /**
+     * OPISZ KUBA TUTAJ
+     * @param from
+     * @param to
+     * @param velocity
+     * @return
+     */
+    private boolean findMovementDirection(Point from, Point to, Vector velocity)
+    {
+        if (velocity.x != 0)
+        {
+            if (from.x > to.x)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.x > 0;
         }
+        else if (velocity.y != 0)
+        {
+            if (from.y > to.y)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.y > 0;
+        }
+        else if (velocity.z != 0)
+        {
+            if (from.z > to.z)
+            {
+                patrolFrom = to;
+                patrolTo = from;
+            }
+
+            return velocity.z > 0;
+        }
+
+        return true;
     }
 
     /**

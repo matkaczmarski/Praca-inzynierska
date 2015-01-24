@@ -121,7 +121,7 @@ public class Updater implements SensorEventListener {
 
     /**
      * Konstruktor
-     * @param context Aktualny kontekst.
+     * @param context
      * @param ball Kulka znajdująca się na planszy.
      * @param board Aktualna zawartość planszy.
      * @param vibrations Informacja o tym czy wibracje są dopuszczone przez użytkownika.
@@ -155,12 +155,12 @@ public class Updater implements SensorEventListener {
         float mu = getActualCoefficientFriction();
         int index = getIndexOfElevatorBallOn();
 
-        for (int i=0;i<board.beams.size();i++) {
-            board.beams.get(i).Update(INTERVAL_TIME);
+        for (Beam beam : board.beams) {
+            beam.Update(INTERVAL_TIME);
         }
 
-        for (int i=0;i<board.elevators.size();i++) {
-            board.elevators.get(i).Update(INTERVAL_TIME);
+        for (Elevator elevator : board.elevators) {
+            elevator.Update(INTERVAL_TIME);
         }
         if (index >= 0) setBallOnElevator(index);
         ball.Update(INTERVAL_TIME, accData, mu);
@@ -169,25 +169,25 @@ public class Updater implements SensorEventListener {
         if (isUnderFloors())
             return UpdateResult.DEFEAT;
 
-        for (int i=0;i<board.elevators.size();i++)
-            if (ball.CheckCollision(board.elevators.get(i)))
-                ball.ReactOnCollision(board.elevators.get(i));
+        for (Elevator elevator : board.elevators)
+            if (ball.CheckCollision(elevator))
+                ball.ReactOnCollision(elevator);
 
-        for (int i=0;i<board.beams.size();i++)
-            if (ball.CheckCollision(board.beams.get(i))) {
-                ball.ReactOnCollision(board.beams.get(i));
+        for (Beam beam : board.beams)
+            if (ball.CheckCollision(beam)) {
+                ball.ReactOnCollision(beam);
                 onBeamCollision();
             }
 
-        for (int i=0;i<board.walls.size();i++)
-            if (ball.CheckCollision(board.walls.get(i))) {
-                ball.ReactOnCollision(board.walls.get(i));
+        for (Wall wall : board.walls)
+            if (ball.CheckCollision(wall)) {
+                ball.ReactOnCollision(wall);
                 onWallCollision();
             }
 
-        for (int i=0;i<board.floors.size();i++)
-            if (ball.CheckCollision(board.floors.get(i)))
-                ball.ReactOnCollision(board.floors.get(i));
+        for (Floor floor : board.floors)
+            if (ball.CheckCollision(floor))
+                ball.ReactOnCollision(floor);
 
         for (int i = 0; i < board.diamonds.size(); i++)
             if (ball.CheckCollision(board.diamonds.get(i))) {
@@ -232,11 +232,11 @@ public class Updater implements SensorEventListener {
      */
     private boolean isUnderFloors() {
         float value = ball.location.y + ball.getRadius();
-        for (int i = 0; i < board.floors.size(); i++)
-            if (board.floors.get(i).location.y - board.floors.get(i).getMeasurements().y / 2 <= value)
+        for (Floor floor : board.floors)
+            if (floor.location.y - floor.getMeasurements().y / 2 <= value)
                 return false;
-        for (int i = 0; i < board.elevators.size(); i++)
-            if (board.elevators.get(i).location.y - board.elevators.get(i).getMeasurements().y / 2 <= value)
+        for (Elevator elevator : board.elevators)
+            if (elevator.location.y - elevator.getMeasurements().y / 2 <= value)
                 return false;
         return true;
     }
@@ -248,22 +248,22 @@ public class Updater implements SensorEventListener {
      */
     private float getActualCoefficientFriction() {
         float mu = -1;
-        for (int i=0;i<board.floors.size();i++) {
-            BoxSize floorMeasurements =board.floors.get(i).getMeasurements();
-            if (board.floors.get(i).location.x - floorMeasurements.x / 2 <= ball.location.x && board.floors.get(i).location.x + floorMeasurements.x / 2 >= ball.location.x
-                    && board.floors.get(i).location.z - floorMeasurements.z / 2 <= ball.location.z && board.floors.get(i).location.z + floorMeasurements.z / 2 >= ball.location.z
-                    && Math.abs(ball.location.y - ball.getRadius() - (board.floors.get(i).location.y + floorMeasurements.y / 2)) < Collisions.USER_EXPERIENCE) {
-                mu = board.floors.get(i).getMu();
+        for (Floor floor : board.floors) {
+            BoxSize floorMeasurements =floor.getMeasurements();
+            if (floor.location.x - floorMeasurements.x / 2 <= ball.location.x && floor.location.x + floorMeasurements.x / 2 >= ball.location.x
+                    && floor.location.z - floorMeasurements.z / 2 <= ball.location.z && floor.location.z + floorMeasurements.z / 2 >= ball.location.z
+                    && Math.abs(ball.location.y - ball.getRadius() - (floor.location.y + floorMeasurements.y / 2)) < Collisions.USER_EXPERIENCE) {
+                mu = floor.getMu();
                 break;
             }
         }
         if (mu < 0)
-            for (int i=0;i<board.elevators.size();i++) {
-                BoxSize elevatorMeasurements = board.elevators.get(i).getMeasurements();
-                if (board.elevators.get(i).location.x - elevatorMeasurements.x / 2 <= ball.location.x && board.elevators.get(i).location.x + elevatorMeasurements.x / 2 >= ball.location.x
-                        && board.elevators.get(i).location.z - elevatorMeasurements.z / 2 <= ball.location.z && board.elevators.get(i).location.z + elevatorMeasurements.z / 2 >= ball.location.z
-                        && Math.abs(ball.location.y - ball.getRadius() - (board.elevators.get(i).location.y + elevatorMeasurements.y / 2)) < Collisions.USER_EXPERIENCE) {
-                    mu = board.elevators.get(i).getMu();
+            for (Elevator elevator : board.elevators) {
+                BoxSize elevatorMeasurements = elevator.getMeasurements();
+                if (elevator.location.x - elevatorMeasurements.x / 2 <= ball.location.x && elevator.location.x + elevatorMeasurements.x / 2 >= ball.location.x
+                        && elevator.location.z - elevatorMeasurements.z / 2 <= ball.location.z && elevator.location.z + elevatorMeasurements.z / 2 >= ball.location.z
+                        && Math.abs(ball.location.y - ball.getRadius() - (elevator.location.y + elevatorMeasurements.y / 2)) < Collisions.USER_EXPERIENCE) {
+                    mu = elevator.getMu();
                     break;
                 }
             }
@@ -320,9 +320,9 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * Wywoływana przy wywołaniu metody onSurfaceChanged klasy <em>GameRenderer</em>.
-     * @param width Szerokość.
-     * @param height Wysokość.
+     * UZUPEŁNIJCIE TUTAJ
+     * @param width
+     * @param height
      */
     public void surfaceChange(int width, int height){
         drawManager.surfaceChange(width, height);

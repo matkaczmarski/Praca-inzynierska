@@ -1,7 +1,7 @@
 package mini.paranormalgolf.Helpers;
 
 /**
- * Informacja o aktualnym stanie rozgrywki (wygrana, porażka, nic, pauza).
+ * Created by Sławomir on 2014-12-08.
  */
 public enum UpdateResult {
     WIN, DEFEAT, NONE, PAUSE

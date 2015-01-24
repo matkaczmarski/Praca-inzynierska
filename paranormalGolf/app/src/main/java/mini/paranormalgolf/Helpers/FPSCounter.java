@@ -3,7 +3,7 @@ package mini.paranormalgolf.Helpers;
 import android.util.Log;
 
 /**
- * Oblicza wartość FPS.
+ * Created by Mateusz on 2014-12-29.
  */
 public class FPSCounter {
     long startTime = System.nanoTime();
