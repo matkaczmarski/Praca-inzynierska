@@ -2,7 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
@@ -73,7 +73,7 @@ public class CheckPoint extends ControlPoint {
         super(location,conicalFrustum);
         visited=false;
 
-        GraphicsData generatedData = ObjectGenerator.createControlPointPlatformModel(conicalFrustum.bottomRadius, CHECKPOINT_PLATFORM_DIMENSION, CHECKPOINT_PLATFORM_SHIFT);
+        TriangleMeshData generatedData = ObjectGenerator.createControlPointPlatformModel(conicalFrustum.bottomRadius, CHECKPOINT_PLATFORM_DIMENSION, CHECKPOINT_PLATFORM_SHIFT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         glow = new Glow(location, conicalFrustum);

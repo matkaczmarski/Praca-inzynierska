@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Primitives.Point;
 import mini.paranormalgolf.Primitives.Pyramid;
 import mini.paranormalgolf.Primitives.Sphere;
@@ -748,8 +748,8 @@ public class ObjectBuilder {
      * Zwraca dane modelu powstałego poprzez zastosowanie sekwencji metod rozszerzających.
      * @return Obiekt zawierający <em><b>vertexData</b></em> oraz <em><b>drawCommands</b></em>.
      */
-    public GraphicsData build(){
-        return new GraphicsData(vertexData, drawCommands);
+    public TriangleMeshData build(){
+        return new TriangleMeshData(vertexData, drawCommands);
     }
 
 }

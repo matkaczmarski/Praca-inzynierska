@@ -6,7 +6,7 @@ import mini.paranormalgolf.Graphics.ModelBuilders.ObjectBuilder.DrawCommand;
 /**
  * Przechowuje informacje o modelu obiektu.
  */
-public class GraphicsData {
+public class TriangleMeshData {
 
     /**
      * Tablica atrybutów wszyskich wierzchołków siatki trójkątów.
@@ -22,7 +22,7 @@ public class GraphicsData {
      * @param vertexData
      * @param drawCommands
      */
-    public GraphicsData(float[] vertexData, List<DrawCommand> drawCommands) {
+    public TriangleMeshData(float[] vertexData, List<DrawCommand> drawCommands) {
         this.vertexData = vertexData;
         this.drawCommands = drawCommands;
     }

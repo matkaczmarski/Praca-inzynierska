@@ -2,7 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
@@ -83,7 +83,7 @@ public class Beam extends MovableElement {
 
         // moveToPatrolTo = findMovementDirection(from, to, velocity);
 
-        GraphicsData generatedData = ObjectGenerator.createBoxModel(measures, BEAM_TEXTURE_UNIT);
+        TriangleMeshData generatedData = ObjectGenerator.createBoxModel(measures, BEAM_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }

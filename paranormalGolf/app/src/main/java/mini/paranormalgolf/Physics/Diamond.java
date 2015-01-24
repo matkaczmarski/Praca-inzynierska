@@ -2,7 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
@@ -52,7 +52,7 @@ public class Diamond extends Bonus {
     */
     public Diamond(Point location, int value, float yShift) {
         super(location, value, yShift);
-        GraphicsData generatedData = ObjectGenerator.createDiamondModel(pyramid);
+        TriangleMeshData generatedData = ObjectGenerator.createDiamondModel(pyramid);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }

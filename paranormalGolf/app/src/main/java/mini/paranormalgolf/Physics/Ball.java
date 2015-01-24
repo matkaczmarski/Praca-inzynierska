@@ -3,7 +3,7 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Primitives.Box;
@@ -148,7 +148,7 @@ public class Ball extends MovableElement {
         rotation=new float[16];
         setIdentityM(rotation,0);
 
-        GraphicsData generatedData = ObjectGenerator.createBallModel(radius, MESH_DIMENSION);
+        TriangleMeshData generatedData = ObjectGenerator.createBallModel(radius, MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }

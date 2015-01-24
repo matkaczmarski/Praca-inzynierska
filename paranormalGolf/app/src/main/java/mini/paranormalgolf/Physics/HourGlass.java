@@ -2,7 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
@@ -46,7 +46,7 @@ public class HourGlass extends Bonus {
         public HourGlassWoodenParts(Point location, Cylinder lowerCylinder, Cylinder upperCylinder) {
             super(location, 0, 0);
 
-            GraphicsData generatedData = ObjectGenerator.createHourglassWoodenPartsModel(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION, TEXTURE_UNIT);
+            TriangleMeshData generatedData = ObjectGenerator.createHourglassWoodenPartsModel(upperCylinder, lowerCylinder, HOURGLASS_MESH_DIMENSION, TEXTURE_UNIT);
             vertexData = new VertexArray(generatedData.vertexData);
             drawCommands = generatedData.drawCommands;
             rotationSpeed = HOURGLASS_ROTATION_SPEED;
@@ -131,7 +131,7 @@ public class HourGlass extends Bonus {
     public HourGlass(Point location, int value, float yShift) {
         super(location, value, yShift);
 
-        GraphicsData generatedData = ObjectGenerator.createHourglassGlassPartModel(lowerCone, upperCone, HOURGLASS_MESH_DIMENSION);
+        TriangleMeshData generatedData = ObjectGenerator.createHourglassGlassPartModel(lowerCone, upperCone, HOURGLASS_MESH_DIMENSION);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
         float woodenBaseHeight = (lowerCone.height + upperCone.height) * WOODEN_BASE_HEIGHT_RATIO;

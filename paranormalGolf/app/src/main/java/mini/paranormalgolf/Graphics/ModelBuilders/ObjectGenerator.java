@@ -1,6 +1,6 @@
 package mini.paranormalgolf.Graphics.ModelBuilders;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.ConicalFrustum;
 import mini.paranormalgolf.Primitives.Cylinder;
@@ -31,7 +31,7 @@ public class ObjectGenerator {
      * @param numPoints Rozdzielczość siatki trójkątów.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu kulki oraz reguły jego ryowania.
      */
-    public static GraphicsData createBallModel(float radius, int numPoints) {
+    public static TriangleMeshData createBallModel(float radius, int numPoints) {
         int size = 2 * numPoints * (numPoints + 1);
 
         ObjectBuilder builder = new ObjectBuilder(size, ObjectBuilder.DrawType.texturing);
@@ -43,7 +43,7 @@ public class ObjectGenerator {
      * Generuje model dla przestrzennego tła.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu tła oraz reguły jego ryowania.
      */
-    public static GraphicsData createSkyBoxModel(){
+    public static TriangleMeshData createSkyBoxModel(){
         ObjectBuilder builder = new ObjectBuilder(0, ObjectBuilder.DrawType.skyBox);
         builder.appendSkyBox();
         return builder.build();
@@ -55,7 +55,7 @@ public class ObjectGenerator {
      * @param textureUnit Wielkość kwadratowego kafelka tekstury.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu prostopadłościanu oraz reguły jego ryowania.
      */
-    public static GraphicsData createBoxModel(BoxSize boxSize, float textureUnit) {
+    public static TriangleMeshData createBoxModel(BoxSize boxSize, float textureUnit) {
         ObjectBuilder builder = new ObjectBuilder(6 * VERTEX_PER_RECTANGLE, ObjectBuilder.DrawType.texturing);
         builder.appendRectangle(new Rectangle(new Point(0f, boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, 1, textureUnit);
         builder.appendRectangle(new Rectangle(new Point(0f, -boxSize.y / 2, 0f), boxSize.x, boxSize.z), Axis.yAxis, -1, textureUnit);
@@ -71,7 +71,7 @@ public class ObjectGenerator {
      * @param pyramid Wymiary ostrosłupa definiującego jedną z części diamentu.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu diamentu oraz reguły jego ryowania.
      */
-    public static GraphicsData createDiamondModel(Pyramid pyramid) {
+    public static TriangleMeshData createDiamondModel(Pyramid pyramid) {
         ObjectBuilder builder = new ObjectBuilder(2 * (pyramid.baseVerticesCount + 1),ObjectBuilder.DrawType.texturing);
         builder.appendPyramidWithoutBase(pyramid, -1);
         builder.appendPyramidWithoutBase(pyramid, 1);
@@ -85,7 +85,7 @@ public class ObjectGenerator {
      * @param yShift Wartość podniesienia platformy stosowana w celu uniknięcia nałożenia modelu z modelem podłogi.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu platformy oraz reguły jego ryowania.
      */
-    public static GraphicsData createControlPointPlatformModel(float radius, int numPoints, float yShift) {
+    public static TriangleMeshData createControlPointPlatformModel(float radius, int numPoints, float yShift) {
         ObjectBuilder builder = new ObjectBuilder(1 + (numPoints + 1),ObjectBuilder.DrawType.texturing);
         builder.appendCircle(new Point(0f, yShift, 0f), radius, 1, numPoints);
         return builder.build();
@@ -97,7 +97,7 @@ public class ObjectGenerator {
      * @param numPoints Rozdzielczość siatki trójkątów.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu poświaty oraz reguły jego ryowania.
      */
-    public static GraphicsData createControlPointGlowModel(ConicalFrustum conicalFrustum, int numPoints) {
+    public static TriangleMeshData createControlPointGlowModel(ConicalFrustum conicalFrustum, int numPoints) {
         ObjectBuilder builder = new ObjectBuilder(2 * (numPoints + 1),ObjectBuilder.DrawType.coloring);
         builder.appendCylindersCurvedSurface(new Point(0, 0, 0f), conicalFrustum.bottomRadius,new Point(0, conicalFrustum.height, 0f), conicalFrustum.topRadius, numPoints, 0f );
         return builder.build();
@@ -110,7 +110,7 @@ public class ObjectGenerator {
      * @param numPoints Rozdzielczość siatki trójkątów.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu szklanej części klepsydry oraz reguły jego ryowania.
      */
-    public static GraphicsData createHourglassGlassPartModel(ConicalFrustum lowerCone, ConicalFrustum upperCone, int numPoints) {
+    public static TriangleMeshData createHourglassGlassPartModel(ConicalFrustum lowerCone, ConicalFrustum upperCone, int numPoints) {
         ObjectBuilder builder = new ObjectBuilder(2 * 2 * (numPoints + 1),ObjectBuilder.DrawType.coloring);
         builder.appendCylindersCurvedSurface(new Point(0f, 0f, 0f), upperCone.bottomRadius,new Point(0,upperCone.height, 0f), upperCone.topRadius, numPoints, 0f );
         builder.appendCylindersCurvedSurface(new Point(0f, -lowerCone.height, 0f), lowerCone.bottomRadius,new Point(0, 0f, 0f), lowerCone.topRadius, numPoints, 0f );
@@ -125,7 +125,7 @@ public class ObjectGenerator {
      * @param textureUnit Wielkość kwadratowego kafelka tekstury.
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu drewnianych części klepsydry oraz reguły jego ryowania.
      */
-    public static GraphicsData createHourglassWoodenPartsModel(Cylinder upperCylinder, Cylinder lowerCylinder, int numPoints, float textureUnit) {
+    public static TriangleMeshData createHourglassWoodenPartsModel(Cylinder upperCylinder, Cylinder lowerCylinder, int numPoints, float textureUnit) {
         ObjectBuilder builder = new ObjectBuilder(2*(2 * (1 + (numPoints + 1)) + 2 * (numPoints + 1)),ObjectBuilder.DrawType.texturing);
         builder.appendCircle(new Point(0f, upperCylinder.center.y + upperCylinder.height/2, 0f), upperCylinder.radius, 1, numPoints);
         builder.appendCircle(new Point(0f, upperCylinder.center.y - upperCylinder.height/2, 0f), upperCylinder.radius, -1, numPoints);

@@ -2,7 +2,7 @@ package mini.paranormalgolf.Physics;
 
 import android.content.Context;
 
-import mini.paranormalgolf.Graphics.GraphicsData;
+import mini.paranormalgolf.Graphics.TriangleMeshData;
 import mini.paranormalgolf.Graphics.ModelBuilders.ObjectGenerator;
 import mini.paranormalgolf.Graphics.VertexArray;
 import mini.paranormalgolf.Helpers.ResourceHelper;
@@ -59,7 +59,7 @@ public class Wall extends Element {
         super(location);
         measurements = measures;
 
-        GraphicsData generatedData = ObjectGenerator.createBoxModel(measures, WALL_TEXTURE_UNIT);
+        TriangleMeshData generatedData = ObjectGenerator.createBoxModel(measures, WALL_TEXTURE_UNIT);
         vertexData = new VertexArray(generatedData.vertexData);
         drawCommands = generatedData.drawCommands;
     }
