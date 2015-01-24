@@ -40,21 +40,63 @@ import mini.paranormalgolf.R;
  */
 public class ResourceHelper {
 
+    /**
+     * Id dźwięku zebrania diamentu.
+     */
     public static final int SOUND_DIAMOND = 1;
+
+    /**
+     * Id dźwięku zebrania klepsydry.
+     */
     public static final int SOUND_HOURGLASS = 2;
+
+    /**
+     * Id dźwięku wygranej.
+     */
     public static final int SOUND_WIN = 3;
+
+    /**
+     * Id dźwięku przegranej.
+     */
     public static final int SOUND_LOSE = 4;
+
+    /**
+     * Id dźwięku wciśnięcia przycisku.
+     */
     public static final int SOUND_BUTTON = 5;
+
+    /**
+     * Id dźwięku odbicia od ściany.
+     */
     public static final int SOUND_WALL = 6;
+
+    /**
+     * Id dźwięku odbicia od belki.
+     */
     public static final int SOUND_BEAM = 7;
 
+    /**
+     * Obiekt, do którego ładowane są dźwięki.
+     */
     private static SoundPool soundPool;
+
+    /**
+     * Obiekt, który paruje id dźwięku z id, które jest otrzymywane po załadowaniu danego dźwięku.
+     */
     private static HashMap<Integer, Integer> soundPoolMap;
 
     private static final String TAG = "TextureHelper";
 
+    /**
+     * Context aplikacji.
+     */
     private static Context context;
 
+
+    /**
+     * Inicjalizuje dźwięki.
+     * @param context Context aplikacji.
+     */
     public static void initSounds(Context context)
     {
         if (soundPool != null)
@@ -71,6 +113,10 @@ public class ResourceHelper {
         soundPoolMap.put(SOUND_BEAM, soundPool.load(context, R.raw.sound_wall_2, 1));
     }
 
+    /**
+     * Odtwarza wybrany dźwięk.
+     * @param sound Id dźwięku.
+     */
     public static void playSound(int sound)
     {
         AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -227,6 +273,9 @@ public class ResourceHelper {
         return textureObjectIds[0];
     }
 
+    /**
+     * Zwalnia dźwięki.
+     */
     public static void releaseSounds()
     {
         if (soundPool != null)

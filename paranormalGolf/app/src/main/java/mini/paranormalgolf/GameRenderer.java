@@ -36,39 +36,117 @@ import static android.opengl.GLES20.glHint;
 
 
 /**
- * Created by Mateusz on 2014-12-05.
+ * Renderer.
  */
 public class GameRenderer implements GLSurfaceView.Renderer {
 
+    /**
+     * Context aplikacji.
+     */
     private final Context context;
+
+    /**
+     * Aktywność gry.
+     */
     private static Activity activity;
 
+    /**
+     * Updater, współpracujący z danym rendererem.
+     */
     private Updater updater;
-    private String board_id;
+
+    /**
+     * Obiekt BoardInfo rozgrywanego poziomu.
+     */
     private BoardInfo boardInfo;
+
+    /**
+     * Ostatnio odczytany czas.
+     */
     private long lastTime;
+
+    /**
+     * Pozostały czas na rozegranie poziomu.
+     */
     private long timeLeft;
+
+    /**
+     * Czy wartość lastTime została ustawiona.
+     */
     private boolean lastTimeUpdated = false;
+
+    /**
+     * Czy gra jest zapauzowana.
+     */
     private boolean paused = false;
 
+    /**
+     * Informacja o tym czy wibracje są dopuszczone przez użytkownika.
+     */
     private boolean vibrations;
+
+    /**
+     * Informacja o tym czy muzyka w grze jest dopuszczona przez użytkownika.
+     */
     private boolean music;
+
+    /**
+     * Informacja o tym czy dźwięki w grze są dopuszczone przez użytkownika.
+     */
     private boolean sound;
+
+    /**
+     * Informacja o tym czy cienie w grze są dopuszczone przez użytkownika.
+     */
     private boolean shadows;
+
+    /**
+     * Informacja o tym, czy użytkownik zmienił domyślny promień kulki (poprzez konsolę).
+     */
     private boolean radius_set;
-    private int texture;
+
+    /**
+     * Promień kulki zdefiniowany przez użytkownika.
+     */
     private float radius;
 
+    /**
+     * Nr tekstury wybranej przez użytkownika.
+     */
+    private int texture;
+
+    /**
+     * Czy wywołano onCreate.
+     */
     private boolean onCreate = false;
 
+    /**
+     * Obiekt liczący klatki animacji.
+     */
     private FPSCounter fpsCounter;
 
+    /**
+     * Pobiera Updater powiązany z rendererem.
+     * @return Updater.
+     */
     public Updater getUpdater(){return updater;}
 
+    /**
+     * Konstruktor
+     * @param activity Aktywność gry.
+     * @param context Context aplikacji.
+     * @param board_id Id poziomu.
+     * @param vibrations Informacja o tym czy wibracje są dopuszczone przez użytkownika.
+     * @param music Informacja o tym czy muzyka jest dopuszczona przez użytkownika.
+     * @param sound Informacja o tym czy dźwięki są dopuszczone przez użytkownika.
+     * @param shadows Informacja o tym czy cienie są dopuszczone przez użytkownika.
+     * @param texture Nr wybranej przez użytkownika tekstury.
+     * @param radius_set Informacja o tym, czy użytkownik zmienił domyślny promień kulki (poprzez konsolę).
+     * @param radius Promień kulki zdefiniowany przez użytkownika.
+     */
     public GameRenderer(Activity activity, Context context, String board_id, boolean vibrations, boolean music, boolean sound, boolean shadows, int texture, boolean radius_set, float radius){
         this.context = context;
         this.activity = activity;
-        this.board_id = board_id;
         this.vibrations = vibrations;
         this.music = music;
         this.sound = sound;
@@ -95,24 +173,33 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         fpsCounter = new FPSCounter();
     }
 
-    public void changeBoard(String board_id)
-    {
-        Ball ball = new Ball(new Point(0f, 1f, 3f), 1f, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
-        updater.changeBoardAndBall(loadBoard(board_id), ball);
-    }
-
+    /**
+     * Wczytuje poziom.
+     * @param board_id Id poziomu.
+     * @return Obiekt Board poziomu.
+     */
     public Board loadBoard(String board_id)
     {
         XMLParser xmlParser = new XMLParser(context);
         return xmlParser.getBoard(board_id);
     }
 
+    /**
+     * Wczytuje obiekt BoardInfo danego poziomu.
+     * @param board_id Id poziomu.
+     * @return Obiekt BoardInfo poziomu.
+     */
     public BoardInfo loadBoardInfo (String board_id)
     {
         XMLParser xmlParser = new XMLParser(context);
         return xmlParser.getBoardInfo(board_id);
     }
 
+    /**
+     *
+     * @param glUnused
+     * @param config
+     */
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config){
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -125,23 +212,31 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         if (onCreate)
         {
             onCreate = false;
-            Board board = loadBoard(board_id);
+            Board board = loadBoard(boardInfo.getBoard_id());
             float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
             Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
 
-            updater = new Updater(context, ball, board, vibrations, music, sound, shadows, this);
+            updater = new Updater(context, ball, board, vibrations, sound, shadows, this);
         }
         updater.setContext(activity);
     }
 
+    /**
+     *
+     * @param glUnused
+     * @param width
+     * @param height
+     */
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         if (updater != null)
             updater.surfaceChange(width, height);
     }
 
-
-
+    /**
+     * Wywoływana gdy należy narysować kolejną klatkę animacji.
+     * @param glUnused
+     */
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
@@ -202,6 +297,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         updater.draw();
     }
 
+    /**
+     * Zatrzymuje działanie renderera.
+     */
     public void pause()
     {
         if (paused)
@@ -215,11 +313,21 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    /**
+     * Zwiększa czas pozostały na ukończenie poziomu.
+     * @param value Wartość w sekundach o jaką należy zwiększyć czas.
+     */
     public void addTime(int value)
     {
         timeLeft += value * 1000;
     }
 
+    /**
+     * Aktualizuje opcje wybrane przez użytkownika.
+     * @param vibrations Informacja o tym czy wibracje są dopuszczone przez użytkownika.
+     * @param music Informacja o tym czy muzyka jest dopuszczona przez użytkownika.
+     * @param sound Informacja o tym czy dźwięki są dopuszczone przez użytkownika.
+     */
     public void updatePreferences (boolean vibrations, boolean music, boolean sound)
     {
         this.vibrations = vibrations;
@@ -229,10 +337,5 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         if(updater != null)
             updater.updatePreferences(vibrations, music, sound);
     }
-
-//    public void changeActivity(Activity activity)
-//    {
-//        this.activity = activity;
-//    }
 
 }

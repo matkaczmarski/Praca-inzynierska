@@ -26,15 +26,29 @@ import mini.paranormalgolf.Primitives.Vector;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Kuba on 2014-12-15.
+ * Klasa odpowiedzialna za czytanie danych z plików XML.
  */
 public class XMLParser
 {
+    /**
+     * Context aplikacji.
+     */
     private Context context;
+
+    /**
+     * Konstruktor.
+     * @param context Context aplikacji.
+     */
     public XMLParser(Context context)
     {
         this.context = context;
     }
+
+    /**
+     * Pobiera obiekt planszy na podstawie id poziomu.
+     * @param board_id Id poziomu.
+     * @return Obiekt planszy utworzony z danych z pliku XML.
+     */
     public Board getBoard(String board_id)
     {
         List<Floor> floors = new ArrayList<Floor>();
@@ -205,6 +219,11 @@ public class XMLParser
         return board;
     }
 
+    /**
+     * Pobiera obiekt BoardInfo poziomu na podstawie id poziomu.
+     * @param board_id Id poziomu.
+     * @return Obiekt BoardInfo utworzony z danych z pliku XML.
+     */
     public BoardInfo getBoardInfo(String board_id)
     {
         try

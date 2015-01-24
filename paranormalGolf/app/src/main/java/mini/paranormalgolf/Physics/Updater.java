@@ -54,69 +54,59 @@ public class Updater implements SensorEventListener {
 
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Context aplikacji.
      */
     private Context context;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Powiązany obiekt DrawManager.
      */
     private DrawManager drawManager;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Czy urządzenie pracuje domyślnie w trybie landscape.
      */
     private boolean landscape;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Maksymalna liczba diamentów, które można zebrać.
      */
     private int max_diamonds_count;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Liczba diamentów, które ostatnio znajdowały się na planszy.
      */
     private int last_diamonds_count;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
-     */
-    private boolean paused = false;
-
-    /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Informacja o tym czy wibracje są dopuszczone przez użytkownika.
      */
     private boolean vibrations;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Informacja o tym czy dźwięki w grze są dopuszczone przez użytkownika.
      */
     private boolean sound;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
-     */
-    private boolean music;
-
-    /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Informacja o tym czy cienie w grze są dopuszczone przez użytkownika.
      */
     private boolean shadows;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Obiekt GameRenderer powiązany z Updaterem.
      */
     private GameRenderer gameRenderer;
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
-     * @return
+     * Pobiera obiekt DrawManager.
+     * @return Powiązany obiek DrawManager
      */
     public DrawManager getDrawManager(){return drawManager;}
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
-     * @param context
+     * Zmienia context.
+     * @param context Nowy context.
      */
     public void setContext(Context context)
     {
@@ -130,22 +120,20 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Konstruktor
      * @param context
      * @param ball Kulka znajdująca się na planszy.
      * @param board Aktualna zawartość planszy.
-     * @param vibrations
-     * @param music
-     * @param sound
-     * @param shadows
-     * @param gameRenderer
+     * @param vibrations Informacja o tym czy wibracje są dopuszczone przez użytkownika.
+     * @param sound Informacja o tym czy dźwięki są dopuszczone przez użytkownika.
+     * @param shadows Informacja o tym czy cienie są dopuszczone przez użytkownika.
+     * @param gameRenderer Obiekt GameRenderer, z którym będzie powiązany Updater
      */
-    public Updater(Context context, Ball ball, Board board, boolean vibrations, boolean music, boolean sound, boolean shadows, GameRenderer gameRenderer) {
+    public Updater(Context context, Ball ball, Board board, boolean vibrations, boolean sound, boolean shadows, GameRenderer gameRenderer) {
         this.ball = ball;
         this.context = context;
         this.board = board;
         this.vibrations = vibrations;
-        this.music = music;
         this.sound = sound;
         this.shadows = shadows;
         this.gameRenderer = gameRenderer;
@@ -163,8 +151,6 @@ public class Updater implements SensorEventListener {
      */
     public UpdateResult update(float interval) {
         INTERVAL_TIME = interval * INTERVAL_FACTOR;
-        if (paused)
-            return UpdateResult.PAUSE;
 
         float mu = getActualCoefficientFriction();
         int index = getIndexOfElevatorBallOn();
@@ -314,7 +300,7 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Rysuje obiekty planszy oraz aktualizuje liczbę zebranych diamentów.
      */
     public void draw() {
         //if (paused)
@@ -342,19 +328,9 @@ public class Updater implements SensorEventListener {
         drawManager.surfaceChange(width, height);
     }
 
-    /**
-     * UZUPEŁNIJCIE TUTAJ
-     * @param board
-     * @param ball
-     */
-    public void changeBoardAndBall(Board board, Ball ball)
-    {
-        this.ball = ball;
-        this.board = board;
-    }
 
     /**
-     * UZUPEŁNIJ KUBA TUTAJ
+     * Wywoływana podczas kolizji ze ścianą.
      */
     private void onWallCollision()
     {
@@ -363,7 +339,7 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJ KUBA TUTAJ
+     * Wywoływana podczas kolizji z belką.
      */
     private void onBeamCollision()
     {
@@ -372,7 +348,7 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Wywoływana przy zebraniu klepsydry.
      */
     public void onHourGlassCollision()
     {
@@ -380,7 +356,7 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Wywoływana podczas przy zebraniu diamentu.
      */
     public void onDiamondCollision()
     {
@@ -388,8 +364,8 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
-     * @return
+     * Oblicza liczbę zebranych diamentów.
+     * @return Liczba zebranych diamentów.
      */
     public int getCollectedDiamondsCount()
     {
@@ -397,15 +373,14 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
-     * @param vibrations
-     * @param music
-     * @param sound
+     * Aktualizuje opcje wybrane przez użytkownika.
+     * @param vibrations Informacja o tym czy wibracje są dopuszczone przez użytkownika.
+     * @param music Informacja o tym czy muzyka jest dopuszczona przez użytkownika.
+     * @param sound Informacja o tym czy dźwięki są dopuszczone przez użytkownika.
      */
     public void updatePreferences (boolean vibrations, boolean music, boolean sound)
     {
         this.vibrations = vibrations;
-        this.music = music;
         this.sound = sound;
     }
 
@@ -465,7 +440,8 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Odtwarza dźwięk (jeśli użytkownik go dopuszcza).
+     * @param sound Id dźwięku
      */
     private void playSound(int sound)
     {
@@ -476,7 +452,7 @@ public class Updater implements SensorEventListener {
     }
 
     /**
-     * UZUPEŁNIJCIE TUTAJ
+     * Uruchamia wibracje (jeśli użytkownik je dopuszcza).
      */
     private void vibrate()
     {

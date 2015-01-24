@@ -1,15 +1,37 @@
 package mini.paranormalgolf.Helpers;
 
 /**
- * Created by Kuba on 2014-12-21.
+ * Klasa zawierająca informacje o poziomie.
  */
 public class BoardInfo
 {
+    /**
+     * Id poziomu.
+     */
     private String board_id;
+
+    /**
+     * Punkty wymagane do zdobycia 2 gwiazdek.
+     */
     private int two_stars;
+
+    /**
+     * Punkty wymagane do zdobycia 3 gwiazdek.
+     */
     private int three_stars;
+
+    /**
+     * Czas jaki gracz ma na ukończenie poziomu.
+     */
     private int time;
 
+    /**
+     * Konstruktor.
+     * @param board_id Id poziomu.
+     * @param two_stars Punkty wymagane do zdobycia 2 gwiazdek.
+     * @param three_stars Punkty wymagane do zdobycia 3 gwiazdek.
+     * @param time Czas jaki gracz ma na ukończenie poziomu.
+     */
     public BoardInfo(String board_id, int two_stars, int three_stars, int time)
     {
         this.board_id = board_id;
@@ -18,41 +40,46 @@ public class BoardInfo
         this.time = time;
     }
 
+    /**
+     * Zwraca id poziomu.
+     * @return Id poziomu.
+     */
     public String getBoard_id()
     {
         return board_id;
     }
 
-    public void setBoard_id(String board_id)
-    {
-        this.board_id = board_id;
-    }
-
+    /**
+     * Zwraca liczbę punktów wymaganych do zdobycia 2 gwiazdek.
+     * @return Punkty wymagane do zdobycia 2 gwiazdek.
+     */
     public int getTwo_stars()
     {
         return two_stars;
     }
 
-    public void setTwo_stars(int two_stars)
-    {
-        this.two_stars = two_stars;
-    }
-
+    /**
+     * Zwraca liczbę punktów wymaganych do zdobycia 3 gwiazdek.
+     * @return Punkty wymagane do zdobycia 3 gwiazdek.
+     */
     public int getThree_stars()
     {
         return three_stars;
     }
 
-    public void setThree_stars(int three_stars)
-    {
-        this.three_stars = three_stars;
-    }
-
+    /**
+     * Zwraca czas jaki gracz ma na ukończenie poziomu.
+     * @return Czas jaki gracz ma na ukończenie poziomu.
+     */
     public int getTime()
     {
         return time;
     }
 
+    /**
+     * Ustawia czas jaki gracz ma na ukończenie poziomu.
+     * @param time Czas jaki gracz ma na ukończenie poziomu.
+     */
     public void setTime(int time)
     {
         this.time = time;
