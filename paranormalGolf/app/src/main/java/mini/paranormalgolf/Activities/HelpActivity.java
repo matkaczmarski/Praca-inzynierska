@@ -25,26 +25,44 @@ import java.util.zip.Inflater;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.R;
 
+/**
+ * Aktywność odpowiadająca oknie pomocy.
+ */
 public class HelpActivity extends Activity
 {
-    private boolean music;
+    /**
+     * Informacja o tym czy dźwięki w grze są dopuszczone przez użytkownika.
+     */
     private boolean sound;
+
+    /**
+     * Informacja o tym czy wibracje są dopuszczone przez użytkownika
+     */
     private boolean vibrations;
 
-    private PowerManager.WakeLock mWakeLock;
-
+    /**
+     * Informacja o tym, która strona pomocy jest aktualnie wyświetlana.
+     */
     private int page = -1;
+
+    /**
+     * Liczba stron pomocy.
+     */
     private int page_max = 1;
 
+    /**
+     * Identyfikatory stron pomocy.
+     */
     private int[] pages;
 
+    /**
+     * Metoda wywoływana, gdy aktywność jest startowana.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
-        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
-        this.mWakeLock.acquire();
 
         pages = new int[4];
         pages[0] = R.layout.help_page_0;
@@ -54,11 +72,13 @@ public class HelpActivity extends Activity
 
         page_max = pages.length;
 
-        //LoadFonts();
         checkSharedPreferences();
         changePage();
     }
 
+    /**
+     * Pobiera opcje zapisane przez użytkownika.
+     */
     private void checkSharedPreferences()
     {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
@@ -68,51 +88,24 @@ public class HelpActivity extends Activity
         }
         else
         {
-            music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
             sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
             vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
         }
     }
 
-    /*private void LoadFonts()
-    {
-        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
-        TextView tv = (TextView)findViewById(R.id.help_title);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.help_menu);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.help_next);
-        tv.setTypeface(tf);
-    }*/
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.help, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up sound_button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Wywoływana przy wciśnięciu przycisku - odtwarza dźwięk i powoduje wibracje.
+     */
     private void onButtonClick()
     {
         playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
+    /**
+     * Odtwarza dźwięk (jeśli użytkownik go dopuszcza).
+     * @param sound Id dźwięku
+     */
     public void playSound(int sound)
     {
         if (this.sound)
@@ -121,6 +114,9 @@ public class HelpActivity extends Activity
         }
     }
 
+    /**
+     * Uruchamia wibracje (jeśli użytkownik je dopuszcza).
+     */
     private void vibrate()
     {
         if (vibrations)
@@ -130,18 +126,29 @@ public class HelpActivity extends Activity
         }
     }
 
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku Menu.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onMenuClick(View view)
     {
         onButtonClick();
         finish();
     }
 
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku Dalej.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onNextClick(View view)
     {
         onButtonClick();
         changePage();
     }
 
+    /**
+     * Zmienia wyświetlaną stronę pomocy na kolejną.
+     */
     private void changePage()
     {
         if (++page == page_max)

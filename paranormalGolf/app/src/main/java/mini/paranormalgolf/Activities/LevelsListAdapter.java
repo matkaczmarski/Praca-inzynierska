@@ -21,7 +21,7 @@ import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Kuba on 2014-12-14.
+ *
  */
 public class LevelsListAdapter extends BaseAdapter
 {
