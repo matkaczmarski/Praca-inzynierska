@@ -1,0 +1,26 @@
+Strona tytu³owa + coœ specjalnego na odwrocie
+
+Streszczenie
+
+Spis treœci - byæ mo¿e przed streszczeniem
+
+Wstêp
+
+Po³¹czona dokumentacja biznesowa i instrukcja obs³ugi z wyrzuconymi niepotrzebnymi rzeczami
+
+Opis aplikacji, w nim:
+	-dane wspolne: uk³ad wspó³rzêdnych i coœ tam jeszcze
+	-czêœæ fizyczna:
+		- cokolwiek o akcelerometrze
+		- fizyczne sprawy (szczegó³y implementacji)
+	-czêœæ graficzna:
+		- OPENGL etc.
+		- nasze szczegó³y implementacji
+	-czêœæ android(mo¿e j¹ na samym pocz¹tku opisu aplikacji):
+		-coœ o technologii
+		-nasze szczegó³y implementacji
+	-extra: testy + dokumentacja kodu
+
+Podsumowanie i wnioski
+
+Oœwiadczenie o samodzielnoœci
