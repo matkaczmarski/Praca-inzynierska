@@ -27,39 +27,64 @@ import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.R;
 
+/**
+ * Aktywność odpowiadająca okno wyboru poziomu.
+ */
 public class LevelsActivity extends Activity
 {
+    /**
+     * Id wybranego poziomu.
+     */
     String board_id = null;
-    private boolean music;
+
+    /**
+     * Informacja o tym czy dźwięki w grze są dopuszczone przez użytkownika.
+     */
     private boolean sound;
+
+    /**
+     * Informacja o tym czy wibracje są dopuszczone przez użytkownika
+     */
     private boolean vibrations;
+
 
     private boolean last_game_win = false;
 
+    /**
+     * Czy wywołano pierwsze onResume.
+     */
     private boolean firstResume = true;
 
+    /**
+     * Czy użytkownik zdefiniował promień kulki.
+     */
     private boolean radius_set = false;
+
+    /**
+     * Promień kulki zdefiniowany przez użytkownika
+     */
     private float radius = 1.0f;
 
-    private PowerManager.WakeLock mWakeLock;
-
+    /**
+     * Metoda wywoływana, gdy aktywność jest startowana.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_levels);
-        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
-        this.mWakeLock.acquire();
 
         Bundle extras = getIntent().getExtras();
         radius_set = extras.getBoolean(getString(R.string.radius_set));
         radius = extras.getFloat(getString(R.string.radius));
 
-        //LoadFonts();
         InitializeBoardList();
         checkSharedPreferences();
     }
 
+    /**
+     * Pobiera opcje zapisane przez użytkownika.
+     */
     public void checkSharedPreferences()
     {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
@@ -69,28 +94,14 @@ public class LevelsActivity extends Activity
         }
         else
         {
-            music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
             sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
             vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
         }
     }
 
-    /*public void LoadFonts()
-    {
-        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
-        TextView tv = (TextView) findViewById(R.id.select_level_title);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.select_level_back);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.select_level_start);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.levels_select_best_result);
-        tv.setTypeface(tf);
-    }*/
-
+    /**
+     * Wypełnia listę poziomów.
+     */
     public void InitializeBoardList()
     {
         String[] board_id = getResources().getStringArray(R.array.boards_id);
@@ -121,6 +132,11 @@ public class LevelsActivity extends Activity
         });
     }
 
+    /**
+     * Zmienia wybrany poziom (automatycznie, nie na skutek działania użytkownika).
+     * @param levelsListAdapter Adapter listy poziomów.
+     * @param nr Nr wybranego poziomu.
+     */
     public void changeSelectedBoard(LevelsListAdapter levelsListAdapter, int nr)
     {
         boolean temp_vibrations = vibrations;
@@ -134,32 +150,20 @@ public class LevelsActivity extends Activity
         sound = temp_sound;
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.levels, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up sound_button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Wywoływana w przypadku wciśnięcia przycisku Wstecz.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onBackClick (View view)
     {
         onButtonClick();
         finish();
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia przycisku Start.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onStartClick (View view)
     {
         onButtonClick();
@@ -173,6 +177,12 @@ public class LevelsActivity extends Activity
         }
     }
 
+    /**
+     * Wywołana gdy aktywność zwraca rezultat.
+     * @param requestCode Kod żądania.
+     * @param resultCode Kod rezultatu.
+     * @param data Przesłane informacje.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -184,6 +194,11 @@ public class LevelsActivity extends Activity
         }
     }
 
+    /**
+     * Wywoływana gdy następuje zmiania wybranego poziomu.
+     * @param boardInfo Obiekt BoardInfo danego poziomu.
+     * @param nr Numer wybranego poziomu.
+     */
     public void selectedBoardChanged(BoardInfo boardInfo, int nr)
     {
         onButtonClick();
@@ -216,12 +231,19 @@ public class LevelsActivity extends Activity
             ((ImageView)findViewById(R.id.level_select_third_star)).setImageDrawable(getResources().getDrawable(R.drawable.star_empty));
     }
 
+    /**
+     * Wywoływana przy wciśnięciu przycisku - odtwarza dźwięk i powoduje wibracje.
+     */
     private void onButtonClick()
     {
         playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
+    /**
+     * Odtwarza dźwięk (jeśli użytkownik go dopuszcza).
+     * @param sound Id dźwięku
+     */
     public void playSound(int sound)
     {
         if (this.sound)
@@ -230,6 +252,9 @@ public class LevelsActivity extends Activity
         }
     }
 
+    /**
+     * Uruchamia wibracje (jeśli użytkownik je dopuszcza).
+     */
     public void vibrate()
     {
         if (vibrations)
@@ -239,13 +264,10 @@ public class LevelsActivity extends Activity
         }
     }
 
-    @Override
-    protected void onDestroy()
-    {
-        this.mWakeLock.release();
-        super.onDestroy();
-    }
-
+    /**
+     * Wywoływana przy wznawianiu aktywności.
+     * Ustawia wybrany poziom.
+     */
     @Override
     protected void onResume()
     {
@@ -276,6 +298,9 @@ public class LevelsActivity extends Activity
         }
     }
 
+    /**
+     * Wybiera ostatni z dostępnych poziomów.
+     */
     private void chooseLastAvailableLevel()
     {
         LevelsListAdapter levelsListAdapter = (LevelsListAdapter)(((ListView)findViewById(R.id.levels_list)).getAdapter());

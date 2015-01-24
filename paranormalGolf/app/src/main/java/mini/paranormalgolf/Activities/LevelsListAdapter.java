@@ -21,20 +21,62 @@ import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.R;
 
 /**
- *
+ * Adapter odpowiedzialny za przechowywanie listy poziomów.
  */
 public class LevelsListAdapter extends BaseAdapter
 {
+    /**
+     * Przechowuje obiekt BoardInfo dla każdego poziomu.
+     */
     BoardInfo[] boardInfos;
+
+    /**
+     * Informacja o tym, które poziomy są zablokowane.
+     */
     boolean[] locked;
+
+    /**
+     * Przechowuje aktualny context.
+     */
     Context context;
+
+    /**
+     * Indeks wybranego elementu.
+     */
     int selectedIndex = 0;
+
+    /**
+     *
+     */
     boolean first = true;
+
+    /**
+     * Przechowuje obiekt ListView, do którego jest przypisany dany adapter.
+     */
     ListView listView;
+
+    /**
+     * Ile elementów jest widoczynych.
+     */
     int lastCount = 0;
+
+    /**
+     * Maksymalna liczba widocznych elementów.
+     */
     static int maxCount = 0;
+
+    /**
+     * Czy ustawiono maksymalną liczbę widocznych elementów.
+     */
     static boolean maxCountSet = false;
 
+    /**
+     * Konstruktor
+     * @param context aktualny context
+     * @param boardInfos obiekty BoardInfo dla każdego z poziomów
+     * @param listView obiekt ListView, do którego będzie przypisany adapter
+     * @param locked informacja o zablokowanych poziomach
+     */
     public LevelsListAdapter(Context context, BoardInfo[] boardInfos, ListView listView, boolean[] locked)
     {
         super();
@@ -44,6 +86,10 @@ public class LevelsListAdapter extends BaseAdapter
         this.context = context;
     }
 
+    /**
+     * Zmienia wybrany element.
+     * @param selectedIndex Indeks wybranego elementu
+     */
     public void setSelectedIndex(int selectedIndex)
     {
         if (locked[selectedIndex])
@@ -73,24 +119,45 @@ public class LevelsListAdapter extends BaseAdapter
         notifyDataSetChanged();
     }
 
+    /**
+     * Zwraca liczbę przechowywanych elementów.
+     * @return Liczba przechowywanych elementów.
+     */
     @Override
     public int getCount()
     {
         return boardInfos.length;
     }
 
+    /**
+     * Pobiera element.
+     * @param i Indeks elementu.
+     * @return i-ty element
+     */
     @Override
     public Object getItem(int i)
     {
         return null;
     }
 
+    /**
+     * Zwraca id elementu.
+     * @param i Indeks elementu.
+     * @return Id i-tego elementu.
+     */
     @Override
     public long getItemId(int i)
     {
         return i;
     }
 
+    /**
+     * Pobiera widok.
+     * @param i Nr elementu, dla którego pobierany jest widok.
+     * @param view
+     * @param viewGroup Widok - rodzic, do którgo zostanie podpięty widok.
+     * @return
+     */
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
@@ -148,8 +215,6 @@ public class LevelsListAdapter extends BaseAdapter
                 textView.setBackgroundDrawable(null);
                 textView.setBackgroundColor(Color.TRANSPARENT);
             }
-            /*Typeface tf = Typeface.createFromAsset(context.getAssets(), "batmanFont.ttf");
-            textView.setTypeface(tf);*/
         }
 
         return rowView;

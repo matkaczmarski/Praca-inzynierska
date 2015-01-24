@@ -35,7 +35,7 @@ import mini.paranormalgolf.Helpers.XMLParser;
 import mini.paranormalgolf.R;
 
 
-public class GameActivity extends Activity implements Runnable {
+public class GameActivity extends Activity  {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet = false;
@@ -309,28 +309,6 @@ public class GameActivity extends Activity implements Runnable {
     {
         ((TextView)findViewById(R.id.game_activity_time)).setText(time + "");
     }
-
-    @Override
-    public void run()
-    {
-
-    }
-
-    /*public void LoadFonts()
-    {
-        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
-        TextView tv = (TextView) findViewById(R.id.game_activity_time_header);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.game_activity_time);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.game_activity_diamonds_header);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.game_activity_diamonds);
-        tv.setTypeface(tf);
-    }*/
 
     public void onPauseClick(View view)
     {
