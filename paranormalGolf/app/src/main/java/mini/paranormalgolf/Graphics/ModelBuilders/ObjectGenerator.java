@@ -72,7 +72,7 @@ public class ObjectGenerator {
      * @return Obiekt typu <em>GraphicsData</em> zawierający wierzchołki modelu diamentu oraz reguły jego ryowania.
      */
     public static TriangleMeshData createDiamondModel(Pyramid pyramid) {
-        ObjectBuilder builder = new ObjectBuilder(2 * (pyramid.baseVerticesCount + 1),ObjectBuilder.DrawType.texturing);
+        ObjectBuilder builder = new ObjectBuilder(2 * (pyramid.baseVerticesCount + 2),ObjectBuilder.DrawType.texturing);
         builder.appendPyramidWithoutBase(pyramid, -1);
         builder.appendPyramidWithoutBase(pyramid, 1);
         return builder.build();

@@ -1,6 +1,7 @@
 package mini.paranormalgolf.Graphics.ModelBuilders;
 
 import android.util.FloatMath;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -574,28 +575,8 @@ public class ObjectBuilder {
      * @param direction Kierunek wektora wysokości ostrosłupa.
      */
     public void appendPyramidWithoutBase(Pyramid pyramid, float direction) {
-
-        final int indicesCount = pyramid.baseVerticesCount * 3;
-        int vertexStar = offset / ( isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
-
-        for (int i = 0; i < pyramid.baseVerticesCount; i++) {
-            float ratio = direction > 0 ? ((float)( pyramid.baseVerticesCount - i) / pyramid.baseVerticesCount) : ( (float)i / pyramid.baseVerticesCount);
-            float alpha =  ratio * 2f * (float) Math.PI;
-
-            vertexData[offset++] =  pyramid.radius * FloatMath.cos(alpha);
-            vertexData[offset++] = 0;
-            vertexData[offset++] = pyramid.radius * FloatMath.sin(alpha);
-
-            Vector vNormal = new Vector(vertexData[offset - 3], vertexData[offset - 2], vertexData[offset - 1]).normalize();
-            vertexData[offset++] = vNormal.x;
-            vertexData[offset++] = vNormal.y;
-            vertexData[offset++] = vNormal.z;
-
-            if(isTextured) {
-                vertexData[offset++] = i % 2; // co drugi trójkąt ma teksturowanie od 0
-                vertexData[offset++] = 1f;
-            }
-        }
+        final int startVertex = offset / (isTextured ? FLOATS_PER_VERTEX_WITH_TEXTURE : FLOATS_PER_VERTEX_WITHOUT_TEXTURE);
+        final int numVertices = pyramid.baseVerticesCount + 2;
 
         vertexData[offset++] = 0;
         vertexData[offset++] = (direction * pyramid.height);
@@ -605,26 +586,33 @@ public class ObjectBuilder {
         vertexData[offset++] = direction;
         vertexData[offset++] = 0;
 
-        if(isTextured) {
+        if (isTextured) {
             vertexData[offset++] = 0.5f;
             vertexData[offset++] = 0f;
         }
 
-        byte[] indices = new byte[indicesCount];
-        int indicesOffset = 0;
-        for (int i = 0; i < pyramid.baseVerticesCount; i++) {
-            indices[indicesOffset++] = (byte)(vertexStar + pyramid.baseVerticesCount);
-            indices[indicesOffset++] = (byte)( vertexStar + i);
-            indices[indicesOffset++] = (byte)(vertexStar + ((i+1) % pyramid.baseVerticesCount));
+        for (int i = 0; i <= pyramid.baseVerticesCount; i++) {
+            float ratio = direction > 0 ? ((float) (pyramid.baseVerticesCount - i) / pyramid.baseVerticesCount) : ((float) i / pyramid.baseVerticesCount);
+            float alpha = ratio * 2f * (float) Math.PI;
+
+            vertexData[offset++] = pyramid.radius * FloatMath.cos(alpha);
+            vertexData[offset++] = 0;
+            vertexData[offset++] = pyramid.radius * FloatMath.sin(alpha);
+
+            Vector vNormal = new Vector(vertexData[offset - 3], vertexData[offset - 2], vertexData[offset - 1]).normalize();
+            vertexData[offset++] = vNormal.x;
+            vertexData[offset++] = vNormal.y;
+            vertexData[offset++] = vNormal.z;
+
+            if (isTextured) {
+                vertexData[offset++] = i % 2; // co drugi trójkąt ma teksturowanie od 0
+                vertexData[offset++] = 1f;
+            }
         }
-
-        final ByteBuffer indexArray = ByteBuffer.allocateDirect(indicesCount).put(indices);
-        indexArray.position(0);
-
         drawCommands.add(new DrawCommand() {
             @Override
             public void draw() {
-                glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_BYTE, indexArray);
+                glDrawArrays(GL_TRIANGLE_FAN, startVertex, numVertices);
             }
         });
 
