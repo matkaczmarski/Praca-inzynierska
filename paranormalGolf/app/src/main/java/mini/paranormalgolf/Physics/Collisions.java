@@ -1,6 +1,5 @@
 package mini.paranormalgolf.Physics;
 
-import mini.paranormalgolf.Helpers.NotResolvingCollisionException;
 import mini.paranormalgolf.Primitives.Box;
 import mini.paranormalgolf.Primitives.BoxSize;
 import mini.paranormalgolf.Primitives.Circle;
