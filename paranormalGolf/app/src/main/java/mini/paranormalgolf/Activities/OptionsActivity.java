@@ -28,19 +28,50 @@ import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.R;
 
+/**
+ * Aktywność odpowiadająca menu opcji.
+ */
 public class OptionsActivity extends Activity
 {
-
+    /**
+     * Informacja o tym czy muzyka w grze jest dopuszczona przez użytkownika.
+     */
     private boolean music;
+
+    /**
+     * Informacja o tym czy dźwięki w grze są dopuszczone przez użytkownika.
+     */
     private boolean sound;
+
+    /**
+     * Informacja o tym czy wibracje są dopuszczone przez użytkownika.
+     */
     private boolean vibrations;
+
+    /**
+     * Informacja o tym czy cienie w grze są dopuszczone przez użytkownika.
+     */
     private boolean shadows;
 
+    /**
+     * Id wybranej przez użytkownika tekstury.
+     */
     private int texture;
+
+    /**
+     * Informacja o tym czy aktywność została wywołana podczas pauzy w grze.
+     */
     private boolean onPause;
 
+    /**
+     * Wybrany przez użytkownika język.
+     */
     private String language;
 
+    /**
+     * Metoda wywoływana, gdy aktywność jest startowana.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +89,14 @@ public class OptionsActivity extends Activity
             findViewById(R.id.options_texture_chosen_textview).setVisibility(View.GONE);
         }
 
-        //LoadFonts();
         checkSharedPreferences();
         if (!onPause)
             loadTextures();
     }
 
+    /**
+     * Ładuje dostępne tekstury do ScrollView oraz aktualnie wybraną teksturę.
+     */
     public void loadTextures()
     {
         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.options_texture_scroll_view);
@@ -80,6 +113,11 @@ public class OptionsActivity extends Activity
         }
     }
 
+    /**
+     * Zwraca id tekstury.
+     * @param ballTextureType Tekstura, której id chcemy otrzymać.
+     * @return Id tekstury.
+     */
     private int getTextureResource(Ball.BallTexture ballTextureType)
     {
         switch (ballTextureType){
@@ -132,6 +170,9 @@ public class OptionsActivity extends Activity
         return -1;
     }
 
+    /**
+     * Pobiera opcje zapisane przez użytkownika lub tworzy domyślny zestaw w przypadku ich braku
+     */
     public void checkSharedPreferences()
     {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
@@ -155,6 +196,9 @@ public class OptionsActivity extends Activity
         }
     }
 
+    /**
+     * Ustawia wartości kontrolek na te wybrane przez użytkownika.
+     */
     public void updateControls()
     {
         ((CheckBox)findViewById(R.id.options_music)).setChecked(music);
@@ -174,6 +218,10 @@ public class OptionsActivity extends Activity
         }
     }
 
+    /**
+     * Zmienia język.
+     * @param language Oznaczenie języka.
+     */
     public void changeLanguage(String language)
     {
         this.language = language;
@@ -185,69 +233,20 @@ public class OptionsActivity extends Activity
         findViewById(android.R.id.content).invalidate();
     }
 
-    /*public void LoadFonts()
-    {
-        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
-        TextView tv = (TextView) findViewById(R.id.options_title);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.options_music);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.options_sounds);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.options_vibrations);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.options_cancel_button);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.options_save_button);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.options_texture_textview);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.options_texture_chosen_textview);
-        tv.setTypeface(tf);
-
-        CheckBox checkBox = (CheckBox)findViewById(R.id.options_pl);
-        checkBox.setTypeface(tf);
-
-        checkBox = (CheckBox)findViewById(R.id.options_en);
-        checkBox.setTypeface(tf);
-
-        checkBox = (CheckBox)findViewById(R.id.options_shadows);
-        checkBox.setTypeface(tf);
-    }*/
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.options, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up sound_button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Wywoływana w przypadku wciśnięcia przycisku Anuluj.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onCancelClick(View view)
     {
         onButtonClick();
         finish();
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia przycisku Zapisz.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onSaveClick(View view)
     {
         onButtonClick();
@@ -264,19 +263,26 @@ public class OptionsActivity extends Activity
         finish();
     }
 
+    /**
+     * Wywoływana w przypadku wyboru polskiego języka.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onPolishPick(View view)
     {
         ((CheckBox)view).setChecked(true);
         ((CheckBox)findViewById(R.id.options_en)).setChecked(false);
         changeLanguage("pl");
         setContentView(R.layout.activity_options);
-        //LoadFonts();
         updateControls();
         if (!onPause)
             loadTextures();
         onButtonClick();
     }
 
+    /**
+     * Wywoływana w przypadku wyboru angielskiego języka.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onEnglishPick(View view)
     {
         ((CheckBox)view).setChecked(true);
@@ -290,36 +296,59 @@ public class OptionsActivity extends Activity
         onButtonClick();
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia checkbox'u odpowiedzialnego za muzykę.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onMusicClick (View view)
     {
         music = ((CheckBox)view).isChecked();
         onButtonClick();
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia checkbox'u odpowiedzialnego za dźwięki.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onSoundClick (View view)
     {
         sound = ((CheckBox)view).isChecked();
         onButtonClick();
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia checkbox'u odpowiedzialnego za wibracje.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onVibrationsClick (View view)
     {
         vibrations = ((CheckBox)view).isChecked();
         onButtonClick();
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia checkbox'u odpowiedzialnego za cienie.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onShadowsClick (View view)
     {
         shadows = ((CheckBox)view).isChecked();
         onButtonClick();
     }
 
+    /**
+     * Wywoływana przy wciśnięciu przycisku - odtwarza dźwięk i powoduje wibracje.
+     */
     private void onButtonClick()
     {
         playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
+    /**
+     * Odtwarza dźwięk (jeśli użytkownik go dopuszcza).
+     * @param sound Id dźwięku
+     */
     public void playSound(int sound)
     {
         if (this.sound)
@@ -328,6 +357,9 @@ public class OptionsActivity extends Activity
         }
     }
 
+    /**
+     * Uruchamia wibracje (jeśli użytkownik je dopuszcza).
+     */
     public void vibrate()
     {
         if (vibrations)
@@ -337,6 +369,10 @@ public class OptionsActivity extends Activity
         }
     }
 
+    /**
+     * Wywoływana w przypadku zmiany wyboru textury.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onTextureClick(View view)
     {
         onButtonClick();

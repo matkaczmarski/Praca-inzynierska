@@ -27,22 +27,53 @@ import java.util.Locale;
 
 import mini.paranormalgolf.Controls.ConsoleView;
 import mini.paranormalgolf.Helpers.ResourceHelper;
+import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.R;
 
+/**
+ * Aktywność odpowiadająca menu głównemu gry.
+ */
 public class MainMenuActivity extends Activity
 {
-    private boolean music = false;
+    /**
+     * Informacja o tym czy dźwięki w grze są dopuszczone przez użytkownika.
+     */
     private boolean sound = false;
-    private boolean vibrations = false;
-    private boolean shadows;
 
+    /**
+     * Informacja o tym czy wibracje są dopuszczone przez użytkownika
+     */
+    private boolean vibrations = false;
+
+    /**
+     * Lista kliknięć - do kontrolowania czy należy pokazać konsolę.
+     */
     private List<Long> clicks = new ArrayList<Long>();
+
+    /**
+     * Stała informująca o tym ile kliknięć jest wymaganych do pokazania konsoli.
+     */
     private final int clicks_nr = 3;
+
+    /**
+     * Stała informująca o tym ile czas w ms musi upłynąć od pierwszego do trzeciego kliknięcia, aby pokazaż konsolę.
+     */
     private final long clicks_max_interval = 1000;
 
+    /**
+     * Informacja o tym, czy użytkownik zmienił domyślny promień kulki (poprzez konsolę).
+     */
     public boolean radius_set = false;
-    public float radius = 1.0f;
 
+    /**
+     * Promień kulki zdefiniowany przez użytkownika.
+     */
+    public float radius = Ball.DEFAULT_RADIUS;
+
+    /**
+     * Metoda wywoływana, gdy aktywność jest startowana.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +82,11 @@ public class MainMenuActivity extends Activity
         checkSharedPreferences();
 
         setContentView(R.layout.activity_main_menu);
-
-        /*TextView tv = (TextView) findViewById(R.id.main_menu_title);
-        tv.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onTitleClick(view);
-            }
-        });*/
-        //LoadFonts();
     }
 
+    /**
+     * Pobiera opcje zapisane przez użytkownika lub tworzy domyślny zestaw w przypadku ich braku
+     */
     public void checkSharedPreferences()
     {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
@@ -86,20 +109,22 @@ public class MainMenuActivity extends Activity
 
             editor.commit();
 
-            music = sound = vibrations = true;
+            sound = vibrations = true;
         }
         else
         {
-            music = sharedPreferences.getBoolean(getString(R.string.options_music), false);
             sound = sharedPreferences.getBoolean(getString(R.string.options_sound_effects), false);
             vibrations = sharedPreferences.getBoolean(getString(R.string.options_vibrations), false);
-            shadows = sharedPreferences.getBoolean(getString(R.string.options_shadows), false);
 
             String language = sharedPreferences.getString(getString(R.string.options_language), "en");
             changeLanguage(language);
         }
     }
 
+    /**
+     * Zmienia język.
+     * @param language Oznaczenie języka
+     */
     public void changeLanguage(String language)
     {
         Resources res = getResources();
@@ -109,38 +134,10 @@ public class MainMenuActivity extends Activity
         res.updateConfiguration(conf, dm);
     }
 
-    /*public void LoadFonts()
-    {
-        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
-        TextView tv = (TextView) findViewById(R.id.main_menu_title);
-        tv.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onTitleClick(view);
-            }
-        });
-        tv.setTypeface(tf);
-
-        Shader textShader=new LinearGradient(0, 0, 0, 20,
-                new int[]{Color.GREEN,Color.BLUE},
-                new float[]{0, 1}, Shader.TileMode.CLAMP);
-        tv.getPaint().setShader(textShader);
-
-        tv = (TextView)findViewById(R.id.main_menu_start);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.main_menu_options);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.main_menu_help);
-        tv.setTypeface(tf);
-
-        tv = (TextView)findViewById(R.id.main_menu_exit);
-        tv.setTypeface(tf);
-    }*/
-
+    /**
+     * Zbiera informacje o kliknięciach nazwy gry i jeśli spełnione są warunki to wyświetla konsolę.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onTitleClick(View view)
     {
         long time = System.currentTimeMillis();
@@ -159,6 +156,9 @@ public class MainMenuActivity extends Activity
 
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia przycisku wstecz na urządzeniu.
+     */
     @Override
     public void onBackPressed()
     {
@@ -167,25 +167,10 @@ public class MainMenuActivity extends Activity
             consoleView.hide();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up sound_button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Wywoływana w przypadku wciśnięcia przycisku Start.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onStartClick(View view)
     {
         onButtonClick();
@@ -195,6 +180,10 @@ public class MainMenuActivity extends Activity
         startActivity(intent);
     }
 
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku Opcje.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onOptionsClick(View view)
     {
         onButtonClick();
@@ -203,6 +192,10 @@ public class MainMenuActivity extends Activity
         startActivity(intent);
     }
 
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku Pomoc.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onHelpClick(View view)
     {
         onButtonClick();
@@ -210,18 +203,31 @@ public class MainMenuActivity extends Activity
         startActivity(intent);
     }
 
+
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku Koniec.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onExitClick(View view)
     {
         onButtonClick();
         finish();
     }
 
+    /**
+     * Wywoływana przy wciśnięciu przycisku - odtwarza dźwięk i powoduje wibracje.
+     */
     public void onButtonClick()
     {
         playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
+
+    /**
+     * Odtwarza dźwięk (jeśli użytkownik go dopuszcza).
+     * @param sound Id dźwięku
+     */
     public void playSound(int sound)
     {
         if (this.sound)
@@ -230,6 +236,9 @@ public class MainMenuActivity extends Activity
         }
     }
 
+    /**
+     * Uruchamia wibracje (jeśli użytkownik je dopuszcza).
+     */
     public void vibrate()
     {
         if (vibrations)
@@ -239,26 +248,15 @@ public class MainMenuActivity extends Activity
         }
     }
 
+    /**
+     * Wywoływana przy wznawianiu aktywności.
+     * Pobiera aktualne opcje wybrane przez użytkownika.
+     */
     @Override
     public void onResume()
     {
         super.onResume();
         checkSharedPreferences();
         setContentView(R.layout.activity_main_menu);
-        //LoadFonts();
-    }
-
-    @Override
-    protected void onStop()
-    {
-        //ResourceHelper.releaseSounds();
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        //ResourceHelper.releaseSounds();
-        super.onDestroy();
     }
 }
