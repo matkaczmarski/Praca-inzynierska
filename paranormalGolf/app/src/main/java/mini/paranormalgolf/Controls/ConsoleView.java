@@ -19,24 +19,39 @@ import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Kuba on 2015-01-14.
+ * Klasa odpowiadająca konsoli.
  */
 public class ConsoleView extends LinearLayout
 {
+    /**
+     * Czas trwania animacji.
+     */
     private final int duration = 500;
 
+    /**
+     * Konstruktor
+     * @param context
+     */
     public ConsoleView(Context context)
     {
         super(context);
         inflate();
     }
 
+    /**
+     * Konstruktor
+     * @param context
+     * @param attrs
+     */
     public ConsoleView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         inflate();
     }
 
+    /**
+     * Wypełnia widok konsoli.
+     */
     public void inflate()
     {
         inflate(getContext(), R.layout.console, this);
@@ -76,6 +91,10 @@ public class ConsoleView extends LinearLayout
         });
     }
 
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku Ok.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onOkClick(View view)
     {
         EditText editText = (EditText)findViewById(R.id.console_command);
@@ -86,6 +105,11 @@ public class ConsoleView extends LinearLayout
         editText.setSelection(getContext().getString(R.string.command_prompt).length());
     }
 
+    /**
+     * Przetwarza wpisaną przez użytkownika komendę.
+     * @param command Komenda wpisana przez użytkownika.
+     * @return Odpowiedź konsoli.
+     */
     private String processCommand(String command)
     {
         String[] args = (command.substring(getContext().getString(R.string.command_prompt).length())).split(" ");
@@ -105,6 +129,11 @@ public class ConsoleView extends LinearLayout
             return getContext().getString(R.string.command_error);
     }
 
+    /**
+     * Przetwarza komendę odblokowania poziomów.
+     * @param level Parametr komendy.
+     * @return Informacja o tym czy udało się przetworzyć komendę dla danego parametru.
+     */
     private boolean unlockLevelCommand(String level)
     {
         int nr;
@@ -137,6 +166,11 @@ public class ConsoleView extends LinearLayout
         return true;
     }
 
+    /**
+     * Przetwarza komendę zmiany promienia kulki.
+     * @param radius_string Parametr komendy.
+     * @return Informacja o tym czy udało się przetworzyć komendę dla danego parametru.
+     */
     private boolean changeBallRadiusCommand (String radius_string)
     {
         float radius = 0;
@@ -159,17 +193,27 @@ public class ConsoleView extends LinearLayout
         return true;
     }
 
+    /**
+     * Wysuwa konsolę.
+     */
     public void show()
     {
         myAnimate(true);
     }
 
+    /**
+     * Ukrywa konsolę.
+     */
     public void hide()
     {
         myAnimate(false);
     }
 
-    public void myAnimate(final boolean slideDown)
+    /**
+     * Animuje konsolę.
+     * @param slideDown Czy konsola ma się pokazać.
+     */
+    private void myAnimate(final boolean slideDown)
     {
         Animation animation = new TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, //fromXType

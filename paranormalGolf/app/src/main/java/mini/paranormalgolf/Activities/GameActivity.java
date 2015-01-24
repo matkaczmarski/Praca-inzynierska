@@ -27,50 +27,116 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import mini.paranormalgolf.Controls.MyBroadcastReceiver;
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Helpers.BoardInfo;
 import mini.paranormalgolf.Helpers.ResourceHelper;
 import mini.paranormalgolf.Helpers.XMLParser;
+import mini.paranormalgolf.Physics.Ball;
 import mini.paranormalgolf.R;
 
-
+/**
+ * Aktywność odpowiadająca menu ekran gry.
+ */
 public class GameActivity extends Activity  {
 
+    /**
+     * GLSurfaceView aktywności.
+     */
     private GLSurfaceView glSurfaceView;
+
+    /**
+     * Czy renderer został ustawiony.
+     */
     private boolean rendererSet = false;
+
+    /**
+     * GameRenderer związany z daną aktywnością.
+     */
     private GameRenderer gameRenderer = null;
+
+    /**
+     * Dialog pauzy.
+     */
     private Dialog pause_dialog = null;
+
+    /**
+     * Dialog zakończenia gry.
+     */
     private Dialog end_game_dialog = null;
 
+    /**
+     * Informacja o tym czy wibracje są dopuszczone przez użytkownika.
+     */
     private boolean vibrations;
+
+    /**
+     * Informacja o tym czy muzyka w grze jest dopuszczona przez użytkownika.
+     */
     private boolean music;
+
+    /**
+     * Informacja o tym czy dźwięki w grze są dopuszczone przez użytkownika.
+     */
     private boolean sound;
+
+    /**
+     * Informacja o tym czy cienie w grze są dopuszczone przez użytkownika.
+     */
     private boolean shadows;
+
+    /**
+     * Nr tekstury wybranej przez użytkownika.
+     */
     private int texture;
 
-    public static boolean screen_lock = false;
-
+    /**
+     * Informacja o tym, czy użytkownik zmienił domyślny promień kulki (poprzez konsolę).
+     */
     private boolean radius_set = false;
-    private float radius = 1.0f;
 
+    /**
+     * Promień kulki zdefiniowany przez użytkownika.
+     */
+    private float radius = Ball.DEFAULT_RADIUS;
+
+    /**
+     * Informacja o tym czy nastąpiło zwycięstwo.
+     */
     private boolean win = false;
 
+    /**
+     * Mechanizm, który powstrzymuje ekran przed automatycznym blokowaniem.
+     */
     protected PowerManager.WakeLock mWakeLock;
 
+    /**
+     * Informacja o tym, czy gra już się rozpoczęła.
+     */
     public static boolean game = false;
 
+    /**
+     * Id rozgrywanego poziomu.
+     */
     private String board_id;
 
+    /**
+     * Obiekt MediaPlayer odpowiedzialny za odtwarzanie muzyki w tle.
+     */
     private MediaPlayer backgroundMusic;
 
+    /**
+     * Obiekt przechwytujący informację o blokadzie ekeranu.
+     */
     private BroadcastReceiver broadcastReceiver = null;
 
+    /**
+     * Metoda wywoływana, gdy aktywność jest startowana.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        //LoadFonts();
 
         Bundle extras = getIntent().getExtras();
         radius_set = extras.getBoolean(getString(R.string.radius_set));
@@ -196,62 +262,51 @@ public class GameActivity extends Activity  {
         });
     }
 
+    /**
+     * Wywoływana gdy zmienia się konfiguracja urządzenia.
+     * @param newConfig Nowa konfiguracja.
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Wywoływana przy pauzowaniu aktywności.
+     */
     @Override
-    protected void onStop()
+    protected void onPause()
     {
-        super.onStop();
+        super.onPause();
+
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.release();
+        }
+        if (rendererSet)
+        {
+            glSurfaceView.onPause();
+        }
     }
 
-    /*
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            getMenuInflater().inflate(R.menu.test, menu);
-            return true;
+    /**
+     * Wywoływana przy wznawianiu aktywności.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkSharedPreferences(false);
+        gameRenderer.updatePreferences(vibrations, music, sound);
+        if (rendererSet) {
+            glSurfaceView.onResume();
         }
+    }
 
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up sound_button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
-            if (id == R.id.action_settings) {
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    */
-        @Override
-        protected void onPause() {
-            super.onPause();
-
-            if(backgroundMusic != null)
-            {
-                backgroundMusic.release();
-            }
-            if (rendererSet) {
-                glSurfaceView.onPause();
-            }
-        }
-
-        @Override
-        protected void onResume() {
-            super.onResume();
-
-            checkSharedPreferences(false);
-            gameRenderer.updatePreferences(vibrations, music, sound);
-            if (rendererSet) {
-                glSurfaceView.onResume();
-            }
-        }
-
+    /**
+     * Wywoływana przy niszczeniu aktywności.
+     */
     @Override
     protected void onDestroy() {
         gameRenderer.getUpdater().getDrawManager().releaseResources();
@@ -264,6 +319,9 @@ public class GameActivity extends Activity  {
         super.onDestroy();
     }
 
+    /**
+     * Pobiera opcje zapisane przez użytkownika lub tworzy domyślny zestaw w przypadku ich braku
+     */
     public void checkSharedPreferences(boolean onCreate)
     {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
@@ -294,22 +352,30 @@ public class GameActivity extends Activity  {
         }
     }
 
+    /**
+     * Aktualizuje wyswietlane informacje o czasie i zebranych diamentach.
+     * @param time Nowy czas.
+     * @param diamonds Nowa liczba zebranych diamentów.
+     */
     public void updatePanel(int time, int diamonds)
     {
         ((TextView)findViewById(R.id.game_activity_time)).setText(time + "");
         ((TextView)findViewById(R.id.game_activity_diamonds)).setText(diamonds + "");
     }
 
+    /**
+     * Aktualizuje wyswietlane informacje o zebranych diamentach.
+     * @param diamonds Nowa liczba zebranych diamentów.
+     */
     public void updatePanelDiamonds(int diamonds)
     {
         ((TextView)findViewById(R.id.game_activity_diamonds)).setText(diamonds + "");
     }
 
-    public void updatePanelTime(long time)
-    {
-        ((TextView)findViewById(R.id.game_activity_time)).setText(time + "");
-    }
-
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku pauzy.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onPauseClick(View view)
     {
         if (!game)
@@ -325,7 +391,6 @@ public class GameActivity extends Activity  {
             pause_dialog.setContentView(R.layout.pause_dialog);
             pause_dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             pause_dialog.setCanceledOnTouchOutside(false);
-            //setFontsForPauseDialog(pause_dialog);
             ((TextView)pause_dialog.findViewById(R.id.pause_resume)).setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -389,32 +454,19 @@ public class GameActivity extends Activity  {
         }
     }
 
-    /*public void setFontsForPauseDialog(Dialog dialog)
-    {
-        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
-
-        TextView textView = (TextView)dialog.findViewById(R.id.pause_resume);
-        textView.setTypeface(tf);
-
-        textView = (TextView)dialog.findViewById(R.id.pause_restart);
-        textView.setTypeface(tf);
-
-        textView = (TextView)dialog.findViewById(R.id.pause_options);
-        textView.setTypeface(tf);
-
-        textView = (TextView)dialog.findViewById(R.id.pause_menu);
-        textView.setTypeface(tf);
-
-        textView = (TextView)dialog.findViewById(R.id.pause_dialog_title);
-        textView.setTypeface(tf);
-    }*/
-
+    /**
+     * Wywoływana przy wciśnięciu przycisku - odtwarza dźwięk i powoduje wibracje.
+     */
     public void onButtonClick()
     {
         playSound(ResourceHelper.SOUND_BUTTON);
         vibrate();
     }
 
+    /**
+     * Odtwarza dźwięk (jeśli użytkownik go dopuszcza).
+     * @param sound Id dźwięku
+     */
     public void playSound(final int sound)
     {
         if (this.sound)
@@ -429,6 +481,9 @@ public class GameActivity extends Activity  {
         }
     }
 
+    /**
+     * Uruchamia wibracje (jeśli użytkownik je dopuszcza).
+     */
     public void vibrate()
     {
         if (vibrations)
@@ -438,10 +493,12 @@ public class GameActivity extends Activity  {
         }
     }
 
+    /**
+     * Uruchamia ponownie grę na danym poziomie.
+     */
     public void restart()
     {
         setContentView(R.layout.activity_game);
-        //LoadFonts();
         ProgressDialog dialog = ProgressDialog.show(this, "Loading", "Please wait...", true);
         glSurfaceView = (GLSurfaceView)findViewById(R.id.game_glsurface);
 
@@ -490,6 +547,9 @@ public class GameActivity extends Activity  {
         dialog.dismiss();
     }
 
+    /**
+     * Wywoływana w przypadku wciśnięcia przycisku wstecz na urządzeniu.
+     */
     @Override
     public void onBackPressed()
     {
@@ -497,8 +557,12 @@ public class GameActivity extends Activity  {
             onPauseClick(glSurfaceView);
     }
 
-
-
+    /**
+     * Wywoływana gdy gra się zakończy.
+     * @param diamonds Liczba zebranych diamentów.
+     * @param time Pozostały czas.
+     * @param win Czy nastąpiła wygrana.
+     */
     public void onWinDialog(int diamonds, int time, boolean win)
     {
         if (end_game_dialog != null)
@@ -512,18 +576,28 @@ public class GameActivity extends Activity  {
         end_game_dialog = new Dialog(this, R.style.EndGameDialogTheme);
         end_game_dialog.setContentView(R.layout.win_dialog);
         end_game_dialog.setCanceledOnTouchOutside(false);
-        //loadFontsForDialog(end_game_dialog);
         setDialogTitleAndResult(end_game_dialog, diamonds, time, win);
 
         end_game_dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         end_game_dialog.show();
     }
 
+    /**
+     * Odtwarza dźwięk po zakończeniu gry.
+     * @param win Czy nastąpiła wygrana.
+     */
     public void playEndGameSound(boolean win)
     {
         playSound(win ? ResourceHelper.SOUND_WIN : ResourceHelper.SOUND_LOSE);
     }
 
+    /**
+     * Ustawia informacje wyświetlane przez Dialog zakońćzenia gry.
+     * @param dialog Dialog zakończenia gry.
+     * @param diamonds Liczba zebranych diamentów.
+     * @param time Pozostały czas.
+     * @param win Czy nastąpiła wygrana.
+     */
     public void setDialogTitleAndResult(Dialog dialog, int diamonds, int time, boolean win)
     {
         ((TextView)dialog.findViewById(R.id.end_game_title)).setText(win ? getString(R.string.win) : getString(R.string.defeat));
@@ -541,7 +615,7 @@ public class GameActivity extends Activity  {
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setImageDrawable(getResources().getDrawable((result >= boardInfo.getThree_stars()) ? R.drawable.star_full : R.drawable.star_empty_white));
 
-        updateBestResult(board_id, result);
+        updateBestResult(result);
 
         ((TextView) dialog.findViewById(R.id.end_game_ok_button)).setOnClickListener(new View.OnClickListener()
         {
@@ -553,7 +627,11 @@ public class GameActivity extends Activity  {
         });
     }
 
-    public void updateBestResult(String board_id, int result)
+    /**
+     * Aktualizuje najlepszy wynik na danym poziomie.
+     * @param result Uzyskany wynik.
+     */
+    public void updateBestResult(int result)
     {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE);
         if (result > sharedPreferences.getInt(board_id, 0))
@@ -565,22 +643,10 @@ public class GameActivity extends Activity  {
         }
     }
 
-    /*public void loadFontsForDialog(Dialog dialog)
-    {
-        Typeface tf = Typeface.createFromAsset(getAssets(), "batmanFont.ttf");
-
-        TextView textView = (TextView)dialog.findViewById(R.id.end_game_title);
-        textView.setTypeface(tf);
-
-        textView = (TextView)dialog.findViewById(R.id.end_game_result);
-        textView.setTypeface(tf);
-
-        textView = (TextView)dialog.findViewById(R.id.end_game_ok_button);
-        textView.setTypeface(tf);
-    }*/
-
-
-
+    /**
+     * Wywyoływana w przypadku wciśnięcia przycisku Ok.
+     * @param view Kontrolka, która została kliknięta.
+     */
     public void onOkClick(View view)
     {
         onButtonClick();

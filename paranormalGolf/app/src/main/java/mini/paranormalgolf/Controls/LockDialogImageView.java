@@ -8,28 +8,58 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
 /**
- * Created by Kuba on 2015-01-11.
+ * Klasa odpowiedzialna za wyświetlanie obrazków. Posiada animację.
  */
 public class LockDialogImageView extends ImageView
 {
+    /**
+     * Czas trwania animacji w ms.
+     */
     private final int duration = 500;
+
+    /**
+     * Opóźnienie animacji w ms.
+     */
     private final int offset = 100;
 
+    /**
+     * Konstruktor.
+     * @param context
+     */
     public LockDialogImageView(Context context)
     {
         super(context);
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     */
     public LockDialogImageView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public LockDialogImageView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * Wywoływana gdy dany widok powinien rozmiar i pozycję widoków potomnych.
+     * @param changed Czy nastąpiła zmiana rozmiaru.
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
@@ -42,6 +72,9 @@ public class LockDialogImageView extends ImageView
         }
     }
 
+    /**
+     * Rozpoczyna animację.
+     */
     public void myAnimate()
     {
         int nr = 0;
@@ -70,6 +103,10 @@ public class LockDialogImageView extends ImageView
         startAnimation(animation);
     }
 
+    /**
+     * Wywoływana gdy nastąpi ustawienie obrazka.
+     * @param drawable Ustawiony obrazek.
+     */
     @Override
     public void setImageDrawable(Drawable drawable)
     {

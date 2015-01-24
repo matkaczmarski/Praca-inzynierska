@@ -13,31 +13,61 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 /**
- * Created by Kuba on 2015-01-09.
+ * Klasa dziedzicząca po CheckBox'ie. Posiada animację.
  */
 public class OptionCheckBox extends CheckBox
 {
+    /**
+     * Czas trwania animacji w ms.
+     */
     private final int duration = 500;
+
+    /**
+     * Opóźnienie animacji w ms.
+     */
     private final int offset = 100;
 
+    /**
+     * Konstruktor.
+     * @param context
+     */
     public OptionCheckBox(Context context)
     {
         super(context);
         init();
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     */
     public OptionCheckBox(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         init();
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public OptionCheckBox(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init();
     }
 
+    /**
+     * Wywoływana gdy dany widok powinien rozmiar i pozycję widoków potomnych.
+     * @param changed Czy nastąpiła zmiana rozmiaru.
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
@@ -48,6 +78,9 @@ public class OptionCheckBox extends CheckBox
         }
     }
 
+    /**
+     * Rozpoczęcie animacji.
+     */
     private void myAnimate()
     {
         getPaint().setShader(new LinearGradient(
@@ -78,16 +111,12 @@ public class OptionCheckBox extends CheckBox
         startAnimation(animation);
     }
 
+    /**
+     * Ustawia czcionkę.
+     */
     private void init()
     {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "SonsieOne-Regular.otf");//"batmanFont.ttf");
         setTypeface(tf);
-    }
-
-    @Override
-    protected void onVisibilityChanged(View changedView, int visibility)
-    {
-        super.onVisibilityChanged(changedView, visibility);
-        init();
     }
 }

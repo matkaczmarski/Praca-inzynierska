@@ -7,38 +7,49 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * Created by Kuba on 2015-01-06.
+ * Klasa odpowiedzialna za wyświetlanie tesktów w grze.
  */
 public class FontTextView extends TextView
 {
+    /**
+     * Konstruktor.
+     * @param context
+     */
     public FontTextView(Context context)
     {
         super(context);
         init();
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     */
     public FontTextView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         init();
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public FontTextView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init();
     }
 
+    /**
+     * Ustawia czcionkę.
+     */
     private void init()
     {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "SonsieOne-Regular.otf");//"batmanFont.ttf");
         setTypeface(tf);
-    }
-
-    @Override
-    protected void onVisibilityChanged(View changedView, int visibility)
-    {
-        super.onVisibilityChanged(changedView, visibility);
-        init();
     }
 }

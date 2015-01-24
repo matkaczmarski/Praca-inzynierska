@@ -10,28 +10,58 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 /**
- * Created by Kuba on 2015-01-09.
+ * Klasa odpowiedzialna za wyświetlanie tekstu. Posiada animację.
  */
 public class LevelsListTextView extends FontTextView
 {
+    /**
+     * Czas trwania animacji w ms.
+     */
     private final int duration = 500;
+
+    /**
+     * Czas opóźnienia animacji w ms.
+     */
     private final int offset = 100;
 
+    /**
+     * Konstruktor.
+     * @param context
+     */
     public LevelsListTextView(Context context)
     {
         super(context);
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     */
     public LevelsListTextView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
 
+    /**
+     * Konstruktor.
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public LevelsListTextView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * Wywoływana gdy dany widok powinien rozmiar i pozycję widoków potomnych.
+     * @param changed Czy nastąpiła zmiana rozmiaru.
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
@@ -42,6 +72,9 @@ public class LevelsListTextView extends FontTextView
         }
     }
 
+    /**
+     * Rozpoczyna animację.
+     */
     private void myAnimate()
     {
         getPaint().setShader(new LinearGradient(
