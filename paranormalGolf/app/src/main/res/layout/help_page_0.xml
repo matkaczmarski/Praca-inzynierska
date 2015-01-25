@@ -20,9 +20,9 @@
             android:gravity="center"/>
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/meta"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/meta"
             android:layout_marginTop="10dp"/>
     </LinearLayout>
 </ScrollView>
