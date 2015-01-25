@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -20,12 +21,15 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 import mini.paranormalgolf.GameRenderer;
 import mini.paranormalgolf.Helpers.BoardInfo;
@@ -181,10 +185,13 @@ public class GameActivity extends Activity  {
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                if (intent.getAction() == Intent.ACTION_SCREEN_OFF)
+                if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SCREEN_OFF))
                 {
                     if (pause_dialog == null)
+                    {
+                        changeLanguage(getSharedPreferences(getString(R.string.preferences), MODE_PRIVATE).getString(getString(R.string.options_language), "pl"));
                         onPauseClick(null);
+                    }
                 }
             }
         };
@@ -260,6 +267,19 @@ public class GameActivity extends Activity  {
                 }
             }
         });
+    }
+
+    /**
+     * Zmienia język.
+     * @param language Oznaczenie języka
+     */
+    public void changeLanguage(String language)
+    {
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.locale = new Locale(language.equalsIgnoreCase("pl") ? "pl_PL" : "en_US");
+        res.updateConfiguration(conf, dm);
     }
 
     /**
