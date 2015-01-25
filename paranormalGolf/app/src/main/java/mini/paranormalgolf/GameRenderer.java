@@ -257,7 +257,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             lastTime = actual_time;
         }
         //long seconds_past = (actual_time - startTime) / 1000;
-        final long seconds_left = timeLeft / 1000;
+        final long seconds_left = (long)Math.ceil(timeLeft / 1000);
         if (paused)
         {
             lastTimeUpdated = false;
