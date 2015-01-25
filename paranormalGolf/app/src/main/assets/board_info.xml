@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Board_Information>
-    <Board id="board_1" two_stars="100" three_stars="200" time="100"/>
-    <Board id="board_2" two_stars="810" three_stars="855" time="100"/>
-    <Board id="board_3" two_stars="750" three_stars="810" time="100"/>
-    <Board id="board_4" two_stars="100" three_stars="200" time="100"/>
-    <Board id="board_5" two_stars="760" three_stars="840" time="100"/>
-    <Board id="board_6" two_stars="100" three_stars="200" time="100"/>
-    <Board id="board_7" two_stars="100" three_stars="200" time="100"/>
+    <Board id="board_1" two_stars="510" three_stars="525" time="30"/>
+    <Board id="board_2" two_stars="610" three_stars="690" time="75"/>
+    <Board id="board_3" two_stars="650" three_stars="695" time="80"/>
+    <Board id="board_4" two_stars="670" three_stars="700" time="70"/>
+    <Board id="board_5" two_stars="345" three_stars="425" time="80"/>
+    <!--Board id="board_7" two_stars="100" three_stars="200" time="100"/>
     <Board id="board_8" two_stars="100" three_stars="200" time="100"/>
-    <Board id="board_9" two_stars="290" three_stars="440" time="50"/>
+    <Board id="board_9" two_stars="290" three_stars="440" time="50"/-->
 </Board_Information>
