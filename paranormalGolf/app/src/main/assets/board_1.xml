@@ -14,6 +14,12 @@
     <Floor location_x="-20" location_y="-1" location_z="-15" boxsize_x="5" boxsize_y="2" boxsize_z="25" friction="0.05"/>
     <Floor location_x="20" location_y="-1" location_z="-15" boxsize_x="5" boxsize_y="2" boxsize_z="25" friction="0.05"/>
 
+
+    <Diamond location_x="5" location_y="1.4" location_z="5" value="100" y_shift="0.7"/>
+    <Diamond location_x="-5" location_y="1.4" location_z="5" value="100" y_shift="0.7" />
+    <Diamond location_x="5" location_y="1.4" location_z="-5" value="100" y_shift="0.7"/>
+    <Diamond location_x="-5" location_y="1.4" location_z="-5" value="100" y_shift="0.7"/>
+
    <!-- <Wall location_x="0" location_y="2.5" location_z="0" boxsize_x="10" boxsize_y="5" boxsize_z="2"/> !-->
 <!--
     <Diamond location_x="5" location_y="1.4" location_z="5" value="100" y_shift="0.7"/>
