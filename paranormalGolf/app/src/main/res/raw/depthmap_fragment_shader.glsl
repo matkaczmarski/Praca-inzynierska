@@ -13,5 +13,6 @@ vec4 pack (float depth){
 void main() {
 	float normalizedDistance  = v_Position.z / v_Position.w;
 	normalizedDistance = (normalizedDistance + 1.0) / 2.0;
+	//normalizedDistance += 0.0005;
 	gl_FragColor = pack(normalizedDistance);
 }
