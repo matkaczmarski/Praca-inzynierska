@@ -34,7 +34,10 @@ import static android.opengl.GLES20.GL_COLOR_ATTACHMENT0;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_ATTACHMENT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_COMPONENT;
 import static android.opengl.GLES20.GL_DEPTH_COMPONENT16;
+import static android.opengl.GLES20.GL_EXTENSIONS;
+import static android.opengl.GLES20.GL_FALSE;
 import static android.opengl.GLES20.GL_FRAMEBUFFER;
 import static android.opengl.GLES20.GL_FRAMEBUFFER_COMPLETE;
 import static android.opengl.GLES20.GL_FRONT;
@@ -56,6 +59,7 @@ import static android.opengl.GLES20.glCheckFramebufferStatus;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glClearDepthf;
+import static android.opengl.GLES20.glColorMask;
 import static android.opengl.GLES20.glCullFace;
 import static android.opengl.GLES20.glDeleteFramebuffers;
 import static android.opengl.GLES20.glDeleteProgram;
@@ -67,6 +71,7 @@ import static android.opengl.GLES20.glFramebufferTexture2D;
 import static android.opengl.GLES20.glGenFramebuffers;
 import static android.opengl.GLES20.glGenRenderbuffers;
 import static android.opengl.GLES20.glGenTextures;
+import static android.opengl.GLES20.glGetString;
 import static android.opengl.GLES20.glRenderbufferStorage;
 import static android.opengl.GLES20.glTexImage2D;
 import static android.opengl.GLES20.glTexParameteri;
@@ -314,8 +319,12 @@ public class DrawManager {
         // create render buffer and bind 16-bit depth buffer
         glGenRenderbuffers(1, depthTextureId, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, depthTextureId[0]);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
-        //glRenderbufferStorage(GL_RENDERBUFFER, GLES11Ext.GL_DEPTH_COMPONENT24_OES, depthMapWidth, depthMapHeight);
+        String extensions = glGetString(GL_EXTENSIONS);
+        if(extensions.contains("OES_depth24")){
+            glRenderbufferStorage(GL_RENDERBUFFER, GLES11Ext.GL_DEPTH_COMPONENT24_OES, depthMapWidth, depthMapHeight);
+        }else{
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, depthMapWidth, depthMapHeight);
+        }
 
 
         // Try to use a texture depth component
@@ -539,12 +548,14 @@ public class DrawManager {
      */
     private void renderSceneWithShadow(Board board, Ball ball){
         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObjectId[0]);
+
         glViewport(0, 0, depthMapWidth, depthMapHeight);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         glCullFace(GL_FRONT);
         renderDepthMap(board, ball);
         glCullFace(GL_BACK);
+
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, displayWidth, displayHeight);
@@ -975,5 +986,5 @@ public class DrawManager {
     /**
      * Stosunek wymiarów mapy głębokości cieni i erkanu.
      */
-    private final float DEPTH_MAP_PRECISION = 2.0f;
+    private final float DEPTH_MAP_PRECISION = 1.5f;
 }
