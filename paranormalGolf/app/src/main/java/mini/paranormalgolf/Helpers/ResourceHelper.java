@@ -36,7 +36,7 @@ import mini.paranormalgolf.LoggerConfig;
 import mini.paranormalgolf.R;
 
 /**
- * Created by Mateusz on 2014-12-05.
+ * Wczytuje dane z zasobów aplikacji.
  */
 public class ResourceHelper {
 
@@ -85,6 +85,9 @@ public class ResourceHelper {
      */
     private static HashMap<Integer, Integer> soundPoolMap;
 
+    /**
+     * Wartość TAG wpisywana w razie błędów w logach.
+     */
     private static final String TAG = "TextureHelper";
 
     /**
@@ -133,7 +136,13 @@ public class ResourceHelper {
         soundPool.play(soundPoolMap.get(sound), volume, volume, 1, 0, 1f);
     }
 
-    //Metoda zwracająca tekst Z pliku
+
+    /**
+     * Wczytuje i zwraca dane tekstowe z pliku.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     * @param resourceId Identyfikator pliku.
+     * @return Tekst pliku.
+     */
     public static String readTextFileFromResource(Context context, int resourceId) {
         StringBuilder body = new StringBuilder();
 
@@ -154,6 +163,12 @@ public class ResourceHelper {
         return body.toString();
     }
 
+    /**
+     * Wczytuje z zasobów teksturę.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     * @param resourceId Identyfikator tekstury.
+     * @return Identyfikator OpenGL tekstury.
+     */
     public static int loadTexture(Context context, int resourceId) {
         final int[] textureObjectIds = new int[1];
         glGenTextures(1, textureObjectIds, 0);
@@ -213,7 +228,12 @@ public class ResourceHelper {
         return textureObjectIds[0];
     }
 
-
+    /**
+     * Wczytuje tekstury i tworzy sześcienną mapę tekstur.
+     * @param context Bieżący kontekst pozwalający uzyskać dostęp do zasobów aplikacji.
+     * @param cubeResources Tablica identyfikatorów tekstur.
+     * @return Identyfikator OpenGL utworzonej szesciennej mapy tekstur.
+     */
     public static int loadCubeMap(Context context, int[] cubeResources) {
         final int[] textureObjectIds = new int[1];
         glGenTextures(1, textureObjectIds, 0);

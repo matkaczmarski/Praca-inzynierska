@@ -3,12 +3,15 @@ package mini.paranormalgolf.Helpers;
 import android.util.Log;
 
 /**
- * Oblicza wartość FPS.
+ * Oblicza wartość FPS - frames per second.
  */
 public class FPSCounter {
     long startTime = System.nanoTime();
     int frames = 0;
 
+    /**
+     * Wyświetla w logach aktualną wartość FPS.
+     */
     public void logFrame() {
         frames++;
         if(System.nanoTime() - startTime >= 1000000000) {
