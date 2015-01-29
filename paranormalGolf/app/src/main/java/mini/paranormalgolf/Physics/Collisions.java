@@ -66,7 +66,7 @@ public final class Collisions {
         } else if (sphereCenter.z > max.z) {
             d += (sphereCenter.z - max.z) * (sphereCenter.z - max.z);
         }
-        return d <= sphereRadius * sphereRadius;
+        return d + Collisions.USER_EXPERIENCE <= sphereRadius * sphereRadius ;
     }
 
     /**
@@ -89,7 +89,7 @@ public final class Collisions {
             d += (sphereCenter.y - cylinderMaxY) * (sphereCenter.y - cylinderMaxY);
         }
         d += (sphereCenter.x - cylinderCenter.x) * (sphereCenter.x - cylinderCenter.x) + (sphereCenter.z - cylinderCenter.z) * (sphereCenter.z - cylinderCenter.z);
-        return d <= (sphereRadius + cylinderRadius) * (sphereRadius + cylinderRadius);
+        return d +Collisions.USER_EXPERIENCE <= (sphereRadius + cylinderRadius) * (sphereRadius + cylinderRadius);
     }
 
     /**
@@ -208,6 +208,7 @@ public final class Collisions {
             }
         }
 
+        velocity=new Vector(0.8f*velocity.x,0.8f*velocity.y,0.8f*velocity.z);
         ball.setLocation(new Point(halfLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfLocation.z + velocity.z * (1 - halfTime) * Updater.INTERVAL_TIME));
@@ -442,7 +443,7 @@ public final class Collisions {
         }
 //        if (element.getClass() == Elevator.class)
 //            halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
-
+        velocity=new Vector(0.8f*velocity.x,0.8f*velocity.y,0.8f*velocity.z);
         ball.setLocation(new Point(halfBallLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfBallLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfBallLocation.z + velocity.z * (1 - halfTime) * Updater.INTERVAL_TIME));

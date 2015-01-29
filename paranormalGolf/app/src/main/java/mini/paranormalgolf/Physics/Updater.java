@@ -425,7 +425,7 @@ public class Updater implements SensorEventListener {
         if (drawManager != null) {
             float angle = landscape ? ((float)(2* Math.PI*(drawManager.getxRotation() - 270)))/360 : ((float)(2* Math.PI*(drawManager.getxRotation() - 180)))/360;
 
-            accData = new Vector((float) (event.values[1] * Math.cos(angle) + event.values[0] * Math.sin(angle)), -event.values[2], (float) (event.values[0] * Math.cos(angle) - event.values[1] * Math.sin(angle)));
+            accData = new Vector((float) (event.values[1] * Math.cos(angle) + event.values[0] * Math.sin(angle)), -Math.abs(event.values[2]), (float) (event.values[0] * Math.cos(angle) - event.values[1] * Math.sin(angle)));
         }
     }
 
