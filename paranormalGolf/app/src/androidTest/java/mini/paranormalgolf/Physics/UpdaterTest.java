@@ -35,7 +35,7 @@ public class UpdaterTest extends TestCase {
         ball = new Ball(new Point(1, 1, 1), 1, new Vector(0, 0, 0), Ball.BallTexture.beach);
         board = new Board(1, floors, walls, diamonds, beams, elevators, checkPoints, hourGlasses, finish, ballLocation);
         Updater.INTERVAL_FACTOR=1f;
-        updater = new Updater(null, ball, board, false, false, false, false, null);
+        updater = new Updater(null, ball, board, false, false, false, null);
     }
 
     public void tearDown() throws Exception {

@@ -196,7 +196,7 @@ public class BallTest extends TestCase {
         ball2.ReactOnCollision(floor);
 
         Vector velocity = ball2.getVelocity();
-        assertEquals(-1f, velocity.x);
+        assertEquals(0.8f*-1f, velocity.x);
         assertEquals(0f, velocity.y);
         assertEquals(0f, velocity.z);
 
@@ -207,9 +207,9 @@ public class BallTest extends TestCase {
         ball3.ReactOnCollision(floor);
 
         velocity = ball3.getVelocity();
-        assertEquals(true, Math.abs(-0.6666666f - velocity.z) < 0.00001f);
-        assertEquals(false, Math.abs(-0.6666666f - velocity.y) < 0.00001f);
-        assertEquals(false, Math.abs(-2 - velocity.x) < 0.00001f);
+        assertEquals(true, Math.abs(0.8f*-0.6666666f - velocity.z) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*-0.6666666f - velocity.y) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*-2 - velocity.x) < 0.00001f);
     }
 
     /**
@@ -227,9 +227,9 @@ public class BallTest extends TestCase {
         ball.ReactOnCollision(wall);
 
         Vector velocity = ball.getVelocity();
-        assertEquals(1.5f, velocity.x);
-        assertEquals(3f, velocity.y);
-        assertEquals(1.5f, velocity.z);
+        assertEquals(0.8f*1.5f, velocity.x);
+        assertEquals(0.8f*3f, velocity.y);
+        assertEquals(0.8f*1.5f, velocity.z);
 
 
         //collision with edge
@@ -238,9 +238,9 @@ public class BallTest extends TestCase {
         ball4.ReactOnCollision(wall);
 
         velocity = ball4.getVelocity();
-        assertEquals(true, Math.abs(-3f - velocity.y) < 0.00001f);
-        assertEquals(false, Math.abs(-3 - velocity.x) < 0.00001f);
-        assertEquals(false, Math.abs(-1.5f - velocity.z) < 0.00001f);
+        assertEquals(true, Math.abs(0.8f*(-3f) - velocity.y) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*(-3) - velocity.x) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*(-1.5f) - velocity.z) < 0.00001f);
     }
 
     /**
@@ -260,7 +260,7 @@ public class BallTest extends TestCase {
         assertEquals(0f, element.getLocation().y);
         assertEquals(0f, element.getLocation().z);
 
-        assertEquals(-4f, ball.getVelocity().x);
+        assertEquals(-3.2f, ball.getVelocity().x);
         assertEquals(0f, ball.getVelocity().y);
         assertEquals(0f, ball.getVelocity().z);
 
@@ -276,9 +276,9 @@ public class BallTest extends TestCase {
         ball3.setLastMove(new Vector(10, 0, 4));
         ball3.ReactOnCollision(element3);
 
-        assertEquals(true, Math.abs(ball3.getVelocity().x + 4) < 0.001f);
+        assertEquals(true, Math.abs(ball3.getVelocity().x + 0.8f*4) < 0.001f);
         assertEquals(true, Math.abs(ball3.getVelocity().y) < 0.001f);
-        assertEquals(true, Math.abs(ball3.getVelocity().z + 10) < 0.001f);
+        assertEquals(true, Math.abs(ball3.getVelocity().z + 0.8f*10) < 0.001f);
     }
 
     /**
@@ -309,9 +309,9 @@ public class BallTest extends TestCase {
         ball4.setLastMove(new Vector(-2, -2, 6));
         ball4.ReactOnCollision(element4);
 
-        assertEquals(true, Math.abs(ball4.getVelocity().x - 6) < 0.001f);
-        assertEquals(true, Math.abs(ball4.getVelocity().y + 2) < 0.001f);
-        assertEquals(true, Math.abs(ball4.getVelocity().z + 2) < 0.001f);
+        assertEquals(true, Math.abs(ball4.getVelocity().x - 0.8f*6) < 0.001f);
+        assertEquals(true, Math.abs(ball4.getVelocity().y + 0.8f*2) < 0.001f);
+        assertEquals(true, Math.abs(ball4.getVelocity().z + 0.8f*2) < 0.001f);
 
     }
 }

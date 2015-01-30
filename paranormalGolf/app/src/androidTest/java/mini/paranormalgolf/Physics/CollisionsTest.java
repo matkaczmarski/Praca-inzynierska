@@ -110,16 +110,16 @@ public class CollisionsTest extends InstrumentationTestCase {
         Collisions.ResponseBallAABBCollisions(ball, box);
 
         Vector velocity = ball.getVelocity();
-        assertEquals(1.5f, velocity.x);
-        assertEquals(3f, velocity.y);
-        assertEquals(1.5f, velocity.z);
+        assertEquals(0.8f*1.5f, velocity.x);
+        assertEquals(0.8f*3f, velocity.y);
+        assertEquals(0.8f*1.5f, velocity.z);
 
         Ball ball2 = new Ball(new Point(4, 4.9f, 0), 1, new Vector(-1, -0.2f, 0), Ball.BallTexture.amethystAlcove);
         ball2.setLastMove(new Vector(-1, -0.2f, 0));
         Collisions.ResponseBallAABBCollisions(ball2, box);
 
         velocity = ball2.getVelocity();
-        assertEquals(-1f, velocity.x);
+        assertEquals(0.8f*-1f, velocity.x);
         assertEquals(0f, velocity.y);
         assertEquals(0f, velocity.z);
 
@@ -129,18 +129,18 @@ public class CollisionsTest extends InstrumentationTestCase {
         ball3.setLastMove(new Vector(-2f, -0.6666666f, -0.6666666f));
         Collisions.ResponseBallAABBCollisions(ball3, box);
         velocity = ball3.getVelocity();
-        assertEquals(true, Math.abs(-0.6666666f - velocity.z) < 0.00001f);
-        assertEquals(false, Math.abs(-0.6666666f - velocity.y) < 0.00001f);
-        assertEquals(false, Math.abs(-2 - velocity.x) < 0.00001f);
+        assertEquals(true, Math.abs(0.8f*-0.6666666f - velocity.z) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*-0.6666666f - velocity.y) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*-2 - velocity.x) < 0.00001f);
 
 
         Ball ball4 = new Ball(new Point(9, -3, 5.5f), 5, new Vector(-3, -3, -1.5f), Ball.BallTexture.amethystAlcove);
         ball4.setLastMove(new Vector(-3, -3, -1.5f));
         Collisions.ResponseBallAABBCollisions(ball4, box);
         velocity = ball4.getVelocity();
-        assertEquals(true, Math.abs(-3f - velocity.y) < 0.00001f);
-        assertEquals(false, Math.abs(-3 - velocity.x) < 0.00001f);
-        assertEquals(false, Math.abs(-1.5f - velocity.z) < 0.00001f);
+        assertEquals(true, Math.abs(0.8f*-3f - velocity.y) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*-3 - velocity.x) < 0.00001f);
+        assertEquals(false, Math.abs(0.8f*-1.5f - velocity.z) < 0.00001f);
     }
 
     /**
@@ -161,7 +161,7 @@ public class CollisionsTest extends InstrumentationTestCase {
         assertEquals(0f, element.getLocation().y);
         assertEquals(0f, element.getLocation().z);
 
-        assertEquals(-4f, ball.getVelocity().x);
+        assertEquals(0.8f*-4f, ball.getVelocity().x);
         assertEquals(0f, ball.getVelocity().y);
         assertEquals(0f, ball.getVelocity().z);
 
@@ -193,9 +193,9 @@ public class CollisionsTest extends InstrumentationTestCase {
         ball3.setLastMove(new Vector(10, 0, 4));
         Collisions.ResponseBallMovingAABBCollisions(ball3, element3);
 
-        assertEquals(true, Math.abs(ball3.getVelocity().x + 4) < 0.001f);
+        assertEquals(true, Math.abs(ball3.getVelocity().x + 0.8f*4) < 0.001f);
         assertEquals(true, Math.abs(ball3.getVelocity().y) < 0.001f);
-        assertEquals(true, Math.abs(ball3.getVelocity().z + 10) < 0.001f);
+        assertEquals(true, Math.abs(ball3.getVelocity().z + 0.8f*10) < 0.001f);
 
 
         //collision with moving elevator
@@ -205,8 +205,8 @@ public class CollisionsTest extends InstrumentationTestCase {
         ball4.setLastMove(new Vector(-2, -2, 6));
         Collisions.ResponseBallMovingAABBCollisions(ball4, element4);
 
-        assertEquals(true, Math.abs(ball4.getVelocity().x - 6) < 0.001f);
-        assertEquals(true, Math.abs(ball4.getVelocity().y + 2) < 0.001f);
-        assertEquals(true, Math.abs(ball4.getVelocity().z + 2) < 0.001f);
+        assertEquals(true, Math.abs(ball4.getVelocity().x - 0.8f*6) < 0.001f);
+        assertEquals(true, Math.abs(ball4.getVelocity().y + 0.8f*2) < 0.001f);
+        assertEquals(true, Math.abs(ball4.getVelocity().z + 0.8f*2) < 0.001f);
     }
 }
