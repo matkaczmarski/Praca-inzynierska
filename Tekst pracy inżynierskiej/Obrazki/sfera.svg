@@ -397,9 +397,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="70.928654"
-     inkscape:cy="167.41627"
+     inkscape:zoom="2"
+     inkscape:cx="167.81741"
+     inkscape:cy="154.89372"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -434,7 +434,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -677,7 +677,7 @@
          id="tspan9709"
          x="77.561707"
          y="782.14886"
-         style="font-size:24px">0°</tspan></text>
+         style="font-size:24px;-inkscape-font-specification:Times New Roman;font-family:Times New Roman">0</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -689,7 +689,7 @@
          id="tspan9709-0"
          x="245.98715"
          y="780.13214"
-         style="font-size:24px">360°</tspan></text>
+         style="font-size:24px;-inkscape-font-specification:Times New Roman;font-family:Times New Roman">2π</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:3.20000005;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-end:url(#Arrow1Send)"
        d="M 35.1353,945.49054 C 24.882251,934.17684 24.175145,915.08495 32.306872,893.87175"
@@ -712,7 +712,7 @@
          id="tspan9709-2"
          x="4.8203125"
          y="970.88062"
-         style="font-size:24px">-90°</tspan></text>
+         style="font-size:24px;-inkscape-font-specification:Times New Roman;font-family:Times New Roman">-π/2</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -724,6 +724,34 @@
          id="tspan9709-6"
          x="11.320313"
          y="884.38062"
-         style="font-size:24px">90°</tspan></text>
+         style="font-size:24px;-inkscape-font-specification:Times New Roman;font-family:Times New Roman">π/2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f20625;fill-opacity:1;stroke:none;font-family:Sans"
+       x="103.76792"
+       y="915.00537"
+       id="text3097"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3099"
+         x="103.76792"
+         y="915.00537"
+         style="font-size:14px;fill:#f20625;fill-opacity:1">P<tspan
+   style="font-size:10px;baseline-shift:sub;fill:#f20625;fill-opacity:1"
+   id="tspan3101">0</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f20625;fill-opacity:1;stroke:none;font-family:Sans"
+       x="113.15794"
+       y="863.04718"
+       id="text3097-1"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3099-7"
+         x="113.15794"
+         y="863.04718"
+         style="font-size:14px;fill:#f20625;fill-opacity:1">P<tspan
+   style="font-size:10px;baseline-shift:sub;fill:#f20625;fill-opacity:1"
+   id="tspan3101-4">1</tspan></tspan></text>
   </g>
 </svg>
