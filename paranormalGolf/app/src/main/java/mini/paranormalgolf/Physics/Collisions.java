@@ -215,25 +215,7 @@ public final class Collisions {
         ball.setVelocity(velocity);
         if (CheckSphereAABBCollision(new Sphere(ball.getLocation(), ball.getRadius()), collidedBox)) {
             Point newBallLocation = ball.getLocation();
-//            if(element.getLastMove().x!=0||element.getLastMove().z!=0) {
-//
-//                Vector distance = element.getLastMove().x!=0?new Vector(element.getLastMove().x, 0, normal.z * element.getLastMove().x / normal.x):
-//                        new Vector(normal.x * element.getLastMove().z / normal.z,0,element.getLastMove().z);
-//                newBallLocation.x += distance.x;
-//                newBallLocation.z += distance.z;
-//                for (int i = 0; i < 10; i++) {
-//                    distance.x /= 2;
-//                    distance.z /= 2;
-//                    newBallLocation.x -= distance.x;
-//                    newBallLocation.z -= distance.z;
-//                    if (CheckSphereAABBCollision(new Sphere(newBallLocation, ball.getRadius()), new Box(element.getLocation(), boxSize))) {
-//                        newBallLocation.x += distance.x;
-//                        newBallLocation.z += distance.z;
-//                    }
-//                }
-//
-//            }
-//            else{
+
             Vector distance = new Vector(0, 0, 0);
             if (min.x - newBallLocation.x > 0 && min.x - newBallLocation.x <= ball.getRadius() + Collisions.USER_EXPERIENCE)
                 distance.x = newBallLocation.x - min.x;
@@ -306,8 +288,6 @@ public final class Collisions {
         //finding normal vector in place of collision
         Vector normal = FindNormalVectorInCollision(new Sphere(halfBallLocation, ball.getRadius()), new Box(halfMovableElementLocation, boxSize));
         Box collidedBox = new Box(halfMovableElementLocation, boxSize);
-        Point min = new Point(collidedBox.center.x - collidedBox.size.x / 2, collidedBox.center.y - collidedBox.size.y / 2, collidedBox.center.z - collidedBox.size.z / 2);
-        Point max = new Point(collidedBox.center.x + collidedBox.size.x / 2, collidedBox.center.y + collidedBox.size.y / 2, collidedBox.center.z + collidedBox.size.z / 2);
 
         //counting and setting new location and velocity after collision
         Vector velocity = ball.getVelocity();
@@ -347,14 +327,6 @@ public final class Collisions {
             normal = normal.normalize();
 
             if (normal.y == 0) {
-//                if (element.getLastMove().x > 0 && element.getLastMove().x > ball.getLastMove().x) {
-//                    float tmp = Math.abs(element.getVelocity().x) + (velocity.x < 0 ? -velocity.x : 0);
-//                    velocity = new Vector(tmp, velocity.y, normal.z * tmp / normal.x);
-//                }
-//                else if(element.getLastMove().x < 0 && element.getLastMove().x < ball.getLastMove().x) {
-//                    float tmp = -Math.abs(element.getVelocity().x) + (velocity.x > 0 ? -velocity.x : 0);
-//                    velocity = new Vector(tmp, velocity.y, normal.z * tmp / normal.x);
-//                }
 
                     Vector velocityBeforeReversing = new Vector(velocity.x, 0, velocity.z).normalize();
                     if (velocityBeforeReversing.dotProduct(normal) < 0) {
@@ -430,19 +402,7 @@ public final class Collisions {
                     }
                 }
             }
-//            if (element.getLastMove().x != 0) {
-//                if(Math.signum(element.getLastMove().x)==1)
-//                    velocity.x=Math.max(velocity.x,Math.abs(element.getVelocity().x));
-//                else
-//                    velocity.x=-Math.max(velocity.x,Math.abs(element.getVelocity().x));
-//              //  velocity.x += Math.max(Math.signum(element.getLastMove().x) * Math.abs(element.getVelocity().x),velocity.x);
-//            }
-//            if (element.getLastMove().z != 0) {
-//                velocity.z += Math.signum(element.getLastMove().z) * Math.abs(element.getVelocity().z);
-//            }
         }
-//        if (element.getClass() == Elevator.class)
-//            halfBallLocation.y += element.getLastMove().y * (1 - halfTime);
         velocity=new Vector(0.8f*velocity.x,0.8f*velocity.y,0.8f*velocity.z);
         ball.setLocation(new Point(halfBallLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
                 halfBallLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
@@ -468,46 +428,6 @@ public final class Collisions {
                ball.setLocation(newBallLocation);
            }
        }
-//            else{
-//                Vector distance=new Vector(0,0,0);
-//                if (min.x - newBallLocation.x > 0 && min.x - newBallLocation.x <= ball.getRadius() + Collisions.USER_EXPERIENCE)
-//                    distance.x = newBallLocation.x-min.x;
-//                else if (newBallLocation.x - max.x > 0 && newBallLocation.x - max.x <= ball.getRadius() + Collisions.USER_EXPERIENCE)
-//                    distance.x = newBallLocation.x-max.x;
-//                if (min.z - newBallLocation.z > 0 && min.z - newBallLocation.z <= ball.getRadius() + Collisions.USER_EXPERIENCE)
-//                    distance.z = newBallLocation.z-min.z;
-//                else if (newBallLocation.z - max.z > 0 && newBallLocation.z - max.z <= ball.getRadius() + Collisions.USER_EXPERIENCE)
-//                    distance.z = newBallLocation.z-max.z;
-//                distance.x=Math.signum(normal.x)*ball.getRadius();
-//                distance.z=Math.signum(normal.z)*ball.getRadius();
-//                newBallLocation.x += distance.x;
-//                newBallLocation.z += distance.z;
-//                for (int i = 0; i < 10; i++) {
-//                    distance.x /= 2;
-//                    distance.z /= 2;
-//                    newBallLocation.x -= distance.x;
-//                    newBallLocation.z -= distance.z;
-//                    if (CheckSphereAABBCollision(new Sphere(newBallLocation, ball.getRadius()), new Box(element.getLocation(), boxSize))) {
-//                        newBallLocation.x += distance.x;
-//                        newBallLocation.z += distance.z;
-//                    }
-//                }
-//            }
-
-
-
-//            if (element.getLastMove().x != 0)
-//                velocity.x = Math.signum(element.getLastMove().x) * Math.abs(element.getVelocity().x);
-//            else if (element.getLastMove().z != 0)
-//                velocity.z = Math.signum(element.getLastMove().z) * Math.abs(element.getVelocity().z);
-//            else
-//                velocity.y = Math.signum(element.getLastMove().y) * Math.abs(element.getVelocity().y);
-//            ball.setLocation(new Point(halfBallLocation.x + velocity.x * (1 - halfTime) * Updater.INTERVAL_TIME,
-//                    halfBallLocation.y + velocity.y * (1 - halfTime) * Updater.INTERVAL_TIME,
-//                    halfBallLocation.z + velocity.z * (1 - halfTime) * Updater.INTERVAL_TIME));
-//            ball.setVelocity(velocity);
-
-        //  }
     }
 
     /**

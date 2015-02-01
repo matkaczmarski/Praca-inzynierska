@@ -230,47 +230,6 @@ public class Ball extends MovableElement {
             else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
             tmpResults[j] = AssignValues(dt, acceleration, localVelocity);
         }
-//        {   //tmpResult[0]
-//            localVelocity = new Vector(actualData[0], actualData[2], actualData[4]);
-//            if (mu < 0)
-//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
-//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
-//            tmpResults[0] = AssignValues(dt, acceleration, localVelocity);
-//        }
-//        {//tmpResult[1]
-//            for (int i = 0; i < 6; ++i) {
-//                tmpResults[1][i] = actualData[i] + 0.5f * tmpResults[0][i];
-//            }
-//            localVelocity = new Vector(tmpResults[1][0], tmpResults[1][2], tmpResults[1][4]);
-//            if (mu < 0)
-//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
-//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
-//            tmpResults[1] = AssignValues(dt, acceleration, localVelocity);
-//        }
-//        {//tmpResult[2]
-//            for (int i = 0; i < 6; ++i) {
-//                tmpResults[2][i] = actualData[i] + 0.5f * tmpResults[1][i];
-//            }
-//            localVelocity = new Vector(tmpResults[2][0], tmpResults[2][2], tmpResults[2][4]);
-//            if (mu < 0)
-//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
-//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
-//            tmpResults[2] = AssignValues(dt, acceleration, localVelocity);
-//        }
-//        {//tmpResult[3]
-//            for (int i = 0; i < 6; ++i) {
-//                tmpResults[3][i] = actualData[i] + tmpResults[2][i];
-//            }
-//            localVelocity = new Vector(tmpResults[3][0], tmpResults[3][2], tmpResults[3][4]);
-//            if (mu < 0)
-//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
-//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
-//            tmpResults[3] = AssignValues(dt, acceleration, localVelocity);
-//        }
-//        dq1 = SolveEquation(q, q, dt, 0.0f, accelerometrData, mu);
-//        dq2 = SolveEquation(q, dq1, dt, 0.5f, accelerometrData, mu);
-//        dq3 = SolveEquation(q, dq2, dt, 0.5f, accelerometrData, mu);
-//        dq4 = SolveEquation(q, dq3, dt, 1.0f, accelerometrData, mu);
         for (int i = 0; i < 6; ++i) {
             result[i] = actualData[i] + (tmpResults[1][i] + 2.0f * tmpResults[2][i] + 2.0f * tmpResults[3][i] + tmpResults[4][i]) / 6.0f;
         }
@@ -278,40 +237,12 @@ public class Ball extends MovableElement {
     }
 
     /**
-     * Pomocnicza rozwiązująca równanie różniczkowe odświeżające położenie i prędkość kulki metodą Rungego-Kutty
-     * rzędu 4.
-     * @param q Tablica zawierająca wartości prędkości(q[0],q[2],q[4]) oraz współrzędne położenia (q[1],q[3],q[5]).
-     * @param deltaQ Druga tablica zawierająca wartości prędkości(deltaQ[0],deltaQ[2],deltaQ[4])
-     *               oraz współrzędne położenia (deltaQ[1],deltaQ[3],deltaQ[5]).
+     * Oblicza nowe wartości położenia i prędkości.
      * @param dt Czas (w sekundach), który upłynął między 2 ostatnimi klatkami.
-     * @param qScale Wartość skalująca wartości z tablicy deltaQ.
-     * @param accelerometrData Wektor przyspieszenia grawitacyjnego.
-     * @param mu Wartość współczynnika tarcia dla powierzchni, na której znajduje się kulka.
-     * @return Nowe wartości prędkości (q[0],q[2],q[4]) i współrzędne położenia (q[1],q[3],q[5]).
+     * @param acceleration Wartości przyspieszenia kulki.
+     * @param localVelocity Wartości prędkości kulki.
+     * @return Tablica zawierająca wartości prędkości(result[0],result[2],result[4]) oraz współrzędne położenia (result[1],result[3],result[5]).
      */
-    private float[] SolveEquation(float[] q, float deltaQ[], float dt, float qScale, Vector accelerometrData,float mu) {
-
-
-        float dQ[] = new float[6];
-        float newQ[] = new float[6];
-        for (int i = 0; i < 6; ++i) {
-            newQ[i] = q[i] + qScale * deltaQ[i];
-        }
-        Vector localVelocity = new Vector(newQ[0], newQ[2], newQ[4]);
-        Vector acceleration;
-        if (mu < 0)
-            acceleration = CountAccelerationForFlying(accelerometrData, localVelocity);
-        else acceleration = CountAccelerationForRolling(accelerometrData, mu, localVelocity);
-
-        dQ[0] = dt * (acceleration.x);
-        dQ[1] = dt * localVelocity.x;
-        dQ[2] = dt * (acceleration.y);
-        dQ[3] = dt * localVelocity.y;
-        dQ[4] = dt * (acceleration.z);
-        dQ[5] = dt * localVelocity.z;
-        return dQ;
-    }
-
     private float[] AssignValues(float dt,Vector acceleration,Vector localVelocity)
     {
         float[] result=new float[6];

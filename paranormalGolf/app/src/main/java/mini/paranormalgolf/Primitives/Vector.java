@@ -52,13 +52,6 @@ public class Vector {
         return FloatMath.sqrt(x * x + y * y + z * z);
     }
 
-//
-//    public Vector crossProduct(Vector other) {
-//        return new Vector(
-//                (y * other.z) - (z * other.y),
-//                (z * other.x) - (x * other.z),
-//                (x * other.y) - (y * other.x));
-//    }
 
     /**
      * Oblicza iloczyn skalarny danego wektora z wektorem <b><em>other</em></b>.
