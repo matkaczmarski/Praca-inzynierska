@@ -161,9 +161,6 @@ public class Ball extends MovableElement {
      */
     public void Update(float dt,Vector accelerometrData,float mu) {
         //Update związany z poruszeniem się elementu
-        int j;
-        int numEqns = 6;
-        float[] dq1,dq2,dq3,dq4;
 
         float[] q = new float[6];
         {
@@ -175,15 +172,10 @@ public class Ball extends MovableElement {
             q[4] = velocity.z;
         }
 
-        dq1 = SolveEquation(q, q, dt, 0.0f, accelerometrData, mu);
-        dq2 = SolveEquation(q, dq1, dt, 0.5f, accelerometrData, mu);
-        dq3 = SolveEquation(q, dq2, dt, 0.5f, accelerometrData, mu);
-        dq4 = SolveEquation(q, dq3, dt, 1.0f, accelerometrData, mu);
-        for (j = 0; j < numEqns; ++j) {
-            q[j] = q[j] + (dq1[j] + 2.0f * dq2[j] + 2.0f * dq3[j] + dq4[j]) / 6.0f;
-        }
 
-        lastMove =new Vector(q[1] - location.x,q[3] - location.y,q[5] - location.z);
+        float[] result=ResolveRungeKutta4(q,dt,accelerometrData,mu);
+
+        lastMove =new Vector(result[1] - location.x,result[3] - location.y,result[5] - location.z);
 
         if (lastMove.x != 0 || lastMove.z != 0) {
             float[] tmp=new float[16];
@@ -197,13 +189,92 @@ public class Ball extends MovableElement {
             System.arraycopy(tmp2,0,rotation,0,16);
         }
         {
-            location.x = q[1];
-            velocity.x = q[0];
-            location.y = q[3];
-            velocity.y = q[2];
-            location.z = q[5];
-            velocity.z = q[4];
+            location.x = result[1];
+            velocity.x = result[0];
+            location.y = result[3];
+            velocity.y = result[2];
+            location.z = result[5];
+            velocity.z = result[4];
         }
+    }
+
+    /**
+     *   Rozwiązuje równania różniczkowe odświeżające położenie i prędkość kulki metodą Rungego-Kutty
+     * rzędu 4. Zaczerpnięto z ksiązki "Physics for Game Programmer"
+     * @param actualData Tablica zawierająca wartości prędkości(q[0],q[2],q[4]) oraz współrzędne położenia (q[1],q[3],q[5]).
+     * @param dt Czas (w sekundach), który upłynął między 2 ostatnimi klatkami.
+     * @param accelerometerData Wektor przyspieszenia grawitacyjnego.
+     * @param mu Wartość współczynnika tarcia dla powierzchni, na której znajduje się kulka.
+     * @return Nowe wartości prędkości (q[0],q[2],q[4]) i współrzędne położenia (q[1],q[3],q[5]).
+     */
+    private float[] ResolveRungeKutta4(float[] actualData,float dt,Vector accelerometerData, float mu) {
+
+        Vector localVelocity;// = new Vector(newQ[0], newQ[2], newQ[4]);
+        Vector acceleration;
+
+        float[] result = new float[6];
+        float[][] tmpResults = new float[5][];
+        for (int i = 0; i < tmpResults.length; i++)
+            tmpResults[i] = new float[6];
+        float[] factors={0,0.5f,0.5f,1f};
+        for(int i=0;i<6;i++)
+            tmpResults[0][i]=actualData[i];
+        for(int j=1;j<tmpResults.length;j++)
+        {
+            for (int i = 0; i < 6; ++i) {
+                tmpResults[j][i] = actualData[i] + factors[j-1] * tmpResults[j-1][i];
+            }
+            localVelocity = new Vector(tmpResults[j][0], tmpResults[j][2], tmpResults[j][4]);
+            if (mu < 0)
+                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
+            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
+            tmpResults[j] = AssignValues(dt, acceleration, localVelocity);
+        }
+//        {   //tmpResult[0]
+//            localVelocity = new Vector(actualData[0], actualData[2], actualData[4]);
+//            if (mu < 0)
+//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
+//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
+//            tmpResults[0] = AssignValues(dt, acceleration, localVelocity);
+//        }
+//        {//tmpResult[1]
+//            for (int i = 0; i < 6; ++i) {
+//                tmpResults[1][i] = actualData[i] + 0.5f * tmpResults[0][i];
+//            }
+//            localVelocity = new Vector(tmpResults[1][0], tmpResults[1][2], tmpResults[1][4]);
+//            if (mu < 0)
+//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
+//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
+//            tmpResults[1] = AssignValues(dt, acceleration, localVelocity);
+//        }
+//        {//tmpResult[2]
+//            for (int i = 0; i < 6; ++i) {
+//                tmpResults[2][i] = actualData[i] + 0.5f * tmpResults[1][i];
+//            }
+//            localVelocity = new Vector(tmpResults[2][0], tmpResults[2][2], tmpResults[2][4]);
+//            if (mu < 0)
+//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
+//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
+//            tmpResults[2] = AssignValues(dt, acceleration, localVelocity);
+//        }
+//        {//tmpResult[3]
+//            for (int i = 0; i < 6; ++i) {
+//                tmpResults[3][i] = actualData[i] + tmpResults[2][i];
+//            }
+//            localVelocity = new Vector(tmpResults[3][0], tmpResults[3][2], tmpResults[3][4]);
+//            if (mu < 0)
+//                acceleration = CountAccelerationForFlying(accelerometerData, localVelocity);
+//            else acceleration = CountAccelerationForRolling(accelerometerData, mu, localVelocity);
+//            tmpResults[3] = AssignValues(dt, acceleration, localVelocity);
+//        }
+//        dq1 = SolveEquation(q, q, dt, 0.0f, accelerometrData, mu);
+//        dq2 = SolveEquation(q, dq1, dt, 0.5f, accelerometrData, mu);
+//        dq3 = SolveEquation(q, dq2, dt, 0.5f, accelerometrData, mu);
+//        dq4 = SolveEquation(q, dq3, dt, 1.0f, accelerometrData, mu);
+        for (int i = 0; i < 6; ++i) {
+            result[i] = actualData[i] + (tmpResults[1][i] + 2.0f * tmpResults[2][i] + 2.0f * tmpResults[3][i] + tmpResults[4][i]) / 6.0f;
+        }
+        return result;
     }
 
     /**
@@ -241,6 +312,18 @@ public class Ball extends MovableElement {
         return dQ;
     }
 
+    private float[] AssignValues(float dt,Vector acceleration,Vector localVelocity)
+    {
+        float[] result=new float[6];
+        result[0] = dt *(acceleration.x);
+        result[1] = dt * localVelocity.x;
+        result[2] = dt *(acceleration.y);
+        result[3] = dt *localVelocity.y;
+        result[4] = dt *(acceleration.z);
+        result[5] = dt *localVelocity.z;
+        return result;
+    }
+
     /**
      * Oblicza wektor przyspieszenia dla kulki znajdującej się na windzie lub podłodze.
      * @param accData Wektor przyspieszenia grawitacyjnego.
@@ -266,7 +349,7 @@ public class Ball extends MovableElement {
      * @return Wektor przyspieszenia dla kulki znajdującej się w powietrzu.
      */
     private Vector CountAccelerationForFlying(Vector accData,Vector actualVelocity) {
-        float v = (float) (Math.sqrt(actualVelocity.x * actualVelocity.x + actualVelocity.y * actualVelocity.y + actualVelocity.z * actualVelocity.z) + 1e-8);
+        float v = (float) (Math.sqrt(actualVelocity.x * actualVelocity.x + actualVelocity.y * actualVelocity.y + actualVelocity.z * actualVelocity.z) + Collisions.USER_EXPERIENCE);
         float Fd = 0.5f * DENSITY * area * CD * v * v;
 
         Vector acceleration = new Vector(
