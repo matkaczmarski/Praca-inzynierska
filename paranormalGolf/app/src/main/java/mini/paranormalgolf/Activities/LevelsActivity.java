@@ -202,7 +202,7 @@ public class LevelsActivity extends Activity
     public void selectedBoardChanged(BoardInfo boardInfo, int nr)
     {
         onButtonClick();
-        board_id = boardInfo.getBoard_id();
+        board_id = "board_"+boardInfo.getBoard_id();
         int picId = getResources().getIdentifier("board_" + nr, "drawable", getApplicationContext().getPackageName());
         ((ImageView)findViewById(R.id.board_image)).setImageDrawable(getResources().getDrawable(picId));
 

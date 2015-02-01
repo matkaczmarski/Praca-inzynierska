@@ -220,7 +220,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         if (onCreate)
         {
             onCreate = false;
-            Board board = loadBoard(boardInfo.getBoard_id());
+            Board board = loadBoard("board_"+boardInfo.getBoard_id());
             float ball_radius = radius_set ? radius : Ball.DEFAULT_RADIUS;
             Ball ball = new Ball(new Point(board.ballLocation.x, board.ballLocation.y + ball_radius, board.ballLocation.z), ball_radius, new Vector(0f, 0f, 0f), Ball.BallTexture.values()[texture]);
 

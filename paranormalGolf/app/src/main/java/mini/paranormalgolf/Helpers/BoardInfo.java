@@ -8,7 +8,7 @@ public class BoardInfo
     /**
      * Id poziomu.
      */
-    private String board_id;
+    private int board_id;
 
     /**
      * Punkty wymagane do zdobycia 2 gwiazdek.
@@ -32,7 +32,7 @@ public class BoardInfo
      * @param three_stars Punkty wymagane do zdobycia 3 gwiazdek.
      * @param time Czas jaki gracz ma na ukończenie poziomu.
      */
-    public BoardInfo(String board_id, int two_stars, int three_stars, int time)
+    public BoardInfo(int board_id, int two_stars, int three_stars, int time)
     {
         this.board_id = board_id;
         this.two_stars = two_stars;
@@ -44,7 +44,7 @@ public class BoardInfo
      * Zwraca id poziomu.
      * @return Id poziomu.
      */
-    public String getBoard_id()
+    public int getBoard_id()
     {
         return board_id;
     }

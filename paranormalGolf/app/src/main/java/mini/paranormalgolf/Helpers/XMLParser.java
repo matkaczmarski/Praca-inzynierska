@@ -249,7 +249,7 @@ public class XMLParser
                             int three_stars = Integer.parseInt(xpp.getAttributeValue(null, "three_stars"));
                             int time = Integer.parseInt(xpp.getAttributeValue(null, "time"));
 
-                            return new BoardInfo(board_id, two_stars, three_stars, time);
+                            return new BoardInfo(Integer.valueOf(board_id.split("_")[1]), two_stars, three_stars, time);
                         }
                     }
                 }
