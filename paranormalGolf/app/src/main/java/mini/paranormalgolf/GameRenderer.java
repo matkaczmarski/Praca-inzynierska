@@ -270,6 +270,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         {
             lastTimeUpdated = false;
             boardInfo.setTime((int)seconds_left);
+            updater.draw();
             //interval = 0;
             return;
         }
