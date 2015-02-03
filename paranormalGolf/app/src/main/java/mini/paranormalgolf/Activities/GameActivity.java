@@ -595,7 +595,7 @@ public class GameActivity extends Activity  {
         GameActivity.game = false;
         end_game_dialog = new Dialog(this, R.style.EndGameDialogTheme);
         end_game_dialog.setContentView(R.layout.win_dialog);
-        end_game_dialog.setCanceledOnTouchOutside(false);
+        end_game_dialog.setCancelable(false);
         setDialogTitleAndResult(end_game_dialog, diamonds, time, win);
 
         end_game_dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
