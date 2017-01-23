@@ -10,7 +10,7 @@
     <string name="main_menu_activity_options">Options</string>
     <string name="main_menu_activity_help">Help</string>
     <string name="main_menu_activity_exit">Exit</string>
-    <string name="title_activity_options">OptionsActivity</string>
+    <string name="title_activity_options" translatable="false">OptionsActivity</string>
     <string name="options_activity_title">OPTIONS</string>
     <string name="options_activity_music">Music</string>
     <string name="options_activity_sound">Sound effects</string>
@@ -18,7 +18,7 @@
     <string name="options_activity_shadows">Shadows</string>
     <string name="options_activity_language">Language</string>
     <string name="options_activity_appearance">Appearance</string>
-    <string name="title_activity_levels">LevelsActivity</string>
+    <string name="title_activity_levels" translatable="false">LevelsActivity</string>
     <string name="select_level_title">Select level</string>
     <string name="select_level_start">Start</string>
     <string name="select_level_back">Back</string>
@@ -26,18 +26,18 @@
     <string name="game_over">Game over</string>
     <string name="time">Time:</string>
     <string name="diamonds">Diamonds:</string>
-    <string name="boardInfoFile">board_info.xml</string>
+    <string name="boardInfoFile" translatable="false">board_info.xml</string>
     <string name="pause_resume">Resume</string>
     <string name="pause_restart">Restart</string>
     <string name="pause_options">Options</string>
     <string name="pause_menu">Menu</string>
-    <string name="options_music">MUSIC</string>
-    <string name="options_sound_effects">SOUND_EFFECTS</string>
-    <string name="options_vibrations">VIBRATIONS</string>
-    <string name="options_shadows">SHADOWS</string>
-    <string name="options_language">LANGUAGE</string>
-    <string name="options_texture">TEXTURE</string>
-    <string name="preferences">PREFERENCES</string>
+    <string name="options_music" translatable="false">MUSIC</string>
+    <string name="options_sound_effects" translatable="false">SOUND_EFFECTS</string>
+    <string name="options_vibrations" translatable="false">VIBRATIONS</string>
+    <string name="options_shadows" translatable="false">SHADOWS</string>
+    <string name="options_language" translatable="false">LANGUAGE</string>
+    <string name="options_texture" translatable="false">TEXTURE</string>
+    <string name="preferences" translatable="false">PREFERENCES</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="best_result">Best result:</string>
@@ -47,7 +47,7 @@
     <string name="result">Result:</string>
     <string name="pause">Pause</string>
     <string name="help_activity_title">Help</string>
-    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_help" translatable="false">HelpActivity</string>
     <string name="help_next">Next</string>
     <string name="help_menu">Menu</string>
     <string name="help_page_0_text">Get the ball to finish by tilting the device</string>
@@ -58,12 +58,12 @@
     <string name="help_page_3_text_1">Collect diamonds for extra points</string>
     <string name="help_page_3_text_2">Collect hourglasses for time bonus</string>
     <string name="level_locked">To unlock this level you have to complete the previous ones!</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="ball_texture">Ball texture:</string>
-    <string name="command_prompt">>></string>
-    <string name="command_ok">OK</string>
-    <string name="command_error">ERROR</string>
+    <string name="command_prompt" translatable="false">>></string>
+    <string name="command_ok" translatable="false">OK</string>
+    <string name="command_error" translatable="false">ERROR</string>
     <string name="chosen">Chosen:</string>
-    <string name="radius_set">RADIUS_SET</string>
-    <string name="radius">RADIUS</string>
+    <string name="radius_set" translatable="false">RADIUS_SET</string>
+    <string name="radius" translatable="false">RADIUS</string>
 </resources>

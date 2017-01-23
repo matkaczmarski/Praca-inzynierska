@@ -116,7 +116,7 @@ public class OptionCheckBox extends CheckBox
      */
     private void init()
     {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "SonsieOne-Regular.otf");//"batmanFont.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(),"batmanFont.ttf" );//"SonsieOne-Regular.otf");
         setTypeface(tf);
     }
 }

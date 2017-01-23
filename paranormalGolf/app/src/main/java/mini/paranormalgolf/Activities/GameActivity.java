@@ -329,7 +329,7 @@ public class GameActivity extends Activity  {
      */
     @Override
     protected void onDestroy() {
-        gameRenderer.getUpdater().getDrawManager().releaseResources();
+        //gameRenderer.getUpdater().getDrawManager().releaseResources();
         if (backgroundMusic != null) {
             backgroundMusic.release();
         }
